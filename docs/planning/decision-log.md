@@ -1,46 +1,51 @@
 # Decision log
-Version 0.1 • 20 October 2026
+Version 0.2 • 22 October 2026
 
 ## Status definitions
-Confirmed = user explicitly agreed.
-Proposed = reasonable implementation default, configurable and not represented as a user decision.
-Deferred = out of v1.
-Launch gate = must be resolved before public charging, not before starting development.
+Confirmed = user explicitly agreed. Carried forward = prior decision retained where not contradicted.
+Proposed = implementation default, not a founder commitment. Open / launch gate = resolve before selling the affected scope.
+Later = outside the current launch. Superseded = historical decision/default no longer controls implementation.
 
-| Decision | Status | Rationale |
+## Current decisions — 22 October 2026
+| Decision | Status | Reason / affected scope |
 | --- | --- | --- |
-| Serve local and online businesses | Confirmed | User selected both |
-| Free and paid reports | Confirmed | User rejected free-only launch |
-| Waive paid fee for beta users | Confirmed direction | Voucher mechanism is proposed |
-| No required account | Confirmed | Minimize friction |
-| PDF download and email delivery | Confirmed | Preserve results without an account |
-| API-based measurements | Confirmed | Accepted tradeoff versus exact consumer app behavior |
-| OpenAI, Anthropic, Google first | Confirmed direction | Prior recommended scope accepted; capabilities verified at build |
-| English | Confirmed | Required initial language |
-| Spanish | Conditional user preference; adopted default | User wants it if easy; manageable with early internationalization |
-| One scan language at a time | Proposed | Avoid doubling test costs and scope |
-| Next.js/Vercel/Supabase | Proposed | Previous suggestion, no explicit separate user confirmation |
-| AI Visibility Checker working name | Proposed | No final brand supplied |
-| Free 3 answers; paid 45 discovery + 3 recognition | Proposed | Small useful sample and repeated paid evidence |
-| US$9 one-time paid price | Proposed / launch gate | Validate cost and willingness to pay |
-| 30-day report retention | Proposed / launch gate | Bounded costs, disclosed expiry |
-| Bearer read link and separate owner capability | Proposed | Anonymous access with controlled mutations |
-| Verified email before evidence delivery | Proposed | Prevent unsolicited reports and misdirected evidence |
-| Beta vouchers with expiry/use caps | Proposed | Fee waiver without unlimited compute |
-| Full refund after unresolved paid partial failure | Proposed / launch gate | Clear early-stage coverage promise |
-| Model IDs and actual search behavior | Launch gate | Provider interfaces evolve |
-| Muse integration | Deferred | Suitable access not verified |
-| Accounts, subscriptions, monitoring, bulk features | Deferred | Preserve narrow MVP |
+| Local and online businesses | Confirmed, carried forward | All products |
+| Four individual reports at launch: visibility, brand perception, competitor analysis, location comparison | Confirmed | Product brief, catalog, flows, architecture, acceptance and build plan |
+| Individual purchases remain available without a subscription | Confirmed | Product and payment rules |
+| Free visibility offering remains | Confirmed | Free sample size still open |
+| OpenAI, Anthropic, Google Gemini and Perplexity via direct APIs | Confirmed | Four adapters; no OpenRouter |
+| No Google AI Overview collection in MVP | Confirmed | Does not remove Gemini coverage |
+| Customer selection/editing/approval of questions | Confirmed | Before free start or paid checkout |
+| Brand advice includes creative discovery opportunities | Confirmed | May suggest adjacent needs without proving demand upfront |
+| Separate tested findings, named-brand suitability feedback, creative opportunities and suggested improvements | Confirmed | Evidence labels and task kinds; ideas are not discovery counts |
+| Agency report packs | Later | No bulk/team/client features required at launch |
+| Subscription | Intended; format and timing open | May be a dashboard rather than periodic reports; no committed cadence, allowances or pricing |
+| Dedicated public page for each report offering; SEO/AI discovery considered from the start | Confirmed direction | Concrete routes/content/technical requirements are proposed in website spec |
+| Private non-indexed customer results | Carried forward | Public offering pages are different from purchased evidence |
+| No required account for individual reports | Carried forward | New subscription access design remains open |
+| PDF and verified email delivery | Confirmed, carried forward | Four report types and free scope |
+| Beta fee waivers | Confirmed direction, carried forward | Bounded report-specific vouchers proposed |
+| English; Spanish if straightforward | Carried forward | English/Spanish default subject to quality checks; one language per scan proposed |
+| Next.js / Vercel / Supabase | Proposed, carried forward | Architecture not deployed |
+| Final report prices, sizes, repeats, competitor/location caps and free allowance | Open / launch gate | Configure and cost-test before charging |
+| Retention, incomplete-result and refund policies | Open / launch gate | Prior bounded-retry/full-refund policy remains proposed |
+| Optional bundles and upgrade discounts | Open | No promised discount |
+| Competitor-only report without target business | Proposed | Not yet a confirmed input mode |
+| Subscription accounts/history and anonymous-report migration | Open | Specify before subscription implementation |
+| Exact provider models, search/citation capability and cost | Launch gate | Verify at implementation |
+| Marketplace/plugins, subjective website review, Google/social collection | Outside launch | Ideas are not silently added requirements |
 
-## No answer inferred from unfinished text
-The user's final “6.” contained no substantive decision. It is not approval of a new requirement or a final stack/name.
+## Superseded decisions and defaults
+The 20 October 2026 starter pack was organized in this repository at the user's request. It specified an account-free single expanded report with three providers.
+- “OpenAI, Anthropic, Google first” is replaced by four-provider launch coverage including Perplexity.
+- One paid expanded-report product is replaced by four independently purchasable reports.
+- Free 3 answers and paid 45 discovery + 3 recognition calls are superseded, not scaled into new promises. Free sample counts discussed later also remain unconfirmed.
+- US$9 one-time price and 30-day retention were proposals, not confirmed promises; reassess for the new catalog.
+- Blanket exclusion of subscriptions/monitoring is replaced by intended subscription with design/timing TBD. It is not a confirmed launch feature.
+- Agency packs remain later; their design is not inferred from their name.
+- The old build estimate is superseded by expanded scope; re-estimate after prototype and caps.
+- No-account individual access remains; it does not settle future subscription authentication.
 
-## Changes after this version
-Record date, decision, reason, affected documents and status. Update related acceptance criteria when a behavior changes. Do not silently convert a proposed price or cap into a confirmed founder decision.
-
-## Questions that can wait
-Final name/domain, exact paid price, email/job vendor and operational spending limit are launch/setup decisions. None requires delaying the first working scan.
-
-
-## Repository organization — 20 October 2026
-Confirmed: user created javoniehodge-code/aibizscanner and requested uploading and organizing this pack. Documents are grouped under docs/product, docs/engineering, docs/quality and docs/planning. Application folders remain recommendations until implementation starts. Product behavior and provisional commercial defaults are unchanged.
+## How to maintain
+For each change record date, decision, status, reason and affected documents. Keep catalog, checkout scope, task configuration, acceptance and public claims aligned.
+Do not infer decisions from unfinished messages or turn suggested prices, routes, features or caps into confirmations.

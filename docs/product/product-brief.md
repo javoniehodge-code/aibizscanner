@@ -1,73 +1,73 @@
 # Product brief
-Version 0.1 • 20 October 2026
+Version 0.2 • 22 October 2026
 
 ## Problem and promise
-Business owners want a quick answer to: “When people ask AI for a business like mine, does it mention me, link to my website, or recommend competitors?” Full monitoring suites may be more than they need. Existing free checkers mean simplicity alone is not a proven competitive advantage.
+Business owners want to know where AI recommends their business, how it describes them, where competitors appear instead and how results differ across locations. They also want useful ideas for reaching customers who describe a situation rather than name a business category.
 
-Promise: enter a business and website, approve realistic customer questions, and receive understandable evidence from multiple providers. Sell a bounded report, not a universal AI ranking or guaranteed improvement.
+Promise: approve relevant questions and purchase a bounded, evidence-backed report. Offer creative discovery and improvement suggestions while distinguishing them from observed findings. This is a self-service product, not human consulting or a subjective website audit.
 
 ## Customers
-Primary: owners and marketers at local service businesses and online businesses.
-Secondary: consultants checking individual clients. Bulk agency management is outside v1.
-Local business example: a dental practice serving San Juan.
-Online business example: scheduling software targeting US small businesses.
-Support optional market/location so online businesses are not forced into a city.
+Owners and marketers at local and online businesses. Consultants can purchase individual reports; agency packs and bulk client/team features come later. Location is optional for general reports and required as comparison inputs for the location report.
 
-## Confirmed decisions
-- Local and online businesses.
-- Free and paid access; fees can be waived for beta users.
-- No required account.
-- Downloadable PDF and email delivery.
-- API-based results; OpenAI, Anthropic and Google initially. Muse deferred until suitable access is verified.
-- Approved workflow: identify business, review suggested questions, run scan, review evidence.
-- English required; Spanish requested if straightforward. Adopt English and Spanish as the implementation default, subject to quality checks.
+## Confirmed launch scope
+- AI visibility, brand perception, competitor analysis and location comparison reports, each purchasable individually.
+- Free visibility offering remains.
+- Direct APIs for OpenAI, Anthropic, Google Gemini and Perplexity; no OpenRouter.
+- No Google AI Overview collection in this MVP. Gemini remains included.
+- Customers review, edit and approve proposed questions before starting or paying.
+- Brand advice includes creative discovery opportunities.
+- PDF download and verified email delivery; beta fee waivers remain.
+- Existing no-required-account rule continues for individual reports.
+- English required; English/Spanish implementation default carries forward, subject to quality review.
 
-## Proposed defaults, not user-confirmed commercial promises
-| Item | Default |
+See [report catalog](report-catalog.md) for precise outputs and boundaries.
+
+## Findings, ideas and advice
+1. **Tested findings:** traceable mentions, actual recommendations, descriptions and citations in recorded answers.
+2. **Generated discovery opportunities:** suggested customer situations/questions, not proven popularity or evidence of recommendations.
+3. **Suggested improvements:** automated advice linked to available evidence and clearly marked assumptions.
+
+A named-brand answer saying it would recommend a company for remote work is feedback, not evidence that the company appeared in an unbranded remote-work search. Reasons stated in answers may be quoted; they do not reveal hidden internal decision processes or prove causes of omissions.
+
+## Commercial direction and open decisions
+| Item | Current status |
 | --- | --- |
-| Free sample | 1 discovery question × 3 providers × 1 run = 3 answers |
-| Expanded report | 5 discovery questions × 3 providers × 3 runs = 45 discovery answers |
-| Recognition in expanded report | 1 named-business question × 3 providers × 1 run = 3 additional answers |
-| Price | US$9 one-time; configurable; validate economics before launch |
-| Language | English or Spanish; one per scan |
-| Report availability | 30 days after completion; disclose before starting |
-| Free allowance | 1 scan per anonymous session per 24 hours, with additional abuse limits |
-| Beta | Limited vouchers for expanded reports; no card required when fully waived |
+| Four individual report purchases | Confirmed for launch |
+| Free offering | Confirmed; question count and limits TBD |
+| Prices, report sizes, repetitions and competitor/location caps | TBD; old US$9 and 48-call scope superseded |
+| Bundles or cross-report upgrade discounts | Open; not required for launch |
+| Beta | Bounded waivers for explicitly eligible report types |
+| Subscription | Intended; format, launch timing, cadence, allowances and pricing TBD |
+| Agency packs | Later |
+| Report retention | TBD before charging; old 30-day proposal must be reconsidered for future history |
+| Anonymous recovery | Existing owner/read capabilities and verified email flow retained for individual reports |
 
-A paid report therefore requires 48 answer calls, excluding question generation, analysis, retries and PDF/email work. Do not market it as costing only 45 calls. Upgrading creates a fresh complete expanded scan; do not mix old free answers into repeated-run counts.
+Do not turn a subscription discussion into a fixed report-per-month plan or mandatory account requirement. Individual purchases must remain available independently.
 
-## Three different outcomes
-1. Discovery mention: an unbranded customer question produces a reference to the correct business.
-2. Website citation: structured provider citation metadata points to the verified business domain or its subdomains.
-3. Recognition: an explicitly named-business question produces a description of the correct business.
-Recognition never contributes to discovery counts. Supplying a URL and asking for a summary is not a visibility test.
+## Screens
+Public report catalog and dedicated sales pages; free check; report-specific setup; question review; checkout/beta; running scan; report-specific results; PDF/email; expired/unavailable state.
+All reports lead with an executive summary and expose original answers, citations, provider/model, date, language and settings. Monitoring dashboards are future/TBD, not a launch requirement.
 
-## MVP screens
-Landing/input; business and question review; checkout or beta redemption; running scan; results; email verification/delivery confirmation; expired/unavailable report.
-One report page contains overview counts, provider comparison, question breakdown, competitors, recognition when included, and expandable original answers/sources.
-Include report date, language, target market and exact models. Lead with counts, not an opaque composite score.
+## Measurement
+Mentions, recommendations, structured citations and named-brand analysis are separate observations. No arbitrary global ranking, market-share claim or opaque AI-readiness score.
+Informational answers with no business recommendations are identified separately; citations can still be useful. Failed requests are not negative visibility findings.
 
 ## Languages
-Internationalize UI strings, errors, emails and PDF templates from the outset. Generate questions in the selected scan language. Preserve original provider responses; do not silently translate evidence.
-Switching UI language does not rerun or translate an existing scan. A scan in the other language is a new purchase/check under the applicable allowance.
-Spanish adds copy review and QA, not a separate architecture. Planning allowance: roughly 1–3 development/QA days beyond an English-only version for this small scope, assuming a competent Spanish reviewer. Regional language quality still needs human review.
+Internationalize UI, errors, email and PDF templates. Preserve original evidence; switching UI language does not translate or rerun scans. One scan language at a time. No automatic bilingual comparison at launch.
 
-## Non-goals
-Accounts, subscriptions, daily monitoring, automated SEO fixes, content publishing, public indexed reports, bulk agency tools, website ownership verification, search-volume estimates, competitive market-share claims, automatic bilingual comparisons, or exact consumer-app emulation.
+## Website and acquisition
+Each report offering has its own substantive public page with a sample, scope and purchase action. Explain AI discovery in plain language using direct and adjacent customer situations. Educational statistics need dated sources and clear definitions.
+Private customer results are not indexed. See [website structure and SEO](website-structure-and-seo.md).
 
-## Metrics
-Track setup completion, question edits, scan completion/partial failure, PDF downloads, verified email deliveries, free-to-paid conversion, beta-to-paid repeat purchases, costs per completed report and refund rate.
-Report beta and paying cohorts separately. Do not count waived purchases as willingness to pay.
-No claim of product-market fit from free scans alone.
+## Outside launch scope
+Agency packs, Google AI Overviews, native social search, plugins/marketplace, automatic website changes, subjective website grading, exact consumer-app emulation and subscription features whose design is unresolved. Do not offer guaranteed AI recommendations.
 
 ## Economics and validation
-All model usage uses the operator's API accounts. Users do not provide keys. Calculate:
-revenue minus model/search costs, question generation, extraction, retries, PDF/email execution, payment fees and refunds.
-Measure median and high-percentile report cost on representative businesses before setting the public price. Starting target: variable cost below 30% of price at the high percentile; a planning target, not a forecast.
-Interview early users about whether the report helped a decision. Observe whether they pay to rerun or check another business.
+Users do not provide API keys. Measure generation/search, question preparation, extraction, advice, retries, PDF/email, payment and refund costs per report type, including location multipliers. Validate median and high-percentile costs before setting prices and caps.
+Track setup and question edits, product-specific conversion/completion, exports, repeat purchases, refunds and costs. Separate waived beta activity from willingness to pay. The earlier variable-cost target below 30% of price remains only a planning target.
 
 ## Public wording
-“Your business appeared in 4 of 15 successful sampled answers.”
-“API-based snapshot. Answers vary by question, model, date and search settings. Results may differ from the consumer apps.”
-Avoid “40% of AI customers see you,” “your global AI rank,” or implied guarantees.
-
+“Your business was recommended in 4 of 20 successful sampled answers.”
+“Suggested opportunity: customers looking for somewhere to work outside their home.”
+“API-based snapshot; results vary by question, model, date and search settings.”
+Avoid claiming tested absence proves permanent exclusion or that advice guarantees inclusion.

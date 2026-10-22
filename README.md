@@ -1,50 +1,41 @@
 # AI Biz Scanner
 
-An account-free AI visibility checker for local and online businesses. Enter a business and website, review customer questions, and see sampled mentions, website citations, competitors and original answers across supported AI provider APIs.
+Self-service AI visibility and brand reports for local and online businesses. Review customer questions, then inspect sampled recommendations, mentions, citations and competitor gaps.
 
 **Status:** planning and specifications. Application implementation has not started.
 
-## Documentation
+## Launch scope
+- Four individually purchasable reports: AI visibility, brand perception, competitor analysis and location comparison.
+- A free visibility sample remains available.
+- Direct OpenAI, Anthropic, Google Gemini and Perplexity API integrations; no OpenRouter.
+- Google AI Overviews and ordinary Google search collection are outside this MVP. Gemini API coverage remains included.
+- Customers review, edit and approve questions before starting a free scan or paying.
+- English and Spanish, one language per scan; PDF download and verified email delivery.
+- Preserve the account-free individual-report flow. Subscription access/account design remains open.
+- Agency packs come later. A subscription is intended, but its dashboard/report format, timing, cadence and allowances are TBD.
 
-Start with [the documentation guide](docs/README.md).
+See the [documentation guide](docs/README.md), [report catalog](docs/product/report-catalog.md), [website requirements](docs/product/website-structure-and-seo.md) and [decision log](docs/planning/decision-log.md).
 
-| Location | Contents |
-| --- | --- |
-| [docs/product/](docs/product/) | Product brief, user flows and product rules |
-| [docs/engineering/](docs/engineering/) | Architecture, data model, provider integrations and security |
-| [docs/quality/](docs/quality/) | Acceptance criteria and launch verification |
-| [docs/planning/](docs/planning/) | Build phases and decision log |
-
-## Initial scope
-
-- Local and online businesses.
-- Free sample and paid expanded report, with beta fee waivers.
-- No required account; PDF download and verified email delivery.
-- English and Spanish, one language per scan.
-- OpenAI, Anthropic and Google API-based checks, subject to capability verification.
-
-API results are snapshots, not exact reproductions of consumer chatbot sessions or universal business rankings. Proposed prices and limits remain provisional; see the [decision log](docs/planning/decision-log.md).
+API results are snapshots, not exact reproductions of consumer apps or universal rankings. Reports distinguish tested findings from generated discovery opportunities and improvement suggestions. Prices, question counts, repetitions, competitor/location caps and retention remain open launch decisions.
 
 ## Start development
-
-Read the [build plan](docs/planning/build-plan.md) and implement Phase 1: one unbranded question, supported provider calls, stored answers/citations and a basic comparison. Validate the measurement before expanding the interface.
+Follow the [build plan](docs/planning/build-plan.md). Prove four-provider evidence collection first, then implement the shared engine and all four report products. Do not treat an intermediate visibility-only milestone as the complete launch.
 
 ## Recommended implementation folders
-
 Create these when implementation begins; they are not scaffolded yet.
 
 | Path | Purpose |
 | --- | --- |
-| src/app/ | Next.js pages, layouts and server routes |
+| src/app/ | Public product pages, private results and server routes |
 | src/components/ | Shared interface components |
-| src/lib/providers/ | Provider API adapters |
-| src/lib/scans/ | Prompt preparation, execution and result analysis |
+| src/lib/providers/ | Direct provider API adapters |
+| src/lib/scans/ | Question preparation, execution and evidence extraction |
 | src/lib/reports/ | Report assembly and PDF generation |
-| src/lib/server/ | Database, payments, email and server-only access helpers |
-| src/jobs/ | Durable background scan and delivery jobs |
-| src/locales/ | English and Spanish interface messages |
-| supabase/migrations/ | Versioned database migrations |
-| tests/ | Meaningful unit, integration and end-to-end tests |
+| src/lib/server/ | Database, payments, email and access helpers |
+| src/jobs/ | Durable execution and delivery jobs |
+| src/locales/ | English and Spanish messages |
+| supabase/migrations/ | Versioned migrations |
+| tests/ | Meaningful correctness and integration checks |
 | public/ | Static public assets |
 
-Keep credentials, real customer reports and generated build artifacts out of Git. Add environment examples with placeholders when the application is scaffolded.
+Keep credentials, customer reports and generated build artifacts out of Git.

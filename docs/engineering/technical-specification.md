@@ -1,5 +1,5 @@
 # Technical specification
-Version 0.1 • 20 October 2026 • Proposed architecture, not deployed
+Version 0.2 • 22 October 2026 • Proposed architecture, not deployed
 
 ## Stack and responsibilities
 - Next.js + TypeScript: responsive application and server endpoints.
@@ -13,7 +13,9 @@ These are proposed defaults based on the existing discussion. Confirm current pl
 
 ## Processing pipeline
 Validate input → bounded public-site fetch → profile confirmation → question generation/review → immutable scan config → entitlement and budget reservation → queued job → provider adapters → evidence extraction → aggregate → frozen report → PDF/email on request.
-Discovery and recognition are distinct task kinds, prompts and aggregates. No additional autonomous agent layer is required.
+Discovery, named-brand analysis, explicit comparison, opportunity generation and advice synthesis are distinct task kinds and aggregates. No additional autonomous agent layer is required.
+Resolve report-specific products from the catalog; calculate tasks and budget from approved configuration rather than a fixed old expanded-report count. Four-provider coverage is OpenAI, Anthropic, Google Gemini and Perplexity through direct APIs; no OpenRouter or Google AI Overview collection.
+Report assembly consumes captured evidence; it must not make undeclared new tests. Advice/opportunity generation is separately budgeted and persisted.
 
 ## Provider adapter contract
 Input:
@@ -33,7 +35,10 @@ Adapter capability flags include search support, citation metadata, usage metada
 
 ## Prompt separation
 Discovery: generic system instructions for answering a customer query; user text is the approved unbranded question with explicit market if requested. Never attach the website scrape, business name, aliases, prior recognition output or matching instructions.
-Recognition: explicitly identify business name, city/market and domain as needed for disambiguation. Label this as a prompted identification check. Its inclusion of the domain is disclosed.
+Named-brand analysis: explicitly identify business name, city/market and domain as needed for disambiguation. Label as prompted brand feedback, not unbranded discovery. Its inclusion of the domain is disclosed.
+Explicit brand comparisons also remain outside discovery aggregates.
+Opportunity/advice generation: may receive profile and captured evidence to suggest new situations or improvements. Store suggestion kind, supporting observation IDs/excerpts, assumptions and generation version. Never count generated prompts as executed tests.
+Location tasks use approved common question families, explicit location variants and per-provider geographic metadata where supported. Keep locations separate in results and record branch/service-area matching.
 Extraction: receives the generated answer, target identity and citation metadata after generation. Treat answer/site content as untrusted data, not instructions.
 Use neutral discovery prompts, versioned and consistent across providers where supported. Do not force a fixed number of recommendations purely to inflate mentions.
 A reproducibility record is not a promise of deterministic future answers.
@@ -44,18 +49,21 @@ Confirm identity using name plus contextual evidence such as domain, market or s
 Use deterministic URL parsing and registrable-domain boundaries, supported by a maintained public-suffix library. example.com.evil.test must never match example.com.
 Resolve redirects only through the protected fetcher. Preserve original and resolved citation URLs.
 A domain printed in answer prose is a URL mention, not a confirmed source citation.
-Use model-based extraction only for ambiguity/competitor identification; demand structured output with evidence spans. Validate against the original answer before counting.
+Use model-based extraction only where interpretation is needed, including identity ambiguity, recommendation classification, competitor identification and brand claims; demand structured output with evidence spans. Validate against the original answer before counting.
 Never use a second model to fabricate citations or turn unsupported sentiments into factual claims.
 
 ## Data model
 | Entity | Key fields and constraints |
 | --- | --- |
-| scan_configs | id, business_name, normalized_domain, aliases, user-confirmed profile, market, scan_language, tier, prompt/config versions, immutable question list |
+| scan_configs | id, report_type, product_version, business_name, normalized_domain, aliases, confirmed profile, competitor identities, locations, scan_language, tier, prompt/config versions, immutable approved question list, repetitions and task plan |
 | scans | id, config_id, state, owner_token_hash, read_token_hash, timestamps, expires_at, expected_task_count, budget reservation, frozen_report_version |
-| scan_tasks | id, scan_id, provider, model, task_kind, question_id, run_index, state; unique scan/provider/kind/question/run tuple |
+| scan_tasks | id, scan_id, provider, model, task_kind, question_id, location_id, run_index, state; unique logical task identity includes location and kind |
 | attempts | task_id, attempt_index, provider_request_id, response/status, usage, estimated_cost, started/ended; retain failures separately |
-| observations | task_id, mention_status, matched_evidence, cited_urls, url_mentions, competitors, extraction_version |
-| entitlements | id, config_id, tier, source free/payment/beta, payment_id or voucher_redemption_id; one successful consumption per scan |
+| observations | task_id, mention_status, recommendation_status, identity ambiguity, matched excerpts, cited_urls, url_mentions, competitor identities, extraction_version |
+| report_products | versioned type, price/currency, provider coverage, question/repetition/competitor/location caps, task kinds, retention and scope disclosures |
+| report_sections | scan_id, report_version, section kind, evidence/task references, source collection timestamps and declared evidence reuse |
+| brand_claims_and_suggestions | report_version, kind tested/named_feedback/opportunity/advice, text, supporting observations, assumptions, model and generation version |
+| entitlements | id, config_id, product/version, source free/payment/beta, permitted report scope, payment_id or voucher_redemption_id; one successful consumption per scan |
 | payments | provider_session_id unique, payment/event IDs unique, amount/currency, status, refunded_amount, config_id |
 | beta_vouchers | hashed code, expiry, max_redemptions, count, eligible_tier; atomic redemption |
 | deliveries | report_version, encrypted address, verification_hash/expiry, verified_at, state, provider_delivery_id, idempotency_key |
@@ -93,7 +101,7 @@ Publish a frozen report once tasks reach terminal states. A permitted missing-ta
 - Retry transient errors with bounded exponential backoff, honoring provider rate limits.
 - No automatic unlimited retries after ambiguous timeout; inspect provider/request status when supported.
 - Reopening pages, duplicate webhooks or worker restarts must not duplicate scans/payment.
-- Reserve budget for all configured calls including recognition, analysis and worst-case bounded retries.
+- Reserve budget for all configured calls including named-brand analysis, opportunity/advice generation, all locations and worst-case bounded retries.
 - Global daily spending ceiling and per-scan ceiling; stop accepting work when capacity is exhausted.
 - Conservative estimates for responses without usage metadata; reconcile later when possible.
 - Free scans, profile/question generation and email/PDF endpoints all need abuse controls.
@@ -118,6 +126,25 @@ Verify sample long/Spanish/partial reports visually during implementation.
 ## Provider documentation to recheck at implementation
 - OpenAI API web search: https://platform.openai.com/docs/guides/tools-web-search
 - Anthropic web search: https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
-- Google grounding: https://ai.google.dev/gemini-api/docs/google-search
+- Google Gemini grounding: https://ai.google.dev/gemini-api/docs/google-search
+- Perplexity: https://docs.perplexity.ai/ (verify the current supported API, model and search contract; do not assume old Sonar examples or consumer app equivalence)
 Exact models, SDK syntax and pricing are deliberately not specified as fixed facts. Run paid sandbox smoke checks before enabling a provider. Search enablement and returned citations need provider-specific verification.
 
+
+## Report composition and reuse
+One shared engine supports the four report types in [the catalog](../product/report-catalog.md). Validate report-specific schemas and required inputs before entitlement/payment.
+Analysis matches target and competitors against the same neutral answers. Distinguish mention, recommendation, named-brand suitability and generated ideas in stored fields and UI.
+Reused evidence must have compatible immutable settings and permissions, preserve original collection time and count once as an observation. Do not reuse stale free responses as new paid repetitions. PDF generation never reruns models.
+Compute competitor gaps only from successful, unambiguous observations under the declared mention/recommendation metric. Aggregate per provider/question/location and expose denominators.
+Top-source counts derive from actual citation metadata; fetch source pages through the protected fetcher before claiming what they contain.
+
+## Public site and private results
+Implement [website structure and SEO](../product/website-structure-and-seo.md). Render substantive public product copy and links into initial HTML; provide metadata, canonicals, sitemap and accurate structured data.
+Customer results, tokens, checkout, API routes and generated PDFs must not enter public sitemaps or public examples. Indexing controls are additional to access control.
+Marketing product routes are distinct from capability-based result/API routes.
+
+## Subscription and agency extension boundary
+Individual reports launch independently. Subscription is intended but its format, timing, identity/access model, billing cadence, allowances, history and cancellation behavior are unresolved.
+Keep products, entitlements, report types and evidence versioned so later account/history features can be added without redefining existing purchases. Do not implement recurring billing, mandatory report accounts or scheduled reruns from guessed requirements.
+Before subscription implementation, specify ownership/migration from anonymous reports, tenant access checks, subscriptions/usage records, scheduler idempotency, cancellation, retention and comparison compatibility.
+Agency packs, bulk runs, client/team permissions and branded exports are deferred pending their own specifications.
