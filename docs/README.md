@@ -13,6 +13,9 @@ This pack specifies four self-service reports at launch, a free visibility sampl
 7. [Build plan](planning/build-plan.md)
 8. [Decision log](planning/decision-log.md)
 
+## Design starting point
+See the [launch website and customer journey map](product/website-and-journey-map.md) for public pages, shared steps, report variations and design states.
+
 ## Instructions for implementation
 Treat confirmed decisions as requirements, proposed defaults as configurable and open decisions as unresolved. Do not inherit old three-provider call counts, the old US$9 price, or the single expanded-report scope.
 
