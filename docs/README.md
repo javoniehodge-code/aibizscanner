@@ -1,40 +1,36 @@
 # AI Biz Scanner — documentation guide
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-This pack specifies four self-service reports at launch, a free visibility sample and independent purchases. Agency packs come later. Subscription format and timing remain TBD; it may be a dashboard rather than recurring reports.
+## Start here
+For a simple visual website skeleton, use the [Claude Design brief](product/claude-design-skeleton.md). It specifies pages, navigation, homepage sequence, customer flows and essential states; no production backend is implied.
 
-## Read in order
+## Product contracts
 1. [Product brief](product/product-brief.md)
 2. [Report catalog](product/report-catalog.md)
-3. [User flows and rules](product/user-flows-and-rules.md)
-4. [Website structure and SEO](product/website-structure-and-seo.md)
-5. [Technical specification](engineering/technical-specification.md)
-6. [Acceptance criteria](quality/acceptance-criteria.md)
-7. [Build plan](planning/build-plan.md)
-8. [Decision log](planning/decision-log.md)
+3. [Brand evidence and discrepancy checklist](product/brand-evidence-and-checklist.md)
+4. [User flows and rules](product/user-flows-and-rules.md)
+5. [Website and journey map](product/website-and-journey-map.md)
+6. [Website structure and SEO](product/website-structure-and-seo.md)
+7. [Technical specification](engineering/technical-specification.md)
+8. [Acceptance criteria](quality/acceptance-criteria.md)
+9. [Build plan](planning/build-plan.md)
+10. [Decision log](planning/decision-log.md)
 
-## Design starting point
-See the [launch website and customer journey map](product/website-and-journey-map.md) for public pages, shared steps, report variations and design states.
+## Current scope
+Four paid reports; a free five-prompt visibility report only; account-required purchases; timed bundles; subscription dashboard with prompt checks three times weekly. Brand, competitive and location refresh cadence is monthly or twice monthly, not yet selected. Agency packs and integrations are later/separately prioritized.
+Products is the navigation label. Business facts and priorities are distinct; prompts are saved, approved and versioned, with priority order independent of wording.
+Green/yellow/red/gray evidence assessments replace grades. Owner corrections produce discrepancies to recheck, not rewritten historical evidence.
 
-## Instructions for implementation
-Treat confirmed decisions as requirements, proposed defaults as configurable and open decisions as unresolved. Do not inherit old three-provider call counts, the old US$9 price, or the single expanded-report scope.
+## Implementation rules
+Treat confirmed scope as requirements, proposed layout/technical defaults as editable, and open commercial choices as unresolved.
+Use direct OpenAI, Anthropic, Gemini and Perplexity adapters; verify actual model/search/citation behavior. No OpenRouter or Google AI Overviews in MVP.
+Business profile and competitor identities guide question preparation/matching, not the outbound context of neutral discovery tests.
+Named-brand perspectives, generated ideas, evidence assessments and actual discovery results remain separate. Never invent citations, decisions, successful payments or causal reasons for omissions.
+Individual reports remain available without a subscription, but require an account. Only free visibility is available to guests.
+Subscriptions/bundles must not charge until their exact terms, caps and release gates are resolved. Design their screens now using labeled placeholders.
 
-Launch coverage is ChatGPT/OpenAI, Claude/Anthropic, Gemini/Google and Perplexity via direct APIs. No OpenRouter, Google AI Overview collection or social-platform collection in this MVP. Validate models, search behavior, citations and costs before enabling paid coverage.
-
-Keep business identity and competitor names out of unbranded discovery generation; supply them only afterward for matching. Named-brand analysis, explicit comparisons and generated ideas are separate task kinds. Never invent responses, citations, rankings, successful payments or reasons for omission.
-
-All four report products must be launch-ready. Reuse the engine and evidence where compatible, without counting reused evidence as independent runs or silently delivering stale answers.
-
-## Commercial and access rules
-- Free sample and individually purchasable visibility, brand, competitor and location reports.
-- Question review and approval before start/payment.
-- No required account for individual reports under the existing rule; PDF and verified email delivery remain.
-- Report-specific prices and limits, free question count, retention and bundle discounts are unresolved.
-- Beta fee waivers remain, with bounded entitlements.
-- Subscription is intended, but not specified or approved for charging yet.
-- Agency packs, team/client access and marketplace/plugins are later work.
-
-Public product pages and customer result pages serve different purposes: indexable marketing/sample pages versus private, non-indexed results. See the website specification.
+## Evidence and privacy
+Preserve original answers, sources, settings, rule versions and timestamps. Do not count reused answers as independent runs. Public sales/sample pages are indexable; account screens, reports and evidence are private.
+These documents do not constitute implementation, deployment, email sending or payment setup.
 
 Repository: [javoniehodge-code/aibizscanner](https://github.com/javoniehodge-code/aibizscanner).
-These are specifications, not evidence of implementation, deployment, live charging or email sending.

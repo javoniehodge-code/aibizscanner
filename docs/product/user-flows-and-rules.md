@@ -1,98 +1,81 @@
 # User flows and product rules
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-## 0. Choose a report
-Choose free visibility sample or an individual visibility, brand perception, competitor analysis or location comparison report from its dedicated public page. All four paid reports are available at launch.
-No subscription is required. Agency packs are later. Subscription format/timing is TBD and must not be sold with undefined allowances.
-Use the [report catalog](report-catalog.md) to determine inputs, task kinds and outputs.
+## 1. Entry and product selection
+Header: Products, Pricing, Sign up, Log in, Free visibility check. Public product pages contain sufficient explanation, examples, coverage, configured caps/price and purchase terms for a decision.
+Four reports: AI Prompt Analysis, Brand Strength Analysis, Competitive Analysis, Location Analysis. Dashboard is a subscription product. Agency packs/integrations are separate later work.
 
-## 1. Identify the business
-Fields: business name (required), website (required), scan language (English/Spanish), optional target market/location for general reports. Location comparison requires at least two selected places.
-Allow selected competitors where the product scope supports them. Record aliases/domains and identity ambiguity. Named-brand comparison questions are distinct from unbranded discovery.
-Accept a bare domain and normalize to HTTPS where possible. Explain that the site must be publicly accessible.
-Read homepage plus up to two relevant public pages. Show inferred business category, services, location and detected name aliases for correction.
-If extraction fails or is blocked, offer manual description/category entry. A failed crawl is not evidence of low AI visibility.
-Keep target business data for question preparation and result matching; it must not enter the discovery answer-generation context.
-Separate UI locale from scan language. Default both to English unless the user changes them.
+## 2. Free visibility — guest flow
+Business name/domain, language/category as needed, relevant location and optional competitors → review/edit/select five neutral prompts → approve/start → progress → results.
+No upfront account or email is required. Results are not gated by email/signup. After results, offer requested email delivery or optional signup to save setup for returning use.
+Only visibility is free; no free Brand Strength or paid report preview masquerading as a completed free product.
+Normalize bare domains; reject invalid/private URLs before fetching. If extraction fails, offer manual profile entry. Show suggested facts for correction. A crawl failure is not low visibility.
+Free allowance, repetitions and rate/cost limits remain open except for the fixed five-prompt cap.
 
-## 2. Review questions
-Generate report-specific candidate questions using the confirmed profile, covering direct needs and creative adjacent customer situations. State these are suggested tests, not verified search-volume rankings.
-Customers select, edit and approve the final set before starting the free scan or paying. Free/paid counts and caps are TBD, configured and displayed per offering; the old one/five-question assumptions are superseded.
-Label named-brand questions and unbranded discovery questions separately. For location comparison, review the common question family and explicit wording for every location.
-Reject blank questions and discovery questions that explicitly include the target business, its domain or confirmed aliases. Flag ambiguous generic-word names for review instead of blindly blocking all occurrences.
-Show target market and language alongside questions. Location is wording in the prompt, not a guarantee of the provider's physical search location.
-Freeze an immutable configuration snapshot before payment/start. A changed question or language creates a new configuration.
+## 3. Paid report — account-required flow
+Product page → short checkout (name, email, business details) → create account or sign in → payment → finish report setup → approve questions/scope → scan → account-linked results.
+These can be steps within one checkout; avoid duplicate entry. Sign-in reuses existing profile and business details with edit controls.
+Account identity must be validated server-side before payment/entitlement creation. No guest purchase, including full beta waivers.
+Before payment, show purchased product/version, caps, language/coverage, price, retention and failure policy. Final prompt choices can happen after payment within that purchased scope.
+Do not silently upcharge if post-payment setup exceeds the package. Show the limit and let the customer revise; price-changing upgrades need explicit checkout.
+If the customer leaves after payment, the order is visible as “Finish setup” in their account; resuming cannot charge twice.
+Use verified payment events, not redirects, to grant entitlements. Check provider/capacity availability before charge where possible. Unstartable purchases follow disclosed refund policy.
 
-## 3. Select access
-Free: show the sample scope and start after allowance/cap checks.
-Paid: show exact price, scope, supported providers, one language, retention, PDF/email access and failure policy before checkout.
-Beta: redeem an expiring, limited-use server-validated voucher to receive the paid scope for zero charge. Do not collect a card for a full waiver.
-Prices, repetitions, question/competitor/location caps and retention are open launch decisions per report type. The old US$9 single expanded-report proposal is superseded. Public charging stays disabled until configured scope, costs and payment setup are validated.
-Freeze report type, all task kinds, approved questions, four-provider configuration, repetitions and comparison inputs. Customers can buy each report independently.
-Use verified payment-provider events to grant paid entitlement; a browser “success” redirect is not proof.
-Free and paid scans reserve budget before enqueueing. If capacity is unavailable, say so before charging. If a paid scan cannot start after payment, refund rather than leaving it indefinitely queued.
+## 4. Signup and baseline onboarding
+Standalone signup, checkout signup and free-results conversion use the same progressive baseline workflow:
+1. Name/email/authentication; method is a proposed implementation choice.
+2. Import business name/domain/facts with source/date; approve, correct or leave unknown.
+3. Locations if relevant and selected competitors.
+4. Desired description, priority services/products, target customers/locations and goals.
+5. Suggest/reuse prompts, let owner reorder/pin/edit and approve when starting tests.
+Preserve imported observations alongside owner-confirmed corrections; differences create evidence-backed findings.
+Keep desired positioning separate from facts. Explain priorities as input to question relevance/order, not a guarantee that AI will describe the business that way.
+Save onboarding progress. Extra priorities need not block access to a purchased report if not required for its execution.
+Attach a guest's existing free scan only with verified account/scan ownership; never claim reports solely because a typed email matches.
 
-## 4. Run
-Display provider progress and successful/expected answer counts. Use real states, not invented percentages or time promises.
-The job continues when the tab closes. Preserve a recovery capability in the original browser.
-Each discovery attempt uses a fresh conversation. Repeated attempts are real new requests, not cached duplicates.
-A provider failure must not prevent other providers finishing.
-Bound retries; never retry indefinitely or bill twice for a refreshed page.
-Show a partial report if some answers fail. Do not classify missing responses as non-mentions.
-Final completion freezes the report version for consistent PDF/email output.
+## 5. Prompt library and setup
+Approved prompts belong to a business, with stable IDs, intent/category, priority, language, location/family and version. Default subsequent purchases/monitoring to the existing set.
+Reordering/pinning does not change test wording/history. Adding or editing wording/language/location produces a version/series boundary; old reports remain frozen.
+Visibility and location use neutral discovery prompts. Location requires two or more places and owner approval of each wording variant.
+Brand is open-ended named-business assessment. Competitive Analysis applies the same framework to the target and up to four competitors; explicit comparisons never count as natural discovery.
+Priorities guide candidate selection/order. Never send target profiles, desired positioning or named competitors in neutral discovery-generation context.
+Freeze execution settings after final approval; disclose any new configuration rather than silently changing paid tests.
 
-## 5. Read results
-Summary: completed discovery answers, business mentions, confirmed website citations and incomplete attempts.
-Provider table: exact model, mention count/valid answer count, citation count/valid answer count, partial/error labels.
-Question detail: each attempt, original answer, actual citation links and status.
-Competitors: observed entities and frequency in sampled discovery answers; count each competitor once per answer. A generic phrase is not automatically a business.
-Brand perception: named-brand descriptions and suitability feedback, quoted strengths/concerns, clearly labeled creative discovery opportunities and suggested improvements. Include any executed discovery tests separately.
-Competitor analysis: recommendation presence/absence by tested question and provider, gaps and citation comparisons.
-Location comparison: comparable question/provider results across selected places, with exact geographic settings/wording.
-Visibility includes competitor comparisons and top cited sources. All four views follow the report catalog.
-Named-business feedback remains separate from discovery, with identity warnings. Do not claim factual accuracy without independently verified evidence.
-A suggestion is not an observed result. Selecting a suggestion for testing creates a new approved configuration and follows the displayed free allowance or purchase scope. Do not start paid calls automatically.
-Advice must link supporting evidence where available and identify assumptions. A quoted reason is not proof of an omission's cause.
-No arbitrary numerical rank. Mention order is not a recommendation rank. Citation order is not a business rank.
+## 6. Scan and results
+Direct OpenAI, Anthropic, Gemini and Perplexity calls; preserve actual models/search metadata, original answers and citations. Search requested versus observed is distinct. No OpenRouter/Google AI Overview in MVP.
+Show real queued/running/completed/partial/failed states and successful/expected counts. Jobs survive tab closure and use bounded retries; provider failures do not stop other providers.
+Results begin with executive summary and product-specific evidence. Labels distinguish recommendation, mention, ambiguity, absence, no business recommendation and missing answer.
+Count substantive usable answers; exclude failures/refusals/empty responses. A substantive no-results answer can be valid. Preserve source metadata; prose URLs are not confirmed citations. Deduplicate citation frequency per answer while retaining originals.
+Do not infer rank from list order, combine named-brand/discovery denominators or combine languages. Show counts with percentages and disclose small samples.
+Brand/competitive results follow the [five-bucket rules](brand-evidence-and-checklist.md); observations, stated rationale and creative advice remain separate.
 
-### Counting rules
-Mention and recommendation are distinct. A negative mention is not a recommendation. Recommendation status and identity ambiguity must be traceable to answer excerpts.
-A valid answer is a completed substantive answer with usable text. Refusals, tool failures and empty responses are excluded from the discovery denominator and shown separately. A substantive “I could not find suitable businesses” remains a valid zero-mention answer. Informational/DIY answers with no business recommendation are labeled separately; they may still provide useful citations and are not automatically competitor gaps.
-Mention statuses: confirmed, ambiguous, absent. Ambiguous mentions are disclosed and not included as confirmed.
-A model merely echoing the supplied question in named-brand mode does not establish independent knowledge of the business.
-Citation statuses: confirmed structured citation, URL mentioned in prose, no citation, metadata unavailable. Only the first counts as a website citation.
-Deduplicate multiple links to the same owned domain within a single answer for the headline count; preserve all individual sources in evidence.
-Named-brand analysis and discovery have separate denominators. Never combine different languages.
-Do not present small-sample percentages without counts or infer population confidence from correlated repeated model responses.
-If a provider lacks required search/citation support, mark it unavailable rather than silently changing the test.
+## 7. Checklist
+Owner/source/AI discrepancies create stable evidence-linked tasks. Source fixes and AI-answer corrections are separate.
+Task lifecycle, deduplication, verification and reopening follow [checklist rules](brand-evidence-and-checklist.md).
+Owner marks done → awaiting verification; only a successful applicable check can verify. Non-verifiable ideas can be Owner completed, never falsely machine-verified.
+Failed/unrelated checks cannot close tasks. Preserve completed history; recurring issues reopen.
+One-off reruns and eligible monitoring refreshes recheck only the evidence they actually collect.
 
-## 6. Download PDF
-Available on the free sample and all four completed/partial paid reports without entering email.
-Generate from the frozen report, including limitations, exact questions, answer statuses, provider/model details, counts, original answers and sources. Long evidence may use an appendix; never silently truncate.
-PDF failure does not invalidate the scan. Offer retry without rerunning AI calls.
-A PDF already downloaded cannot be remotely revoked when the web report expires.
+## 8. Monitoring and timed bundles
+Dashboard requires an active subscription for ongoing monitoring, not just an account. Customers without subscription still access available purchased reports, unfinished orders and their business setup.
+Prompt checks: three per week, fixed approved prompt versions and provider settings, dates visible. Exact weekdays/timezone, limits, missed-run/catch-up rules and alerts are open.
+Brand/competitive/location refresh: monthly or twice monthly, not selected. Do not imply three full analyses weekly or real time.
+Display module-specific last/next refresh and coverage. Plot actual values, gaps and labeled trends; annotate edits without claiming causation.
+Timed report bundles are a separate purchase format; exact cadence, billing, cancellation and entitlement quantities must be specified before selling.
+Cancellation/failed payment behavior and history access after subscription expiry are production launch decisions, not invented design promises.
 
-## 7. Email without an account
-An explicit “Email my report” action asks for one address. Explain that verification is required and that this does not subscribe the recipient to marketing.
-Send a short verification link with no business/report details. After recipient verification, deliver the report link and PDF attachment subject to attachment size limits; for oversized PDFs, use the verified download link and explain.
-Verification token: one-time, short-lived (proposed 30 minutes); delivery retries are idempotent.
-Proposed limits: 3 verification requests per report per hour and recipient/IP-level limits. Add an abuse challenge when warranted.
-Changing address requires new verification. A payment receipt email is not blanket marketing permission.
-Separate statuses for queued, accepted by email provider, delivered if supported, bounced and failed. Do not claim inbox delivery merely because the API accepted the message.
-This specification authorizes no actual emails in the present documentation task.
+## 9. Export, email and private access
+PDF download available for free visibility and paid results, from frozen versions without new model calls. Preserve accents, long URLs, repeating headers and evidence.
+Guest free results use high-entropy read/owner capabilities with browser recovery; unrelated guests cannot enumerate reports. Paid reports use account/business ownership checks. No public indexing.
+Email is optional after free results and optional for paid report delivery. Verify guest addresses before sending evidence; an already verified account address can satisfy verification without a duplicate flow.
+Pre-verification messages contain no report evidence. Reverification required for changed addresses; verification/delivery are bounded and idempotent. No automatic marketing enrollment.
+Paid customer results are not public bearer links by default. Optional sharing must be separately designed with consent, revocation and read-only scope.
+Expiry/deletion revokes access and removes evidence/files per configured policy; downloaded PDFs cannot be revoked. Retention, backup lag and payment/audit exceptions must be disclosed before sale.
 
-## 8. Access, retention and recovery
-Reports use unguessable bearer links. Anyone with the link can view them; say so before sharing. No public directory, search indexing or account history.
-Retention remains an open launch decision per offering; the old 30-day proposal is not a final rule. Set and disclose the actual duration before charging, show expiry on-page and in email, and reconcile future subscription history promises before offering them. After expiry, delete report evidence/PDF and delivery address according to the configured retention process. Keep only required payment/audit records separately; final record-retention policy needs review before charging.
-Original browser retains an owner-management capability distinct from the read link. Only owner capability permits requesting email delivery, reruns or deletion. Read-link holders may view/download.
-Without the original browser or a previously verified recovery email, anonymous report recovery is not promised.
-The existing account-free individual-report flow remains. Subscription authentication/history design is unresolved; do not introduce mandatory accounts for individual purchases or advertise undefined dashboard access.
-Owner can request deletion; revoke links and delete generated report files. Payment records follow their separate policy.
+## 10. Failure/refund proposals
+Bounded missing-task retries, visible partial coverage, no duplicate charges. Proposed default: unresolved promised paid coverage permits retry or full refund; all-failed paid scans automatically refund. Waivers have no cash refund.
+Delivery failures retry without rerunning AI. Final refund/retention rules require publication before charging.
+Recurring-plan failures, credits, paused schedules and quota restoration need plan-specific rules before subscription/bundle charging.
 
-## 9. Failure and refund default
-Retry failed attempts once automatically where safe and transient. Provider timeouts may still incur provider charges; record attempt identity and avoid repeated ambiguous retries.
-For a paid report, after bounded retries, offer one user-triggered retry of missing attempts only, or a full refund if any promised provider coverage remains incomplete. Do not charge again. A refund preserves already delivered evidence until normal expiry.
-All-failed paid scans trigger a full refund automatically. Free/beta failures have no cash refund.
-PDF/email issues get delivery retry first; if export/delivery cannot be restored, provide support/refund path.
-Implement refund policy as a proposed launch default; publish the final policy before accepting live payments.
-
+## 11. Outside the current skeleton
+Agency team/client management, live GBP editing, integration marketplace, Google AI Overviews and native social collection. Show integrations only as explicitly future material, not working controls.

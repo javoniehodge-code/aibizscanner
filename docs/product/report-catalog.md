@@ -1,88 +1,65 @@
 # Report catalog
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-## Shared contract
-All four reports are available at launch and purchasable individually, without a subscription. Free access is a limited visibility sample. Agency packs are later; subscription design is TBD.
+## Shared foundation
+Four individually purchasable reports require an account; no subscription needed for one-off purchases. Timed report bundles are intended; terms remain open. Only AI Prompt Analysis has a free guest version, limited to five approved prompts.
+Direct OpenAI, Anthropic, Google Gemini and Perplexity APIs; record actual model/search settings. API responses are not exact replicas of consumer apps. No OpenRouter/Google AI Overviews in MVP.
 
-Coverage: direct OpenAI, Anthropic, Google Gemini and Perplexity APIs. Record actual model/search configuration; consumer product names describe coverage, not exact app replication. No Google AI Overviews in the MVP.
+Product pages and checkout disclose price, coverage, limits, delivery, retention and failure policy. Payment precedes final question approval/setup; purchased scope is frozen first, execution configuration afterward. Validate any post-payment change against purchased scope; never silently charge for extra work.
+Reports include executive summary, sources/answer evidence, provider/model/date, successful/missing counts, PDF and optional requested email delivery.
 
-Each checkout discloses its report type, questions/task kinds, provider coverage, repetitions, competitors/locations, language, price, retention and incomplete-result policy. These numerical caps/prices are open decisions and must be configured before charging.
+## 1. AI Prompt Analysis — visibility
+**Question:** Is AI recommending me, for which customer needs, and who else appears?
+Inputs: name/domain, category, language, relevant market, optional selected competitors and approved neutral prompts.
+Outputs: prompt × provider table; mentions vs recommendations; other businesses appearing; competitor gaps; top cited domains/pages with evidence; practical next steps where supported.
+Free: five prompts, no upfront email/account. Show results before offering email or signup. Repetition count and abuse limits remain open. Paid: broader scope still to be priced/capped.
 
-Every report includes executive summary, question/provider evidence table, original answers and citations, timestamps/settings, successful versus missing task counts, and PDF/verified email access. Clearly label seeded examples. Customer inputs are reviewed and frozen before purchase.
+This is the appearances report, not a full comparative brand assessment. A gap means a successful, unambiguous sampled answer recommends a competitor but not the target; mention-only gaps are labeled separately.
 
-## 1. AI visibility report
-**Question:** Where does my business appear, who else appears and what sources are cited?
+## 2. Brand Strength Analysis
+**Question:** Does AI know the business, how does it describe it, when would it recommend it, and what might improve its prospects?
+Ask each AI openly about the named company: known information/sources, suitable prompts/customer situations, unsuitable situations or concerns, stated rationale, improvements and creative discovery ideas.
+Do not limit this to a fixed customer discovery test set; generated candidate prompts are a distinct output.
+Combine:
+1. Each AI's perspective and available sources, compared with owner-confirmed facts and desired positioning.
+2. Five documented evidence buckets with green/yellow/red/gray status and detailed findings.
+3. Evidence-linked owner checklist and creative opportunities prioritized around business goals.
 
-Inputs: business name/domain, confirmed profile, optional market, optional selected competitors, language and approved unbranded customer questions.
+Buckets: Accessible business information; Independent validation; Customer review evidence; Expertise and supporting evidence; Information currency. See [assessment rules](brand-evidence-and-checklist.md).
+No numeric/letter grade or total readiness score. No universal schema/platform/review-count/freshness threshold. Industry-specific applicability matters.
+AI's stated suitability is not observed unbranded discovery; quoted rationale is not proof of internal causation.
+
+## 3. Competitive Analysis
+**Question:** How does the business compare with up to four selected competitors in AI's assessment, and what can the owner learn?
+Inputs: target business, up to four competitors, relevant services/market/language, owner priority categories and approved analysis scope.
+Use the same five evidence buckets/rules and comparable collection scope for target and competitors.
 Outputs:
-- Mentions and recommendations per question/provider with underlying counts.
-- Competitor appearances and gaps in the same answers.
-- Business-domain citations and most frequently cited websites/pages across all sources, with counts and links.
-- Original evidence and a concise action/opportunity checklist with any advice labeled.
+- Side-by-side statuses with sources, coverage and limitations.
+- What each business does well or poorly under those criteria.
+- Each AI's stated comparative preferences for particular needs, with excerpts/sources.
+- Differences in reviews, independent mentions, accessible facts, expertise and current information.
+- Practical learning opportunities and discrepancy tasks.
 
-A competitor gap means a successful sampled answer recommends the competitor but does not recommend the target. Mention-only gaps may also be shown under a separate label. Failed/ambiguous responses do not establish a gap.
-Use the same captured answers to compare businesses; do not insert competitors into unbranded questions.
+This goes beyond visibility's “who appears where.” Reuse compatible visibility evidence with dates; label new named-brand comparisons separately. Do not claim hidden reasons or treat competitor priorities as the owner's priorities.
+Competitor-only analysis without a target remains unconfirmed. Competitor facts are observed evidence, not owner-approved truth.
 
-## 2. Brand perception report
-**Question:** How does AI describe the company, which needs does it associate with the company and what could the owner improve or explore?
+## 4. Location Analysis
+**Question:** How does visibility change across selected places, and where might nearby customers discover the business?
+Use the business's saved neutral question families with location-specific versions across at least two places. Example: a Brooklyn hotel appearing for Brooklyn wording but absent for nearby Ridgewood wording.
+Outputs: side-by-side prompt/provider/location recommendations, competitors, citations, gaps and source links; useful nearby-market opportunities with assumptions clearly labeled.
+Keep intent/settings/repetitions consistent apart from explicit location differences. Record wording and supported geographic settings; named place does not simulate a physically located searcher. Do not assume the business serves every tested location.
 
-Inputs: disambiguated business identity, optional comparison brands, approved named-brand questions covering descriptions, strengths, concerns and suitable/unsuitable customer situations.
-Outputs:
-- Quoted brand descriptions and stated strengths/concerns by provider, with supplied citations.
-- Situations AI says the business suits or does not suit, explicitly labeled **named-brand feedback**.
-- **Tested findings:** any separately executed unbranded discovery tests, with their own evidence and totals.
-- **Other ways customers could discover you:** creative customer situations and candidate questions.
-- **Suggested improvements:** evidence-linked actions and clearly identified assumptions/owner confirmations.
+## 5. Dashboard and timed bundles
+Subscription dashboard: prompt checks three times per week with priority order, history, competitors in answers, sources, change annotations and rechecked checklist.
+Full brand/competitive/location analyses refresh on a slower monthly or twice-monthly cadence, to be selected and priced. Last/next update dates per module; no implied daily or real-time full analysis.
+Timed bundles deliver defined reports periodically without assuming full dashboard access. Bundle cadence, entitlement quantities, recurring billing terms and dashboard inclusion remain open.
+Account access to purchased reports and setup is not the same as an active monitoring subscription.
+Do not charge for undefined plans.
 
-Do not require proof of search demand before suggesting creative opportunities. Do not assert the business already provides an unverified service.
-A named-brand suitability answer does not count as natural discovery. Generated ideas do not become tested findings until explicitly selected, executed and stored as new tests.
-“Relevant to my business / Opportunity to develop / Not relevant” is a proposed self-service interaction, not a requirement for human review.
-Do not claim AI knows why another provider omitted the business; retain any reasons as stated explanations, not causal proof.
-
-## 3. Competitor analysis report
-**Question:** Which tested prompts recommend selected competitors, which do not and where are the gaps?
-
-Inputs: business/category context, selected competitors and optional target business, market, language and approved unbranded questions. Competitor-only analysis without a target is a proposed capability, not a confirmed commercial requirement; settle before exposing it.
-Outputs:
-- Question × business comparison with provider/run detail.
-- Prompts where each competitor was recommended versus not recommended in successful answers.
-- Shared opportunities, competitor-only appearances and target-only appearances when a target exists.
-- Citation/source comparison, with exact evidence.
-- Generated follow-up opportunities clearly separate from tested results.
-
-The visibility report contains a basic competitor comparison. This report centers deeper competitor coverage and prompt-level gaps; breadth/caps must be disclosed rather than invented.
-Explicit “compare these brands” tasks, if offered, are labeled separately and excluded from unbranded discovery totals.
-Do not call a business “never recommended” based on absence in this sample.
-
-## 4. Location comparison report
-**Question:** How do sampled results differ across selected markets?
-
-Inputs: business identity/profile, at least two explicit comparison locations, language and an approved common question family with location-specific wording.
-Outputs:
-- Side-by-side question/provider/location mentions, recommendations and citations.
-- Selected competitor appearances and gaps by location.
-- Exact location wording and any supported provider geographic setting.
-- Counts and missing coverage for each location; original answers for every cell.
-
-Keep intent, model/search settings, repetitions and question structure consistent except for declared location differences. Explain service-area/branch identity matching.
-A named place in a prompt is not physical search location. No precise neighborhood ranking heatmap inferred from wording-only tests.
-
-## Task and evidence rules
-| Kind | Purpose | Counts toward unbranded discovery? |
-| --- | --- | --- |
-| Unbranded discovery | Test a neutral customer need | Yes |
-| Named-brand analysis | Ask about the identified company | No |
-| Explicit brand comparison | Compare supplied brands | No |
-| Opportunity generation | Suggest situations/prompts | No |
-| Advice synthesis | Explain observed evidence and possible actions | No |
-
-Distinguish a mention from an actual recommendation. A negative reference is not a recommendation. Record ambiguous identity/recommendation classifications and show their evidence.
-Informational/DIY answers can cite sources without recommending businesses. Show “No business recommendation returned” rather than implying a competitive loss.
-
-For top-source frequency, count a page/domain at most once per successful answer for its respective frequency table; preserve every original citation in evidence. Separate page counts from domain counts and display denominators.
-
-No unseen source-content claims: a citation URL alone does not prove what the page says. Fetch through the protected path before describing page contents; otherwise show only available citation metadata.
-
-## Reuse, freshness and costs
-Share compatible evidence within a purchased scan/report family when its exact configuration, dates and access permissions match. Disclose reuse and collection time. Never count one answer as independent repetitions, silently substitute old free results for fresh paid runs or expose unpaid report types.
-Task costs depend on questions × providers × repetitions × locations, plus named-brand, suggestion, analysis and retry work. Report size and task budget must be computed from the actual frozen configuration, not the old 48-answer assumption.
+## Saved prompts and evidence
+Prompt library belongs to the business. Retain question ID, exact wording/version, intent/category, priority/order, language, explicit location and approval. Location variants link to the same family; ordering changes are not wording changes.
+Reuse approved prompts by default across applicable products. Offer additions transparently; changing a monitored question starts a new series/version.
+Task kinds: unbranded discovery, named-brand analysis, explicit comparisons, evidence assessment, opportunity generation, advice synthesis. Only actual unbranded answers contribute to discovery counts.
+Distinguish negative mention, recommendation, ambiguous identity, absence, no business recommendation returned and failed request.
+Count each cited page/domain once per answer in its respective frequency table; preserve raw annotations. No source-content claim from URL alone.
+Compatible evidence reuse must preserve timestamp, settings and permissions; no stale substitution or counting reused answers as independent runs.

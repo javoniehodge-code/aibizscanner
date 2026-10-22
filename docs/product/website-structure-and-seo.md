@@ -1,55 +1,55 @@
 # Website structure and SEO requirements
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-## Purpose and boundary
-Each report offering has a dedicated, useful public sales page. “A page for each report” means each report type, not automatically publishing customer results.
-The following routes and content layout are proposed implementation defaults, not final branding. All four product pages and purchase journeys are launch scope.
+## Public page structure
+Products is the navigation label. Four paid report types and a subscription dashboard each have a dedicated useful public page. Only visibility has a free five-prompt version.
+Routes below are proposed; branding/slugs may change before implementation.
 
-| Proposed route | Purpose |
+| Route | Purpose |
 | --- | --- |
-| / | Plain-English value proposition, example customer question and product overview |
-| /reports | Compare all four reports, scope, samples and purchase links |
-| /reports/ai-visibility | Mentions, recommendations, competitors and citations |
-| /reports/brand-perception | Brand feedback, creative discovery opportunities and advice |
-| /reports/competitor-analysis | Tested prompt gaps and citation comparisons |
-| /reports/location-comparison | Results across explicit locations |
-| /free-ai-visibility-check | Free scope, setup and next step |
-| /pricing | Configured one-time prices and limits; no undefined subscription promises |
-| /methodology | Sampling, task kinds, four-provider settings, gaps, limitations and failures |
-| /samples/... | Synthetic labeled examples or separately authorized, sanitized examples |
-| /learn/... | Useful explanations of AI discovery, customer situations and report interpretation |
+| / | Narrative homepage connecting business questions to products |
+| /products | Product overview |
+| /products/ai-prompt-analysis | Prompt visibility, competitors and citations |
+| /products/brand-strength | AI perspectives, five evidence buckets and actions |
+| /products/competitive-analysis | Target plus up to four competitors, comparative assessment |
+| /products/location-analysis | Matched visibility questions across places |
+| /products/dashboard | Subscription monitoring: prompts three times weekly and slower analyses |
+| /free-ai-visibility-check | Five-prompt guest workflow, results before optional email/signup |
+| /pricing | One-off, timed report bundles and subscription terms once configured |
+| /signup and /login | Account entry, kept out of search indexing |
+| /methodology | Sampling, evidence statuses, sources, limitations and cadence |
+| /samples/... | Labeled synthetic or separately authorized sanitized examples |
+| /learn/... | Useful explanations and customer-situation examples |
+| /privacy, /terms, /help | Supporting policies/help, text to prepare |
 
-Agency and subscription landing pages are later/TBD; do not advertise them as purchasable launch products. Avoid generating thin pages for every industry/city/provider combination.
+Account workspace uses separate private /app/... routes. Route names are proposed; do not duplicate public product copy in private result routes.
 
-## Product page content
-Each page has a distinct title, heading, description and:
-- Customer problem and plain-English explanation of what the report answers.
-- Inputs, provider coverage, exact configured scope, price and turnaround expectations.
-- Sample executive summary and five-question illustrative table where useful; examples are not product caps or live results.
-- Differences from the other reports and links between relevant offerings.
-- Original-evidence preview, limitations, report retention and incomplete-result policy.
-- Useful FAQs and a clear purchase action without requiring a subscription.
+## Homepage narrative
+Promise → understand your brand → test recommendations → learn from competitors → explore geographic gaps → track changes → choose a starting point.
+Every section includes plain-English benefit, small illustrative output and relevant product action. Product pages provide enough scope/sample/price information for purchase before detailed question setup.
+Primary free CTA; paid products remain directly purchasable with account creation/sign-in at checkout. No free Brand Strength, guest checkout or daily/real-time monitoring promise.
 
-Explain both category searches and customer situations, such as a café for laptop work or a plumber after a failed DIY repair. Introduce AEO only after the practical use is understandable.
-Audience/adoption statistics must have an identifiable primary source, date, geography and definition. Do not describe AI user counts as business-search volume or Google keyword volumes as AI prompt popularity.
-A report's advice does not guarantee recommendation placement.
+## Product page requirements
+Distinct title, heading, description, audience/problem, inputs, outputs, configured AI coverage/caps/price, useful sample, FAQs and action.
+Explain differences: visibility appearances; brand perspectives/evidence; competitive five-bucket comparison; geographic comparison; monitoring history/checklist.
+Report purchases do not require a subscription. Timed bundles and dashboard subscription are distinct purchase formats; do not sell undefined plans. Dashboard release timing remains open.
+Display accurate cadence per module. No implied automatic causal proof that an edit increased visibility.
 
-## Technical requirements
-- Public content and navigation available as readable HTML through static/server rendering, with real crawlable links and stable URLs.
-- Unique metadata, canonical URLs, meaningful headings, accessible layout and mobile usability.
-- XML sitemap containing canonical indexable public pages only; intentional robots rules and no accidental production noindex.
-- Structured data accurate to visible content and supported page/entity types; do not invent ratings, reviews or business facts.
-- Correct status codes and redirects, no duplicate query-string copies of product pages, monitored broken links.
-- English/Spanish URL and canonical/hreflang policy when translated public pages ship; UI locale alone must not create duplicate indexable URLs.
-- Review initial HTML and rendered page, metadata, sitemap, robots behavior and keyboard/mobile usability before launch.
+## Discoverability and quality
+Public content/navigation must be readable in initial HTML via static/server rendering with stable crawlable links. Unique metadata, canonicals, sitemap and intentional robots settings; structured data matches visible content.
+Use semantic headings, accessible status labels, mobile layouts, appropriate status codes and redirects. Avoid thin location/industry/provider pages.
+English/Spanish public-page policy must define translated URLs, canonicals and language alternates; UI locale alone must not create duplicate indexed URLs.
+Examples/statistics must be labeled and sourced with dates/definitions. Do not invent testimonials or relabel AI audience as search volume.
+No special-schema or llms.txt recommendation guarantee; these are not prerequisites in our framework.
 
-AI discovery builds on accessible, clear, sourceable content; no claim of special schema or guaranteed inclusion. llms.txt, schema generators and crawler-checker products are separate backlog ideas, not hidden launch requirements.
+## Privacy and indexing
+Public offering pages are distinct from private evidence. Keep auth, checkout, onboarding, account workspace, report bodies, PDFs, capabilities and API routes out of sitemaps/search indexing.
+Use account ownership checks for paid evidence and secure capabilities for guest free evidence, plus noindex/private cache policies. noindex is not authentication.
+Do not expose a guest scan publicly because it is free. Optional email delivery and account creation require consent/verification; no marketing enrollment by default.
+Agency/integration pages are not assumed launch products; no live GBP management claims.
 
-## Customer privacy
-Individual results and PDF evidence remain private by default under the capability-access rules. Use noindex and private/no-store headers; never treat robots.txt/noindex as authentication.
-Exclude private results and capability URLs from public links, analytics, sitemaps and samples. Optional read-link sharing carries existing bearer-link disclosure; it does not authorize public indexing.
-
-## Reference guidance
-Recheck official guidance during implementation:
+## References to recheck during implementation
 - https://developers.google.com/search/docs/appearance/ai-features
 - https://developers.google.com/search/docs/fundamentals/seo-starter-guide
+
+For the prototype, use [Claude Design brief](claude-design-skeleton.md); validate initial HTML/metadata/sitemap and private route exclusion during implementation.

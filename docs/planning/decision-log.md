@@ -1,51 +1,55 @@
 # Decision log
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-## Status definitions
-Confirmed = user explicitly agreed. Carried forward = prior decision retained where not contradicted.
-Proposed = implementation default, not a founder commitment. Open / launch gate = resolve before selling the affected scope.
-Later = outside the current launch. Superseded = historical decision/default no longer controls implementation.
+Confirmed = explicit user decision; Proposed = implementation/design default; Open/launch gate = resolve before selling the affected scope; Later = outside current launch.
+Version 0.3 supersedes conflicting earlier 20/22 October rules.
 
-## Current decisions — 22 October 2026
-| Decision | Status | Reason / affected scope |
+## Current decisions
+| Decision | Status | Effect |
 | --- | --- | --- |
-| Local and online businesses | Confirmed, carried forward | All products |
-| Four individual reports at launch: visibility, brand perception, competitor analysis, location comparison | Confirmed | Product brief, catalog, flows, architecture, acceptance and build plan |
-| Individual purchases remain available without a subscription | Confirmed | Product and payment rules |
-| Free visibility offering remains | Confirmed | Free sample size still open |
-| OpenAI, Anthropic, Google Gemini and Perplexity via direct APIs | Confirmed | Four adapters; no OpenRouter |
-| No Google AI Overview collection in MVP | Confirmed | Does not remove Gemini coverage |
-| Customer selection/editing/approval of questions | Confirmed | Before free start or paid checkout |
-| Brand advice includes creative discovery opportunities | Confirmed | May suggest adjacent needs without proving demand upfront |
-| Separate tested findings, named-brand suitability feedback, creative opportunities and suggested improvements | Confirmed | Evidence labels and task kinds; ideas are not discovery counts |
-| Agency report packs | Later | No bulk/team/client features required at launch |
-| Subscription | Intended; format and timing open | May be a dashboard rather than periodic reports; no committed cadence, allowances or pricing |
-| Dedicated public page for each report offering; SEO/AI discovery considered from the start | Confirmed direction | Concrete routes/content/technical requirements are proposed in website spec |
-| Private non-indexed customer results | Carried forward | Public offering pages are different from purchased evidence |
-| No required account for individual reports | Carried forward | New subscription access design remains open |
-| PDF and verified email delivery | Confirmed, carried forward | Four report types and free scope |
-| Beta fee waivers | Confirmed direction, carried forward | Bounded report-specific vouchers proposed |
-| English; Spanish if straightforward | Carried forward | English/Spanish default subject to quality checks; one language per scan proposed |
-| Next.js / Vercel / Supabase | Proposed, carried forward | Architecture not deployed |
-| Final report prices, sizes, repeats, competitor/location caps and free allowance | Open / launch gate | Configure and cost-test before charging |
-| Retention, incomplete-result and refund policies | Open / launch gate | Prior bounded-retry/full-refund policy remains proposed |
-| Optional bundles and upgrade discounts | Open | No promised discount |
-| Competitor-only report without target business | Proposed | Not yet a confirmed input mode |
-| Subscription accounts/history and anonymous-report migration | Open | Specify before subscription implementation |
-| Exact provider models, search/citation capability and cost | Launch gate | Verify at implementation |
-| Marketplace/plugins, subjective website review, Google/social collection | Outside launch | Ideas are not silently added requirements |
+| Local and online businesses | Confirmed | No forced local-only model |
+| Four paid reports: AI Prompt Analysis, Brand Strength Analysis, Competitive Analysis, Location Analysis | Confirmed | Competitive Analysis restored by later written product outline; distinct comparative five-bucket assessment |
+| Visibility competitors | Confirmed | Show who appears where in approved prompts |
+| Brand perspective | Confirmed | Open-ended AI assessment of recommendation situations/concerns, sources, advice and creative opportunities |
+| Competitive report | Confirmed | Target plus up to four competitors, comparable evidence buckets and stated rationales |
+| Five brand buckets with green/yellow/red/gray statuses, evidence and steps | Confirmed | No grades/100-point total; rule details must be specified |
+| Free visibility only, five prompts | Confirmed | No free Brand Strength |
+| Free results before optional email/signup | Confirmed latest flow | No upfront account/email or results gate |
+| Every paid purchase requires account | Confirmed latest flow | Guest paid purchases withdrawn |
+| Short checkout name/email/business, signup/sign-in, payment, then remaining setup/question approval | Confirmed | Question approval before scan, not before payment |
+| Signup facts import/owner approval separately from priorities/goals | Confirmed | Preserve source observations/corrections |
+| Priorities drive suggestions/order of reusable saved prompts | Confirmed | Reorder retains history; wording/version changes visible |
+| Dashboard subscription | Confirmed direction | Account ownership alone does not include monitoring |
+| Prompt monitoring three times weekly | Confirmed | Replaces daily/real-time claims |
+| Brand/competitive/location refresh monthly or twice monthly | Direction confirmed; exact choice open | Separate slower module cadence |
+| One-off and timed report bundles | Confirmed direction | Exact cadence/quantity/billing terms open |
+| Evidence-linked discrepancy checklist | Confirmed | Recheck applicable evidence; owner action not automatic verification |
+| Website fix separate from AI discrepancy | Confirmed | Owner-confirmed baseline does not rewrite observed sources |
+| Task completion history and recurrence | Confirmed | Successful applicable verification, no closure from failed/absent summary; reopen recurring issue |
+| Products navigation and dedicated public product pages | Confirmed | Homepage explains customer benefit, not just tools |
+| Four direct provider APIs: OpenAI, Anthropic, Gemini, Perplexity | Confirmed | No OpenRouter; no Google AI Overviews in MVP |
+| PDF/verified email, bounded beta waivers | Carried forward | Accounts required for paid/waived scope; free email optional |
+| English and Spanish | Implementation default carried forward | One scan language; quality validation required |
+| Agency packs and integrations | Later / separate priority list | GBP is a candidate, not an approved live integration |
+| Next.js/Vercel/Supabase/auth/Stripe implementation | Proposed | Not deployed; exact service configuration not confirmed |
+| Fifty monitored prompts | Illustration only | Not a confirmed plan limit |
 
-## Superseded decisions and defaults
-The 20 October 2026 starter pack was organized in this repository at the user's request. It specified an account-free single expanded report with three providers.
-- “OpenAI, Anthropic, Google first” is replaced by four-provider launch coverage including Perplexity.
-- One paid expanded-report product is replaced by four independently purchasable reports.
-- Free 3 answers and paid 45 discovery + 3 recognition calls are superseded, not scaled into new promises. Free sample counts discussed later also remain unconfirmed.
-- US$9 one-time price and 30-day retention were proposals, not confirmed promises; reassess for the new catalog.
-- Blanket exclusion of subscriptions/monitoring is replaced by intended subscription with design/timing TBD. It is not a confirmed launch feature.
-- Agency packs remain later; their design is not inferred from their name.
-- The old build estimate is superseded by expanded scope; re-estimate after prototype and caps.
-- No-account individual access remains; it does not settle future subscription authentication.
+## Open decisions
+Paid prices/caps/repetitions; free repetitions/rate allowance; subscription/bundle terms, allowances, cancellation and release timing; monthly vs twice-monthly full cadence; exact weekly schedule/timezone/catch-up; status/checklist materiality/stability/aggregation rules; retention/refund/account-deletion policies; authentication details; final brand/domain.
+All relevant commercial and production verification details are release gates, not reasons to block the design skeleton.
 
-## How to maintain
-For each change record date, decision, status, reason and affected documents. Keep catalog, checkout scope, task configuration, acceptance and public claims aligned.
-Do not infer decisions from unfinished messages or turn suggested prices, routes, features or caps into confirmations.
+## Superseded history
+- 20 October starter: three providers, single expanded report, account-free purchases, proposed US$9 and 30 days. Replaced; old 3/48-answer counts are not current.
+- Earlier 22 October: four reports, subscription unspecified, one free prompt count TBD and no required account; later competitor report was briefly proposed for removal. Latest written outline restores four reports with a distinct comparative assessment.
+- Earlier email-before-free-scan and mandatory paid accounts were temporarily replaced with free email-after-results and optional guest paid orders. Latest decision restores mandatory accounts for all paid purchases while retaining guest free visibility.
+- Free Brand Strength was proposed in the written outline, then explicitly withdrawn.
+- Numeric/letter grades replaced by five status buckets with source evidence and criteria.
+- Daily monitoring replaced by prompting three times weekly and slower full analysis refresh.
+- “Compare reports” / Reports header is replaced by Products.
+- Approval before payment is replaced by approval before execution within paid package scope.
+- Blanket exclusion of account/dashboard work is no longer current. Dashboard is in design scope; exact release/plan details remain open.
+- Agency, integration marketplace and Google AI Overview collection remain outside MVP.
+
+## Maintenance
+Update catalog, flows, design map, architecture and acceptance together. Keep source observations, owner assertions, desired positioning, named-brand opinions and actual discovery tests distinct.
+Do not infer confirmation of prices, schedule details or implementation defaults from these specifications.

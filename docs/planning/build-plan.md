@@ -1,53 +1,48 @@
 # Build plan
-Version 0.2 • 22 October 2026
+Version 0.3 • 22 October 2026
 
-All four report types are launch requirements. The phases below are implementation milestones, not separate product releases. Agency packs are later; subscription format and timing remain TBD.
+All four paid reports and a five-prompt free visibility version are launch scope. Dashboard and timed bundles are in product/design scope; final release timing and plan details remain open. Agency/integrations are separate later work.
 
-## Phase 1 — prove four-provider measurement
-Build one approved unbranded question across direct OpenAI, Anthropic, Google Gemini and Perplexity APIs with verified search/citation behavior. Store original answers, exact models, search settings, requests, usage and costs.
-Validate identity ambiguity, mention versus recommendation, citation metadata and partial failure. No OpenRouter or Google AI Overview collection.
-Exit: real evidence and measured cost for each of the four adapters. An unavailable adapter blocks selling promised four-provider coverage until resolved; never silently substitute.
+## Phase 1 — design skeleton and measurement prototype
+Use [Claude Design brief](../product/claude-design-skeleton.md) to make connected rough frames for public products, free/paid journeys, onboarding, results and workspace. Do not wait for complete visual polish to validate collection.
+In parallel as implementation work, prove one unbranded question across direct OpenAI, Anthropic, Gemini and Perplexity with actual search/citation/usage metadata. Store original answers and distinguish mentions from recommendations.
+Exit: clickable skeleton and measured four-provider evidence; no live payment/email/scan claimed by prototype.
 
-## Phase 2 — shared scan and evidence engine
-Implement protected fetch/manual fallback, profile/competitor/location inputs, customer question approval, immutable task plans, anonymous access, durable jobs, budget reservation, and versioned frozen evidence.
-Separate unbranded discovery, named-brand analysis, explicit comparison, suggestions and advice. Support question families across locations.
-Exit: complete/partial jobs survive tab closure, duplicate requests and bounded retries; task budgets derive from actual configuration.
+## Phase 2 — identity, baseline and saved prompts
+Implement guest free access separately from authenticated paid access. Checkout requires account; paid orders persist before final question setup.
+Build imported fact approval/correction, owner-source distinction, priorities/goals, relevant competitors/locations and resumable onboarding.
+Build prompt families/versions, approval and priority ordering. Reorder retains history; wording/location/language edits mark compatibility boundaries.
+Exit: private account/business access holds under cross-account attempts; question configurations are traceable; unfinished paid setup can resume.
 
-## Phase 3 — all four report products
-Implement visibility with competitor/citation evidence; brand feedback with creative discovery opportunities and advice; competitor prompt-gap analysis; and comparable location results.
-Build executive summaries, inspectable question tables and source/answer expansion. Test each against the report catalog.
-Exit: all four can be configured independently and assembled from traceable evidence. Suggestions cannot appear as tested recommendations.
+## Phase 3 — shared scan engine and visibility flow
+Protected public fetching/manual fallback, immutable execution plans, durable jobs, budgets, normalized evidence and partial failures.
+Free five-prompt scan shows results before email/signup. Paid visibility runs after account-bound payment and question approval within purchased caps.
+Implement sources/answers, executive summary, PDF and requested email verification/delivery.
+Exit: complete journey survives tab close, retries and webhook duplicates with no duplicate charges or answer inflation.
 
-## Phase 4 — delivery, one-time purchases and free sample
-Implement configured free scope, individual product checkout, beta waivers, entitlement enforcement, retention, refunds, PDF and verified email.
-Add English/Spanish UI/templates, accessibility and report-specific PDF layouts.
-Resolve report counts, repetitions, competitor/location caps, prices and retention before charging; discard old 3/48-answer and US$9 assumptions.
-Exit: each report can be bought without subscription; duplicate payment events cannot grant duplicate work; all four exports and failure paths are verified.
+## Phase 4 — brand, competitive and location products
+Open-ended AI perspectives, creative suggestions and five-bucket evidence assessments. Define/document applicability, status aggregation and verification rules before production.
+Competitive report compares target with up to four competitors using matching criteria and disclosed coverage. Location tests use approved common question families with explicit place variants.
+Build discrepancy/checklist model: source/AI items separate, owner done versus verified, unsuccessful-check handling, completed history and recurrence.
+Exit: four individually purchasable products with distinct evidence-backed outputs, no numeric grading or invented causal claims.
 
-## Phase 5 — public website and acquisition
-Build all four substantive report sales pages, comparison/pricing pages, free entry, methodology and labeled samples per website specification.
-Verify initial HTML, metadata, canonicals, sitemap, public crawl access, private-result exclusion, mobile and keyboard flows.
-Exit: visitors can understand and purchase each report from its own public page; private evidence is not exposed for indexing.
+## Phase 5 — commerce and public release gates
+Finalize prices/caps/repetitions, free abuse allowance, retention and refund terms; cost-test each product. Beta waivers are account-bound.
+Finish public homepage narrative, Products pages, pricing/auth and methodology/samples. Validate HTML/metadata/indexing/accessibility/mobile and private-result exclusion.
+Pilot all reports on diverse businesses/languages/locations; inspect long/partial/Spanish exports, assessment consistency and costs. A proposed 10–20-business pilot is not a statistical sample.
+Exit: acceptance evidence, payment/refund sandbox checks, per-product costs and rollback/operator controls; no guest paid purchases.
 
-## Phase 6 — pilot and launch gates
-Run a capped pilot spanning all four products, representative local/online businesses, multiple locations and supported languages. A planning target of 10–20 businesses is not a statistical sample.
-Review identity/recommendation errors, question usefulness, partial failures, brand-advice grounding, delivery, costs and refund behavior.
-Separate waived engagement from paid demand. Verify rollback, operational monitoring and spending limits.
-Exit: all launch acceptance criteria pass; final product scope and disclosures match checkout and reports.
+## Phase 6 — dashboard and timed bundles
+Before charging, decide subscription/bundle price, allowances, cadence details, credits, cancellation, missed runs, history and release timing.
+Implement prompt schedule three times weekly. Full brand/competitive/location cadence monthly versus twice monthly is not selected. Module-specific history/last/next check, priority order and checklist rechecks use actual collected evidence.
+Use unique schedule slots, active entitlement checks and atomic spending/quota reservations. Subscription cancellation or failed renewal cannot silently continue unentitled spending.
+Exit: real cadence/cost/permissions tests and published plan scope. If released after reports, product page must clearly show availability rather than accept undefined subscriptions.
 
-## Estimate and sequencing
-The old 11–19-day / 3–4-week estimate covered a smaller single-report, three-provider product and is superseded. Re-estimate after the adapter prototype and product caps are resolved; no new timeline is promised here.
-Public-site work can proceed alongside report implementation once content/contracts are stable.
+## Later
+Agency packs/team/client work. Integrations separately prioritized: bounded website change tracking, schema tools, analytics and potential GBP connection; no live integration implied.
+No OpenRouter/Google AI Overviews/native social collection in MVP.
 
-## First coding task
-Implement Phase 1 only: four direct provider adapters, one neutral unbranded question, response/citation persistence, usage logging and a plain evidence comparison. Keep model IDs configurable. Never include target/competitor identities in discovery payloads. Label fixtures visibly when credentials are missing; do not claim live validation.
-
-## Owner setup and decisions
-Provider billing and limits; hosting/database/job setup; payment account and settlement configuration; email sender verification; final branding/domain.
-Before charging: configure each report's scope, price, retention and failure policy, plus the free allowance. Secrets belong in secret management.
-Account-free individual purchases carry forward. Subscription identity/history design is open; it does not block the four report products.
-
-## After launch / separate specification
-- Subscription/dashboard: decide format, timing, cadence, allowances, history, authentication, billing and cancellation before implementation or charging.
-- Agency packs: decide bulk purchases, branding, team/client access and pricing.
-- Google AI Overviews/social collection and plugin marketplace: backlog, not launch.
+## Estimates and setup
+Previous single-report time/cost estimates are superseded. Re-estimate after adapter proof, status rules and product/plan caps.
+Owner setup: provider billing/limits, hosting/database/auth/jobs, Stripe merchant configuration, email sender/domain and brand/domain. Credentials belong in secret management.
+The skeleton is design work only; production checks remain required. Implement in bounded journeys and review behavior against docs before expanding.
