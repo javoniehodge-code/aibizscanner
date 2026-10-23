@@ -53,3 +53,12 @@ All relevant commercial and production verification details are release gates, n
 ## Maintenance
 Update catalog, flows, design map, architecture and acceptance together. Keep source observations, owner assertions, desired positioning, named-brand opinions and actual discovery tests distinct.
 Do not infer confirmation of prices, schedule details or implementation defaults from these specifications.
+
+## Confirmed section decision — 23 October 2026
+- Brand Strength is now the **AI Brand Perception Audit**. The report is being refined in chunks.
+- Section 1 assesses discovery and accessibility of the business’s own website for ChatGPT, Claude, Gemini and Perplexity.
+- Show exact selected page names, clickable URLs, selection reasons and one consistent denominator; do not confuse selected pages with total website size. Six pages is sample data only.
+- Published search permissions and observed page discovery/reading are separate. Blocked, unconfirmed and not tested are distinct. Report confirmed restrictions plainly; the owner chooses what to do.
+- Use plain English, a white background and all-black text. Put technical details behind expandable controls. Webpage first; PDF layout later.
+- The Café Bustelo design is approved as a reference; all displayed test outcomes are simulated and must remain labeled.
+- [Approved specification, visual and data](../product/ai-brand-perception/sections/website-discovery-accessibility/README.md). This update covers the first section only; it does not endorse older whole-report examples as the current design.

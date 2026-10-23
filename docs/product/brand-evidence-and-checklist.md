@@ -74,3 +74,6 @@ History, evidence and completed tasks follow disclosed retention; exact retentio
 ## User-facing task card
 Show: status, issue, observed versus owner-confirmed fact, source/date, why it matters, suggested action, last check and verification evidence.
 Controls: inspect evidence, owner marks fix done, view history. Manual recheck button is a proposed paid/budgeted action, not an unlimited free promise.
+
+## Approved first section — 23 October 2026
+The report is now called the **AI Brand Perception Audit**. Its first section is [Website discovery and accessibility](ai-brand-perception/sections/website-discovery-accessibility/README.md): platform-specific website permission checks, explicitly selected/named pages, separate search and reading results, evidence and plain-language owner options. Use the linked approved white-background, black-text design for this section. This replaces this section’s previous generic accessible-information presentation; it does not finalize the rest of the report.

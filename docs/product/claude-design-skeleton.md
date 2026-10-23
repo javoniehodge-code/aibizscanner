@@ -109,3 +109,6 @@ Integrations are a separate backlog. Do not create working GBP management contro
 Use “Price TBD,” “Paid scope TBD” and “Refresh cadence TBD” where unsettled.
 Make the key journeys navigable with mock states; no real charge, email or scan. Do not generate backend architecture as part of the skeleton.
 First pass: all pages as rough connected frames. Second pass: polish the visibility flow, then reuse components across other products.
+
+## Approved Brand Perception section override — 23 October 2026
+For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery and accessibility](ai-brand-perception/sections/website-discovery-accessibility/README.md) and its linked image, webpage reference and fixture. The approved first section takes precedence over older generic Brand Strength bucket/color layouts for that section. All-black text on white, plain English, named linked pages and consistent selected-page counts are required. Keep outcomes simulated until actual evidence exists. Do not redesign or finalize the other report sections in this handoff.

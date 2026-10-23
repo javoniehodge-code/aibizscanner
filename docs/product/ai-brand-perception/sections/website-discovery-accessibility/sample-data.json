@@ -1,0 +1,512 @@
+{
+  "section_id": "website-discovery-accessibility",
+  "schema_version": "1.0-design-fixture",
+  "is_illustrative": true,
+  "brand_name": "Café Bustelo",
+  "domain": "https://www.cafebustelo.com",
+  "display_date": "2026-10-23",
+  "tested_at": null,
+  "total_site_pages": null,
+  "selected_page_count": 6,
+  "selection_basis": "Customer decision pages: business overview, product range, three different product needs and buying questions. Six is illustrative, not a product limit.",
+  "providers": [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "test_surface": null,
+      "search_permission": {
+        "status": "allowed",
+        "crawler": "OAI-SearchBot",
+        "evidence": [],
+        "checked_at": null,
+        "is_illustrative": true
+      },
+      "found_and_read_count": 6,
+      "not_tested_count": 0,
+      "selected_page_count": 6,
+      "summary_label": "6 of 6",
+      "indexing_status": "unconfirmed",
+      "verified_crawler_visit_status": "unconfirmed"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "test_surface": null,
+      "search_permission": {
+        "status": "blocked",
+        "crawler": "Claude-SearchBot",
+        "evidence": [],
+        "checked_at": null,
+        "is_illustrative": true
+      },
+      "found_and_read_count": null,
+      "not_tested_count": 6,
+      "selected_page_count": 6,
+      "summary_label": "Not tested",
+      "indexing_status": "unconfirmed",
+      "verified_crawler_visit_status": "unconfirmed"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "test_surface": null,
+      "search_permission": {
+        "status": "unconfirmed",
+        "crawler": null,
+        "evidence": [],
+        "checked_at": null,
+        "is_illustrative": true
+      },
+      "found_and_read_count": 4,
+      "not_tested_count": 0,
+      "selected_page_count": 6,
+      "summary_label": "4 of 6",
+      "indexing_status": "unconfirmed",
+      "verified_crawler_visit_status": "unconfirmed"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "test_surface": null,
+      "search_permission": {
+        "status": "allowed",
+        "crawler": "PerplexityBot",
+        "evidence": [],
+        "checked_at": null,
+        "is_illustrative": true
+      },
+      "found_and_read_count": 5,
+      "not_tested_count": 0,
+      "selected_page_count": 6,
+      "summary_label": "5 of 6",
+      "indexing_status": "unconfirmed",
+      "verified_crawler_visit_status": "unconfirmed"
+    }
+  ],
+  "selected_pages": [
+    {
+      "id": "page-01",
+      "title": "Home",
+      "url": "https://www.cafebustelo.com/",
+      "why_selected": "Introduces the brand and directs buyers to its coffee range.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    },
+    {
+      "id": "page-02",
+      "title": "All coffee products",
+      "url": "https://www.cafebustelo.com/coffee",
+      "why_selected": "Shows the available formats, roasts and product choices.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    },
+    {
+      "id": "page-03",
+      "title": "Classic espresso-style ground coffee",
+      "url": "https://www.cafebustelo.com/coffee/ground/espresso-style-can",
+      "why_selected": "Explains the classic ground-coffee product for customers considering a bold dark roast.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    },
+    {
+      "id": "page-04",
+      "title": "Medium-roast ground coffee",
+      "url": "https://www.cafebustelo.com/coffee/ground/medium-roast",
+      "why_selected": "Gives customers a different roast option from the classic dark roast.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "not_found"
+          },
+          "reading": {
+            "status": "unsuccessful"
+          },
+          "display_label": "Not found or read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    },
+    {
+      "id": "page-05",
+      "title": "Coffee capsules for Nespresso Original Line machines",
+      "url": "https://www.cafebustelo.com/coffee/espresso-capsules/dark-roast",
+      "why_selected": "Helps a customer determine whether this coffee fits their machine. “Capsules” are the small coffee containers used in that machine.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "not_found"
+          },
+          "reading": {
+            "status": "unsuccessful"
+          },
+          "display_label": "Not found or read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "not_found"
+          },
+          "reading": {
+            "status": "unsuccessful"
+          },
+          "display_label": "Not found or read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    },
+    {
+      "id": "page-06",
+      "title": "Frequently asked questions",
+      "url": "https://www.cafebustelo.com/faqs",
+      "why_selected": "Answers questions about brewing, product differences and other buying considerations.",
+      "providers": {
+        "chatgpt": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "claude": {
+          "search": {
+            "status": "not_tested"
+          },
+          "reading": {
+            "status": "not_tested"
+          },
+          "display_label": "Not tested",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "gemini": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        },
+        "perplexity": {
+          "search": {
+            "status": "found"
+          },
+          "reading": {
+            "status": "readable"
+          },
+          "display_label": "Found & read",
+          "cause": null,
+          "tested_at": null,
+          "evidence": [],
+          "is_illustrative": true
+        }
+      }
+    }
+  ],
+  "missing_relevant_pages": [],
+  "website_checks": [
+    {
+      "id": "internal-links",
+      "label": "Selected product pages hard to reach",
+      "affected_page_ids": [
+        "page-04",
+        "page-05"
+      ],
+      "is_illustrative": true,
+      "evidence": []
+    },
+    {
+      "id": "sitemap",
+      "label": "Capsule page missing from sitemap",
+      "affected_page_ids": [
+        "page-05"
+      ],
+      "is_illustrative": true,
+      "evidence": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "claude-search-permission",
+      "title": "Claude’s search system is blocked.",
+      "provider_ids": [
+        "claude"
+      ],
+      "affected_page_ids": [
+        "page-01",
+        "page-02",
+        "page-03",
+        "page-04",
+        "page-05",
+        "page-06"
+      ],
+      "owner_option": "If unintended, ask your website manager to allow its search crawler.",
+      "is_illustrative": true,
+      "evidence": []
+    },
+    {
+      "id": "missed-product-pages",
+      "title": "Two product pages were missed in some tests.",
+      "provider_ids": [
+        "gemini",
+        "perplexity"
+      ],
+      "affected_page_ids": [
+        "page-04",
+        "page-05"
+      ],
+      "cause": "unconfirmed",
+      "owner_option": "Check the affected URLs and links from the coffee catalog.",
+      "is_illustrative": true,
+      "evidence": []
+    }
+  ],
+  "limits": [
+    "All results invented; no scans or provider tests performed.",
+    "Total website page count not established.",
+    "Search permission does not establish actual visits, indexing or direct retrieval.",
+    "Google Search permissions are not equivalent to all Gemini retrieval routes."
+  ]
+}
