@@ -1,0 +1,261 @@
+{
+  "schemaVersion": "1.0",
+  "sectionId": "consistent-current",
+  "sectionNumber": 3,
+  "isIllustrative": true,
+  "business": {
+    "label": "Fictional Charleston boutique hotel",
+    "website": null
+  },
+  "assessedAt": null,
+  "assessmentRunId": null,
+  "industryStandard": {
+    "id": "boutique-hotel",
+    "version": "1.0"
+  },
+  "rubricVersion": "draft-1",
+  "scope": {
+    "applicableDecisionFactCount": 10,
+    "coreCount": 5,
+    "whenRelevantCount": 5,
+    "siteTotalPageCount": null,
+    "actualSourcesChecked": 0
+  },
+  "summary": {
+    "agree": 3,
+    "difference": 5,
+    "unconfirmed": 2,
+    "notApplicable": 0
+  },
+  "referenceSources": [
+    {
+      "id": "hotel-website",
+      "type": "owned",
+      "label": "Hotel website: Rooms, Amenities, Policies, Booking terms",
+      "url": null,
+      "status": "illustrative_only"
+    },
+    {
+      "id": "booking-a",
+      "type": "booking_listing",
+      "label": "Booking listing A",
+      "url": null,
+      "status": "illustrative_only"
+    },
+    {
+      "id": "booking-b",
+      "type": "booking_listing",
+      "label": "Booking listing B",
+      "url": null,
+      "status": "illustrative_only"
+    },
+    {
+      "id": "guide",
+      "type": "guide",
+      "label": "Charleston hotel guide",
+      "url": null,
+      "status": "illustrative_only"
+    },
+    {
+      "id": "roundup",
+      "type": "listicle",
+      "label": "Historic-district hotel roundup",
+      "url": null,
+      "status": "illustrative_only"
+    }
+  ],
+  "decisionFacts": [
+    {
+      "id": "location",
+      "label": "1. Location & neighborhood",
+      "bucket": "core",
+      "applicable": true,
+      "baselineStatement": "French Quarter, Charleston.",
+      "externalStatements": "Both booking listings show the same address and neighborhood.",
+      "displayOutcome": "agree",
+      "finding": "✓ AgreeSupports recommendations for guests who want to stay in the French Quarter.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "price-fees",
+      "label": "2. Price range & mandatory fees",
+      "bucket": "core",
+      "applicable": true,
+      "baselineStatement": "$35 nightly destination fee, added to the room rate.",
+      "externalStatements": "One booking listing describes the rate as including all mandatory property fees, but its displayed breakdown omits this charge.",
+      "displayOutcome": "difference",
+      "finding": "! ConflictingAI could understate the total cost and recommend the hotel for a budget it exceeds.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "rooms-occupancy",
+      "label": "3. Room types & occupancy",
+      "bucket": "core",
+      "applicable": true,
+      "baselineStatement": "King rooms sleep 2; double-queen rooms sleep 4.",
+      "externalStatements": "Both booking listings match the room types and maximum occupancy.",
+      "displayOutcome": "agree",
+      "finding": "✓ AgreeSupports matching the room to the number of guests.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "amenities",
+      "label": "4. Amenities & availability",
+      "bucket": "core",
+      "applicable": true,
+      "baselineStatement": "Rooftop pool permanently closed.",
+      "externalStatements": "The hotel roundup still lists a rooftop pool as a reason to stay.",
+      "displayOutcome": "difference",
+      "finding": "! Outdated elsewhereAI could recommend a pool that guests will not receive.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "atmosphere",
+      "label": "5. Atmosphere & guest fit",
+      "bucket": "core",
+      "applicable": true,
+      "baselineStatement": "Small, quiet hotel designed for a relaxed stay.",
+      "externalStatements": "The hotel guide and booking descriptions also describe a quiet, intimate setting.",
+      "displayOutcome": "agree",
+      "finding": "✓ Descriptions agreeSupports the same description of guest fit. Whether the stay delivers on it is assessed separately through reviews.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "parking",
+      "label": "6. Parking & charges",
+      "bucket": "when_relevant",
+      "applicable": true,
+      "baselineStatement": "Valet parking: $45 per night.",
+      "externalStatements": "The Charleston guide lists complimentary parking.",
+      "displayOutcome": "difference",
+      "finding": "! ConflictingAI could describe parking as free or miscalculate the cost of bringing a car.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "pets",
+      "label": "7. Pet policy & charges",
+      "bucket": "when_relevant",
+      "applicable": true,
+      "baselineStatement": "Dogs welcome; $75 per stay.",
+      "externalStatements": "One booking listing says pets are not permitted.",
+      "displayOutcome": "difference",
+      "finding": "! ConflictingAI could exclude the hotel from dog-friendly recommendations.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "accessibility",
+      "label": "8. Accessibility features",
+      "bucket": "when_relevant",
+      "applicable": true,
+      "baselineStatement": "Accessible rooms available; specific bathroom and access features not described.",
+      "externalStatements": "Booking listings say “accessible” without naming the room features.",
+      "displayOutcome": "unconfirmed",
+      "finding": "? Not enough to confirmThe sources do not establish which room meets a guest’s specific access needs. Agreement on a vague label is insufficient.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "breakfast",
+      "label": "9. Breakfast & inclusions",
+      "bucket": "when_relevant",
+      "applicable": true,
+      "baselineStatement": "Breakfast available for an additional charge.",
+      "externalStatements": "One booking listing says breakfast is included in every rate.",
+      "displayOutcome": "difference",
+      "finding": "! ConflictingAI could overstate what the stay includes. Specific packages may differ and need to be matched.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "booking-terms",
+      "label": "10. Cancellation & booking restrictions",
+      "bucket": "when_relevant",
+      "applicable": true,
+      "baselineStatement": "Flexible and nonrefundable rates offered; conditions shown during booking.",
+      "externalStatements": "A guide says “free cancellation” without specifying a rate or deadline.",
+      "displayOutcome": "unconfirmed",
+      "finding": "? Rate conditions unclearAI should not describe every booking as refundable. Conditions must match the selected rate.",
+      "agreementAssessment": null,
+      "currencyAssessment": null,
+      "evidenceIds": [],
+      "checkedAt": null,
+      "isIllustrative": true
+    }
+  ],
+  "evidence": [],
+  "fixes": [
+    {
+      "rank": 1,
+      "title": "Correct the missing pool and conflicting pet policy.",
+      "decisionFactIds": [
+        "amenities",
+        "pets"
+      ],
+      "sourceIds": [
+        "roundup",
+        "booking-a"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Align charges and inclusions.",
+      "decisionFactIds": [
+        "price-fees",
+        "parking",
+        "breakfast"
+      ],
+      "sourceIds": [
+        "booking-a",
+        "guide"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Clarify details that cannot yet be confirmed.",
+      "decisionFactIds": [
+        "accessibility",
+        "booking-terms"
+      ],
+      "sourceIds": [
+        "hotel-website",
+        "booking-a",
+        "booking-b",
+        "guide"
+      ]
+    }
+  ]
+}

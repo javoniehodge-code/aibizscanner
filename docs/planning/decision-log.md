@@ -71,3 +71,12 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Preserve the white background, all-black text, plain language, explicit scope and expandable evidence. Owner onboarding collects optional facts, not desired positioning.
 - [Approved reference and data](../product/ai-brand-perception/sections/clear-concise-complete/README.md); [proposed technical process](../engineering/clear-concise-complete.md). This approval does not finalize other report sections or deploy a scanner.
 
+
+## Confirmed third section and decision-fact standards — 23 October 2026
+- Section 3 **Consistent & current** assesses whether decision facts agree across selected sources and still apply, explaining possible effects on AI recommendations.
+- Approved visual uses a fictional Charleston boutique hotel: ten applicable facts, 3 agree / 5 conflicting or outdated / 2 not enough to confirm. No live findings are implied.
+- Each business type has 5–10 decision facts total, ten as a ceiling across **Core** and **When relevant**. Do not add buying-context or usually-unnecessary report buckets.
+- The hotel and coffee standards are shared by website completeness and cross-source consistency. Local stock is not a routine fact for nationally distributed online coffee; product suitability still matters.
+- Website is comparison baseline, not independently verified truth. Separate consistency from currency and credibility. Retrieval/publication dates alone do not prove currency.
+- [Approved Section 3](../product/ai-brand-perception/sections/consistent-current/README.md), [shared standards](../product/ai-brand-perception/decision-fact-standards.md), [proposed implementation](../engineering/consistent-current.md). Approval covers the reference and product decisions; no production scanner is deployed.
+

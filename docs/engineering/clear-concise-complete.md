@@ -79,3 +79,7 @@ A prompt-only refresh does not rerun this assessment. Reassess on an authorized 
 - Refresh: resumed jobs are idempotent; cached evidence keeps its date; scope changes are visible; access controls prevent another account reading evidence.
 
 These are acceptance cases for future implementation. This documentation update does not add or run a production audit service.
+
+## Subsequent shared-standard requirement — 23 October 2026
+Use the approved [shared decision-fact standards](../product/ai-brand-perception/decision-fact-standards.md) for new runs, shared with [Section 3](consistent-current.md). Total 5–10 facts across Core and When relevant. The original eight-question coffee fixture is a historical synthetic design reference; migrate future checklists as documented rather than reusing its outcomes. In particular, routine local availability/purchase-route checks are outside the nationally distributed coffee standard.
+

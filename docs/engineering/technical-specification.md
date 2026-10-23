@@ -191,3 +191,7 @@ Pricing/cost estimates include all tasks, sources, advice, verification and fail
 ## Clear, concise & complete implementation
 [Section 2 implementation process](clear-concise-complete.md) adds versioned industry questions, product-level applicability, source-grounded extraction, the three assessment criteria, deterministic status/count rules, missing-versus-unavailable handling, owner improvements and refresh/release requirements. It consumes Section 1's declared inventory and snapshots. It is a proposed implementation plan, not deployed functionality or a live provider test.
 
+
+## Consistent & current implementation
+[Section 3 implementation process](consistent-current.md) defines bounded source selection, qualified fact extraction, entity/rate alignment, independent consistency/currency judgments, deterministic counts, source-specific corrections and evidence-backed rechecks. Use the [shared standards](../product/ai-brand-perception/decision-fact-standards.md) with Section 2. This is an implementation specification, not a deployed audit or provider integration.
+

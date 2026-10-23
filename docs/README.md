@@ -41,3 +41,7 @@ The former Brand Strength report is now the **AI Brand Perception Audit**. Build
 ## Approved second section — 23 October 2026
 [Section 2: Clear, concise & complete](product/ai-brand-perception/sections/clear-concise-complete/README.md) records the approved visual, webpage, synthetic fixture and data contract. [Implementation process](engineering/clear-concise-complete.md) specifies the website-content baseline and evidence rules. This section is now approved alongside Section 1; remaining sections are still under revision.
 
+
+## Approved third section and shared standards — 23 October 2026
+[Section 3: Consistent & current](product/ai-brand-perception/sections/consistent-current/README.md) records the approved fictional-hotel visual, webpage, fixture and contract. [Technical process](engineering/consistent-current.md) defines cross-source comparison and freshness checks. [Shared decision-fact standards](product/ai-brand-perception/decision-fact-standards.md) now govern Sections 2 and 3: 5–10 facts total, only Core and When relevant, with approved hotel and coffee standards. These standards supersede the old coffee checklist for future reports; the earlier visual remains a synthetic design reference.
+

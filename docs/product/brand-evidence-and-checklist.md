@@ -81,3 +81,7 @@ The report is now called the **AI Brand Perception Audit**. Its first section is
 ## Approved second section — 23 October 2026
 Use [Clear, concise & complete](ai-brand-perception/sections/clear-concise-complete/README.md) as the second section of the **AI Brand Perception Audit**. Assess whether selected website information supports relevant recommendation decisions against a consistent industry checklist. Finding a product is insufficient. Keep evidence grounded, scope explicit and unavailable sources separate from missing content. The linked reference overrides older presentation/checklist guidance for this section only. Owner onboarding needs optional facts, not desired positioning.
 
+
+## Approved consistency section and shared standard — 23 October 2026
+Use [Section 3: Consistent & current](ai-brand-perception/sections/consistent-current/README.md) for the cross-source baseline. Follow the [shared decision-fact standards](ai-brand-perception/decision-fact-standards.md) in both completeness and consistency: 5–10 total facts, Core and When relevant only. Compare like-for-like entities/policies against the website baseline while flagging its own gaps. Missing, conflicting, unavailable and currency-unconfirmed remain distinct. The hotel fixture is synthetic. Prior generic coffee purchase-route checks are not the future coffee standard.
+

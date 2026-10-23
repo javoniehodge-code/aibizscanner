@@ -44,3 +44,7 @@ Discovery/accessibility remains Section 1. Independent credibility, product qual
 ## Handoff acceptance
 
 Keep the approved structure and language; make content evidence-driven. Expose exact pages and product scope. Reproduce fixture counts without inventing evidence. Preserve distinctions between unavailable, absent, ambiguous and inapplicable information. Every real finding and suggested improvement must trace to its underlying question and source evidence.
+
+## Subsequent standard update — 23 October 2026
+The [shared decision-fact standards](../../decision-fact-standards.md) now govern future completeness and consistency reports, with 5–10 total facts across Core and When relevant. The earlier eight-question coffee visual above remains an approved synthetic design reference, but its purchase-route checklist is superseded for future report generation. Do not silently reuse or convert its 4/2/2 findings under the new standard.
+

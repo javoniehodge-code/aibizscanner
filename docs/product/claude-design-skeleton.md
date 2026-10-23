@@ -116,3 +116,7 @@ For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery
 ## Approved second-section override — 23 October 2026
 [Section 2: Clear, concise & complete](ai-brand-perception/sections/clear-concise-complete/README.md) is now approved alongside Section 1. Follow its saved webpage/image, fixture and contract: plain-language verdict, explicit question counts, clear/concise/complete standards, selected-page scope, decision table with expandable evidence and ranked factual improvements. White background and all-black text remain required. These are our content assessments, not model-specific scores. Preserve the illustrative label until validated evidence replaces the sample. Other sections remain under revision.
 
+
+## Approved third-section override — 23 October 2026
+[Section 3: Consistent & current](ai-brand-perception/sections/consistent-current/README.md) is approved: question/verdict, three outcome counts, scope and source disclosure, Core/When relevant fact table, prioritized source-specific fixes, expandable evidence/rules. Use the fictional hotel webpage/image and fixture. White background, all-black text and plain English remain required. Use the [shared 5–10 fact standards](ai-brand-perception/decision-fact-standards.md) across Sections 2 and 3. Other sections remain under revision. Keep simulated results labeled; do not claim observed AI source use.
+
