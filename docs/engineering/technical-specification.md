@@ -183,3 +183,7 @@ Prompt checks three times weekly only; full modules use separate slower schedule
 Worker claims unique schedule slot, snapshots scope, checks active subscription/credits and reserves cost atomically. Retries/restarts do not double-run or double-consume. Disable work on inactive entitlement under the finalized billing policy.
 Chart real counts, sample sizes and gaps; label any smoothing/trend. Avoid misleading inference from single-run variance. Reuse source snapshots only with explicit freshness/coverage labels, never as new observations.
 Pricing/cost estimates include all tasks, sources, advice, verification and failure overhead at each cadence; no old 48-call assumptions.
+
+## Website discovery and accessibility implementation
+[Section 1 implementation process](website-discovery-accessibility.md) defines page inventory/selection, provider-specific permissions, separate search and URL-reading tests, required tool evidence, cache/live distinctions, deterministic counts, budgets and release checks. This is a proposed implementation plan, not a deployed scanner. Use it with the approved report-section reference.
+

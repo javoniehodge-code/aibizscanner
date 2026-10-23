@@ -101,3 +101,7 @@ Gemini misses medium roast and Nespresso Original Line capsules in the example; 
 ## Design handoff to Claude
 
 Implement this section using the approved webpage reference and sample data. Preserve the page inventory, simple language, white background, black text, consistent counts and separate access-permission check. Keep the rest of the report out of this iteration. Treat the HTML as a reference design, not a production scanner. Build the production UI from the data contract and never present the sample as a real scan.
+
+## Technical implementation
+See the [end-to-end implementation process](../../../../engineering/website-discovery-accessibility.md). It details collection, page selection, permissions, provider capability validation, independent search/reading tests, evidence requirements, cache behavior, job records and acceptance cases. Published crawler blocking does not automatically cancel a separate permitted URL test; the Claude sample is illustrative, not that execution rule.
+

@@ -46,3 +46,7 @@ If all provider page tests are not_tested, `found_and_read_count` is null, and t
 ## Production evidence
 
 Every real claim should link to dated evidence appropriate to its type: rules snapshot for published permissions; platform search output for discovery; tool-returned page content for reading; verified server logs for crawler visits; platform webmaster evidence for indexing where available. Use bounded source and page collection and disclose limits. Never let the illustrative fixture enter production results as observed evidence.
+
+## Production implementation extension
+See the [technical process](../../../../engineering/website-discovery-accessibility.md). Production checks also require exact provider/tool identifiers, attempted/observed search and fetch actions, URL-match evidence, content-validation evidence, cache/live/unknown retrieval provenance, per-attempt execution status and query/evaluation rule versions. Treat the sample fixture as a display example, not execution evidence. A cached content success can demonstrate information availability, but does not establish a current direct visit or verify removal of an access block.
+
