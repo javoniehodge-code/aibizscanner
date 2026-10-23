@@ -62,3 +62,12 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Use plain English, a white background and all-black text. Put technical details behind expandable controls. Webpage first; PDF layout later.
 - The Café Bustelo design is approved as a reference; all displayed test outcomes are simulated and must remain labeled.
 - [Approved specification, visual and data](../product/ai-brand-perception/sections/website-discovery-accessibility/README.md). This update covers the first section only; it does not endorse older whole-report examples as the current design.
+
+## Confirmed second-section decision — 23 October 2026
+- Section 2, **Clear & complete**, asks whether the website gives AI clear, concise and complete facts to match a product to a customer's needs.
+- Assess relevant recommendation decisions against versioned industry standards, not merely the presence of a product name or an About page fact.
+- The approved coffee example has eight questions across the same six selected pages, with illustrative counts of 4 enough detail, 2 some detail missing and 2 not enough information.
+- This is our website-content baseline, not per-model opinions or proof of an AI recommendation. Missing, unavailable and not applicable are distinct.
+- Preserve the white background, all-black text, plain language, explicit scope and expandable evidence. Owner onboarding collects optional facts, not desired positioning.
+- [Approved reference and data](../product/ai-brand-perception/sections/clear-concise-complete/README.md); [proposed technical process](../engineering/clear-concise-complete.md). This approval does not finalize other report sections or deploy a scanner.
+

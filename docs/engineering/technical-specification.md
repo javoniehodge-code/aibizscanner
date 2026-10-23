@@ -187,3 +187,7 @@ Pricing/cost estimates include all tasks, sources, advice, verification and fail
 ## Website discovery and accessibility implementation
 [Section 1 implementation process](website-discovery-accessibility.md) defines page inventory/selection, provider-specific permissions, separate search and URL-reading tests, required tool evidence, cache/live distinctions, deterministic counts, budgets and release checks. This is a proposed implementation plan, not a deployed scanner. Use it with the approved report-section reference.
 
+
+## Clear, concise & complete implementation
+[Section 2 implementation process](clear-concise-complete.md) adds versioned industry questions, product-level applicability, source-grounded extraction, the three assessment criteria, deterministic status/count rules, missing-versus-unavailable handling, owner improvements and refresh/release requirements. It consumes Section 1's declared inventory and snapshots. It is a proposed implementation plan, not deployed functionality or a live provider test.
+

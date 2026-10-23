@@ -77,3 +77,7 @@ Controls: inspect evidence, owner marks fix done, view history. Manual recheck b
 
 ## Approved first section — 23 October 2026
 The report is now called the **AI Brand Perception Audit**. Its first section is [Website discovery and accessibility](ai-brand-perception/sections/website-discovery-accessibility/README.md): platform-specific website permission checks, explicitly selected/named pages, separate search and reading results, evidence and plain-language owner options. Use the linked approved white-background, black-text design for this section. This replaces this section’s previous generic accessible-information presentation; it does not finalize the rest of the report.
+
+## Approved second section — 23 October 2026
+Use [Clear, concise & complete](ai-brand-perception/sections/clear-concise-complete/README.md) as the second section of the **AI Brand Perception Audit**. Assess whether selected website information supports relevant recommendation decisions against a consistent industry checklist. Finding a product is insufficient. Keep evidence grounded, scope explicit and unavailable sources separate from missing content. The linked reference overrides older presentation/checklist guidance for this section only. Owner onboarding needs optional facts, not desired positioning.
+

@@ -112,3 +112,7 @@ First pass: all pages as rough connected frames. Second pass: polish the visibil
 
 ## Approved Brand Perception section override — 23 October 2026
 For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery and accessibility](ai-brand-perception/sections/website-discovery-accessibility/README.md) and its linked image, webpage reference and fixture. The approved first section takes precedence over older generic Brand Strength bucket/color layouts for that section. All-black text on white, plain English, named linked pages and consistent selected-page counts are required. Keep outcomes simulated until actual evidence exists. Do not redesign or finalize the other report sections in this handoff.
+
+## Approved second-section override — 23 October 2026
+[Section 2: Clear, concise & complete](ai-brand-perception/sections/clear-concise-complete/README.md) is now approved alongside Section 1. Follow its saved webpage/image, fixture and contract: plain-language verdict, explicit question counts, clear/concise/complete standards, selected-page scope, decision table with expandable evidence and ranked factual improvements. White background and all-black text remain required. These are our content assessments, not model-specific scores. Preserve the illustrative label until validated evidence replaces the sample. Other sections remain under revision.
+

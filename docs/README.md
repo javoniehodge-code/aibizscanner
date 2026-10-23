@@ -37,3 +37,7 @@ Repository: [javoniehodge-code/aibizscanner](https://github.com/javoniehodge-cod
 
 ## Approved report sections — 23 October 2026
 The former Brand Strength report is now the **AI Brand Perception Audit**. Build it section by section. Start with [Section 1: Website discovery and accessibility](product/ai-brand-perception/sections/website-discovery-accessibility/README.md), including the approved visual, webpage reference, sample data and data contract. This section supersedes conflicting layout/color guidance for itself; other report sections remain under revision.
+
+## Approved second section — 23 October 2026
+[Section 2: Clear, concise & complete](product/ai-brand-perception/sections/clear-concise-complete/README.md) records the approved visual, webpage, synthetic fixture and data contract. [Implementation process](engineering/clear-concise-complete.md) specifies the website-content baseline and evidence rules. This section is now approved alongside Section 1; remaining sections are still under revision.
+

@@ -1,0 +1,251 @@
+{
+  "schemaVersion": "1.0",
+  "sectionId": "clear-concise-complete",
+  "sectionNumber": 2,
+  "displayLabel": "Clear & complete",
+  "brand": "Café Bustelo",
+  "isIllustrative": true,
+  "assessmentType": "website_content_baseline",
+  "assessmentRunId": null,
+  "assessedAt": null,
+  "industryTemplate": {
+    "id": "cpg-coffee",
+    "version": "draft-1"
+  },
+  "rubricVersion": "draft-1",
+  "scope": {
+    "selectedPageCount": 6,
+    "applicableQuestionCount": 8,
+    "siteTotalPageCount": null,
+    "selectionReference": "../website-discovery-accessibility/sample-data.json",
+    "limitation": "Selected pages only; not a complete website or catalog audit."
+  },
+  "sources": [
+    {
+      "id": "home",
+      "name": "Home",
+      "url": "https://www.cafebustelo.com/",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    },
+    {
+      "id": "products",
+      "name": "All coffee products",
+      "url": "https://www.cafebustelo.com/coffee",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    },
+    {
+      "id": "classic",
+      "name": "Classic espresso-style ground coffee",
+      "url": "https://www.cafebustelo.com/coffee/ground/espresso-style-can",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    },
+    {
+      "id": "medium",
+      "name": "Medium-roast ground coffee",
+      "url": "https://www.cafebustelo.com/coffee/ground/medium-roast",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    },
+    {
+      "id": "capsules",
+      "name": "Nespresso Original Line capsules",
+      "url": "https://www.cafebustelo.com/coffee/espresso-capsules/dark-roast",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    },
+    {
+      "id": "faq",
+      "name": "Frequently asked questions",
+      "url": "https://www.cafebustelo.com/faqs",
+      "collectionStatus": "reference_only",
+      "snapshotId": null,
+      "retrievedAt": null
+    }
+  ],
+  "summary": {
+    "enough_detail": 4,
+    "some_detail_missing": 2,
+    "not_enough_information": 2,
+    "could_not_assess": 0,
+    "not_applicable": 0,
+    "assessableQuestionCount": 8
+  },
+  "questions": [
+    {
+      "id": "format",
+      "question": "Can AI recommend the right product format for the customer?",
+      "requiredInformation": "Clearly named products and formats, so AI can distinguish coffee that needs brewing from instant coffee or machine capsules.",
+      "sampleFinding": "Formats are stated directly and linked to named products. AI has enough information to select a format without inferring it from a photo.",
+      "status": "enough_detail",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "products"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "roast",
+      "question": "Can AI choose a coffee that matches the requested roast?",
+      "requiredInformation": "A specific roast level for each relevant product, so AI can distinguish medium-roast choices from the classic dark roast.",
+      "sampleFinding": "Each selected product has a direct roast label. AI can distinguish the medium-roast option from the classic dark roast.",
+      "status": "enough_detail",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "classic",
+        "medium"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "flavor",
+      "question": "Can AI match a coffee to the customer’s taste preferences?",
+      "requiredInformation": "Specific, supported flavor descriptions and distinctions between products—for example, smoky versus chocolatey, or mild versus intense.",
+      "sampleFinding": "“Bold” and “distinct” provide little detail about actual flavor differences. AI would need to infer which product fits a more specific preference.",
+      "status": "some_detail_missing",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "products"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "brewing",
+      "question": "Can AI recommend a coffee for the customer’s brewing method?",
+      "requiredInformation": "Product-specific grind and brewing suitability, with concise preparation guidance where needed to establish the match.",
+      "sampleFinding": "Methods are named, but the sample does not clearly connect each selected ground coffee’s grind and preparation guidance to those methods.",
+      "status": "some_detail_missing",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "faq"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "machine",
+      "question": "Can AI recommend a product that fits the customer’s machine?",
+      "requiredInformation": "The exact compatible machine system for the specific capsule or pod, including relevant exclusions.",
+      "sampleFinding": "The sample explicitly names Nespresso Original Line. AI has a specific compatibility statement to use rather than treating every Nespresso system as interchangeable.",
+      "status": "enough_detail",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "capsules"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "purchase",
+      "question": "Can AI direct the customer to a place to buy the recommended product?",
+      "requiredInformation": "A clear purchase route associated with the exact product, including any relevant location limits.",
+      "sampleFinding": "The selected product pages include direct purchase routes. AI can point to the product’s buying options; local stock still requires a separate check.",
+      "status": "enough_detail",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "classic",
+        "medium"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "caffeine",
+      "question": "Can AI recommend an option for the customer’s caffeine preference?",
+      "requiredInformation": "Which relevant products are regular or decaf, with any stated caffeine amount tied to the correct product and serving size.",
+      "sampleFinding": "The example does not clearly connect caffeine and decaf information to the products being compared. AI cannot confidently select for that preference from this sample.",
+      "status": "not_enough_information",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "classic",
+        "faq"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    },
+    {
+      "id": "value",
+      "question": "Can AI compare value when the customer asks for an affordable coffee?",
+      "requiredInformation": "Comparable pack sizes, current purchase prices and a stated serving amount or yield. Any calculated cost per serving must show its assumptions.",
+      "sampleFinding": "The sample does not provide enough connected price and serving information for a fair comparison. Calling the coffee “affordable” would not establish that it meets a specific budget.",
+      "status": "not_enough_information",
+      "applicability": "applicable",
+      "scope": "Selected products relevant to this question; illustrative scope only",
+      "sourceIds": [
+        "products",
+        "classic",
+        "medium"
+      ],
+      "criterionAssessments": null,
+      "productChecks": [],
+      "evidenceIds": [],
+      "assessedAt": null,
+      "isIllustrative": true
+    }
+  ],
+  "evidence": [],
+  "fixes": [
+    {
+      "rank": 1,
+      "title": "State specific product differences in a short, factual summary.",
+      "questionIds": [
+        "flavor"
+      ],
+      "guidance": "Use supported product attributes; never invent tasting notes."
+    },
+    {
+      "rank": 2,
+      "title": "Connect brewing and caffeine information to the specific product.",
+      "questionIds": [
+        "brewing",
+        "caffeine"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Provide the facts needed for a fair value comparison.",
+      "questionIds": [
+        "value"
+      ],
+      "guidance": "Match pack, price and yield; show assumptions for optional calculations."
+    }
+  ]
+}
