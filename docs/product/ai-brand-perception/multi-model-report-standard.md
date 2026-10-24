@@ -51,3 +51,7 @@ All comparison answers, citations and earlier results in the references are inve
 ## Precedence
 
 This confirmed product direction supersedes older “baseline only,” “no provider columns” and “actual model understanding later” instructions **where they excluded model comparison from a report section**. The evidence baseline remains required. Earlier approved visuals and synthetic fixtures are historical references; the linked four-model designs are revisions implementing the new direction, not a claim that every new synthetic example has separately been approved. Section 1 keeps its established provider comparison and adds the common history/provenance contract. No production scanner is built by this specification change.
+
+## Section 5 model comparison — 24 October 2026
+[Distinctive & relevant](sections/distinctive-relevant/README.md) extends the same four-provider layout and compatible-history requirement. Shared baseline: supported capabilities, audiences and limitations. Observations: each model's expressed associations, reasons to choose, caveats/overclaims and disclosed citations. Track association presence, explicit user-value emphasis, missing supported strengths and corrected/persistent mischaracterizations. Independent-search named-site diagnostics remain separate from organic recommendation tests; no baseline feature list is supplied to elicit desired associations. The example has no verified competitive advantage.
+

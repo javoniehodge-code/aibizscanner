@@ -124,3 +124,7 @@ For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery
 ## Required four-model report layouts — 24 October 2026
 Every section compares all four providers side by side. Use the [revised preview](ai-brand-perception/model-comparison-preview.html) and [shared standard](ai-brand-perception/multi-model-report-standard.md). Sections 2/3 baseline-only layouts are historical; revisions add shared baseline plus four model columns, source evidence and provider-specific previous/current changes. Section 4 adds source-strength/citation matrix plus model conclusions. Keep four models visible even when tests are unavailable. No fake results, dates or integrations outside labeled example mode. These revisions implement confirmed product direction; their invented examples are not live findings.
 
+
+## Section 5 design handoff — 24 October 2026
+Use [Distinctive & relevant](ai-brand-perception/sections/distinctive-relevant/README.md) and its new white-background/all-black-text construction-calculator reference. Fixed flow: verdict, four model descriptions, scope/method, baseline plus four-model association matrix, relevance/competitive conclusions, per-model history, ranked improvements and expandable rules/evidence. Keep this section's five assessment dimensions separate from the 5–10 decision-fact standard. Results and prior runs are labeled invented; do not create live integrations or imply the new visual has already been separately reviewed.
+

@@ -58,3 +58,7 @@ Real raw responses, tool traces, website snapshots and customer reports remain a
 - White background/all-black copy, readable table scrolling, keyboard section tabs, exact four-provider content and current/previous metric sums are checked.
 
 This task updates reference designs/specifications only. No live model tests, API integrations or production monitoring are implemented.
+
+## Section 5 association pipeline — 24 October 2026
+Add [Distinctive & relevant](distinctive-relevant.md) after the evidence sections. Reuse the supported capability baseline, execute neutral named-site questions across four providers, extract and validate semantically scoped associations with exact spans, compare expression/alignment separately, independently verify competitive distinctions and track compatible provider-specific changes. Do not infer accuracy, uniqueness, causal influence or organic recommendation share from association copy. Apply the same private evidence storage and bounded idempotent execution requirements.
+

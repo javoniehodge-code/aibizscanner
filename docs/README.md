@@ -49,3 +49,7 @@ The former Brand Strength report is now the **AI Brand Perception Audit**. Build
 ## Four-model comparison across every section — 24 October 2026
 The [multi-model report standard](product/ai-brand-perception/multi-model-report-standard.md) now requires visible ChatGPT, Claude, Gemini and Perplexity outcomes, disclosed sources and per-model history in every section. Shared baselines remain distinct. See the [revised section preview](product/ai-brand-perception/model-comparison-preview.html), section-specific references and [implementation process](engineering/multi-model-brand-perception.md). This supersedes earlier baseline-only layouts; all current comparison results are synthetic design examples.
 
+
+## Distinctive & relevant — 24 October 2026
+[Section 5](product/ai-brand-perception/sections/distinctive-relevant/README.md) records the agreed conceptual direction and new fictional construction-calculator visual: shared capability evidence, all four AI association columns, relevance/reasons to choose, competitive-evidence limits and per-model history. Includes webpage/image, synthetic data, contract and [technical process](engineering/distinctive-relevant.md). The user requested creation/logging; the newly drawn visual has not separately been reviewed. No live findings are implied.
+

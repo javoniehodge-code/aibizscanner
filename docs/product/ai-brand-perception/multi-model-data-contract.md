@@ -49,3 +49,7 @@ Cache reuse retains the original observation timestamp and is never a new answer
 ## Synthetic fixtures
 
 `isIllustrative=true`, actual model calls/retrievals zero, raw response/model IDs/timestamps absent and no real evidence. Both current and previous fixtures are synthetic. Always render the visible example banner. Reject them from production trends, billing reports and live evidence scoring. New examples cannot masquerade as historical customer runs.
+
+## Section 5 extension — 24 October 2026
+Use [Distinctive & relevant contract](sections/distinctive-relevant/data-contract.md) for association taxonomy/version, exact answer spans, expression versus evidence alignment, explicit exclusions/negation, question-set coverage and model-specific history. Frequency needs a declared answer/opportunity denominator, not word counts. Named comparative evidence is required before claiming advantage. Partial/unavailable tests cannot silently yield not-mentioned. Synthetic previous/current examples do not enter production trends.
+

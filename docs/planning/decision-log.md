@@ -89,3 +89,13 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Keep source fixes and changed model representation separately verified. One changed answer/citation does not establish stable improvement or causality.
 - [Product standard](../product/ai-brand-perception/multi-model-report-standard.md), [data contract](../product/ai-brand-perception/multi-model-data-contract.md), [technical process](../engineering/multi-model-brand-perception.md). Section 2/3 earlier baseline-only references are superseded for future report presentation; the linked designs are revisions implementing this correction. Section 4 remains a revised proposal, not a separately approved live audit.
 
+
+## Confirmed Section 5 direction — 24 October 2026
+- **Distinctive & relevant** asks whether each AI connects supported capabilities to meaningful reasons to choose the business.
+- Use a fictional construction-calculator site for this exercise; compare ChatGPT, Claude, Gemini and Perplexity visibly.
+- Assess five dimensions: category association, user fit, reasons to choose, competitive distinction, and missing/misleading associations.
+- Distinguish present, explicitly emphasized, not mentioned in tested answers, misleading, and correctly excluded broader capabilities. Failed tests are not missing associations.
+- Useful features are not automatically unique. A competitive advantage requires named like-for-like comparison evidence; this example has none and says not established.
+- Preserve model-specific gains/losses, stronger reasons and corrected/persistent overclaims across compatible runs. No desired-positioning onboarding or causal improvement claim.
+- [Section reference/data](../product/ai-brand-perception/sections/distinctive-relevant/README.md); [technical process](../engineering/distinctive-relevant.md). Concept approved and creation/logging requested; newly created visual is not separately reviewed. All answers/history are synthetic; no production implementation is claimed.
+

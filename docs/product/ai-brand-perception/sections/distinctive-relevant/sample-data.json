@@ -1,0 +1,622 @@
+{
+  "schemaVersion": "1.0",
+  "sectionId": "distinctive-relevant",
+  "sectionNumber": 5,
+  "isIllustrative": true,
+  "business": {
+    "label": "Fictional construction-calculator website",
+    "website": null
+  },
+  "providers": [
+    "chatgpt",
+    "claude",
+    "gemini",
+    "perplexity"
+  ],
+  "assessmentDimensions": [
+    "category_association",
+    "user_fit",
+    "reasons_to_choose",
+    "competitive_distinction",
+    "missing_or_misleading_associations"
+  ],
+  "scope": {
+    "questionCountPerProvider": 5,
+    "trackedAssociationCount": 5,
+    "providerCount": 4,
+    "testMode": "independent_web_search",
+    "answersPerQuestionPerProvider": 1
+  },
+  "actualModelCalls": 0,
+  "actualSourceRetrievals": 0,
+  "runMetadata": {
+    "currentRunId": "synthetic-current",
+    "previousRunId": "synthetic-previous",
+    "testedAt": null,
+    "actualModelIds": null,
+    "toolEvidence": []
+  },
+  "questions": [
+    {
+      "id": "category",
+      "text": "What does this website offer?"
+    },
+    {
+      "id": "user-fit",
+      "text": "Who is this website most useful for?"
+    },
+    {
+      "id": "reasons",
+      "text": "What are its main reasons to choose it?"
+    },
+    {
+      "id": "alternatives",
+      "text": "When would another type of tool be a better choice?"
+    },
+    {
+      "id": "limits",
+      "text": "What are the limits of what it can do?"
+    }
+  ],
+  "associations": [
+    {
+      "id": "concrete",
+      "label": "Concrete quantity estimates",
+      "baseline": {
+        "summary": "Supported capabilityConcrete tool estimates volume from supplied dimensions.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "current": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentIdentifies concrete-volume estimates.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "present",
+          "summary": "✓ PresentNames the concrete tool.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "present",
+          "summary": "✓ PresentIncludes concrete calculations.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "present",
+          "summary": "✓ PresentIdentifies the concrete use case.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "waste",
+      "label": "Adjustable waste allowance",
+      "baseline": {
+        "summary": "Supported capabilityUser can change the allowance; the result shows the adjustment.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "current": [
+        {
+          "provider": "chatgpt",
+          "status": "emphasized",
+          "summary": "✓ EmphasizedGives it as a reason to choose the tool.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedNo waste-control association in these answers.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedNo waste-control association in these answers.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "emphasized",
+          "summary": "✓ EmphasizedConnects the control to adjusting a material estimate.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "formulas",
+      "label": "Explains formulas & assumptions",
+      "baseline": {
+        "summary": "Supported capabilityFormula explanations and calculation assumptions are visible.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "current": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentMentions visible calculation steps.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "emphasized",
+          "summary": "✓ EmphasizedGives transparency as a reason to choose it.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedUses generic “easy to use” wording instead.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "emphasized",
+          "summary": "✓ EmphasizedExplains the benefit of checking assumptions.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "diy",
+      "label": "DIY material planning",
+      "baseline": {
+        "summary": "Supported user fitSimple project inputs and guidance support basic homeowner planning.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "current": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentAssociates it with homeowners and small projects.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "present",
+          "summary": "✓ PresentIdentifies DIY users.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "present",
+          "summary": "✓ PresentIdentifies DIY users.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "present",
+          "summary": "✓ PresentConnects tools to basic material planning.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "full-estimating",
+      "label": "Complete contractor estimating software",
+      "baseline": {
+        "summary": "Not supportedIndividual calculators do not establish a complete estimating or bidding workflow.",
+        "support": "not_supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "current": [
+        {
+          "provider": "chatgpt",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesDescribes individual calculations, not full job estimates.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesExplains when a broader estimating tool is needed.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "misleading",
+          "summary": "! MisleadingCalls it a complete contractor estimating platform.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesPreserves the material-calculator scope.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "previousAssociations": [
+    {
+      "id": "concrete",
+      "label": "Concrete quantity estimates",
+      "baseline": {
+        "summary": "Supported capabilityConcrete tool estimates volume from supplied dimensions.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "observations": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentIdentifies concrete-volume estimates.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "present",
+          "summary": "✓ PresentNames the concrete tool.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "present",
+          "summary": "✓ PresentIncludes concrete calculations.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "present",
+          "summary": "✓ PresentIdentifies the concrete use case.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "waste",
+      "label": "Adjustable waste allowance",
+      "baseline": {
+        "summary": "Supported capabilityUser can change the allowance; the result shows the adjustment.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "observations": [
+        {
+          "provider": "chatgpt",
+          "status": "not_mentioned",
+          "summary": "Earlier synthetic answer omitted the waste allowance.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedNo waste-control association in these answers.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedNo waste-control association in these answers.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "emphasized",
+          "summary": "✓ EmphasizedConnects the control to adjusting a material estimate.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "formulas",
+      "label": "Explains formulas & assumptions",
+      "baseline": {
+        "summary": "Supported capabilityFormula explanations and calculation assumptions are visible.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "observations": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentMentions visible calculation steps.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "present",
+          "summary": "Earlier synthetic answer mentioned formulas without making them a reason to choose.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "not_mentioned",
+          "summary": "— Not mentionedUses generic “easy to use” wording instead.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "not_mentioned",
+          "summary": "Earlier synthetic answer omitted formula transparency.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "diy",
+      "label": "DIY material planning",
+      "baseline": {
+        "summary": "Supported user fitSimple project inputs and guidance support basic homeowner planning.",
+        "support": "supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "observations": [
+        {
+          "provider": "chatgpt",
+          "status": "present",
+          "summary": "✓ PresentAssociates it with homeowners and small projects.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "present",
+          "summary": "✓ PresentIdentifies DIY users.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "present",
+          "summary": "✓ PresentIdentifies DIY users.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "present",
+          "summary": "✓ PresentConnects tools to basic material planning.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "full-estimating",
+      "label": "Complete contractor estimating software",
+      "baseline": {
+        "summary": "Not supportedIndividual calculators do not establish a complete estimating or bidding workflow.",
+        "support": "not_supported",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "observations": [
+        {
+          "provider": "chatgpt",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesDescribes individual calculations, not full job estimates.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesExplains when a broader estimating tool is needed.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "misleading",
+          "summary": "! MisleadingCalls it a complete contractor estimating platform.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "bounded",
+          "summary": "✓ Correctly distinguishesPreserves the material-calculator scope.",
+          "exactAnswerSpans": [],
+          "questionIds": [],
+          "citationIds": [],
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "provider": "chatgpt",
+      "previous": "Described concrete estimates without naming the waste allowance.",
+      "current": "Uses adjustable waste as a reason to choose the tool.",
+      "meaning": "One useful capability is now explicitly connected to selection.",
+      "isIllustrative": true
+    },
+    {
+      "provider": "claude",
+      "previous": "Mentioned visible formulas as a feature.",
+      "current": "Explains formula transparency as a reason to choose the site.",
+      "meaning": "Same association, stronger connection to user value.",
+      "isIllustrative": true
+    },
+    {
+      "provider": "gemini",
+      "previous": "Generic description; overstated full estimating capability.",
+      "current": "Same broad description and overstatement.",
+      "meaning": "No improvement shown. Capability correction remains unresolved.",
+      "isIllustrative": true
+    },
+    {
+      "provider": "perplexity",
+      "previous": "Emphasized waste controls; did not mention formula transparency.",
+      "current": "Emphasizes both controls and transparent assumptions.",
+      "meaning": "Another supported reason to choose is now reflected.",
+      "isIllustrative": true
+    }
+  ],
+  "competitiveAssessment": {
+    "status": "not_established",
+    "comparisonSet": [],
+    "reason": "No named alternatives were compared. Useful capabilities are not verified unique advantages."
+  },
+  "baselineSources": [],
+  "rawResponses": [],
+  "citations": [],
+  "productionEvidenceComplete": false,
+  "fixes": [
+    {
+      "rank": 1,
+      "title": "Connect supported capabilities to practical benefits.",
+      "associationIds": [
+        "waste",
+        "formulas"
+      ],
+      "watchProviders": [
+        "claude",
+        "gemini"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "State material-calculator scope plainly.",
+      "associationIds": [
+        "full-estimating"
+      ],
+      "watchProviders": [
+        "gemini"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Compare named alternatives before claiming competitive advantage.",
+      "associationIds": [
+        "waste",
+        "formulas"
+      ],
+      "watchProviders": [
+        "chatgpt",
+        "claude",
+        "gemini",
+        "perplexity"
+      ]
+    }
+  ]
+}

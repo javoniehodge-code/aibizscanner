@@ -199,3 +199,7 @@ Pricing/cost estimates include all tasks, sources, advice, verification and fail
 ## Mandatory model layer — 24 October 2026
 Use [Multi-model Brand Perception implementation](multi-model-brand-perception.md) for every section, with [versioned contract](../product/ai-brand-perception/multi-model-data-contract.md). The shared baseline pipeline is necessary but insufficient: collect and preserve all four providers' observed answers/tool evidence/citations, explicit test modes, matched denominators and compatible history. This supersedes any earlier decision to defer model understanding or omit provider columns. No production service or live calls are implemented in this documentation update.
 
+
+## Distinctive & relevant implementation
+[Section 5 process](distinctive-relevant.md) adds neutral named-site questions, evidence-bound association extraction, independent expression/alignment states, competitive comparison requirements and per-model history. Use the common provider provenance/budget/privacy pipeline. Present, emphasized, not mentioned, correctly excluded and misleading are not interchangeable. The reference is synthetic and does not implement or test a production scanner.
+

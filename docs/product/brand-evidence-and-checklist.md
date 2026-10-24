@@ -89,3 +89,7 @@ Use [Section 3: Consistent & current](ai-brand-perception/sections/consistent-cu
 ## Required model observations — 24 October 2026
 Apply the [four-model standard](ai-brand-perception/multi-model-report-standard.md) across all sections. Baseline website sufficiency, source consistency and source strength are not substitutes for actual recorded model answers. Show named model columns and per-model history; keep source correction verification distinct from model-output rechecks. See the revised Section 2/3/4 references and preserve explicit test modes/coverage.
 
+
+## Distinctive & relevant baseline — 24 October 2026
+Use [Section 5](ai-brand-perception/sections/distinctive-relevant/README.md): supported capability/audience baseline plus all four models' observed associations and reasons to choose. Missing relevant associations and misleading scope are distinct. Grade source support independently from model expression. Comparative superiority needs named equivalent evidence. The construction-calculator example is fictional and does not establish calculation accuracy or spontaneous recommendation inclusion.
+
