@@ -50,3 +50,7 @@ Every real claim should link to dated evidence appropriate to its type: rules sn
 ## Production implementation extension
 See the [technical process](../../../../engineering/website-discovery-accessibility.md). Production checks also require exact provider/tool identifiers, attempted/observed search and fetch actions, URL-match evidence, content-validation evidence, cache/live/unknown retrieval provenance, per-attempt execution status and query/evaluation rule versions. Treat the sample fixture as a display example, not execution evidence. A cached content success can demonstrate information availability, but does not establish a current direct visit or verify removal of an access block.
 
+
+## Model history extension — 24 October 2026
+Follow the [shared v2 contract](../../multi-model-data-contract.md): immutable provider/page/run observation IDs, actual route/model/tool configuration, response/retrieval evidence, baseline/page-scope versions, timestamps and compatible previous/current outcomes. Preserve permission/search/URL-read dimensions and existing selected-page denominators. First run, failed refresh and changed inventory/configuration remain explicit.
+

@@ -202,3 +202,7 @@ Capabilities change; recheck at implementation. Access to docs is not a successf
 ## Open engineering choices
 
 Exact model/tool combinations and API versions; purchased page/call caps; robots parser and route registry implementation; query limits; passage-validation thresholds; retry/time budgets; evidence retention; and optional owner log/search-tool integrations. Validate capabilities before promising identical features across all providers. These choices do not block the approved mockup, but do block unsupported production claims.
+
+## Shared model-history requirement — 24 October 2026
+Retain this section's established four-model permission/search/reading separation and follow the [common history/provenance pipeline](multi-model-brand-perception.md). Compare exact selected pages and dimensions per provider across compatible runs. A failure or untested provider stays visible. Model/version/tool/inventory changes create a disclosed history boundary; supplied-content success in Section 2 is not a discovery/accessibility test.
+

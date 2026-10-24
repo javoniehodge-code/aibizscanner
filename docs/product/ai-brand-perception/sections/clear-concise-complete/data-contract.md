@@ -49,3 +49,7 @@ Show counts as “X of Y applicable questions” and separately show unavailable
 ## Improvements and lineage
 
 Each improvement has rank, title, question IDs, finding/evidence references, affected product/source IDs and concrete suggested information. Do not generate unsupported product claims or guarantee more recommendations. Store raw findings separately from display copy. Reassessment creates a versioned run; it never rewrites historical evidence. Compare runs only with compatible template, scope and rubric, or show the differences.
+
+## Mandatory four-model extension — 24 October 2026
+Use the [shared v2 model contract](../../multi-model-data-contract.md) in addition to the baseline contract above. Add independent provider run/observation records, full answers, supplied-source versus actual citation provenance, baseline-relative statuses and compatible per-model history. Baseline findings alone are not report completion. This supersedes any statement that the report needs no provider columns; the baseline itself is still assessed once.
+

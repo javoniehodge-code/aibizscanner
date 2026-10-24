@@ -71,3 +71,7 @@ Real source snapshots, owner data and reports remain private with account author
 - UI remains all-black text on white, plain-language, keyboard-accessible and mobile-readable, with no false per-model source-use claims.
 
 These are future implementation acceptance requirements. No production scanner tests or live hotel assessment were performed by this logging task.
+
+## Mandatory provider-answer pipeline — 24 October 2026
+The source comparison above is the shared baseline subroutine. Add [independent-search observations](multi-model-brand-perception.md) for all four providers, actual answers/citations, baseline-relative status and compatible model history. A corrected source and a corrected model answer have separate recheck triggers. See [revised section reference](../product/ai-brand-perception/sections/consistent-current/model-comparison.html). Provider answers cannot be replaced by our source-only assessment.
+

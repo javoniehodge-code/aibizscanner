@@ -1,0 +1,1228 @@
+{
+  "schemaVersion": "2.0",
+  "sectionId": "consistent-current",
+  "isIllustrative": true,
+  "actualModelCalls": 0,
+  "testMode": "independent_web_search",
+  "questionCount": 10,
+  "providers": [
+    "chatgpt",
+    "claude",
+    "gemini",
+    "perplexity"
+  ],
+  "sampling": {
+    "answersPerQuestionPerProvider": 1,
+    "inference": "One observed answer is not a stable estimate of all future behavior."
+  },
+  "runMetadata": {
+    "currentRunId": "synthetic-current",
+    "previousRunId": "synthetic-previous",
+    "testedAt": null,
+    "actualModelIds": null,
+    "toolEvidence": []
+  },
+  "metric": {
+    "label": "Answers matching scoped baseline",
+    "successStatus": "match",
+    "denominator": 10,
+    "current": {
+      "chatgpt": 8,
+      "claude": 6,
+      "gemini": 5,
+      "perplexity": 8
+    },
+    "previous": {
+      "chatgpt": 7,
+      "claude": 6,
+      "gemini": 4,
+      "perplexity": 7
+    }
+  },
+  "facts": [
+    {
+      "id": "location",
+      "label": "Location",
+      "sharedBaseline": {
+        "summary": "French Quarter, Charleston.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: H",
+          "answerId": "synthetic-consistent-location-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: B",
+          "answerId": "synthetic-consistent-location-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: G",
+          "answerId": "synthetic-consistent-location-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: H",
+          "answerId": "synthetic-consistent-location-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "price-fees",
+      "label": "Price & mandatory fees",
+      "sharedBaseline": {
+        "summary": "$35 nightly destination fee; rate depends on dates. No universal nightly quote.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Adds the $35 fee; says rates varySource: H",
+          "answerId": "synthetic-consistent-price-fees-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "conflict",
+          "displayAnswer": "! Says all property fees includedSource: B",
+          "answerId": "synthetic-consistent-price-fees-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Omits fee while claiming an all-in totalSource: B",
+          "answerId": "synthetic-consistent-price-fees-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Adds fee; qualifies rateSource: H",
+          "answerId": "synthetic-consistent-price-fees-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "rooms-occupancy",
+      "label": "Rooms & occupancy",
+      "sharedBaseline": {
+        "summary": "King: 2 guests. Double queen: 4.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: H",
+          "answerId": "synthetic-consistent-rooms-occupancy-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: B",
+          "answerId": "synthetic-consistent-rooms-occupancy-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: B",
+          "answerId": "synthetic-consistent-rooms-occupancy-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: H",
+          "answerId": "synthetic-consistent-rooms-occupancy-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "amenities",
+      "label": "Amenities",
+      "sharedBaseline": {
+        "summary": "Rooftop pool permanently closed.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says pool is closedSource: H",
+          "answerId": "synthetic-consistent-amenities-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Says pool is closedSource: H",
+          "answerId": "synthetic-consistent-amenities-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Recommends the rooftop poolSource: R",
+          "answerId": "synthetic-consistent-amenities-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Says pool is closedSource: H",
+          "answerId": "synthetic-consistent-amenities-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "atmosphere",
+      "label": "Atmosphere & fit",
+      "sharedBaseline": {
+        "summary": "Website describes a quiet, intimate stay. Actual quietness needs review evidence.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Attributes description to hotelSource: H",
+          "answerId": "synthetic-consistent-atmosphere-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_established",
+          "displayAnswer": "— Does not address atmosphereNo relevant citation",
+          "answerId": "synthetic-consistent-atmosphere-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Guarantees a quiet staySource: H",
+          "answerId": "synthetic-consistent-atmosphere-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Does not guarantee quietSource: H",
+          "answerId": "synthetic-consistent-atmosphere-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "label": "Parking",
+      "sharedBaseline": {
+        "summary": "Valet: $45 per night.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ States $45 valetSource: H",
+          "answerId": "synthetic-consistent-parking-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "label": "Pet policy",
+      "sharedBaseline": {
+        "summary": "Dogs welcome; $75 per stay.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Dogs allowed; $75 per staySource: H",
+          "answerId": "synthetic-consistent-pets-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_established",
+          "displayAnswer": "— Does not establish pet policyNo relevant citation",
+          "answerId": "synthetic-consistent-pets-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Says pets are not allowedSource: B",
+          "answerId": "synthetic-consistent-pets-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Dogs allowed; states feeSource: H",
+          "answerId": "synthetic-consistent-pets-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility",
+      "sharedBaseline": {
+        "summary": "Specific room features not established. Ask for exact requirements and confirmation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says specific features need confirmationSource: H",
+          "answerId": "synthetic-consistent-accessibility-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Does not assume room suitabilitySource: B",
+          "answerId": "synthetic-consistent-accessibility-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Qualifies broad accessible labelSource: B",
+          "answerId": "synthetic-consistent-accessibility-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Requests feature confirmationSource: H",
+          "answerId": "synthetic-consistent-accessibility-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "breakfast",
+      "label": "Breakfast",
+      "sharedBaseline": {
+        "summary": "Extra charge except where a matching package explicitly includes it.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "conflict",
+          "displayAnswer": "! Says included in every rateSource: B",
+          "answerId": "synthetic-consistent-breakfast-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Says extra charge; package dependentSource: H",
+          "answerId": "synthetic-consistent-breakfast-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Qualifies inclusionsSource: H",
+          "answerId": "synthetic-consistent-breakfast-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "conflict",
+          "displayAnswer": "! Says always includedSource: B",
+          "answerId": "synthetic-consistent-breakfast-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "booking-terms",
+      "label": "Cancellation",
+      "sharedBaseline": {
+        "summary": "Rate-specific. No blanket free-cancellation promise.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says check selected rateSource: H",
+          "answerId": "synthetic-consistent-booking-terms-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Distinguishes rate typesSource: H",
+          "answerId": "synthetic-consistent-booking-terms-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Says terms vary by rateSource: H",
+          "answerId": "synthetic-consistent-booking-terms-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "conflict",
+          "displayAnswer": "! Promises free cancellationSource: G",
+          "answerId": "synthetic-consistent-booking-terms-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "previousFacts": [
+    {
+      "id": "location",
+      "label": "Location",
+      "sharedBaseline": {
+        "summary": "French Quarter, Charleston.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: H",
+          "answerId": "synthetic-consistent-location-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: B",
+          "answerId": "synthetic-consistent-location-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: G",
+          "answerId": "synthetic-consistent-location-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ French QuarterSource: H",
+          "answerId": "synthetic-consistent-location-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "price-fees",
+      "label": "Price & mandatory fees",
+      "sharedBaseline": {
+        "summary": "$35 nightly destination fee; rate depends on dates. No universal nightly quote.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Adds the $35 fee; says rates varySource: H",
+          "answerId": "synthetic-consistent-price-fees-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "conflict",
+          "displayAnswer": "! Says all property fees includedSource: B",
+          "answerId": "synthetic-consistent-price-fees-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Omits fee while claiming an all-in totalSource: B",
+          "answerId": "synthetic-consistent-price-fees-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Adds fee; qualifies rateSource: H",
+          "answerId": "synthetic-consistent-price-fees-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "rooms-occupancy",
+      "label": "Rooms & occupancy",
+      "sharedBaseline": {
+        "summary": "King: 2 guests. Double queen: 4.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: H",
+          "answerId": "synthetic-consistent-rooms-occupancy-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: B",
+          "answerId": "synthetic-consistent-rooms-occupancy-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: B",
+          "answerId": "synthetic-consistent-rooms-occupancy-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Correct room limitsSource: H",
+          "answerId": "synthetic-consistent-rooms-occupancy-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "amenities",
+      "label": "Amenities",
+      "sharedBaseline": {
+        "summary": "Rooftop pool permanently closed.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says pool is closedSource: H",
+          "answerId": "synthetic-consistent-amenities-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Says pool is closedSource: H",
+          "answerId": "synthetic-consistent-amenities-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Recommends the rooftop poolSource: R",
+          "answerId": "synthetic-consistent-amenities-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "conflict",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: conflict",
+          "answerId": "synthetic-consistent-amenities-perplexity-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "atmosphere",
+      "label": "Atmosphere & fit",
+      "sharedBaseline": {
+        "summary": "Website describes a quiet, intimate stay. Actual quietness needs review evidence.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Attributes description to hotelSource: H",
+          "answerId": "synthetic-consistent-atmosphere-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_established",
+          "displayAnswer": "— Does not address atmosphereNo relevant citation",
+          "answerId": "synthetic-consistent-atmosphere-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Guarantees a quiet staySource: H",
+          "answerId": "synthetic-consistent-atmosphere-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Does not guarantee quietSource: H",
+          "answerId": "synthetic-consistent-atmosphere-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "label": "Parking",
+      "sharedBaseline": {
+        "summary": "Valet: $45 per night.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Calls parking freeSource: G",
+          "answerId": "synthetic-consistent-parking-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ States $45 valetSource: H",
+          "answerId": "synthetic-consistent-parking-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "label": "Pet policy",
+      "sharedBaseline": {
+        "summary": "Dogs welcome; $75 per stay.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "conflict",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: conflict",
+          "answerId": "synthetic-consistent-pets-chatgpt-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "not_established",
+          "displayAnswer": "— Does not establish pet policyNo relevant citation",
+          "answerId": "synthetic-consistent-pets-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "conflict",
+          "displayAnswer": "! Says pets are not allowedSource: B",
+          "answerId": "synthetic-consistent-pets-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Dogs allowed; states feeSource: H",
+          "answerId": "synthetic-consistent-pets-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility",
+      "sharedBaseline": {
+        "summary": "Specific room features not established. Ask for exact requirements and confirmation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says specific features need confirmationSource: H",
+          "answerId": "synthetic-consistent-accessibility-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Does not assume room suitabilitySource: B",
+          "answerId": "synthetic-consistent-accessibility-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: unsupported",
+          "answerId": "synthetic-consistent-accessibility-gemini-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "match",
+          "displayAnswer": "✓ Requests feature confirmationSource: H",
+          "answerId": "synthetic-consistent-accessibility-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "breakfast",
+      "label": "Breakfast",
+      "sharedBaseline": {
+        "summary": "Extra charge except where a matching package explicitly includes it.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "conflict",
+          "displayAnswer": "! Says included in every rateSource: B",
+          "answerId": "synthetic-consistent-breakfast-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Says extra charge; package dependentSource: H",
+          "answerId": "synthetic-consistent-breakfast-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Qualifies inclusionsSource: H",
+          "answerId": "synthetic-consistent-breakfast-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "conflict",
+          "displayAnswer": "! Says always includedSource: B",
+          "answerId": "synthetic-consistent-breakfast-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "booking-terms",
+      "label": "Cancellation",
+      "sharedBaseline": {
+        "summary": "Rate-specific. No blanket free-cancellation promise.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "match",
+          "displayAnswer": "✓ Says check selected rateSource: H",
+          "answerId": "synthetic-consistent-booking-terms-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "match",
+          "displayAnswer": "✓ Distinguishes rate typesSource: H",
+          "answerId": "synthetic-consistent-booking-terms-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "match",
+          "displayAnswer": "✓ Says terms vary by rateSource: H",
+          "answerId": "synthetic-consistent-booking-terms-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "conflict",
+          "displayAnswer": "! Promises free cancellationSource: G",
+          "answerId": "synthetic-consistent-booking-terms-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "productionEvidenceComplete": false,
+  "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows."
+}

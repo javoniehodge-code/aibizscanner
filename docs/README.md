@@ -45,3 +45,7 @@ The former Brand Strength report is now the **AI Brand Perception Audit**. Build
 ## Approved third section and shared standards — 23 October 2026
 [Section 3: Consistent & current](product/ai-brand-perception/sections/consistent-current/README.md) records the approved fictional-hotel visual, webpage, fixture and contract. [Technical process](engineering/consistent-current.md) defines cross-source comparison and freshness checks. [Shared decision-fact standards](product/ai-brand-perception/decision-fact-standards.md) now govern Sections 2 and 3: 5–10 facts total, only Core and When relevant, with approved hotel and coffee standards. These standards supersede the old coffee checklist for future reports; the earlier visual remains a synthetic design reference.
 
+
+## Four-model comparison across every section — 24 October 2026
+The [multi-model report standard](product/ai-brand-perception/multi-model-report-standard.md) now requires visible ChatGPT, Claude, Gemini and Perplexity outcomes, disclosed sources and per-model history in every section. Shared baselines remain distinct. See the [revised section preview](product/ai-brand-perception/model-comparison-preview.html), section-specific references and [implementation process](engineering/multi-model-brand-perception.md). This supersedes earlier baseline-only layouts; all current comparison results are synthetic design examples.
+

@@ -80,3 +80,12 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Website is comparison baseline, not independently verified truth. Separate consistency from currency and credibility. Retrieval/publication dates alone do not prove currency.
 - [Approved Section 3](../product/ai-brand-perception/sections/consistent-current/README.md), [shared standards](../product/ai-brand-perception/decision-fact-standards.md), [proposed implementation](../engineering/consistent-current.md). Approval covers the reference and product decisions; no production scanner is deployed.
 
+
+## Confirmed model-comparison correction — 24 October 2026
+- Every report section must visibly compare ChatGPT, Claude, Gemini and Perplexity; customers pay for model-specific knowledge and changes over time.
+- Shared facts and source-strength baselines remain assessed once. Actual answers, caveats and citations are recorded separately for each model.
+- Add four model columns, metric units/denominators, actual answer/evidence expansion and per-model previous/current changes. Failed/untested providers remain visible.
+- Label supplied-website diagnostics separately from independent web-search tests. Never present synthetic answers or pasted content as autonomous discovery.
+- Keep source fixes and changed model representation separately verified. One changed answer/citation does not establish stable improvement or causality.
+- [Product standard](../product/ai-brand-perception/multi-model-report-standard.md), [data contract](../product/ai-brand-perception/multi-model-data-contract.md), [technical process](../engineering/multi-model-brand-perception.md). Section 2/3 earlier baseline-only references are superseded for future report presentation; the linked designs are revisions implementing this correction. Section 4 remains a revised proposal, not a separately approved live audit.
+

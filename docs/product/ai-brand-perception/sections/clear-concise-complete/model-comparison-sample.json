@@ -1,0 +1,992 @@
+{
+  "schemaVersion": "2.0",
+  "sectionId": "clear-concise-complete",
+  "isIllustrative": true,
+  "actualModelCalls": 0,
+  "testMode": "supplied_website_passages",
+  "questionCount": 8,
+  "providers": [
+    "chatgpt",
+    "claude",
+    "gemini",
+    "perplexity"
+  ],
+  "sampling": {
+    "answersPerQuestionPerProvider": 1,
+    "inference": "One observed answer is not a stable estimate of all future behavior."
+  },
+  "runMetadata": {
+    "currentRunId": "synthetic-current",
+    "previousRunId": "synthetic-previous",
+    "testedAt": null,
+    "actualModelIds": null,
+    "toolEvidence": []
+  },
+  "metric": {
+    "label": "Fully supported website answers",
+    "successStatus": "supported",
+    "denominator": 8,
+    "current": {
+      "chatgpt": 4,
+      "claude": 3,
+      "gemini": 3,
+      "perplexity": 5
+    },
+    "previous": {
+      "chatgpt": 3,
+      "claude": 3,
+      "gemini": 2,
+      "perplexity": 4
+    }
+  },
+  "facts": [
+    {
+      "id": "flavor",
+      "label": "Flavor profile",
+      "sharedBaseline": {
+        "summary": "Some detail missing: generic “bold” wording does not distinguish products.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats “bold”; no product distinction.",
+          "answerId": "synthetic-clear-flavor-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats broad flavor language.",
+          "answerId": "synthetic-clear-flavor-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedAdds tasting notes not established by the passages.",
+          "answerId": "synthetic-clear-flavor-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "△ PartialRecognizes limited flavor detail.",
+          "answerId": "synthetic-clear-flavor-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "roast",
+      "label": "Roast level",
+      "sharedBaseline": {
+        "summary": "Enough detail: selected products have explicit roast labels.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches roast to each product.",
+          "answerId": "synthetic-clear-roast-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedDistinguishes medium and dark roast.",
+          "answerId": "synthetic-clear-roast-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedUses product-level labels.",
+          "answerId": "synthetic-clear-roast-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches roast to each product.",
+          "answerId": "synthetic-clear-roast-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "format-grind",
+      "label": "Format & grind",
+      "sharedBaseline": {
+        "summary": "Enough detail: formats and selected grind details are explicit in this example.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedDistinguishes ground, instant and capsules.",
+          "answerId": "synthetic-clear-format-grind-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies format and grind.",
+          "answerId": "synthetic-clear-format-grind-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies format and grind.",
+          "answerId": "synthetic-clear-format-grind-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches the named formats.",
+          "answerId": "synthetic-clear-format-grind-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "brewing-compatibility",
+      "label": "Brewing / machine fit",
+      "sharedBaseline": {
+        "summary": "Enough detail for the declared capsule scope: Original Line is explicit. Ground-coffee brewing is outside this row's test scope.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+          "answerId": "synthetic-clear-brewing-compatibility-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialSays Nespresso without the system distinction.",
+          "answerId": "synthetic-clear-brewing-compatibility-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "wrong",
+          "displayAnswer": "! WrongSays the capsules fit Vertuo.",
+          "answerId": "synthetic-clear-brewing-compatibility-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+          "answerId": "synthetic-clear-brewing-compatibility-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "caffeine",
+      "label": "Regular / decaf",
+      "sharedBaseline": {
+        "summary": "Not enough information: selected passages do not clearly label the compared options.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot establish the distinction.",
+          "answerId": "synthetic-clear-caffeine-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "no_answer",
+          "displayAnswer": "— No answerAsks for product confirmation.",
+          "answerId": "synthetic-clear-caffeine-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedStates a decaf option without passage support.",
+          "answerId": "synthetic-clear-caffeine-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "no_answer",
+          "displayAnswer": "— No answerFlags missing product-level detail.",
+          "answerId": "synthetic-clear-caffeine-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "label": "Price / quantity / yield",
+      "sharedBaseline": {
+        "summary": "Not enough information for a comparable cost-per-serving calculation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "no_answer",
+          "displayAnswer": "— No answerDoes not invent a serving cost.",
+          "answerId": "synthetic-clear-value-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot compare serving cost.",
+          "answerId": "synthetic-clear-value-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot establish serving cost.",
+          "answerId": "synthetic-clear-value-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "no_answer",
+          "displayAnswer": "— No answerIdentifies missing inputs.",
+          "answerId": "synthetic-clear-value-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "ingredients",
+      "label": "Ingredients & additives",
+      "sharedBaseline": {
+        "summary": "Enough detail for the selected SKU in this invented sample; no claim about the whole catalog.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedUses the selected SKU's ingredient statement.",
+          "answerId": "synthetic-clear-ingredients-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+          "answerId": "synthetic-clear-ingredients-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+          "answerId": "synthetic-clear-ingredients-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies the selected SKU's ingredients.",
+          "answerId": "synthetic-clear-ingredients-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "certifications-sourcing",
+      "label": "Certification / sourcing claims",
+      "sharedBaseline": {
+        "summary": "Enough detail to identify a stated sourcing practice and its limits. Independent verification is assessed separately.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "△ PartialLeaves out the claim's product scope.",
+          "answerId": "synthetic-clear-certifications-sourcing-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats the practice without its limits.",
+          "answerId": "synthetic-clear-certifications-sourcing-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedTurns a sourcing practice into a certification.",
+          "answerId": "synthetic-clear-certifications-sourcing-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedPreserves scope; does not claim certification.",
+          "answerId": "synthetic-clear-certifications-sourcing-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "previousFacts": [
+    {
+      "id": "flavor",
+      "label": "Flavor profile",
+      "sharedBaseline": {
+        "summary": "Some detail missing: generic “bold” wording does not distinguish products.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats “bold”; no product distinction.",
+          "answerId": "synthetic-clear-flavor-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats broad flavor language.",
+          "answerId": "synthetic-clear-flavor-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedAdds tasting notes not established by the passages.",
+          "answerId": "synthetic-clear-flavor-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "△ PartialRecognizes limited flavor detail.",
+          "answerId": "synthetic-clear-flavor-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "roast",
+      "label": "Roast level",
+      "sharedBaseline": {
+        "summary": "Enough detail: selected products have explicit roast labels.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches roast to each product.",
+          "answerId": "synthetic-clear-roast-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedDistinguishes medium and dark roast.",
+          "answerId": "synthetic-clear-roast-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedUses product-level labels.",
+          "answerId": "synthetic-clear-roast-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches roast to each product.",
+          "answerId": "synthetic-clear-roast-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "format-grind",
+      "label": "Format & grind",
+      "sharedBaseline": {
+        "summary": "Enough detail: formats and selected grind details are explicit in this example.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedDistinguishes ground, instant and capsules.",
+          "answerId": "synthetic-clear-format-grind-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies format and grind.",
+          "answerId": "synthetic-clear-format-grind-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies format and grind.",
+          "answerId": "synthetic-clear-format-grind-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedMatches the named formats.",
+          "answerId": "synthetic-clear-format-grind-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "brewing-compatibility",
+      "label": "Brewing / machine fit",
+      "sharedBaseline": {
+        "summary": "Enough detail for the declared capsule scope: Original Line is explicit. Ground-coffee brewing is outside this row's test scope.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+          "answerId": "synthetic-clear-brewing-compatibility-chatgpt-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialSays Nespresso without the system distinction.",
+          "answerId": "synthetic-clear-brewing-compatibility-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "wrong",
+          "displayAnswer": "! WrongSays the capsules fit Vertuo.",
+          "answerId": "synthetic-clear-brewing-compatibility-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+          "answerId": "synthetic-clear-brewing-compatibility-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "caffeine",
+      "label": "Regular / decaf",
+      "sharedBaseline": {
+        "summary": "Not enough information: selected passages do not clearly label the compared options.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot establish the distinction.",
+          "answerId": "synthetic-clear-caffeine-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "no_answer",
+          "displayAnswer": "— No answerAsks for product confirmation.",
+          "answerId": "synthetic-clear-caffeine-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedStates a decaf option without passage support.",
+          "answerId": "synthetic-clear-caffeine-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "no_answer",
+          "displayAnswer": "— No answerFlags missing product-level detail.",
+          "answerId": "synthetic-clear-caffeine-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "label": "Price / quantity / yield",
+      "sharedBaseline": {
+        "summary": "Not enough information for a comparable cost-per-serving calculation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "no_answer",
+          "displayAnswer": "— No answerDoes not invent a serving cost.",
+          "answerId": "synthetic-clear-value-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot compare serving cost.",
+          "answerId": "synthetic-clear-value-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "no_answer",
+          "displayAnswer": "— No answerCannot establish serving cost.",
+          "answerId": "synthetic-clear-value-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "no_answer",
+          "displayAnswer": "— No answerIdentifies missing inputs.",
+          "answerId": "synthetic-clear-value-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "ingredients",
+      "label": "Ingredients & additives",
+      "sharedBaseline": {
+        "summary": "Enough detail for the selected SKU in this invented sample; no claim about the whole catalog.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedUses the selected SKU's ingredient statement.",
+          "answerId": "synthetic-clear-ingredients-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+          "answerId": "synthetic-clear-ingredients-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "partial",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+          "answerId": "synthetic-clear-ingredients-gemini-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "supported",
+          "displayAnswer": "✓ SupportedIdentifies the selected SKU's ingredients.",
+          "answerId": "synthetic-clear-ingredients-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "certifications-sourcing",
+      "label": "Certification / sourcing claims",
+      "sharedBaseline": {
+        "summary": "Enough detail to identify a stated sourcing practice and its limits. Independent verification is assessed separately.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "△ PartialLeaves out the claim's product scope.",
+          "answerId": "synthetic-clear-certifications-sourcing-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ PartialRepeats the practice without its limits.",
+          "answerId": "synthetic-clear-certifications-sourcing-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! UnsupportedTurns a sourcing practice into a certification.",
+          "answerId": "synthetic-clear-certifications-sourcing-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+          "answerId": "synthetic-clear-certifications-sourcing-perplexity-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "productionEvidenceComplete": false,
+  "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows."
+}

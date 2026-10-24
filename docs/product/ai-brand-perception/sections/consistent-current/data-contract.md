@@ -42,3 +42,7 @@ For multiple room/rate subchecks, one validated relevant conflict causes the fac
 [Sample data](sample-data.json) intentionally contains null source URLs, dates and dimension assessments, no snapshots and no evidence. `isIllustrative=true` requires a visible design-example banner and excludes production comparisons/trends. Production validation rejects these omissions. Approved sample outcomes are design states, not evidence-backed grades.
 
 Each fix has rank, affected fact IDs, source IDs, relevant claims/evidence, proposed correction, owner action and rationale. Updates should distinguish updating owned pages from requesting third-party corrections. Rechecks resolve each discrepancy only when the affected source is checked again; an owner marking a task done is not verification. Preserve immutable history and unresolved sources.
+
+## Mandatory four-model extension — 24 October 2026
+The [shared v2 contract](../../multi-model-data-contract.md) adds each provider's actual independent-search answers and citations, baseline-relative evaluations, source coverage and previous/current comparisons. Preserve the original source agreement/currency dimensions and counts as a separate baseline. Never turn source counts into model-answer counts or compare provider outputs with an undisclosed baseline answer key.
+

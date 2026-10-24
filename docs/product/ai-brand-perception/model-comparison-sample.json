@@ -1,0 +1,2955 @@
+{
+  "schemaVersion": "2.0",
+  "isIllustrative": true,
+  "actualModelCalls": 0,
+  "actualSourceRetrievals": 0,
+  "providers": [
+    "chatgpt",
+    "claude",
+    "gemini",
+    "perplexity"
+  ],
+  "previousRunId": "synthetic-previous",
+  "currentRunId": "synthetic-current",
+  "comparison": "Same declared synthetic scope/settings; no actual dates, model IDs or evidence.",
+  "sections": {
+    "clear-concise-complete": {
+      "schemaVersion": "2.0",
+      "sectionId": "clear-concise-complete",
+      "isIllustrative": true,
+      "actualModelCalls": 0,
+      "testMode": "supplied_website_passages",
+      "questionCount": 8,
+      "providers": [
+        "chatgpt",
+        "claude",
+        "gemini",
+        "perplexity"
+      ],
+      "sampling": {
+        "answersPerQuestionPerProvider": 1,
+        "inference": "One observed answer is not a stable estimate of all future behavior."
+      },
+      "runMetadata": {
+        "currentRunId": "synthetic-current",
+        "previousRunId": "synthetic-previous",
+        "testedAt": null,
+        "actualModelIds": null,
+        "toolEvidence": []
+      },
+      "metric": {
+        "label": "Fully supported website answers",
+        "successStatus": "supported",
+        "denominator": 8,
+        "current": {
+          "chatgpt": 4,
+          "claude": 3,
+          "gemini": 3,
+          "perplexity": 5
+        },
+        "previous": {
+          "chatgpt": 3,
+          "claude": 3,
+          "gemini": 2,
+          "perplexity": 4
+        }
+      },
+      "facts": [
+        {
+          "id": "flavor",
+          "label": "Flavor profile",
+          "sharedBaseline": {
+            "summary": "Some detail missing: generic “bold” wording does not distinguish products.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats “bold”; no product distinction.",
+              "answerId": "synthetic-clear-flavor-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats broad flavor language.",
+              "answerId": "synthetic-clear-flavor-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedAdds tasting notes not established by the passages.",
+              "answerId": "synthetic-clear-flavor-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "△ PartialRecognizes limited flavor detail.",
+              "answerId": "synthetic-clear-flavor-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "roast",
+          "label": "Roast level",
+          "sharedBaseline": {
+            "summary": "Enough detail: selected products have explicit roast labels.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches roast to each product.",
+              "answerId": "synthetic-clear-roast-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedDistinguishes medium and dark roast.",
+              "answerId": "synthetic-clear-roast-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedUses product-level labels.",
+              "answerId": "synthetic-clear-roast-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches roast to each product.",
+              "answerId": "synthetic-clear-roast-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "format-grind",
+          "label": "Format & grind",
+          "sharedBaseline": {
+            "summary": "Enough detail: formats and selected grind details are explicit in this example.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedDistinguishes ground, instant and capsules.",
+              "answerId": "synthetic-clear-format-grind-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies format and grind.",
+              "answerId": "synthetic-clear-format-grind-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies format and grind.",
+              "answerId": "synthetic-clear-format-grind-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches the named formats.",
+              "answerId": "synthetic-clear-format-grind-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "brewing-compatibility",
+          "label": "Brewing / machine fit",
+          "sharedBaseline": {
+            "summary": "Enough detail for the declared capsule scope: Original Line is explicit. Ground-coffee brewing is outside this row's test scope.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+              "answerId": "synthetic-clear-brewing-compatibility-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialSays Nespresso without the system distinction.",
+              "answerId": "synthetic-clear-brewing-compatibility-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "wrong",
+              "displayAnswer": "! WrongSays the capsules fit Vertuo.",
+              "answerId": "synthetic-clear-brewing-compatibility-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+              "answerId": "synthetic-clear-brewing-compatibility-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "caffeine",
+          "label": "Regular / decaf",
+          "sharedBaseline": {
+            "summary": "Not enough information: selected passages do not clearly label the compared options.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot establish the distinction.",
+              "answerId": "synthetic-clear-caffeine-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "no_answer",
+              "displayAnswer": "— No answerAsks for product confirmation.",
+              "answerId": "synthetic-clear-caffeine-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedStates a decaf option without passage support.",
+              "answerId": "synthetic-clear-caffeine-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "no_answer",
+              "displayAnswer": "— No answerFlags missing product-level detail.",
+              "answerId": "synthetic-clear-caffeine-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "value",
+          "label": "Price / quantity / yield",
+          "sharedBaseline": {
+            "summary": "Not enough information for a comparable cost-per-serving calculation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "no_answer",
+              "displayAnswer": "— No answerDoes not invent a serving cost.",
+              "answerId": "synthetic-clear-value-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot compare serving cost.",
+              "answerId": "synthetic-clear-value-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot establish serving cost.",
+              "answerId": "synthetic-clear-value-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "no_answer",
+              "displayAnswer": "— No answerIdentifies missing inputs.",
+              "answerId": "synthetic-clear-value-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "ingredients",
+          "label": "Ingredients & additives",
+          "sharedBaseline": {
+            "summary": "Enough detail for the selected SKU in this invented sample; no claim about the whole catalog.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedUses the selected SKU's ingredient statement.",
+              "answerId": "synthetic-clear-ingredients-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+              "answerId": "synthetic-clear-ingredients-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+              "answerId": "synthetic-clear-ingredients-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies the selected SKU's ingredients.",
+              "answerId": "synthetic-clear-ingredients-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "certifications-sourcing",
+          "label": "Certification / sourcing claims",
+          "sharedBaseline": {
+            "summary": "Enough detail to identify a stated sourcing practice and its limits. Independent verification is assessed separately.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "△ PartialLeaves out the claim's product scope.",
+              "answerId": "synthetic-clear-certifications-sourcing-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats the practice without its limits.",
+              "answerId": "synthetic-clear-certifications-sourcing-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedTurns a sourcing practice into a certification.",
+              "answerId": "synthetic-clear-certifications-sourcing-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedPreserves scope; does not claim certification.",
+              "answerId": "synthetic-clear-certifications-sourcing-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "previousFacts": [
+        {
+          "id": "flavor",
+          "label": "Flavor profile",
+          "sharedBaseline": {
+            "summary": "Some detail missing: generic “bold” wording does not distinguish products.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats “bold”; no product distinction.",
+              "answerId": "synthetic-clear-flavor-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats broad flavor language.",
+              "answerId": "synthetic-clear-flavor-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedAdds tasting notes not established by the passages.",
+              "answerId": "synthetic-clear-flavor-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "△ PartialRecognizes limited flavor detail.",
+              "answerId": "synthetic-clear-flavor-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "roast",
+          "label": "Roast level",
+          "sharedBaseline": {
+            "summary": "Enough detail: selected products have explicit roast labels.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches roast to each product.",
+              "answerId": "synthetic-clear-roast-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedDistinguishes medium and dark roast.",
+              "answerId": "synthetic-clear-roast-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedUses product-level labels.",
+              "answerId": "synthetic-clear-roast-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches roast to each product.",
+              "answerId": "synthetic-clear-roast-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "format-grind",
+          "label": "Format & grind",
+          "sharedBaseline": {
+            "summary": "Enough detail: formats and selected grind details are explicit in this example.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedDistinguishes ground, instant and capsules.",
+              "answerId": "synthetic-clear-format-grind-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies format and grind.",
+              "answerId": "synthetic-clear-format-grind-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies format and grind.",
+              "answerId": "synthetic-clear-format-grind-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedMatches the named formats.",
+              "answerId": "synthetic-clear-format-grind-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "brewing-compatibility",
+          "label": "Brewing / machine fit",
+          "sharedBaseline": {
+            "summary": "Enough detail for the declared capsule scope: Original Line is explicit. Ground-coffee brewing is outside this row's test scope.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+              "answerId": "synthetic-clear-brewing-compatibility-chatgpt-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialSays Nespresso without the system distinction.",
+              "answerId": "synthetic-clear-brewing-compatibility-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "wrong",
+              "displayAnswer": "! WrongSays the capsules fit Vertuo.",
+              "answerId": "synthetic-clear-brewing-compatibility-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedOriginal Line; excludes Vertuo.",
+              "answerId": "synthetic-clear-brewing-compatibility-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "caffeine",
+          "label": "Regular / decaf",
+          "sharedBaseline": {
+            "summary": "Not enough information: selected passages do not clearly label the compared options.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot establish the distinction.",
+              "answerId": "synthetic-clear-caffeine-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "no_answer",
+              "displayAnswer": "— No answerAsks for product confirmation.",
+              "answerId": "synthetic-clear-caffeine-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedStates a decaf option without passage support.",
+              "answerId": "synthetic-clear-caffeine-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "no_answer",
+              "displayAnswer": "— No answerFlags missing product-level detail.",
+              "answerId": "synthetic-clear-caffeine-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "value",
+          "label": "Price / quantity / yield",
+          "sharedBaseline": {
+            "summary": "Not enough information for a comparable cost-per-serving calculation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "no_answer",
+              "displayAnswer": "— No answerDoes not invent a serving cost.",
+              "answerId": "synthetic-clear-value-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot compare serving cost.",
+              "answerId": "synthetic-clear-value-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "no_answer",
+              "displayAnswer": "— No answerCannot establish serving cost.",
+              "answerId": "synthetic-clear-value-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "no_answer",
+              "displayAnswer": "— No answerIdentifies missing inputs.",
+              "answerId": "synthetic-clear-value-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "ingredients",
+          "label": "Ingredients & additives",
+          "sharedBaseline": {
+            "summary": "Enough detail for the selected SKU in this invented sample; no claim about the whole catalog.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedUses the selected SKU's ingredient statement.",
+              "answerId": "synthetic-clear-ingredients-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedKeeps the statement product-specific.",
+              "answerId": "synthetic-clear-ingredients-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "partial",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+              "answerId": "synthetic-clear-ingredients-gemini-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "supported",
+              "displayAnswer": "✓ SupportedIdentifies the selected SKU's ingredients.",
+              "answerId": "synthetic-clear-ingredients-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "certifications-sourcing",
+          "label": "Certification / sourcing claims",
+          "sharedBaseline": {
+            "summary": "Enough detail to identify a stated sourcing practice and its limits. Independent verification is assessed separately.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "△ PartialLeaves out the claim's product scope.",
+              "answerId": "synthetic-clear-certifications-sourcing-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ PartialRepeats the practice without its limits.",
+              "answerId": "synthetic-clear-certifications-sourcing-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! UnsupportedTurns a sourcing practice into a certification.",
+              "answerId": "synthetic-clear-certifications-sourcing-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+              "answerId": "synthetic-clear-certifications-sourcing-perplexity-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "productionEvidenceComplete": false,
+      "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows."
+    },
+    "consistent-current": {
+      "schemaVersion": "2.0",
+      "sectionId": "consistent-current",
+      "isIllustrative": true,
+      "actualModelCalls": 0,
+      "testMode": "independent_web_search",
+      "questionCount": 10,
+      "providers": [
+        "chatgpt",
+        "claude",
+        "gemini",
+        "perplexity"
+      ],
+      "sampling": {
+        "answersPerQuestionPerProvider": 1,
+        "inference": "One observed answer is not a stable estimate of all future behavior."
+      },
+      "runMetadata": {
+        "currentRunId": "synthetic-current",
+        "previousRunId": "synthetic-previous",
+        "testedAt": null,
+        "actualModelIds": null,
+        "toolEvidence": []
+      },
+      "metric": {
+        "label": "Answers matching scoped baseline",
+        "successStatus": "match",
+        "denominator": 10,
+        "current": {
+          "chatgpt": 8,
+          "claude": 6,
+          "gemini": 5,
+          "perplexity": 8
+        },
+        "previous": {
+          "chatgpt": 7,
+          "claude": 6,
+          "gemini": 4,
+          "perplexity": 7
+        }
+      },
+      "facts": [
+        {
+          "id": "location",
+          "label": "Location",
+          "sharedBaseline": {
+            "summary": "French Quarter, Charleston.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: H",
+              "answerId": "synthetic-consistent-location-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: B",
+              "answerId": "synthetic-consistent-location-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: G",
+              "answerId": "synthetic-consistent-location-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: H",
+              "answerId": "synthetic-consistent-location-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "price-fees",
+          "label": "Price & mandatory fees",
+          "sharedBaseline": {
+            "summary": "$35 nightly destination fee; rate depends on dates. No universal nightly quote.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Adds the $35 fee; says rates varySource: H",
+              "answerId": "synthetic-consistent-price-fees-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "conflict",
+              "displayAnswer": "! Says all property fees includedSource: B",
+              "answerId": "synthetic-consistent-price-fees-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Omits fee while claiming an all-in totalSource: B",
+              "answerId": "synthetic-consistent-price-fees-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Adds fee; qualifies rateSource: H",
+              "answerId": "synthetic-consistent-price-fees-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "rooms-occupancy",
+          "label": "Rooms & occupancy",
+          "sharedBaseline": {
+            "summary": "King: 2 guests. Double queen: 4.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: H",
+              "answerId": "synthetic-consistent-rooms-occupancy-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: B",
+              "answerId": "synthetic-consistent-rooms-occupancy-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: B",
+              "answerId": "synthetic-consistent-rooms-occupancy-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: H",
+              "answerId": "synthetic-consistent-rooms-occupancy-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "amenities",
+          "label": "Amenities",
+          "sharedBaseline": {
+            "summary": "Rooftop pool permanently closed.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says pool is closedSource: H",
+              "answerId": "synthetic-consistent-amenities-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Says pool is closedSource: H",
+              "answerId": "synthetic-consistent-amenities-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Recommends the rooftop poolSource: R",
+              "answerId": "synthetic-consistent-amenities-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Says pool is closedSource: H",
+              "answerId": "synthetic-consistent-amenities-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "atmosphere",
+          "label": "Atmosphere & fit",
+          "sharedBaseline": {
+            "summary": "Website describes a quiet, intimate stay. Actual quietness needs review evidence.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Attributes description to hotelSource: H",
+              "answerId": "synthetic-consistent-atmosphere-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "not_established",
+              "displayAnswer": "— Does not address atmosphereNo relevant citation",
+              "answerId": "synthetic-consistent-atmosphere-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Guarantees a quiet staySource: H",
+              "answerId": "synthetic-consistent-atmosphere-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Does not guarantee quietSource: H",
+              "answerId": "synthetic-consistent-atmosphere-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "parking",
+          "label": "Parking",
+          "sharedBaseline": {
+            "summary": "Valet: $45 per night.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ States $45 valetSource: H",
+              "answerId": "synthetic-consistent-parking-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "pets",
+          "label": "Pet policy",
+          "sharedBaseline": {
+            "summary": "Dogs welcome; $75 per stay.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Dogs allowed; $75 per staySource: H",
+              "answerId": "synthetic-consistent-pets-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "not_established",
+              "displayAnswer": "— Does not establish pet policyNo relevant citation",
+              "answerId": "synthetic-consistent-pets-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Says pets are not allowedSource: B",
+              "answerId": "synthetic-consistent-pets-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Dogs allowed; states feeSource: H",
+              "answerId": "synthetic-consistent-pets-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "accessibility",
+          "label": "Accessibility",
+          "sharedBaseline": {
+            "summary": "Specific room features not established. Ask for exact requirements and confirmation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says specific features need confirmationSource: H",
+              "answerId": "synthetic-consistent-accessibility-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Does not assume room suitabilitySource: B",
+              "answerId": "synthetic-consistent-accessibility-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Qualifies broad accessible labelSource: B",
+              "answerId": "synthetic-consistent-accessibility-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Requests feature confirmationSource: H",
+              "answerId": "synthetic-consistent-accessibility-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "breakfast",
+          "label": "Breakfast",
+          "sharedBaseline": {
+            "summary": "Extra charge except where a matching package explicitly includes it.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "conflict",
+              "displayAnswer": "! Says included in every rateSource: B",
+              "answerId": "synthetic-consistent-breakfast-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Says extra charge; package dependentSource: H",
+              "answerId": "synthetic-consistent-breakfast-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Qualifies inclusionsSource: H",
+              "answerId": "synthetic-consistent-breakfast-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "conflict",
+              "displayAnswer": "! Says always includedSource: B",
+              "answerId": "synthetic-consistent-breakfast-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "booking-terms",
+          "label": "Cancellation",
+          "sharedBaseline": {
+            "summary": "Rate-specific. No blanket free-cancellation promise.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says check selected rateSource: H",
+              "answerId": "synthetic-consistent-booking-terms-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Distinguishes rate typesSource: H",
+              "answerId": "synthetic-consistent-booking-terms-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Says terms vary by rateSource: H",
+              "answerId": "synthetic-consistent-booking-terms-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "conflict",
+              "displayAnswer": "! Promises free cancellationSource: G",
+              "answerId": "synthetic-consistent-booking-terms-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "previousFacts": [
+        {
+          "id": "location",
+          "label": "Location",
+          "sharedBaseline": {
+            "summary": "French Quarter, Charleston.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: H",
+              "answerId": "synthetic-consistent-location-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: B",
+              "answerId": "synthetic-consistent-location-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: G",
+              "answerId": "synthetic-consistent-location-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ French QuarterSource: H",
+              "answerId": "synthetic-consistent-location-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "price-fees",
+          "label": "Price & mandatory fees",
+          "sharedBaseline": {
+            "summary": "$35 nightly destination fee; rate depends on dates. No universal nightly quote.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Adds the $35 fee; says rates varySource: H",
+              "answerId": "synthetic-consistent-price-fees-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "conflict",
+              "displayAnswer": "! Says all property fees includedSource: B",
+              "answerId": "synthetic-consistent-price-fees-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Omits fee while claiming an all-in totalSource: B",
+              "answerId": "synthetic-consistent-price-fees-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Adds fee; qualifies rateSource: H",
+              "answerId": "synthetic-consistent-price-fees-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "rooms-occupancy",
+          "label": "Rooms & occupancy",
+          "sharedBaseline": {
+            "summary": "King: 2 guests. Double queen: 4.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: H",
+              "answerId": "synthetic-consistent-rooms-occupancy-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: B",
+              "answerId": "synthetic-consistent-rooms-occupancy-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: B",
+              "answerId": "synthetic-consistent-rooms-occupancy-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Correct room limitsSource: H",
+              "answerId": "synthetic-consistent-rooms-occupancy-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "amenities",
+          "label": "Amenities",
+          "sharedBaseline": {
+            "summary": "Rooftop pool permanently closed.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says pool is closedSource: H",
+              "answerId": "synthetic-consistent-amenities-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Says pool is closedSource: H",
+              "answerId": "synthetic-consistent-amenities-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Recommends the rooftop poolSource: R",
+              "answerId": "synthetic-consistent-amenities-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "conflict",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: conflict",
+              "answerId": "synthetic-consistent-amenities-perplexity-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "atmosphere",
+          "label": "Atmosphere & fit",
+          "sharedBaseline": {
+            "summary": "Website describes a quiet, intimate stay. Actual quietness needs review evidence.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Attributes description to hotelSource: H",
+              "answerId": "synthetic-consistent-atmosphere-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "not_established",
+              "displayAnswer": "— Does not address atmosphereNo relevant citation",
+              "answerId": "synthetic-consistent-atmosphere-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Guarantees a quiet staySource: H",
+              "answerId": "synthetic-consistent-atmosphere-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Does not guarantee quietSource: H",
+              "answerId": "synthetic-consistent-atmosphere-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "parking",
+          "label": "Parking",
+          "sharedBaseline": {
+            "summary": "Valet: $45 per night.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Calls parking freeSource: G",
+              "answerId": "synthetic-consistent-parking-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ States $45 valetSource: H",
+              "answerId": "synthetic-consistent-parking-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "pets",
+          "label": "Pet policy",
+          "sharedBaseline": {
+            "summary": "Dogs welcome; $75 per stay.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "conflict",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: conflict",
+              "answerId": "synthetic-consistent-pets-chatgpt-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "not_established",
+              "displayAnswer": "— Does not establish pet policyNo relevant citation",
+              "answerId": "synthetic-consistent-pets-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "conflict",
+              "displayAnswer": "! Says pets are not allowedSource: B",
+              "answerId": "synthetic-consistent-pets-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Dogs allowed; states feeSource: H",
+              "answerId": "synthetic-consistent-pets-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "accessibility",
+          "label": "Accessibility",
+          "sharedBaseline": {
+            "summary": "Specific room features not established. Ask for exact requirements and confirmation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says specific features need confirmationSource: H",
+              "answerId": "synthetic-consistent-accessibility-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Does not assume room suitabilitySource: B",
+              "answerId": "synthetic-consistent-accessibility-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: unsupported",
+              "answerId": "synthetic-consistent-accessibility-gemini-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "match",
+              "displayAnswer": "✓ Requests feature confirmationSource: H",
+              "answerId": "synthetic-consistent-accessibility-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "breakfast",
+          "label": "Breakfast",
+          "sharedBaseline": {
+            "summary": "Extra charge except where a matching package explicitly includes it.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "conflict",
+              "displayAnswer": "! Says included in every rateSource: B",
+              "answerId": "synthetic-consistent-breakfast-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Says extra charge; package dependentSource: H",
+              "answerId": "synthetic-consistent-breakfast-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Qualifies inclusionsSource: H",
+              "answerId": "synthetic-consistent-breakfast-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "conflict",
+              "displayAnswer": "! Says always includedSource: B",
+              "answerId": "synthetic-consistent-breakfast-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "booking-terms",
+          "label": "Cancellation",
+          "sharedBaseline": {
+            "summary": "Rate-specific. No blanket free-cancellation promise.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "match",
+              "displayAnswer": "✓ Says check selected rateSource: H",
+              "answerId": "synthetic-consistent-booking-terms-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "match",
+              "displayAnswer": "✓ Distinguishes rate typesSource: H",
+              "answerId": "synthetic-consistent-booking-terms-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "match",
+              "displayAnswer": "✓ Says terms vary by rateSource: H",
+              "answerId": "synthetic-consistent-booking-terms-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "conflict",
+              "displayAnswer": "! Promises free cancellationSource: G",
+              "answerId": "synthetic-consistent-booking-terms-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "productionEvidenceComplete": false,
+      "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows."
+    },
+    "credible-corroborated": {
+      "schemaVersion": "2.0",
+      "sectionId": "credible-corroborated",
+      "isIllustrative": true,
+      "actualModelCalls": 0,
+      "testMode": "independent_web_search",
+      "questionCount": 5,
+      "providers": [
+        "chatgpt",
+        "claude",
+        "gemini",
+        "perplexity"
+      ],
+      "sampling": {
+        "answersPerQuestionPerProvider": 1,
+        "inference": "One observed answer is not a stable estimate of all future behavior."
+      },
+      "runMetadata": {
+        "currentRunId": "synthetic-current",
+        "previousRunId": "synthetic-previous",
+        "testedAt": null,
+        "actualModelIds": null,
+        "toolEvidence": []
+      },
+      "metric": {
+        "label": "Evidence-aligned conclusions",
+        "successStatus": "aligned",
+        "denominator": 5,
+        "current": {
+          "chatgpt": 5,
+          "claude": 3,
+          "gemini": 2,
+          "perplexity": 4
+        },
+        "previous": {
+          "chatgpt": 4,
+          "claude": 3,
+          "gemini": 2,
+          "perplexity": 3
+        }
+      },
+      "facts": [
+        {
+          "id": "service",
+          "label": "Quality: service",
+          "sharedBaseline": {
+            "summary": "Specific expert and recurring guest support for attentive service.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Supports service with reasonsTravel + guest reviews",
+              "answerId": "synthetic-credible-service-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses recurring guest praiseGuest reviews",
+              "answerId": "synthetic-credible-service-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "partial",
+              "displayAnswer": "△ Generic “excellent service”Generic list",
+              "answerId": "synthetic-credible-service-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Gives specific supportTravel + guest reviews",
+              "answerId": "synthetic-credible-service-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "couples",
+          "label": "Suitability: couples",
+          "sharedBaseline": {
+            "summary": "Meaningful support for intimate setting and date-night location.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitTravel review + guide",
+              "answerId": "synthetic-credible-couples-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitCouples guide",
+              "answerId": "synthetic-credible-couples-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitCouples guide",
+              "answerId": "synthetic-credible-couples-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitTravel review + guide",
+              "answerId": "synthetic-credible-couples-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Suitability: quiet stay",
+          "sharedBaseline": {
+            "summary": "Mixed. Street-facing rooms have recurring noise caveats.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Adds room-specific caveatTravel + guest reviews",
+              "answerId": "synthetic-credible-quiet-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ Omits noise caveatHotel website",
+              "answerId": "synthetic-credible-quiet-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! Calls it reliably quietHotel website + generic list",
+              "answerId": "synthetic-credible-quiet-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Keeps noise caveatTravel + guest reviews",
+              "answerId": "synthetic-credible-quiet-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "historic",
+          "label": "Claim: historic building",
+          "sharedBaseline": {
+            "summary": "Supported by matching official designation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses the hotel's accurate designation claimHotel website",
+              "answerId": "synthetic-credible-historic-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "sustainability",
+          "label": "Claim: sustainability",
+          "sharedBaseline": {
+            "summary": "Practices self-reported. Independent verification not found in the selected set.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "currentAnswers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Labels self-reported; no certification establishedHotel website",
+              "answerId": "synthetic-credible-sustainability-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "unsupported",
+              "displayAnswer": "! Calls it certified sustainableHotel website",
+              "answerId": "synthetic-credible-sustainability-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! Claims certificationHotel website",
+              "answerId": "synthetic-credible-sustainability-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "△ Repeats sustainable label without verification caveatHotel website",
+              "answerId": "synthetic-credible-sustainability-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "previousFacts": [
+        {
+          "id": "service",
+          "label": "Quality: service",
+          "sharedBaseline": {
+            "summary": "Specific expert and recurring guest support for attentive service.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Supports service with reasonsTravel + guest reviews",
+              "answerId": "synthetic-credible-service-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses recurring guest praiseGuest reviews",
+              "answerId": "synthetic-credible-service-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "partial",
+              "displayAnswer": "△ Generic “excellent service”Generic list",
+              "answerId": "synthetic-credible-service-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Gives specific supportTravel + guest reviews",
+              "answerId": "synthetic-credible-service-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "couples",
+          "label": "Suitability: couples",
+          "sharedBaseline": {
+            "summary": "Meaningful support for intimate setting and date-night location.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitTravel review + guide",
+              "answerId": "synthetic-credible-couples-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitCouples guide",
+              "answerId": "synthetic-credible-couples-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitCouples guide",
+              "answerId": "synthetic-credible-couples-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Explains couples fitTravel review + guide",
+              "answerId": "synthetic-credible-couples-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Suitability: quiet stay",
+          "sharedBaseline": {
+            "summary": "Mixed. Street-facing rooms have recurring noise caveats.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Adds room-specific caveatTravel + guest reviews",
+              "answerId": "synthetic-credible-quiet-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "partial",
+              "displayAnswer": "△ Omits noise caveatHotel website",
+              "answerId": "synthetic-credible-quiet-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! Calls it reliably quietHotel website + generic list",
+              "answerId": "synthetic-credible-quiet-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+              "answerId": "synthetic-credible-quiet-perplexity-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "historic",
+          "label": "Claim: historic building",
+          "sharedBaseline": {
+            "summary": "Supported by matching official designation.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-chatgpt",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses the hotel's accurate designation claimHotel website",
+              "answerId": "synthetic-credible-historic-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "aligned",
+              "displayAnswer": "✓ Uses official recordHistoric register",
+              "answerId": "synthetic-credible-historic-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        },
+        {
+          "id": "sustainability",
+          "label": "Claim: sustainability",
+          "sharedBaseline": {
+            "summary": "Practices self-reported. Independent verification not found in the selected set.",
+            "evidenceIds": [],
+            "isIllustrative": true
+          },
+          "answers": [
+            {
+              "provider": "chatgpt",
+              "status": "partial",
+              "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+              "answerId": "synthetic-credible-sustainability-chatgpt-previous",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "claude",
+              "status": "unsupported",
+              "displayAnswer": "! Calls it certified sustainableHotel website",
+              "answerId": "synthetic-credible-sustainability-claude",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "gemini",
+              "status": "unsupported",
+              "displayAnswer": "! Claims certificationHotel website",
+              "answerId": "synthetic-credible-sustainability-gemini",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            },
+            {
+              "provider": "perplexity",
+              "status": "partial",
+              "displayAnswer": "△ Repeats sustainable label without verification caveatHotel website",
+              "answerId": "synthetic-credible-sustainability-perplexity",
+              "rawResponse": null,
+              "citations": [],
+              "evidenceIds": [],
+              "testedAt": null,
+              "actualModelId": null,
+              "isIllustrative": true
+            }
+          ]
+        }
+      ],
+      "productionEvidenceComplete": false,
+      "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows.",
+      "sourceMatrix": [
+        {
+          "id": "expert",
+          "name": "Travel reviewExpert",
+          "sharedAssessment": "Strong, with caveat. Firsthand service and couples evidence; flags street noise.Why this assessment?Relevance high; specific stay details; review arrangements disclosed; firsthand basis. One stay does not establish every guest's experience.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": true,
+            "claude": false,
+            "gemini": false,
+            "perplexity": true
+          },
+          "isIllustrative": true
+        },
+        {
+          "id": "reviews",
+          "name": "Guest reviewsCustomer",
+          "sharedAssessment": "Useful, mixed experience. Recurring service/cleanliness praise and room-specific noise complaints.Why this assessment?Specific reported stays; guest-authored on a commercial booking platform. Real evidence must show review window, sample size, theme counts and authenticity limitations.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": true,
+            "claude": true,
+            "gemini": false,
+            "perplexity": true
+          },
+          "isIllustrative": true
+        },
+        {
+          "id": "specialist",
+          "name": "Couples guideSpecialist list",
+          "sharedAssessment": "Moderate. Relevant fit and specific selection reasons; no documented overnight stay.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": true,
+            "claude": true,
+            "gemini": true,
+            "perplexity": true
+          },
+          "isIllustrative": true
+        },
+        {
+          "id": "generic",
+          "name": "“Best hotels” listGeneric list",
+          "sharedAssessment": "Weak. Generic praise; no meaningful selection criteria or firsthand account.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": false,
+            "claude": false,
+            "gemini": true,
+            "perplexity": false
+          },
+          "isIllustrative": true
+        },
+        {
+          "id": "register",
+          "name": "Historic registerOfficial record",
+          "sharedAssessment": "Strong for historic status. Exact property match; does not establish hotel quality.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": true,
+            "claude": true,
+            "gemini": false,
+            "perplexity": true
+          },
+          "isIllustrative": true
+        },
+        {
+          "id": "owned",
+          "name": "Hotel websiteBrand-owned",
+          "sharedAssessment": "First-party claims. Useful product facts; no independent sustainability verification in the checked set.",
+          "url": null,
+          "citationPresence": {
+            "chatgpt": true,
+            "claude": true,
+            "gemini": true,
+            "perplexity": true
+          },
+          "isIllustrative": true
+        }
+      ]
+    }
+  }
+}

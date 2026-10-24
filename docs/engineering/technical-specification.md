@@ -195,3 +195,7 @@ Pricing/cost estimates include all tasks, sources, advice, verification and fail
 ## Consistent & current implementation
 [Section 3 implementation process](consistent-current.md) defines bounded source selection, qualified fact extraction, entity/rate alignment, independent consistency/currency judgments, deterministic counts, source-specific corrections and evidence-backed rechecks. Use the [shared standards](../product/ai-brand-perception/decision-fact-standards.md) with Section 2. This is an implementation specification, not a deployed audit or provider integration.
 
+
+## Mandatory model layer — 24 October 2026
+Use [Multi-model Brand Perception implementation](multi-model-brand-perception.md) for every section, with [versioned contract](../product/ai-brand-perception/multi-model-data-contract.md). The shared baseline pipeline is necessary but insufficient: collect and preserve all four providers' observed answers/tool evidence/citations, explicit test modes, matched denominators and compatible history. This supersedes any earlier decision to defer model understanding or omit provider columns. No production service or live calls are implemented in this documentation update.
+

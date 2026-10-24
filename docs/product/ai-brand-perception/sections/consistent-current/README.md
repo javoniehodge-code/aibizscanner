@@ -1,3 +1,13 @@
+# Current report direction: Consistent & current across four AIs
+
+Updated 24 October 2026. The customer requires model-specific comparison and history in every section. Use the [revised webpage](model-comparison.html), [image](model-comparison.png), [current/previous synthetic fixture](model-comparison-sample.json) and [shared standard](../../multi-model-report-standard.md). The evidence baseline remains shared; each model's answers and citations are observed separately. All revised comparison outcomes are invented design examples, not live tests or approved customer results.
+
+![Revised four-model design](model-comparison.png)
+
+## Historical baseline-only reference
+
+The earlier approved reference below is retained for design/evidence history. Its layout alone no longer satisfies the current report requirement.
+
 # Section 3: Consistent & current
 
 Approved reference: 23 October 2026. Product: **AI Brand Perception Audit**. Stable ID: `consistent-current`.
@@ -42,3 +52,4 @@ Exclude inapplicable facts with a reason. Unreadable sources remain unavailable,
 ## Acceptance and handoff
 
 Preserve the 10-row fixture and 3/5/2 counts. Separate agreement from currency in production records, even when a concise display label combines them. Show source limitations and unresolved facts. The website is the reference baseline, not infallible truth; flag its own omissions and contradictions. Keep physical service quality and review-backed guest fit for credibility assessment. The engineering process is a proposed specification; no production scanner is delivered by this documentation update.
+

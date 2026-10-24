@@ -1,3 +1,13 @@
+# Current report direction: Clear & complete across four AIs
+
+Updated 24 October 2026. The customer requires model-specific comparison and history in every section. Use the [revised webpage](model-comparison.html), [image](model-comparison.png), [current/previous synthetic fixture](model-comparison-sample.json) and [shared standard](../../multi-model-report-standard.md). The evidence baseline remains shared; each model's answers and citations are observed separately. All revised comparison outcomes are invented design examples, not live tests or approved customer results.
+
+![Revised four-model design](model-comparison.png)
+
+## Historical baseline-only reference
+
+The earlier approved reference below is retained for design/evidence history. Its layout alone no longer satisfies the current report requirement.
+
 # Section 2: Clear, concise & complete
 
 Approved reference: 23 October 2026. Product: **AI Brand Perception Audit**. Stable section ID: `clear-concise-complete`; displayed section label: **Clear & complete**.
@@ -47,4 +57,5 @@ Keep the approved structure and language; make content evidence-driven. Expose e
 
 ## Subsequent standard update — 23 October 2026
 The [shared decision-fact standards](../../decision-fact-standards.md) now govern future completeness and consistency reports, with 5–10 total facts across Core and When relevant. The earlier eight-question coffee visual above remains an approved synthetic design reference, but its purchase-route checklist is superseded for future report generation. Do not silently reuse or convert its 4/2/2 findings under the new standard.
+
 

@@ -1,0 +1,718 @@
+{
+  "schemaVersion": "2.0",
+  "sectionId": "credible-corroborated",
+  "isIllustrative": true,
+  "actualModelCalls": 0,
+  "testMode": "independent_web_search",
+  "questionCount": 5,
+  "providers": [
+    "chatgpt",
+    "claude",
+    "gemini",
+    "perplexity"
+  ],
+  "sampling": {
+    "answersPerQuestionPerProvider": 1,
+    "inference": "One observed answer is not a stable estimate of all future behavior."
+  },
+  "runMetadata": {
+    "currentRunId": "synthetic-current",
+    "previousRunId": "synthetic-previous",
+    "testedAt": null,
+    "actualModelIds": null,
+    "toolEvidence": []
+  },
+  "metric": {
+    "label": "Evidence-aligned conclusions",
+    "successStatus": "aligned",
+    "denominator": 5,
+    "current": {
+      "chatgpt": 5,
+      "claude": 3,
+      "gemini": 2,
+      "perplexity": 4
+    },
+    "previous": {
+      "chatgpt": 4,
+      "claude": 3,
+      "gemini": 2,
+      "perplexity": 3
+    }
+  },
+  "facts": [
+    {
+      "id": "service",
+      "label": "Quality: service",
+      "sharedBaseline": {
+        "summary": "Specific expert and recurring guest support for attentive service.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Supports service with reasonsTravel + guest reviews",
+          "answerId": "synthetic-credible-service-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses recurring guest praiseGuest reviews",
+          "answerId": "synthetic-credible-service-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "partial",
+          "displayAnswer": "△ Generic “excellent service”Generic list",
+          "answerId": "synthetic-credible-service-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Gives specific supportTravel + guest reviews",
+          "answerId": "synthetic-credible-service-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "couples",
+      "label": "Suitability: couples",
+      "sharedBaseline": {
+        "summary": "Meaningful support for intimate setting and date-night location.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitTravel review + guide",
+          "answerId": "synthetic-credible-couples-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitCouples guide",
+          "answerId": "synthetic-credible-couples-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitCouples guide",
+          "answerId": "synthetic-credible-couples-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitTravel review + guide",
+          "answerId": "synthetic-credible-couples-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "quiet",
+      "label": "Suitability: quiet stay",
+      "sharedBaseline": {
+        "summary": "Mixed. Street-facing rooms have recurring noise caveats.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Adds room-specific caveatTravel + guest reviews",
+          "answerId": "synthetic-credible-quiet-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ Omits noise caveatHotel website",
+          "answerId": "synthetic-credible-quiet-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! Calls it reliably quietHotel website + generic list",
+          "answerId": "synthetic-credible-quiet-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Keeps noise caveatTravel + guest reviews",
+          "answerId": "synthetic-credible-quiet-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "historic",
+      "label": "Claim: historic building",
+      "sharedBaseline": {
+        "summary": "Supported by matching official designation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses the hotel's accurate designation claimHotel website",
+          "answerId": "synthetic-credible-historic-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "sustainability",
+      "label": "Claim: sustainability",
+      "sharedBaseline": {
+        "summary": "Practices self-reported. Independent verification not found in the selected set.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "currentAnswers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Labels self-reported; no certification establishedHotel website",
+          "answerId": "synthetic-credible-sustainability-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "unsupported",
+          "displayAnswer": "! Calls it certified sustainableHotel website",
+          "answerId": "synthetic-credible-sustainability-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! Claims certificationHotel website",
+          "answerId": "synthetic-credible-sustainability-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "△ Repeats sustainable label without verification caveatHotel website",
+          "answerId": "synthetic-credible-sustainability-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "previousFacts": [
+    {
+      "id": "service",
+      "label": "Quality: service",
+      "sharedBaseline": {
+        "summary": "Specific expert and recurring guest support for attentive service.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Supports service with reasonsTravel + guest reviews",
+          "answerId": "synthetic-credible-service-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses recurring guest praiseGuest reviews",
+          "answerId": "synthetic-credible-service-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "partial",
+          "displayAnswer": "△ Generic “excellent service”Generic list",
+          "answerId": "synthetic-credible-service-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Gives specific supportTravel + guest reviews",
+          "answerId": "synthetic-credible-service-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "couples",
+      "label": "Suitability: couples",
+      "sharedBaseline": {
+        "summary": "Meaningful support for intimate setting and date-night location.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitTravel review + guide",
+          "answerId": "synthetic-credible-couples-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitCouples guide",
+          "answerId": "synthetic-credible-couples-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitCouples guide",
+          "answerId": "synthetic-credible-couples-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Explains couples fitTravel review + guide",
+          "answerId": "synthetic-credible-couples-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "quiet",
+      "label": "Suitability: quiet stay",
+      "sharedBaseline": {
+        "summary": "Mixed. Street-facing rooms have recurring noise caveats.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Adds room-specific caveatTravel + guest reviews",
+          "answerId": "synthetic-credible-quiet-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "partial",
+          "displayAnswer": "△ Omits noise caveatHotel website",
+          "answerId": "synthetic-credible-quiet-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! Calls it reliably quietHotel website + generic list",
+          "answerId": "synthetic-credible-quiet-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+          "answerId": "synthetic-credible-quiet-perplexity-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "historic",
+      "label": "Claim: historic building",
+      "sharedBaseline": {
+        "summary": "Supported by matching official designation.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-chatgpt",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses the hotel's accurate designation claimHotel website",
+          "answerId": "synthetic-credible-historic-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "aligned",
+          "displayAnswer": "✓ Uses official recordHistoric register",
+          "answerId": "synthetic-credible-historic-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    },
+    {
+      "id": "sustainability",
+      "label": "Claim: sustainability",
+      "sharedBaseline": {
+        "summary": "Practices self-reported. Independent verification not found in the selected set.",
+        "evidenceIds": [],
+        "isIllustrative": true
+      },
+      "answers": [
+        {
+          "provider": "chatgpt",
+          "status": "partial",
+          "displayAnswer": "Earlier synthetic answer; see visible change summary. Status: partial",
+          "answerId": "synthetic-credible-sustainability-chatgpt-previous",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "claude",
+          "status": "unsupported",
+          "displayAnswer": "! Calls it certified sustainableHotel website",
+          "answerId": "synthetic-credible-sustainability-claude",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "gemini",
+          "status": "unsupported",
+          "displayAnswer": "! Claims certificationHotel website",
+          "answerId": "synthetic-credible-sustainability-gemini",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        },
+        {
+          "provider": "perplexity",
+          "status": "partial",
+          "displayAnswer": "△ Repeats sustainable label without verification caveatHotel website",
+          "answerId": "synthetic-credible-sustainability-perplexity",
+          "rawResponse": null,
+          "citations": [],
+          "evidenceIds": [],
+          "testedAt": null,
+          "actualModelId": null,
+          "isIllustrative": true
+        }
+      ]
+    }
+  ],
+  "productionEvidenceComplete": false,
+  "sourceDisclosure": "Source names in display text are simulated, not machine-validated citations. Empty citations/evidence are invalid for production scored rows.",
+  "sourceMatrix": [
+    {
+      "id": "expert",
+      "name": "Travel reviewExpert",
+      "sharedAssessment": "Strong, with caveat. Firsthand service and couples evidence; flags street noise.Why this assessment?Relevance high; specific stay details; review arrangements disclosed; firsthand basis. One stay does not establish every guest's experience.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": true,
+        "claude": false,
+        "gemini": false,
+        "perplexity": true
+      },
+      "isIllustrative": true
+    },
+    {
+      "id": "reviews",
+      "name": "Guest reviewsCustomer",
+      "sharedAssessment": "Useful, mixed experience. Recurring service/cleanliness praise and room-specific noise complaints.Why this assessment?Specific reported stays; guest-authored on a commercial booking platform. Real evidence must show review window, sample size, theme counts and authenticity limitations.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": true,
+        "claude": true,
+        "gemini": false,
+        "perplexity": true
+      },
+      "isIllustrative": true
+    },
+    {
+      "id": "specialist",
+      "name": "Couples guideSpecialist list",
+      "sharedAssessment": "Moderate. Relevant fit and specific selection reasons; no documented overnight stay.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": true,
+        "claude": true,
+        "gemini": true,
+        "perplexity": true
+      },
+      "isIllustrative": true
+    },
+    {
+      "id": "generic",
+      "name": "“Best hotels” listGeneric list",
+      "sharedAssessment": "Weak. Generic praise; no meaningful selection criteria or firsthand account.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": false,
+        "claude": false,
+        "gemini": true,
+        "perplexity": false
+      },
+      "isIllustrative": true
+    },
+    {
+      "id": "register",
+      "name": "Historic registerOfficial record",
+      "sharedAssessment": "Strong for historic status. Exact property match; does not establish hotel quality.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": true,
+        "claude": true,
+        "gemini": false,
+        "perplexity": true
+      },
+      "isIllustrative": true
+    },
+    {
+      "id": "owned",
+      "name": "Hotel websiteBrand-owned",
+      "sharedAssessment": "First-party claims. Useful product facts; no independent sustainability verification in the checked set.",
+      "url": null,
+      "citationPresence": {
+        "chatgpt": true,
+        "claude": true,
+        "gemini": true,
+        "perplexity": true
+      },
+      "isIllustrative": true
+    }
+  ]
+}

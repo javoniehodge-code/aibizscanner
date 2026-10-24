@@ -85,3 +85,7 @@ Use [Clear, concise & complete](ai-brand-perception/sections/clear-concise-compl
 ## Approved consistency section and shared standard — 23 October 2026
 Use [Section 3: Consistent & current](ai-brand-perception/sections/consistent-current/README.md) for the cross-source baseline. Follow the [shared decision-fact standards](ai-brand-perception/decision-fact-standards.md) in both completeness and consistency: 5–10 total facts, Core and When relevant only. Compare like-for-like entities/policies against the website baseline while flagging its own gaps. Missing, conflicting, unavailable and currency-unconfirmed remain distinct. The hotel fixture is synthetic. Prior generic coffee purchase-route checks are not the future coffee standard.
 
+
+## Required model observations — 24 October 2026
+Apply the [four-model standard](ai-brand-perception/multi-model-report-standard.md) across all sections. Baseline website sufficiency, source consistency and source strength are not substitutes for actual recorded model answers. Show named model columns and per-model history; keep source correction verification distinct from model-output rechecks. See the revised Section 2/3/4 references and preserve explicit test modes/coverage.
+

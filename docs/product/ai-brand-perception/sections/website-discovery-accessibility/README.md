@@ -105,3 +105,7 @@ Implement this section using the approved webpage reference and sample data. Pre
 ## Technical implementation
 See the [end-to-end implementation process](../../../../engineering/website-discovery-accessibility.md). It details collection, page selection, permissions, provider capability validation, independent search/reading tests, evidence requirements, cache behavior, job records and acceptance cases. Published crawler blocking does not automatically cancel a separate permitted URL test; the Claude sample is illustrative, not that execution rule.
 
+
+## Required model-layer extension — 24 October 2026
+Apply the [shared model standard](../../multi-model-report-standard.md) and [contract](../../multi-model-data-contract.md). Preserve the existing four-provider access comparison. Add provider/page-level history of permission, search-discovery and URL-reading changes, exact test dates/configurations and compatible previous-run scope. Do not conflate these outcomes or infer accessibility from supplied-content tests elsewhere in the report.
+

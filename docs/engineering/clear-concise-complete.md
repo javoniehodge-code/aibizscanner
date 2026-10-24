@@ -83,3 +83,7 @@ These are acceptance cases for future implementation. This documentation update 
 ## Subsequent shared-standard requirement — 23 October 2026
 Use the approved [shared decision-fact standards](../product/ai-brand-perception/decision-fact-standards.md) for new runs, shared with [Section 3](consistent-current.md). Total 5–10 facts across Core and When relevant. The original eight-question coffee fixture is a historical synthetic design reference; migrate future checklists as documented rather than reusing its outcomes. In particular, routine local availability/purchase-route checks are outside the nationally distributed coffee standard.
 
+
+## Mandatory provider-answer pipeline — 24 October 2026
+This document's collection/rubric work defines the **shared baseline subroutine**. It is no longer the whole section. Add the [multi-model implementation](multi-model-brand-perception.md), four observed answer columns, explicit supplied-website diagnostic mode, provenance and per-model compatible history. A website gap, model abstention and model error despite clear text are separate outcomes. This extension supersedes baseline-only/no-provider-columns and deferred-understanding guidance above. See [revised section reference](../product/ai-brand-perception/sections/clear-concise-complete/model-comparison.html).
+

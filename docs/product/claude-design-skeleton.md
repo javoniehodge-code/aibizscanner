@@ -120,3 +120,7 @@ For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery
 ## Approved third-section override — 23 October 2026
 [Section 3: Consistent & current](ai-brand-perception/sections/consistent-current/README.md) is approved: question/verdict, three outcome counts, scope and source disclosure, Core/When relevant fact table, prioritized source-specific fixes, expandable evidence/rules. Use the fictional hotel webpage/image and fixture. White background, all-black text and plain English remain required. Use the [shared 5–10 fact standards](ai-brand-perception/decision-fact-standards.md) across Sections 2 and 3. Other sections remain under revision. Keep simulated results labeled; do not claim observed AI source use.
 
+
+## Required four-model report layouts — 24 October 2026
+Every section compares all four providers side by side. Use the [revised preview](ai-brand-perception/model-comparison-preview.html) and [shared standard](ai-brand-perception/multi-model-report-standard.md). Sections 2/3 baseline-only layouts are historical; revisions add shared baseline plus four model columns, source evidence and provider-specific previous/current changes. Section 4 adds source-strength/citation matrix plus model conclusions. Keep four models visible even when tests are unavailable. No fake results, dates or integrations outside labeled example mode. These revisions implement confirmed product direction; their invented examples are not live findings.
+

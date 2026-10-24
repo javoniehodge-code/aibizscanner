@@ -47,3 +47,7 @@ The earlier approved Section 2 visual remains an archived design reference with 
 ## Engineering handoff
 
 The category facts and two-bucket limit are confirmed product decisions. Required subfield definitions, source sampling and assessment resolution are versioned implementation proposals; do not claim every implementation default was individually approved. Add new industry templates through reviewed standards, not an unconstrained model-generated checklist.
+
+## Four-model presentation — 24 October 2026
+These standards are the shared baseline. The [required model layer](multi-model-report-standard.md) adds actual answers and sources for all four AIs in every section and tracks changes by model. New [Section 2 example](sections/clear-concise-complete/model-comparison.html) and [fixture](sections/clear-concise-complete/model-comparison-sample.json) illustrate the agreed coffee standard afresh; their synthetic counts are not derived from the older eight-question sample. Product/SKU scope must always remain explicit.
+
