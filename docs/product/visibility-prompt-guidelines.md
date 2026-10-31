@@ -1,6 +1,8 @@
-# Visibility Report — prompt generation guidelines
+# AI Prompt Analysis — prompt generation guidelines
 
-Status: approved process from the prompt-framework discussion. This document governs prompt generation and selection for the AI Visibility Report (called AI Prompt Analysis in earlier documents). It specifies guidelines, not implemented functionality.
+Status: approved process from the prompt-framework discussion. This document governs prompt generation and selection for AI Prompt Analysis (called AI Visibility Report in earlier discussions). It specifies guidelines, not implemented functionality.
+
+Report structure, result fields, position/name views, competitor charts, source categories, brand summary and checklist follow the [AI Prompt Analysis report schema](visibility-report-schema.md). Prompt generation and this report are one product and workflow; they are not separate purchases or analyses.
 
 ## Purpose and scope
 
