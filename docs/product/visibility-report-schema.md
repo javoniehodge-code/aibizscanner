@@ -1,11 +1,11 @@
-# AI Visibility Report — report schema and content specification
+# AI Prompt Analysis — report schema and content specification
 
 Version 1.0 • 31 October 2026
 Status: product specification, not implemented functionality. Confirmed requirements and proposed implementation defaults are distinguished below.
 
 ## 1. One product, from prompt generation to report
 
-**AI Visibility Report is the product name. “AI Prompt Analysis” is an earlier name for the same product, not an additional report, separate purchase or separate analysis workflow.** The prompt analysis table is the report's central evidence view; the other sections summarize and explain those same observations.
+**AI Prompt Analysis is the product name. “AI Visibility Report” is a previous working name for this same product, not an additional report, separate purchase or separate analysis workflow.** The prompt analysis table is the report's central evidence view; the other sections summarize and explain those same observations.
 
 The [Visibility Report prompt generation guidelines](visibility-prompt-guidelines.md) govern how questions are researched, generated, selected, approved and versioned. This document governs how their executed results are stored, aggregated and presented. Neither document replaces the other.
 
@@ -15,7 +15,7 @@ End-to-end flow:
 3. Freeze the approved prompt-set version and execute it across ChatGPT, Claude, Gemini and Perplexity.
 4. Preserve original answers and citations; identify the target and other named businesses after execution.
 5. Derive positions, appearances, recommendations, competitor frequencies and source categories from those observations.
-6. Present one AI Visibility Report with six sections, answer-level evidence and an action checklist.
+6. Present one AI Prompt Analysis with six sections, answer-level evidence and an action checklist.
 7. Reuse compatible approved questions for later runs; preserve dated snapshots and explicit series boundaries.
 
 Do not generate separate, untraceable datasets for the executive summary, competitor chart or brand summary. Additional retrieval to investigate sources is a separately recorded evidence check, not another discovery observation.
@@ -251,7 +251,7 @@ An answer can contain multiple contextual mentions; preserve supporting spans an
 
 ## 6. Acceptance criteria
 
-1. The product is labeled AI Visibility Report. Prompt generation, execution and the six report sections are documented as one workflow.
+1. The product is labeled AI Prompt Analysis. Prompt generation, execution and the six report sections are documented as one workflow.
 2. The generation guideline is linked in both directions, without duplicating or contradicting its selection rules.
 3. The report shows all four providers and preserves unavailable states and real model metadata.
 4. Position cells support “1st of 5 named,” “2nd of 3 named” and “Not named · 5 others named,” plus unclear/no-names/unavailable states.
