@@ -99,3 +99,14 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Preserve model-specific gains/losses, stronger reasons and corrected/persistent overclaims across compatible runs. No desired-positioning onboarding or causal improvement claim.
 - [Section reference/data](../product/ai-brand-perception/sections/distinctive-relevant/README.md); [technical process](../engineering/distinctive-relevant.md). Concept approved and creation/logging requested; newly created visual is not separately reviewed. All answers/history are synthetic; no production implementation is claimed.
 
+
+## Confirmed Visibility Report prompt-generation process
+
+- Use one cross-business process: structured business brief → available demand evidence → shared question patterns → intent deduplication → selection → owner approval → saved/versioned execution.
+- Keep general baseline, products/services and adjacent needs as coverage buckets. Category discovery, offering discovery, problem/task, specific requirement and alternatives are reusable patterns; skip inapplicable patterns.
+- Exclude invented customer personas and personal scenarios. Requirements need demand evidence or an exploratory label.
+- Target 25–50 distinct, useful prompts for expanded tracking; return fewer rather than padding. Free visibility remains a five-prompt subset. This does not fix paid limits or change monitoring cadence.
+- Evidence statuses are observed, supported and exploratory. Website eligibility, owner priorities and model plausibility do not establish customer demand. Never invent demand metrics or claim exact AI prompt frequency from search-topic volume.
+- Keep target identity and promotional context out of discovery execution. Do not select prompts because the target is expected to appear. Track why each prompt matters, its evidence and uncovered offerings.
+- The candidate range, bucket allocations, evidence proportions and review interval in the guideline are proposed operational defaults, not validated optimal values or commercial commitments.
+- [Approved guidelines and reusable model instruction](../product/visibility-prompt-guidelines.md). Documentation only; no generation pipeline or provider runs are implemented by this update.

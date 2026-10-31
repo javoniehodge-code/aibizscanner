@@ -9,6 +9,8 @@ Product pages and checkout disclose price, coverage, limits, delivery, retention
 Reports include executive summary, sources/answer evidence, provider/model/date, successful/missing counts, PDF and optional requested email delivery.
 
 ## 1. AI Prompt Analysis — visibility
+Prompt preparation follows the [Visibility Report prompt generation guidelines](visibility-prompt-guidelines.md): structured business brief, demand evidence, shared question patterns, distinct-intent selection, neutral execution wording and saved approval/versioning. The expanded working target is 25–50 useful prompts, not a paid plan cap; the free report selects five from the same process. Customer profiles and invented personal scenarios are excluded.
+
 **Question:** Is AI recommending me, for which customer needs, and who else appears?
 Inputs: name/domain, category, language, relevant market, optional selected competitors and approved neutral prompts.
 Outputs: prompt × provider table; mentions vs recommendations; other businesses appearing; competitor gaps; top cited domains/pages with evidence; practical next steps where supported.

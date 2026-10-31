@@ -7,6 +7,7 @@ For a simple visual website skeleton, use the [Claude Design brief](product/clau
 ## Product contracts
 1. [Product brief](product/product-brief.md)
 2. [Report catalog](product/report-catalog.md)
+   - [Visibility Report prompt generation guidelines](product/visibility-prompt-guidelines.md)
 3. [Brand evidence and discrepancy checklist](product/brand-evidence-and-checklist.md)
 4. [User flows and rules](product/user-flows-and-rules.md)
 5. [Website and journey map](product/website-and-journey-map.md)
