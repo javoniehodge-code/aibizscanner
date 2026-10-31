@@ -8,15 +8,29 @@ Direct OpenAI, Anthropic, Google Gemini and Perplexity APIs; record actual model
 Product pages and checkout disclose price, coverage, limits, delivery, retention and failure policy. Payment precedes final question approval/setup; purchased scope is frozen first, execution configuration afterward. Validate any post-payment change against purchased scope; never silently charge for extra work.
 Reports include executive summary, sources/answer evidence, provider/model/date, successful/missing counts, PDF and optional requested email delivery.
 
-## 1. AI Prompt Analysis — visibility
-Prompt preparation follows the [Visibility Report prompt generation guidelines](visibility-prompt-guidelines.md): structured business brief, demand evidence, shared question patterns, distinct-intent selection, neutral execution wording and saved approval/versioning. The expanded working target is 25–50 useful prompts, not a paid plan cap; the free report selects five from the same process. Customer profiles and invented personal scenarios are excluded.
+## 1. AI Prompt Analysis
 
-**Question:** Is AI recommending me, for which customer needs, and who else appears?
-Inputs: name/domain, category, language, relevant market, optional selected competitors and approved neutral prompts.
-Outputs: prompt × provider table; mentions vs recommendations; other businesses appearing; competitor gaps; top cited domains/pages with evidence; practical next steps where supported.
-Free: five prompts, no upfront email/account. Show results before offering email or signup. Repetition count and abuse limits remain open. Paid: broader scope still to be priced/capped.
+**AI Prompt Analysis is the product name. AI Visibility Report is a previous working name for the same product.** Prompt generation, execution and the delivered report are one workflow, not separate products or purchases.
 
-This is the appearances report, not a full comparative brand assessment. A gap means a successful, unambiguous sampled answer recommends a competitor but not the target; mention-only gaps are labeled separately.
+Prompt preparation follows the [AI Prompt Analysis prompt generation guidelines](visibility-prompt-guidelines.md). Report content and logical data fields follow the [AI Prompt Analysis report schema](visibility-report-schema.md). This schema supersedes older visibility layout descriptions where they conflict.
+
+**Question:** Is AI recommending me, for which customer needs, where am I named, and who else appears?
+
+Inputs: name/domain, category, language, relevant market, factual offerings, optional owner offering priorities and approved neutral prompts. Owners do not select competitors for this report; alternatives are identified from the answers. Customer profiles and invented personal scenarios are excluded for now.
+
+Six sections:
+1. Executive summary, with per-provider results and explicit denominators.
+2. Prompt analysis table with Positions / Business names views: for example, “1st of 5 named” or “Not named · 5 others named.” Preserve mention/recommendation distinctions and original answer evidence.
+3. Competitor appearances as a highest-to-lowest horizontal bar chart of distinct-answer naming frequency.
+4. Categorized source analysis with all four provider columns, top websites per bucket, reference counts, exact pages and supporting answers.
+5. Brief brand summary of explicitly stated strengths, concerns and discrepancies across the tested answers.
+6. Evidence-linked action checklist, separating source fixes from changed AI representation.
+
+Use black text on white throughout, including supporting text. Distinguish the target using bold text, labels or outlines; the earlier distinct-color suggestion is superseded.
+
+Free: five prompts selected from the same process. Existing guest-flow rules remain unchanged. Expanded generation targets 25–50 useful prompts; this is not a paid entitlement. Repetition count, paid pricing/caps and abuse limits remain open.
+
+Position describes observed answer order, not inferred preference rank. Citation frequency measures observed references, not causal influence. This is the appearances report, not the separately sold full comparative brand assessment. A recommendation gap requires a usable, identity-resolved answer recommending an alternative but not the target.
 
 ## 2. Brand Strength Analysis
 **Question:** Does AI know the business, how does it describe it, when would it recommend it, and what might improve its prospects?
