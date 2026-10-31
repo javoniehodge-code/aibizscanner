@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Illustrative Hotel Competitive Analysis</title><style>body{margin:0;padding:24px;background:#fff;color:#000}#hotel-comparison{max-width:1100px;margin:auto}.cursor-interaction,summary,button{cursor:pointer}@media print{details{break-inside:avoid}button{display:none}}</style></head><body>
+<div id="hotel-comparison">
+  <style>
+    #hotel-comparison{color:#000;background:#fff;font:14px/1.5 Arial,sans-serif;border:1px solid #000;border-radius:12px;overflow:hidden;color-scheme:light}
+    #hotel-comparison *{box-sizing:border-box;color:#000}
+    #hotel-comparison header{padding:20px 24px;border-bottom:1px solid #000;display:flex;gap:18px;flex-wrap:wrap;align-items:center;padding-right:110px}
+    #hotel-comparison .brand{font-weight:700;letter-spacing:1px}
+    #hotel-comparison main{padding:24px}
+    #hotel-comparison h1{font-size:26px;line-height:1.2;margin:8px 0}
+    #hotel-comparison h2{font-size:18px;margin:24px 0 10px}
+    #hotel-comparison p{margin:8px 0}
+    #hotel-comparison .sample{border:1px solid #000;padding:4px 9px;border-radius:5px;font-size:12px;display:inline-block}
+    #hotel-comparison details{border:1px solid #000;border-radius:8px;padding:14px;margin:20px 0}
+    #hotel-comparison summary{font-weight:700}
+    #hotel-comparison .choices{display:flex;flex-wrap:wrap;gap:10px 20px;margin:12px 0}
+    #hotel-comparison label{display:flex;gap:7px;align-items:center}
+    #hotel-comparison input{accent-color:#000}
+    #hotel-comparison fieldset{border:0;margin:16px 0;padding:0}
+    #hotel-comparison legend{font-weight:700}
+    #hotel-comparison button{font:inherit;background:#fff;border:1px solid #000;border-radius:5px;padding:8px 12px}
+    #hotel-comparison button[aria-pressed="true"]{background:#e9f4df;box-shadow:inset 0 -3px #000}
+    #hotel-comparison .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    #hotel-comparison .table-wrap{overflow-x:auto;margin-top:12px}
+    #hotel-comparison table{border-collapse:collapse;width:100%;min-width:650px;table-layout:fixed}
+    #hotel-comparison th,#hotel-comparison td{text-align:left;padding:13px 12px;vertical-align:top;border-bottom:1px solid #000}
+    #hotel-comparison th{font-weight:700;background:#f4f4ed}
+    #hotel-comparison th:first-child{width:22%}
+    #hotel-comparison .ours{background:#eef6e7}
+    #hotel-comparison .sub{display:block;font-size:12px;margin-top:5px}
+    #hotel-comparison .tag{display:inline-block;border:1px solid #000;border-radius:4px;padding:2px 6px;font-size:12px;margin-bottom:5px}
+    #hotel-comparison .findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    #hotel-comparison .finding{border-top:3px solid #000;padding:12px 0}
+    #hotel-comparison .finding strong{display:block;margin:7px 0}
+    #hotel-comparison footer{border-top:1px solid #000;margin-top:24px;padding-top:12px;font-size:12px}
+    #hotel-comparison .question{width:100%;padding:9px;border:1px solid #000;border-radius:5px;font:inherit}
+    @media(max-width:600px){#hotel-comparison main{padding:16px}#hotel-comparison .findings{grid-template-columns:1fr}#hotel-comparison header{padding-left:16px}#hotel-comparison h1{font-size:23px}}
+  </style>
+  <header><span class="brand">AI BUSINESS SCANNER</span><span>Competitor analysis</span></header>
+  <main>
+    <span class="sample">ILLUSTRATIVE REPORT · Fictional hotels and data</span>
+    <h1>How does your hotel compare?</h1>
+    <p>Casa Palma · San Juan, Puerto Rico</p>
+    <details>
+      <summary class="cursor-interaction">Customize competitors &amp; comparison points</summary>
+      <fieldset><legend>Selected competitors</legend><div class="choices">
+        <label><input type="checkbox" data-competitor="2" checked> Harbor House</label>
+        <label><input type="checkbox" data-competitor="3" checked> Mar Azul Suites</label>
+      </div></fieldset>
+      <fieldset><legend>Points of comparison</legend><div class="choices" id="hotel-options"></div></fieldset>
+      <label for="hotel-custom">Custom comparison question</label>
+      <input class="question" id="hotel-custom" placeholder="Example: Which hotels accommodate wedding room blocks?">
+      <span class="sub">Preview: selections update the table. Custom questions require a new scan.</span>
+    </details>
+    <h2>Your competitive snapshot</h2>
+    <p id="hotel-count" aria-live="polite">8 comparison points · 2 competitors</p>
+    <div class="table-wrap"><table aria-label="Hotel facts and competitor comparison"><thead><tr><th>Compare</th><th class="ours">Casa Palma<span class="sub">YOUR HOTEL</span></th><th data-col="2">Harbor House</th><th data-col="3">Mar Azul Suites</th></tr></thead><tbody id="hotel-rows"></tbody></table></div>
+    <h2>Executive assessment</h2>
+    <p><strong>Casa Palma’s clearest position is a small hotel for couples and remote workers who value included extras.</strong> In this fictional comparison, its strengths are a coworking lounge, included parking and a lower matched nightly price. Harbor House has stronger business facilities; Mar Azul has a more complete family offering.</p>
+    <p>The immediate opportunity is to make the existing offer easier to understand and buy. Large investments in family rooms or meeting facilities require demand and cost evidence beyond this report.</p>
+    <h2>1. Price and total trip cost</h2>
+    <p>Illustrative stay: November 17–20, 2026 · 2 adults · 3 nights · entry-level room · refundable until 72 hours before arrival. Quotes below are fictional, not live availability.</p>
+    <div class="table-wrap"><table><thead><tr><th>Three-night cost</th><th class="ours">Casa Palma</th><th>Harbor House</th><th>Mar Azul Suites</th></tr></thead><tbody>
+    <tr><th>Room + taxes</th><td class="ours">$735</td><td>$765</td><td>$780</td></tr>
+    <tr><th>Mandatory property fees</th><td class="ours">$0</td><td>$90</td><td>$0</td></tr>
+    <tr><th>Parking for 3 nights</th><td class="ours">Included</td><td>$90</td><td>$60</td></tr>
+    <tr><th>Total without a car</th><td class="ours"><strong>$735</strong></td><td>$855</td><td>$780</td></tr>
+    <tr><th>Total with a car</th><td class="ours"><strong>$735</strong></td><td>$945</td><td>$840</td></tr>
+    </tbody></table></div>
+    <p><strong>Implication:</strong> For this matched stay with a car, Casa Palma costs $210 less than Harbor House and $105 less than Mar Azul. This is a dated comparison, not evidence that Casa Palma is always cheaper. Its smaller rooms may also explain part of the difference.</p>
+    <h2>2. Which customers each hotel is equipped to serve</h2>
+    <div class="table-wrap"><table><thead><tr><th>Customer need</th><th class="ours">Casa Palma</th><th>Harbor House</th><th>Mar Azul Suites</th></tr></thead><tbody>
+    <tr><th>Remote working</th><td class="ours">Shared lounge and room desks. Internet speed and quiet-call space unverified.</td><td>Room desks and business center. Shared working space not found.</td><td>Room desks. Dedicated workspace not found.</td></tr>
+    <tr><th>Business groups</th><td class="ours">Meeting room not found. Group terms require inquiry.</td><td>Two meeting rooms; group booking page; convention access.</td><td>Group terms available by inquiry; meeting space not found.</td></tr>
+    <tr><th>Family stays</th><td class="ours">Standard rooms; connecting rooms not found.</td><td>Suites available; kitchenettes not found.</td><td>Family suites, kitchenettes and beachfront access.</td></tr>
+    <tr><th>Couples’ short breaks</th><td class="ours">Small property, pool, walkable beach access.</td><td>Restaurant and room service; convention-oriented location.</td><td>Beachfront and larger rooms; family-oriented amenities.</td></tr>
+    </tbody></table></div>
+    <p><strong>Interpretation:</strong> These are assessments of published offerings, not verified guest demographics. Casa Palma’s remote-work position is promising but needs practical proof: internet performance, lounge hours and call arrangements.</p>
+    <h2>3. What guests praise—and where the experience breaks down</h2>
+    <p>Illustrative coding of 100 recent reviews per hotel on the same fictional review platform, within the same six-month window. One review can mention multiple themes. Counts describe this sample.</p>
+    <div class="table-wrap"><table><thead><tr><th>Review theme</th><th class="ours">Casa Palma</th><th>Harbor House</th><th>Mar Azul Suites</th></tr></thead><tbody>
+    <tr><th>Staff praised</th><td class="ours">34 / 100</td><td>21 / 100</td><td>27 / 100</td></tr>
+    <tr><th>Location praised</th><td class="ours">29 / 100</td><td>38 / 100</td><td>41 / 100</td></tr>
+    <tr><th>Noise complaints</th><td class="ours">18 / 100</td><td>7 / 100</td><td>10 / 100</td></tr>
+    <tr><th>Unexpected-fee complaints</th><td class="ours">2 / 100</td><td>19 / 100</td><td>8 / 100</td></tr>
+    <tr><th>Maintenance complaints</th><td class="ours">6 / 100</td><td>9 / 100</td><td>17 / 100</td></tr>
+    </tbody></table></div>
+    <p><strong>Priority:</strong> Noise is Casa Palma’s most visible weakness in this sample. Before promoting quiet remote-work stays, identify whether complaints concern street-facing rooms, common areas or adjacent rooms. Staff praise supports a personal-service message.</p>
+    <h2>4. Positioning and booking experience</h2>
+    <div class="table-wrap"><table><thead><tr><th>Published signal</th><th class="ours">Casa Palma</th><th>Harbor House</th><th>Mar Azul Suites</th></tr></thead><tbody>
+    <tr><th>Main promise</th><td class="ours">Boutique escape near the beach</td><td>Convenient base for business travel</td><td>Space for the whole family</td></tr>
+    <tr><th>Supporting proof</th><td class="ours">Pool and interiors prominent; lounge shown only on amenities page.</td><td>Meeting capacities, room layouts and group inquiry form.</td><td>Suite layouts, kitchen equipment and family photographs.</td></tr>
+    <tr><th>Booking clarity</th><td class="ours">Parking included but only in FAQ.</td><td>Property fee appears during rate selection.</td><td>Parking charge and suite occupancy shown on room pages.</td></tr>
+    <tr><th>Commercial opportunity</th><td class="ours">Show included parking and workspace beside room rates.</td><td>Benchmark for group-booking detail.</td><td>Benchmark for room-layout detail.</td></tr>
+    </tbody></table></div>
+    <h2>5. Prioritized opportunities</h2>
+    <div class="table-wrap"><table><thead><tr><th>Priority / action</th><th>Evidence</th><th>Effort &amp; decision</th><th>Measure</th></tr></thead><tbody>
+    <tr><th>1 · Investigate noise</th><td>18 of 100 sample reviews mention it.</td><td>Low effort to diagnose; remedy cost unknown. Audit complaints by room.</td><td>Noise complaints per 100 new reviews; room-specific complaints.</td></tr>
+    <tr><th>2 · Make total value visible</th><td>Included parking; lower matched trip cost.</td><td>Low. Add included extras beside rates. Avoid permanent cheapest-price claims.</td><td>Direct booking conversion and parking-related questions.</td></tr>
+    <tr><th>3 · Validate remote-work offer</th><td>Lounge exists; practical details missing.</td><td>Low to medium. Check Wi-Fi, opening hours, outlets and call space.</td><td>Work-related inquiries and bookings; guest feedback.</td></tr>
+    <tr><th>4 · Test a weekday work-stay package</th><td>Potential fit between lounge and remote-work needs.</td><td>Medium. Hypothesis only: check weekday occupancy and package margin first.</td><td>Incremental weekday room nights and contribution margin.</td></tr>
+    </tbody></table></div>
+    <h2>6. Evidence quality and unresolved questions</h2>
+    <div class="table-wrap"><table><thead><tr><th>Finding</th><th>Source basis</th><th>Confidence rule</th><th>Still needed</th></tr></thead><tbody>
+    <tr><th>Matched price advantage</th><td>Sample booking quotes P1–P3</td><td>Strong for selected dates only when totals and terms match.</td><td>Real quotes across weekday, weekend and peak periods.</td></tr>
+    <tr><th>Amenities and policies</th><td>Official pages A1–A3</td><td>Published claim; service delivery not independently verified.</td><td>Resolve missing hours, occupancy and restrictions.</td></tr>
+    <tr><th>Guest experience themes</th><td>Review samples R1–R3</td><td>Moderate; sample bias and review authenticity remain limitations.</td><td>Linked reviews, dates and consistent theme coding.</td></tr>
+    <tr><th>Customer positioning</th><td>Messaging + offerings + review themes</td><td>Inference, not customer demographic data.</td><td>Owner booking mix to test segment fit.</td></tr>
+    </tbody></table></div>
+    <p><strong>Evidence register:</strong> P1–P3 = fictional booking snapshots; A1–A3 = fictional official hotel pages; R1–R3 = fictional review samples. No sources were researched for this mockup. A paid report would provide working source links, captured dates, relevant excerpts and an explicit “not found” status.</p>
+    <h2>7. What the next report would track</h2>
+    <p>Changes to matched stay prices, mandatory fees, room offerings, amenities, policies, review themes and positioning. The first report establishes the baseline; later reports should distinguish verified changes from information newly discovered.</p>
+    <h2>Three things to act on</h2>
+    <div class="findings">
+      <div class="finding"><span class="tag">YOUR ADVANTAGE</span><strong>Your total price is lower.</strong><p>Casa Palma has the lowest sample nightly total. Make the included parking easy to find.</p><span class="sub">Evidence: matched sample booking quotes</span></div>
+      <div class="finding"><span class="tag">OFFERING GAP</span><strong>Families get more at Mar Azul.</strong><p>Kitchenettes and larger rooms support longer family stays. Decide whether this is a segment you want to compete for.</p><span class="sub">Evidence: room and amenity pages</span></div>
+      <div class="finding"><span class="tag">INFORMATION GAP</span><strong>Your workspace needs clearer proof.</strong><p>Your site lists a coworking lounge, but practical details about hours, internet and calls are missing.</p><span class="sub">Evidence: sample amenity-page review</span></div>
+    </div>
+    <details><summary class="cursor-interaction">Evidence &amp; comparison rules</summary><p>Production reports link each fact to its source and capture date. These examples use fictional evidence labels.</p><p>Prices: same sample dates, two adults, three nights, entry-level room, matching cancellation terms; taxes and mandatory fees included.</p><p>Reviews: compare ratings and counts on the same platform. “Not found” means undocumented, not unavailable. Customer focus is labeled as an explicit claim or inferred positioning.</p><p>Source quality: assess attribution, recency, independent corroboration and agreement. Citation frequency alone does not establish quality.</p></details>
+    <footer>All businesses, prices, review samples and findings are fictional and illustrative. No live competitive research was performed.</footer>
+  </main>
+  <script>
+    (()=>{
+      const root=document.getElementById('hotel-comparison');
+      const rows=[
+        ['Price & fees','$245 total / night|Parking included','$285 total / night|Includes $30 property fee','$260 total / night|Parking: $20 extra','Matched sample booking quotes'],
+        ['Customer focus','Couples & remote workers|Inferred from website positioning','Business travelers|Explicit website focus','Families & extended stays|Explicit website focus','Official website messaging'],
+        ['Products & amenities','Pool, coworking lounge|Standard rooms','Gym, meeting rooms|Standard rooms and suites','Pool, kitchenettes|Family suites','Room and amenity pages'],
+        ['Services & hours','Front desk: 24 hours|Breakfast: 7–10 a.m.','Front desk: 24 hours|Room service: until 11 p.m.','Front desk: 7 a.m.–11 p.m.|Airport shuttle: not found','Service and contact pages'],
+        ['Location & access','Condado|Beach: 5-minute walk','Convention district|Convention center: 8-minute walk','Isla Verde|Beachfront','Official location pages'],
+        ['Policies & restrictions','Pets allowed: $50 / stay|Selected rate: 72-hour cancellation','Pets: not allowed|Selected rate: 72-hour cancellation','Pets allowed: $75 / stay|Selected rate: 72-hour cancellation','Published policy pages'],
+        ['Review reputation','4.6 / 5 · 420 reviews|Praise: staff · Concern: noise','4.4 / 5 · 810 reviews|Praise: convenience · Concern: fees','4.5 / 5 · 650 reviews|Praise: space · Concern: upkeep','Same review platform · sample snapshot'],
+        ['Online source quality','Workspace: official site only|Independent support not found','Meeting facilities corroborated|Official site + trade directory','Family amenities corroborated|Official site + travel publication','Source agreement and corroboration']
+      ];
+      const options=root.querySelector('#hotel-options');
+      rows.forEach((r,i)=>{const label=document.createElement('label');const input=document.createElement('input');input.type='checkbox';input.checked=true;input.dataset.row=i;label.append(input,document.createTextNode(r[0]));options.append(label)});
+      function fill(cell,value){const parts=value.split('|');cell.append(document.createTextNode(parts[0]));if(parts[1]){const sub=document.createElement('span');sub.className='sub';sub.textContent=parts[1];cell.append(sub)}}
+      function columns(){root.querySelectorAll('[data-col]').forEach(el=>{el.hidden=!root.querySelector('[data-competitor="'+el.dataset.col+'"]').checked})}
+      function update(){const body=root.querySelector('#hotel-rows');body.replaceChildren();let count=0;rows.forEach((r,i)=>{if(!root.querySelector('[data-row="'+i+'"]').checked)return;count++;const tr=document.createElement('tr');r.slice(0,4).forEach((v,j)=>{const cell=document.createElement(j===0?'th':'td');if(j===0){cell.scope='row';fill(cell,v+'|'+r[4])}else fill(cell,v);if(j===1)cell.className='ours';if(j>1)cell.dataset.col=j;tr.append(cell)});body.append(tr)});const competitors=root.querySelectorAll('[data-competitor]:checked').length;root.querySelector('#hotel-count').textContent=count+' comparison points · '+competitors+' competitors';columns()}
+      root.querySelectorAll('input[type="checkbox"]').forEach(el=>el.addEventListener('change',update));
+      update();
+    })();
+  </script>
+</div>
+
+</body></html>
