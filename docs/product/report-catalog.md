@@ -60,6 +60,8 @@ This goes beyond visibility's “who appears where.” Reuse compatible visibili
 Competitor-only analysis without a target remains unconfirmed. Competitor facts are observed evidence, not owner-approved truth.
 
 ## 4. Location Analysis
+
+Detailed structure and evidence rules: [Location Analysis Report schema](location-report-schema.md), including portfolio scorecard, location/prompt heatmap, HQ versus branch fixes, accuracy errors, internal branch comparison, local competitors, and coverage gaps. The owner website is the factual baseline; source disagreements remain visible. The detailed schema supersedes this older summary where they conflict.
 **Question:** How does visibility change across selected places, and where might nearby customers discover the business?
 Use the business's saved neutral question families with location-specific versions across at least two places. Example: a Brooklyn hotel appearing for Brooklyn wording but absent for nearby Ridgewood wording.
 Outputs: side-by-side prompt/provider/location recommendations, competitors, citations, gaps and source links; useful nearby-market opportunities with assumptions clearly labeled.
