@@ -26,6 +26,13 @@ Competitive report compares target with up to four competitors using matching cr
 Build discrepancy/checklist model: source/AI items separate, owner done versus verified, unsuccessful-check handling, completed history and recurrence.
 Exit: four individually purchasable products with distinct evidence-backed outputs, no numeric grading or invented causal claims.
 
+
+### To do — Brand Audit inputs from AI Prompt Analysis
+
+- [ ] **Write build instructions for generating the AI Brand Perception Audit from AI Prompt Analysis findings.** Define which prompt runs qualify for reuse, when a standalone Brand Audit needs its own run, and how relevant answers and cited pages feed each audit section.
+
+  For **Consistent & Current**, start with the business website and the exact pages cited for relevant facts. Keep competitor-only coverage opportunities separate from discrepancies about the business. Label official or other verification sources that were checked separately from AI citations. If citations are sparse or do not support a specific claim, show the coverage gap without guessing where the answer came from.
+
 ## Phase 5 — commerce and public release gates
 Finalize prices/caps/repetitions, free abuse allowance, retention and refund terms; cost-test each product. Beta waivers are account-bound.
 Finish public homepage narrative, Products pages, pricing/auth and methodology/samples. Validate HTML/metadata/indexing/accessibility/mobile and private-result exclusion.
