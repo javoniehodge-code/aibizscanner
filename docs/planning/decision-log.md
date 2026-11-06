@@ -110,3 +110,9 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Keep target identity and promotional context out of discovery execution. Do not select prompts because the target is expected to appear. Track why each prompt matters, its evidence and uncovered offerings.
 - The candidate range, bucket allocations, evidence proportions and review interval in the guideline are proposed operational defaults, not validated optimal values or commercial commitments.
 - [Approved guidelines and reusable model instruction](../product/visibility-prompt-guidelines.md). Documentation only; no generation pipeline or provider runs are implemented by this update.
+
+## Section 4 — outside support
+- Credible & Corroborated asks whether reviews and independent publications give customers a reason to choose the business.
+- Start with exact pages cited for relevant recommendations in AI Prompt Analysis. Rank by distinct prompts citing each page and show the observed providers. Separate citation frequency from the strength of the support.
+- Show recommendations, reviews, plain listings and competitor-only coverage separately. Check a small set of relevant review profiles independently and label them accordingly.
+- Replace the earlier hotel claim-alignment layout with the [moving company example](../product/ai-brand-perception/sections/credible-corroborated/README.md). No new named-business questions or four-model accuracy scorecards are required for this section by default.

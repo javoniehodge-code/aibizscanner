@@ -22,21 +22,21 @@ For supplied-evidence diagnostics, store supplied source IDs separately from sou
 - Answer state: `answered`, `qualified`, `not_addressed`, `abstained`, `unsupported`, `conflicting`. Preserve the exact answer and explain whether uncertainty is appropriate.
 - Section 2 answer evaluation: fully supported / partial / wrong / unsupported / no answer. Correct abstention can avoid hallucination but does not complete the product-information answer.
 - Section 3 evaluation: matches scoped baseline / conflicts / unsupported / not established. A correctly qualified answer to unresolved baseline facts may match; it does not establish that the fact itself is known or current.
-- Section 4 evaluation: evidence aligned / partial or caveat omitted / unsupported or overstated / not addressed. Keep independent evidence citation strength separate from alignment of the conclusion.
+- Section 4 evaluation: third-party business presence and recommendation support. Use the [Section 4 contract](sections/credible-corroborated/data-contract.md) for cited pages, independently checked reviews, evidence and coverage.
 
 Renderer must show unavailable/not-tested states rather than scoring missing rows. Every scored production observation requires a valid completed response, rule/reason and sufficient evidence for its status; unsupported/absence findings preserve scope and validation rationale rather than invented supporting quotations. If the shared baseline is unresolved, assess appropriate qualification or mark evaluation unresolved; do not manufacture a true/false key.
 
 ## Counts
 
-Declare unit and denominator per section/provider. All four columns use the same applicable items. Display supported/matching/aligned count **of total applicable**, with completed, unavailable, not-tested, abstained and other outcome counts disclosed. Distinguish answer alignment from website quality and recommendation frequency. Do not use one composite score across sections.
+Declare unit and denominator per section/provider. Where model answer columns are shown, use the same applicable items. Display supported/matching/aligned count **of total applicable**, with completed, unavailable, not-tested, abstained and other outcome counts disclosed. Distinguish answer alignment from website quality and recommendation frequency. Do not use one composite score across sections.
 
-Section 1 retains its page-based permission/discovery/reading denominators; Sections 2–3 use facts/questions, Section 4 uses disclosed topics/questions. Multiple trials attach to the same question/provider; they do not silently expand the number of facts. For sampling, show independent-trial results separately or as an explicitly labeled question/trial metric.
+Section 1 retains its page-based permission/discovery/reading denominators; Sections 2–3 use facts/questions, Section 4 counts distinct relevant Prompt Analysis prompts citing each page, deduplicated across providers and trials; supplemental reviews do not count. Multiple trials attach to the same question/provider; they do not silently expand the number of facts. For sampling, show independent-trial results separately or as an explicitly labeled question/trial metric.
 
-The sample fixtures use aliases `supported`, `partial`, `wrong`, `unsupported`, `no_answer`; `match`, `conflict`, `not_established`; `aligned`, `partial`, `unsupported`. Their abbreviated display answers and source strings are **synthetic copy**, not valid normalized citations or stored API responses.
+The sample fixtures use aliases `supported`, `partial`, `wrong`, `unsupported`, `no_answer`; `match`, `conflict`, `not_established`. Their abbreviated display answers and source strings are **synthetic copy**, not valid normalized citations or stored API responses.
 
 ## Source matrix
 
-Source strength is assessed once per claim/topic, independent of citation frequency and positivity. Store relevance, specificity, independence/disclosures, evidence basis, limitations, claim IDs and source/evidence provenance. Per-model citation counts derive only from recorded citation records for a declared run/question set. Binary “cited at least once” and frequency are different metrics; label which is shown. Deduplicate URLs/origins while retaining each actual citation event.
+Source support is assessed independently of citation frequency and positivity. For Section 4, assess the reason to choose the business supported by the inspected page. Store relevance, specificity, independence/disclosures, evidence basis, limitations, claim IDs and source/evidence provenance. Per-model citation counts derive only from recorded citation records for a declared run/question set. Binary “cited at least once” and frequency are different metrics; label which is shown. Deduplicate URLs/origins while retaining each actual citation event.
 
 Do not label a source unused, blocked or unimportant merely because it was not cited. Do not infer causal influence from citation presence. A source not in the original baseline but actually cited is added for assessment or marked not yet assessed; never silently grade it or discard it.
 

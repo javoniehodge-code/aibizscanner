@@ -122,7 +122,7 @@ For the renamed **AI Brand Perception Audit**, use [Section 1: Website discovery
 
 
 ## Required four-model report layouts — 24 October 2026
-Every section compares all four providers side by side. Use the [revised preview](ai-brand-perception/model-comparison-preview.html) and [shared standard](ai-brand-perception/multi-model-report-standard.md). Sections 2/3 baseline-only layouts are historical; revisions add shared baseline plus four model columns, source evidence and provider-specific previous/current changes. Section 4 adds source-strength/citation matrix plus model conclusions. Keep four models visible even when tests are unavailable. No fake results, dates or integrations outside labeled example mode. These revisions implement confirmed product direction; their invented examples are not live findings.
+Sections that compare model answers or access outcomes show the four providers side by side. Use the [revised preview](ai-brand-perception/model-comparison-preview.html) and [shared standard](ai-brand-perception/multi-model-report-standard.md). Sections 2/3 baseline-only layouts are historical; revisions add shared baseline plus four model columns, source evidence and provider-specific previous/current changes. [Section 4](ai-brand-perception/sections/credible-corroborated/README.md) leads with outside support: cited pages ranked by distinct relevant prompts, observed AI names, business presence, competitor coverage gaps and separately labeled review checks. Use the moving company example in place of the earlier hotel claim-alignment layout. No fake results, dates or integrations outside labeled example mode. Examples are illustrative, not live findings.
 
 
 ## Section 5 design handoff — 24 October 2026

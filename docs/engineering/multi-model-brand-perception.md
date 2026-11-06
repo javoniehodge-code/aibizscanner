@@ -1,6 +1,6 @@
 # Multi-model Brand Perception implementation
 
-Proposed implementation, 24 October 2026. [Confirmed report direction](../product/ai-brand-perception/multi-model-report-standard.md), [contract](../product/ai-brand-perception/multi-model-data-contract.md). Customer reports require observed comparisons for ChatGPT, Claude, Gemini and Perplexity in every section.
+Proposed implementation, 24 October 2026. [Confirmed report direction](../product/ai-brand-perception/multi-model-report-standard.md), [contract](../product/ai-brand-perception/multi-model-data-contract.md). Report comparisons use ChatGPT, Claude, Gemini and Perplexity where applicable. Section 4 reports observed citation providers and shared outside support, rather than per-model claim alignment.
 
 ## Pipeline
 
@@ -20,9 +20,9 @@ Proposed implementation, 24 October 2026. [Confirmed report direction](../produc
 
 **Section 2:** default proposed diagnostic supplies the same selected website passage bundle with stable page references to each model. This isolates whether the information supports a clear, concise and complete answer. Score passage-grounded answers, not prior knowledge. This test does not prove organic discovery, autonomous retrieval or consumer-app behavior. Preserve source content selection/length and any truncation; budget mismatch creates a visible limitation. An optional independent website-retrieval test must have a separate mode label, tool evidence and compatible history series.
 
-**Sections 3–4:** independent web-search runs for the same named-business fact/claim questions. Each model may return different sources. Preserve actual retrieval/disclosed citations; do not pre-feed our conclusions. If a cited source was outside the baseline, retrieve and assess it under normal permissions/budgets or flag it unassessed; update baseline version explicitly if new evidence changes it. A lack of disclosed citations limits source-use attribution, even if an answer is recorded.
+**Section 3:** independent web-search runs for the same named-business fact/claim questions. Each model may return different sources. Preserve actual retrieval/disclosed citations; do not pre-feed our conclusions. If a cited source was outside the baseline, retrieve and assess it under normal permissions/budgets or flag it unassessed; update baseline version explicitly if new evidence changes it. A lack of disclosed citations limits source-use attribution, even if an answer is recorded.
 
-These are diagnostic tests of named-business representation, not unbranded recommendation share. Actual recommendation frequency/rank uses its own prompt-run contract and metrics. API-backed results describe tested configurations, not guaranteed replicas of consumer products. Resolve concrete provider API implementations against current official capabilities at build time; this plan does not invent SDK/tool availability.
+The named-business diagnostics are separate from unbranded recommendation share. **Section 4** consumes relevant recommendation citations from Prompt Analysis and supplements them with a small, labeled review check. It does not run a separate reputation question set by default. Actual recommendation frequency/rank uses its own prompt-run contract and metrics. API-backed results describe tested configurations, not guaranteed replicas of consumer products. Resolve concrete provider API implementations against current official capabilities at build time; this plan does not invent SDK/tool availability.
 
 ## Per-section outputs
 
@@ -30,7 +30,7 @@ Section 2 has separate website-quality findings and model answer outcomes. Websi
 
 Section 3 separately stores source agreement, currency and each model's factual answer. Qualified answers can match an uncertain baseline without proving a room feature or rate policy. Like-for-like constraints remain mandatory. Corrections to websites/listings resolve only upon source recheck; corrected model representation resolves only upon a new appropriate model run. Do not merge those tasks.
 
-Section 4 source strength is shared and claim-specific; model source citation and answer alignment are separate. Correct historic status from an owned page can align with independent evidence while lacking an independent citation in that answer. A model citing a strong source can still omit its caveat. Negative firsthand evidence can be strong. Keep quality, suitability and claim support visible.
+Section 4 ranks exact cited pages by distinct relevant prompts, shows the providers that cited each page, and assesses whether the business is recommended, reviewed, merely mentioned or absent on the checked page. Review evidence includes rating, volume, recency and supported themes; label supplemental profiles separately. See the [Section 4 implementation](credible-corroborated.md).
 
 ## History and variability
 
@@ -46,16 +46,16 @@ Real raw responses, tool traces, website snapshots and customer reports remain a
 
 ## Acceptance checks
 
-- All four provider labels/columns render in every section, including error/no-prior states. Section navigation never becomes a single-provider default.
+- Model comparison sections retain provider visibility in error/no-prior states. Section 4 shows observed providers per cited page and does not fabricate provider observations for separately checked sources.
 - Source baseline and provider outcomes are separate and cannot be substituted for one another.
 - Section 2 cannot pass on an answer unsupported by supplied passages; supplied evidence cannot be labeled an actual crawl/citation.
-- Sections 3–4 require the independent-search mode provenance; failures/unsupported tools remain explicit. A missing citation never implies source blocking or nonuse.
+- Section 3 requires the independent-search mode provenance; failures/unsupported tools remain explicit. A missing citation never implies source blocking or nonuse.
 - Exact answer, sources, cited passages and rule justifications are inspectable; unmatched claims or qualifiers fail validation or remain unresolved.
 - Four-provider counts use the same applicable questions and explicit coverage; failed tests do not disappear. Unsupported claims, appropriate abstention, omitted caveats and not-addressed states remain distinct.
 - Compatible prior/current diffs are computed by item IDs and source/answer artifacts, not generated narrative. First run, model changes and changed rubric/scope are visible.
 - Citation matrices derive from actual recorded events and declared test sets; syndicated sources are not independent corroboration. New cited sources are assessed or flagged.
 - Synthetic current/previous fixtures stay labeled, cannot enter production trends and have no invented model IDs/timestamps/calls.
-- White background/all-black copy, readable table scrolling, keyboard section tabs, exact four-provider content and current/previous metric sums are checked.
+- White background/all-black copy, readable table scrolling, keyboard section tabs, provider labels where applicable and current/previous metric sums are checked.
 
 This task updates reference designs/specifications only. No live model tests, API integrations or production monitoring are implemented.
 

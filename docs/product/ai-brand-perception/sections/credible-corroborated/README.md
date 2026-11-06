@@ -1,25 +1,27 @@
 # Section 4: Credible & corroborated
 
-Revised design proposal, 24 October 2026, implementing the confirmed all-four-model requirement. Product: AI Brand Perception Audit. The section's original visual was discussed but not separately logged as an approved section before this revision.
+**Who else gives AI a reason to recommend your business?**
 
-![Four-model reference](model-comparison.png)
+This section assesses the outside support a business has across the web: customer reviews, relevant editorial recommendations and other independent coverage. Find & Read and Clear & Complete focus on the business website; Consistent & Current checks agreement on business facts. This section asks where other sources give customers a reason to choose the business.
+
+![Moving company report preview](model-comparison.png)
 
 - [Webpage](model-comparison.html)
-- [Synthetic current and previous data](model-comparison-sample.json)
-- [Shared model comparison standard](../../multi-model-report-standard.md)
+- [Illustrative moving company data](model-comparison-sample.json)
 - [Data contract](data-contract.md)
-- [Implementation](../../../../engineering/credible-corroborated.md)
+- [Implementation notes](../../../../engineering/credible-corroborated.md)
 
-## Purpose and structure
+## What the owner sees
 
-Assess meaningful support for quality, guest suitability and significant claims, then show what ChatGPT, Claude, Gemini and Perplexity say and cite. Source strength is assessed once for relevance, specificity, independence/disclosures and evidence. Positive sentiment, famous publishers or repeated generic mentions do not automatically make support strong.
+1. **What stands out:** strongest existing support and the most useful coverage gap.
+2. **Pages cited in AI Prompt Analysis:** the exact page, how many distinct relevant prompts cited it, which AIs cited it, whether the business appears, what the page supports and any competitors the page recommends.
+3. **What customers say:** ratings, review counts, recent activity and specific positive or negative themes. A small set of relevant profiles can be checked independently and must be labeled **Checked separately**.
+4. **What to work on first:** two or three evidence-backed actions.
 
-Show a model-specific verdict; four side-by-side outcome summaries; mode/scope; source-strength table with all four citation columns; topic/evidence baseline and four answer columns; per-model history; source and representation improvements. All-black text on white, plain-language labels, expandable exact answers/evidence and explicit denominators.
+Citation frequency prioritizes pages to inspect. A recommendation with a specific reason, a plain listing, and a page that recommends competitors without naming the business are different outcomes. Absence is scoped to a page we checked, not the entire publisher. A citation does not establish influence or endorsement.
 
-## Synthetic hotel example
+## Example and scope
 
-Same fictional Charleston hotel. Six source references: travel review, guest reviews, couples guide, generic list, historic register and hotel website. Five topics: service, couples fit, quietness, historic status and sustainability. Simulated evidence-aligned answer counts: ChatGPT 5/5, Claude 3/5, Gemini 2/5, Perplexity 4/5. Simulated earlier counts 4/5, 3/5, 2/5, 3/5. Every answer, citation and change is invented; no real reviews, sources or models were tested.
+The fictional moving company example shows three cited pages across twelve distinct moving prompts and one additional review profile checked separately. All pages, reviews, citations and provider observations are illustrative. No live scan was performed.
 
-Source strength and observed model citation are different. The source matrix shows binary cited-at-least-once within the declared questions, not all model influences or causal source weight. Guest review findings need real sample/window/theme counts in production. Historic records support designation only; self-reported practices are not a certification. Claims lacking support in selected sources remain unconfirmed, not automatically false.
-
-The reference is a revised proposal implementing the user's model-comparison correction, not an assertion of live findings or independent approval of every invented example. Future evidence can change the baseline through an explicit versioned reassessment.
+This design replaces the earlier hotel example and the model-by-model claim-accuracy layout. Use the existing Prompt Analysis findings as the starting point; do not add a new named-business question set by default. Show provider names with observed citations rather than four answer-alignment scores. The broader instructions for using Prompt Analysis findings throughout the Brand Audit are still a [build-plan to-do](../../../../planning/build-plan.md#to-do--brand-audit-inputs-from-ai-prompt-analysis).
