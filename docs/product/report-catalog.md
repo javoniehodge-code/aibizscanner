@@ -21,7 +21,7 @@ Inputs: name/domain, category, language, relevant market, factual offerings, opt
 Six sections:
 1. Executive summary, with per-provider results and explicit denominators.
 2. Prompt analysis table with Positions / Business names views: for example, “1st of 5 named” or “Not named · 5 others named.” Preserve mention/recommendation distinctions and original answer evidence.
-3. Competitor appearances as a highest-to-lowest horizontal bar chart of distinct-answer naming frequency.
+3. Businesses named: three separate vertical bar charts, stacked Named / Recommended / Explicit first choice, each sorted highest to lowest by its own count. Include the target, provider selection, answer evidence and a supporting position-distribution table. Explicit first choice requires a stated preference; first mention alone does not qualify. [Approved visual](ai-prompt-analysis/businesses-named-preview.html).
 4. Categorized source analysis with all four provider columns, top websites per bucket, reference counts, exact pages and supporting answers.
 5. Brief brand summary of explicitly stated strengths, concerns and discrepancies across the tested answers.
 6. Evidence-linked action checklist, separating source fixes from changed AI representation.
