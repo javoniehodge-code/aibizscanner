@@ -133,7 +133,7 @@ Approved design reference: [Businesses named — interactive visual](ai-prompt-a
 - Sort each chart independently from highest to lowest by its own metric; use alphabetical ordering for ties. A business may therefore move across charts.
 - Keep the same business universe across the three charts, including zero bars. Always include the target, even when never named.
 - Use the same y-axis scale and selected answer scope across all three charts for direct comparison.
-- Provide ChatGPT / Claude / Gemini / Perplexity / All four AIs selection. Changing provider updates all three charts, denominators, supporting counts and evidence together.
+- Default to **All four AIs**, with a horizontal toggle across the top in this order: **All four AIs / ChatGPT / Claude / Gemini / Perplexity**. Selecting a provider shows it separately and updates all three charts, denominators, supporting counts and evidence together. Keep selected-state text black, using an underline/border and weight for emphasis; wrap controls on narrow screens.
 - Show the usable-answer denominator, expected answers, unavailable answers and classification coverage. All-AI totals pool answer observations; they do not count the same question once across all providers.
 - Distinguish the target with black diagonal hatching and the label “Your business.” All text is black on white, including chart labels, counts and notes. No gray text.
 - Allow inspection of the questions, original answers, providers and supporting excerpts behind each business/metric. A native business selector is an acceptable equivalent to selecting bars and must remain keyboard accessible.
