@@ -1,6 +1,6 @@
 # AI Prompt Analysis — report schema and content specification
 
-Version 1.0 • 31 October 2026
+Version 1.1 • 7 November 2026
 Status: product specification, not implemented functionality. Confirmed requirements and proposed implementation defaults are distinguished below.
 
 ## 1. One product, from prompt generation to report
@@ -116,22 +116,76 @@ Each cell expands to:
 
 If more than one sample exists for a prompt/provider pair, expose sample selection and named/recommended frequencies. Do not combine different lists into one invented ordered answer or hide variation behind an unexplained average position.
 
-### 3. Competitor appearances
+### 3. Businesses named
 
-Show a **horizontal bar chart sorted highest to lowest** by how often each business was named in the selected answers. Include the target as a clearly labeled comparison bar.
+**Approved layout update — 7 November 2026.** Replace the previous single horizontal frequency chart and proposed metric toggle with **three separate vertical bar charts stacked in this order**:
 
-Required chart behavior:
-- Default metric: named in distinct usable answers.
-- Count each normalized business once per answer, even if it appears repeatedly.
-- Show count and denominator, such as “12 of 19 answers.”
-- Support All AIs / individual provider selection.
-- Selecting a business reveals the questions, providers, positions and answer evidence where it appears.
-- Preserve eligible but unresolved identities separately; do not merge same-name businesses without evidence.
-- Use a stable alphabetical tie-break where counts are equal.
+1. **Named**
+2. **Recommended**
+3. **Explicit first choice**
 
-Proposed enhancement: a Named / Recommended metric toggle. Named is the confirmed default; recommendation counts must remain distinguishable elsewhere even if this extra control is deferred.
+Approved design reference: [Businesses named — interactive visual](ai-prompt-analysis/businesses-named-preview.html). Download/open the HTML in a browser to use the provider selector and inspect sample answers. All businesses, counts and excerpts in this visual are invented. It is a section design reference, not a live test or production implementation.
 
-Label the section “Businesses named most often” or equally plain language. Named frequency is not market share or proof of endorsement. The section includes observed alternatives, which may be from different categories for adjacent questions. It is part of this Visibility Report, not the separately sold Competitor Analysis Report, whose deeper assessment remains distinct.
+#### Chart structure and interaction
+
+- X-axis: business names, including the target and all resolved relevant alternatives in the selected scope.
+- Y-axis: number of distinct usable answers satisfying that chart's criterion, starting at zero, with integer ticks and exact counts above the bars.
+- Sort each chart independently from highest to lowest by its own metric; use alphabetical ordering for ties. A business may therefore move across charts.
+- Keep the same business universe across the three charts, including zero bars. Always include the target, even when never named.
+- Use the same y-axis scale and selected answer scope across all three charts for direct comparison.
+- Provide ChatGPT / Claude / Gemini / Perplexity / All four AIs selection. Changing provider updates all three charts, denominators, supporting counts and evidence together.
+- Show the usable-answer denominator, expected answers, unavailable answers and classification coverage. All-AI totals pool answer observations; they do not count the same question once across all providers.
+- Distinguish the target with black diagonal hatching and the label “Your business.” All text is black on white, including chart labels, counts and notes. No gray text.
+- Allow inspection of the questions, original answers, providers and supporting excerpts behind each business/metric. A native business selector is an acceptable equivalent to selecting bars and must remain keyboard accessible.
+- On smaller screens, preserve readable business labels by wrapping them or expanding the chart layout; never shrink labels until illegible or silently omit businesses.
+
+These metrics overlap: **explicit first choice is included within recommended, which is included within named**. Do not stack or add these three totals, or present them as exclusive shares. Count each normalized business at most once per usable answer for each metric.
+
+Named frequency is not market share or proof of endorsement. These charts assess observed prominence and recommendation treatment, not business quality. Alternatives may cross business categories for adjacent needs. This section belongs to AI Prompt Analysis; it is not the separately sold Competitor Analysis Report.
+
+#### Classification contract
+
+| Field | Meaning / rule |
+| --- | --- |
+| Named | Substantive, identity-resolved appearance in the original answer. Includes neutral mentions and negative/explicitly excluded appearances. Ignore incidental names, source publishers and repeated mentions. |
+| Recommended | The answer affirmatively presents the business as a suitable choice, including a recommendation for a stated need or condition. Mere description, list numbering or location does not establish endorsement. |
+| Explicit first choice | The answer directly identifies the business as the preferred/top choice overall or for an explicitly stated need. First appearance or “1.” alone is insufficient unless the answer explicitly establishes a preference ranking. |
+| First-choice scope | Overall question or the exact stated need/condition, retained with its excerpt. Several businesses can be first choices for different needs in one answer. Do not present a scoped first choice as an overall winner. |
+| Stated fit | Short extracted description of the need the business is recommended for, with evidence. Do not force it into universal customer-profile categories. |
+| Stated concerns | Any explicit caveats, negative statements or exclusions, with evidence and context. A business can be recommended and have a concern in the same answer. |
+| Unclear | Classification or identity cannot be resolved confidently. Preserve this state and disclose assessment coverage; do not manufacture a negative result. |
+
+Only original discovery answers contribute to these chart counts. A follow-up asking why a named business was chosen is a separate analysis and cannot become an additional discovery recommendation.
+
+Proposed extraction process:
+1. Store the complete original answer and resolve its relevant business identities.
+2. Extract independent recommendation/first-choice fields, scope, stated fit and concerns for each business.
+3. Require exact answer spans and offsets for every affirmative or adverse classification. Check that excerpts occur in the answer. Excerpt presence alone does not prove correct interpretation.
+4. Validate field relationships: first choice requires recommendation and naming; recommendation requires naming. Flag contradictions or mixed contexts rather than guessing.
+5. Preserve extraction rules/model/version and unresolved cases so aggregates can be audited and reprocessed.
+6. Evaluate classification against reviewed examples containing ordered lists, unranked lists, conditional preferences, mixed praise/criticism, neutral descriptions, explicit exclusions and ambiguous identity before production use.
+
+Recommendation and first-choice classification are automated extraction tasks; these rules do not introduce manual servicing of every customer report.
+
+Example:
+> “Iron District offers strength training. For personal coaching, Hudson Strength is my top choice, although its memberships may cost more.”
+
+For Hudson Strength: appearance position = 2nd of 2 named; recommended = yes; explicit first choice = yes; scope/fit = personal coaching; concern = memberships may cost more. The concern is an observed model statement, not a verified pricing fact. This answer demonstrates why appearance order and recommendation treatment must remain separate.
+
+A missing affirmative statement counts as no explicit first-choice designation only when the original answer was usable and fully assessed. Failed extraction is “unclear,” not “no.” Keep complete usable-answer denominators visible alongside assessed/unclear counts so missing extraction is not hidden.
+
+#### Appearance position distribution
+
+Retain a supporting table below the three charts with one row per business and counts for:
+- 1st appearance
+- 2nd appearance
+- 3rd appearance
+- 4th or later (expandable into exact positions when needed)
+- Named, order unclear
+- Not named
+- Identity/extraction unresolved, when applicable
+
+Use the same provider/run/prompt scope and unique-business rules as the charts. These position states are mutually exclusive per business/answer and reconcile to the usable-answer count; unavailable answers remain disclosed separately. Do not treat an explicit concern or an unranked mention as target absence.
 
 A recommendation gap means a usable, identity-resolved answer recommends an alternative but not the target. Keep mention-only differences and answers with no recommendations separate.
 
@@ -216,7 +270,8 @@ This is a storage-independent contract for design and engineering, not a databas
 | ExecutionRun | run_id, prompt_set_version_id, configuration_version, started_at, completed_at, status, expected_attempts, report_window |
 | AnswerObservation | answer_id, run_id, prompt_version_id, provider, actual_model_id, sample_index, request/execution settings, search_requested, search_observed, timestamp, status, usable, raw_answer, failure_reason, extraction_version |
 | BusinessEntity | entity_id, canonical_name, domain, aliases, locations, entity_scope, identity_evidence; target linkage |
-| BusinessAppearance | answer_id, entity_id or unresolved candidate, raw_name, source_span, appearance_order or null, order_basis, recommendation_status, explicit_rank or null, explicit_concern, match_status |
+| BusinessAppearance | answer_id, entity_id or unresolved candidate, raw_name, source_span, appearance_order or null, order_basis, recommendation_status, is_recommended (yes/no/unclear), explicit_first_choice (yes/no/unclear), first_choice_scope, stated_fit, stated_concerns[], supporting_spans/offsets, explicit_rank or null, match_status, extraction_rule_version |
+| BusinessMetricAggregate | scope/run/provider filters, entity_id, usable_answer_count, named_count, recommended_count, explicit_first_choice_count, identity/extraction coverage, position_distribution, supporting_answer_ids |
 | CitationAnnotation | citation_id, answer_id, provider annotation, raw_url, normalized_page_id, linked_answer_span if supplied, metadata_status |
 | SourcePage | page_id, canonical_url, domain_id, title, primary_category, category_rules_version, classification_basis/confidence, company_relation |
 | SourceCheck | check_id, page_id, retrieved_at, retrieval_status, observed_content/evidence, freshness/verification limitations |
@@ -230,6 +285,7 @@ Recommended enums:
 - Demand evidence: observed / supported / exploratory.
 - Execution: queued / running / completed / partial / failed / not_tested.
 - Recommendation: recommended / mention_only / negative_mention / explicitly_excluded / ambiguous.
+- Recommendation flags: yes / no / unclear; first-choice scope: overall / stated_need with exact scope text. Concerns coexist with recommendation flags.
 - Target assessment: named / absent / identity_unresolved / no_businesses_named / answer_unavailable.
 - Order basis: explicit_rank / linear_appearance / grouped_or_unclear.
 - Citation metadata: available / none_returned / unavailable.
@@ -257,7 +313,7 @@ An answer can contain multiple contextual mentions; preserve supporting spans an
 4. Position cells support “1st of 5 named,” “2nd of 3 named” and “Not named · 5 others named,” plus unclear/no-names/unavailable states.
 5. Switching Positions / Business names preserves observations and shows original ordering; target identity is distinguished in black-only styling.
 6. Mention, recommendation and concern remain separate from appearance order.
-7. The competitor bar chart sorts named-answer frequency descending, includes the target and exposes underlying questions and providers.
+7. The Businesses named section shows three separate vertical bar charts stacked Named / Recommended / Explicit first choice, each sorted by its own count, with common scales/scope, all resolved alternatives, target hatching/label and answer evidence. The position-distribution table reconciles to usable answers with unresolved cases visible.
 8. Source categories show per-provider counts, top domains, pages and answer references, with deduplication and missing-metadata rules.
 9. Summary totals reconcile to answer observations; unavailable and identity-unresolved results cannot silently become absences.
 10. Brand findings and actions link to evidence; unexplained omission is not assigned a fabricated cause.
@@ -271,7 +327,7 @@ An answer can contain multiple contextual mentions; preserve supporting spans an
 - Finalize source-category boundaries and validate page-role classification on mixed platforms.
 - Validate extraction rules for grouped lists, incidental mentions, branch identities and conflicting answer statements.
 - Choose sampling repetitions and multi-sample cell presentation within disclosed cost/plan limits.
-- Decide whether to ship the proposed Named / Recommended chart toggle initially.
+- Validate recommendation and explicit-first-choice extraction against reviewed examples; keep need-specific preferences and concerns attached to their supporting excerpts.
 - Validate responsive layout and black-only target emphasis.
 
 These choices do not create additional products or reopen the confirmed six-section structure.
