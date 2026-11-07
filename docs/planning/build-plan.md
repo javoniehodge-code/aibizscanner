@@ -53,3 +53,10 @@ No OpenRouter/Google AI Overviews/native social collection in MVP.
 Previous single-report time/cost estimates are superseded. Re-estimate after adapter proof, status rules and product/plan caps.
 Owner setup: provider billing/limits, hosting/database/auth/jobs, Stripe merchant configuration, email sender/domain and brand/domain. Credentials belong in secret management.
 The skeleton is design work only; production checks remain required. Implement in bounded journeys and review behavior against docs before expanding.
+
+## To do — customer education blog
+Added 7 November 2026. Topic notes for future articles; not finished or fact-checked articles.
+
+- [ ] **Why position in an AI answer does not tell the whole story.** Explain that an answer may recommend different businesses for different needs rather than rank them from best to worst. A hotel listed third might be the specific recommendation for travelers with dogs. Distinguish order of appearance, explicit ranking, and recommendation for a particular need. Help customers interpret position alongside what the answer actually says and which needs it matches.
+
+- [ ] **Your website is one part of your web presence: how AI changes the picture.** Explore the difference between optimizing the business's own pages and building credible support across the web. Opening premise: anyone can create a website and make claims, so the article should explain the role of corroborating sources such as reviews, relevant publications and business profiles. Develop “digital ID” as an approachable metaphor for a recognizable, consistent business identity supported by multiple sources, rather than a formal credential. Research how AI uses these sources before publication; avoid implying that source count alone proves credibility, that AI reliably detects fake businesses, or that traditional SEO ignores outside signals.
