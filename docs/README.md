@@ -9,6 +9,7 @@ For a simple visual website skeleton, use the [Claude Design brief](product/clau
 2. [Report catalog](product/report-catalog.md)
    - [AI Prompt Analysis prompt generation guidelines](product/visibility-prompt-guidelines.md)
    - [AI Prompt Analysis report schema and content](product/visibility-report-schema.md)
+   - [Businesses named — approved three-chart visual](product/ai-prompt-analysis/businesses-named-preview.html)
    - [Location Analysis Report schema and Target visual](product/location-report-schema.md)
 3. [Brand evidence and discrepancy checklist](product/brand-evidence-and-checklist.md)
 4. [User flows and rules](product/user-flows-and-rules.md)
