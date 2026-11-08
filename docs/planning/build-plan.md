@@ -60,3 +60,18 @@ Added 7 November 2026. Topic notes for future articles; not finished or fact-che
 - [ ] **Why position in an AI answer does not tell the whole story.** Explain that an answer may recommend different businesses for different needs rather than rank them from best to worst. A hotel listed third might be the specific recommendation for travelers with dogs. Distinguish order of appearance, explicit ranking, and recommendation for a particular need. Help customers interpret position alongside what the answer actually says and which needs it matches.
 
 - [ ] **Your website is one part of your web presence: how AI changes the picture.** Explore the difference between optimizing the business's own pages and building credible support across the web. Opening premise: anyone can create a website and make claims, so the article should explain the role of corroborating sources such as reviews, relevant publications and business profiles. Develop “digital ID” as an approachable metaphor for a recognizable, consistent business identity supported by multiple sources, rather than a formal credential. Research how AI uses these sources before publication; avoid implying that source count alone proves credibility, that AI reliably detects fake businesses, or that traditional SEO ignores outside signals.
+
+### Blog positioning — DIY guidance for business owners
+Added 8 November 2026.
+
+The blog should emphasize that this is a DIY product for business owners. Reports help owners direct their own time and effort, assign specific work to their team or contractors, and decide where to invest marketing dollars. Write practical explanations connecting a finding to a decision, a person responsible and a concrete next step.
+
+- [ ] **Turn report findings into a plan for your team.** Show how an owner can use the reports to:
+  - See which websites AI references for relevant customer needs, then investigate opportunities to create useful content, earn coverage or invest marketing effort there.
+  - Identify review gaps and decide whether to improve the review process or invest in a review management platform.
+  - Give a web developer specific changes that help AI find, read and understand the website.
+  - Ask a social media manager to prioritize LinkedIn, YouTube or other channels when evidence shows they matter for the business's segment.
+  - Brief the marketing team on which messages, content, channels and spending priorities should change.
+
+Use concrete business examples and plain English. The recurring value proposition is: understand the findings, choose priorities, and give the right people clear work to do. Treat cited sources as evidence of observed use, not proof that buying ads on those sites will improve AI recommendations. Channel examples are conditional opportunities, not claims that all reports currently collect native social data.
+
