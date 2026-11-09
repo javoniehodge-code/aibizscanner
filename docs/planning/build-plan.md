@@ -75,3 +75,11 @@ The blog should emphasize that this is a DIY product for business owners. Report
 
 Use concrete business examples and plain English. The recurring value proposition is: understand the findings, choose priorities, and give the right people clear work to do. Treat cited sources as evidence of observed use, not proof that buying ads on those sites will improve AI recommendations. Channel examples are conditional opportunities, not claims that all reports currently collect native social data.
 
+### Blog topics and resource hub — AI source partnerships
+Added 9 November 2026.
+
+- [ ] **Which companies have content or data deals with AI providers, and why should business owners care?** Use Reddit as a starting research example. Build a sourced, dated guide to confirmed partnerships: who partnered with whom, what content is covered, and whether the agreement concerns model training, search/retrieval, or another use. Explain what each arrangement could mean for a source's relevance to a business's segment, alongside actual citation evidence from reports. Verify current deal terms and status before publication. A partnership alone does not establish citation priority or guarantee that a business mentioned on that platform will be recommended.
+
+- [ ] **Recommend companies and tools that help owners act on relevant source opportunities.** Research and compare appropriate providers for community participation (including Reddit where relevant), content creation, digital PR, review management and related work. Explain what each helps with, who it suits, what owners can do themselves, and how to evaluate results. Validate providers before recommending them; distinguish editorial recommendations from paid or affiliate relationships.
+
+**Editorial direction: be a hub of useful information for business owners.** Connect plain-English explanations of AI sources and industry developments to report findings, practical next steps and vetted companies or tools that can help. The hub should help owners understand an opportunity, decide whether it matters to their business, and assign or obtain the help needed to act.
