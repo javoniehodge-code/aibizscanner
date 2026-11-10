@@ -13,6 +13,7 @@ For a simple visual website skeleton, use the [Claude Design brief](product/clau
    - [Location Analysis Report schema and Target visual](product/location-report-schema.md)
 3. [Brand evidence and discrepancy checklist](product/brand-evidence-and-checklist.md)
 4. [User flows and rules](product/user-flows-and-rules.md)
+   - [AI Prompt Analysis onboarding structure](product/prompt-onboarding-flow.md)
 5. [Website and journey map](product/website-and-journey-map.md)
 6. [Website structure and SEO](product/website-structure-and-seo.md)
 7. [Technical specification](engineering/technical-specification.md)

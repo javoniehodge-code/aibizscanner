@@ -179,3 +179,32 @@ Before approving a set, verify:
 - Branded analysis, generated suggestions and actual discovery observations remain separate.
 
 Report visibility across the tracked prompt set. Do not describe it as share of all AI searches, validated customer prompt frequency or a deterministic recommendation probability.
+
+## 9. Nearby service-area prompts
+
+For a business serving local areas, include 2–5 nearby-area variants within the expanded 25–50 prompts, when applicable. Suggest places and have the owner confirm actual service coverage, including places not clearly documented online. Do not assume coverage from proximity alone.
+
+Use one core question and change only the place. Example: “What plumbers do you recommend in San Juan?” with variants for Carolina, Isla Verde and Río Piedras. These are deliberate geographic comparisons linked to the same family, not redundant paraphrases. Keep them within their relevant baseline/offering bucket.
+
+Run the same variants across all four models. Show the business's presence, other businesses appearing and explicit coverage limitations. An absence reveals a sampled geographic visibility gap; it does not prove unclear website coverage caused it. This is a small geographic check within AI Prompt Analysis; deeper comparisons belong in Location Analysis.
+
+## 10. One-level A/B follow-up tests
+
+Add selected conversation tests where clarification could meaningfully change recommendations. Begin with a neutral broad question. Where the model asks a relevant clarification, fork the initial conversation into two independent continuations: user reply A and user reply B. Each branch ends after the next model answer. B never sees A or its answer.
+
+Select questions using customer evidence, offering relevance and whether clarification changes eligible solutions, services or markets. Avoid already-specific questions and choices designed to make the target appear. Branches use neutral customer requirements, not target business names or promotional clues. No customer-persona questionnaire is required.
+
+Preserve the actual initial model answer and clarification, exact A/B replies, transcript, provider/settings and each resulting answer/citations. Show initial, A and B outcomes separately, including target presence and competitors. Shared initial responses count once, not as independent repeated observations. Keep branch results outside single-question discovery totals.
+
+Do not force a clarification or fabricate one when the model answers directly. Mark a natural follow-up test not triggered; any proactive customer-refinement test must be separately labeled. If the initial answer contains only a question, label it clarification requested rather than target absent.
+
+One level and A/B branching are approved. The exact eligible-question rubric, branch count, treatment of different model follow-up questions, and free/paid allowance accounting remain open. Declare added calls and scope before execution; do not silently increase purchased work. Cross-model comparisons require comparable branch meaning and disclosed differences.
+
+## 11. Onboarding inputs and generation instruction additions
+
+Use the [approved onboarding structure](prompt-onboarding-flow.md): confirm business → choose research topics → review and approve questions. Accept owner-added topics, existing prompts and common customer questions. Separate physical location from service coverage and confirm imported offerings.
+
+Extend the reusable generation instruction:
+> For local service coverage, suggest 2–5 nearby-area variants of a core question, changing only location and requiring owner-confirmed coverage. Count these within the expanded question target.
+>
+> Identify candidates for one-level A/B follow-up tests and explain why clarification could change recommendations. Propose neutral branch meanings and mark evidence status. Do not claim the model has asked a follow-up until observed. Keep follow-up tests distinct from single-question results and leave unresolved selection/allowance rules explicit.

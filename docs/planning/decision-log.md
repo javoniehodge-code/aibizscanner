@@ -116,3 +116,11 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Start with exact pages cited for relevant recommendations in AI Prompt Analysis. Rank by distinct prompts citing each page and show the observed providers. Separate citation frequency from the strength of the support.
 - Show recommendations, reviews, plain listings and competitor-only coverage separately. Check a small set of relevant review profiles independently and label them accordingly.
 - Replace the earlier hotel claim-alignment layout with the [moving company example](../product/ai-brand-perception/sections/credible-corroborated/README.md). No new named-business questions or four-model accuracy scorecards are required for this section by default.
+
+## Approved prompt onboarding and framework additions
+
+- Three setup steps: confirm business; choose research topics; review/approve questions. Reuse existing details, extract offerings for confirmation, allow up to five priorities and additions, and accept optional customer questions/existing prompts.
+- Separate physical location from actual served areas or online markets. Include 2–5 nearby-location variations when applicable within the expanded prompt target; change only location and confirm service coverage.
+- Add selected one-level A/B follow-up tests, branching independently from the same initial conversation. Preserve initial and branch results separately from single-question totals.
+- Follow-up eligibility rubric, number of branched questions, cross-model clarification handling and allowance accounting remain open. Do not fabricate natural follow-ups or infer website causation from geographic gaps.
+- [Onboarding structure](../product/prompt-onboarding-flow.md) and [updated framework](../product/visibility-prompt-guidelines.md). Structure only; no visual uploaded or production functionality implemented.
