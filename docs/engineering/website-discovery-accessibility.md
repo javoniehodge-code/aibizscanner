@@ -21,7 +21,7 @@ This is a named-website diagnostic, not an unbranded buyer recommendation test. 
 | Step | Service action | Saved output | Owner experience |
 | --- | --- | --- | --- |
 | Discover | Read homepage, sitemap references and bounded internal links | Candidate page inventory and collection limits | Pages found on the site |
-| Select | Suggest customer-decision pages; owner reviews/adds | Frozen selected page IDs, URLs and reasons | Exactly which pages will be checked |
+| Select | Reuse confirmed facts and Prompt Analysis; owner reviews/adds pages | Frozen selected page IDs, URLs and reasons | Exactly which pages will be checked |
 | Inspect | Fetch public rules and selected pages through our protected fetcher | Access rules, response observations and content references | Website permission and supporting website checks |
 | Search | Use each provider's actual web-search capability | Returned source URLs, executed queries/tool events | Did this platform surface the page? |
 | Open | Use each provider's supported URL-reading capability | URL-specific retrieval evidence and content observations | Was this page's information available? |
@@ -42,9 +42,11 @@ Run work in durable server-side jobs under the existing scan entitlement, budget
 
 ### Selection
 
-Suggest pages based on customer decision needs for the business type. Include relevant homepage/catalog pages and product/service, pricing, FAQ, policy, contact and location pages. Do not select merely the first six URLs. Use deterministic page classification where possible; a model can assist classification with evidence and a reason, but cannot invent pages.
+Reuse the confirmed offerings and locations from [onboarding](../product/prompt-onboarding-flow.md#handoff-to-the-website-audit). After Prompt Analysis runs or a compatible run is reused, match relevant questions and own-site citations to the site inventory. Include every discovered individual service page and applicable decision pages such as homepage, pricing, booking/contact, FAQ, policies and locations regardless of citation status. Deduplicate by page identity; keep distinct offerings and locations when they answer different questions. If discovery or audit limits leave pages unchecked, disclose that coverage. A model may assist classification but cannot invent pages.
 
-Show candidate titles, URLs and selection reasons. Owner may add/remove pages within purchased scope. Freeze the selected list before a scan. An added page or changed selection creates a new configuration/version, not a silent denominator change. A relevant page not found in our bounded discovery is a separate inventory observation, not an AI search failure.
+Show titles, URLs and selection reasons for quick owner approval and optional additions. Do not open another onboarding form. Ask a targeted, skippable question only if needed, such as asking for the URL explaining a confirmed service. If skipped, retain the confirmed fact and record what was not found in the checked scope. Never turn an inventory gap into an AI retrieval failure.
+
+Freeze the selected page list after approval and before direct-link and crawler-permission checks. Changed scope creates a new configuration/version rather than silently changing the denominator.
 
 ### Our content reference
 

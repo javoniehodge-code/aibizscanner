@@ -42,9 +42,9 @@ This section does not grade product quality, reviews, claims, third-party covera
 
 ## Page selection
 
-Identify the pages that support customer decisions: homepage, product/service catalog, relevant individual offerings, FAQs/policies, prices, locations/service areas and contact/booking pages where applicable. Select based on the business and buying needs; do not assume one industry template covers every site.
+Reuse the services and locations confirmed in [onboarding](../../../prompt-onboarding-flow.md#handoff-to-the-website-audit). After Prompt Analysis, build the proposed list using the site inventory and relevant own-site citations. Include every individual service page discovered and the relevant pages customers use to decide or book, even if uncited. Count unique pages once and disclose any coverage limits.
 
-Show the selected list and reasons before testing in the production setup; allow the owner to add relevant pages. In the result, disclose selected-page count, total site page count if known, and collection limits. A total of null means unknown, not six.
+Show the selected pages and reasons before testing. The owner can approve the list or add a page without re-entering business facts. If a specific page is missing, ask for the link optionally; if skipped, show what could not be located in the checked scope. Disclose the selected-page count separately from total site size, which can be unknown.
 
 Record a relevant page not found during site discovery separately from a selected URL that an AI did not find. Do not invent a URL or silently drop a missing page. A site-discovery limit prevents claiming the page does not exist anywhere.
 

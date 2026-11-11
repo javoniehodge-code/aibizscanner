@@ -46,6 +46,16 @@ Confirm the selected offerings, areas, exact prompts and any branch replies. Sav
 
 Run neutral discovery without attaching the business profile or priorities. Store answers, sources and results for each model; keep initial and branch observations separate.
 
+## Handoff to the website audit
+
+Confirm services and locations once during onboarding. Reuse the confirmed business profile when the website audit starts, including when the owner upgrades from an existing Prompt Analysis. Do not ask the owner to re-enter or reconfirm the same facts.
+
+After Prompt Analysis runs or a compatible run is reused, build the proposed page list from the confirmed offerings and locations, the website inventory and relevant own-site citations. Include every individual service page discovered, plus applicable pages customers use to decide or book, whether or not they were cited. Count each unique page once.
+
+Show **“Here are the pages we’ll check”** with page names and links. Let the owner approve the list or add a missing page before the audit runs its direct-link and crawler-permission checks. This is a scope review, not a second onboarding form.
+
+Ask for new information only to resolve a specific gap, and make it skippable. Example: “You confirmed that you move pianos. We couldn’t find a page that explains that service. Is there a link we missed?” If skipped, keep the owner-confirmed fact and report the gap as scoped to the pages checked. See [Find & Read page selection](ai-brand-perception/sections/website-discovery-accessibility/README.md#page-selection).
+
 ## Follow-up selection
 
 Prefer questions where a short clarification changes the eligible solution, service or market, using actual customer questions or a relevant exploratory hypothesis. Avoid questions already specific enough to answer, irrelevant choices and branches that simply steer toward the target business.
