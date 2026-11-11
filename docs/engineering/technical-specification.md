@@ -165,7 +165,7 @@ Customer results, tokens, checkout, API routes and generated PDFs must not enter
 Marketing product routes are distinct from account-protected result/API routes and guest free capability routes.
 
 ## Subscription and agency extension boundary
-Dashboard is a specified subscription product and part of the design scope. Prompt checks run three times weekly; full brand/competitive/location assessments refresh monthly or twice monthly, choice open.
+Dashboard is a specified subscription product and part of the design scope. Current AI Prompt Analysis runs once per report, with a separate recheck. The dashboard scheduling concepts below are future scope for this product.
 One-time purchases remain possible without monitoring subscription, but always require an account. Timed report bundles are separate recurring delivery products with unresolved billing/cadence/quantity terms.
 Do not use the old blanket “no accounts/subscription” scope. Conversely, do not charge until plan prices/caps, exact schedule/timezone, cancellation, quota, history/retention and failure/credit policies are implemented and published.
 Dashboard/bundle release timing is still open; agency packs, team/client permissions and integration management remain later work.
@@ -179,7 +179,7 @@ Verification evidence references baseline version and check scope/date; definiti
 
 ## Monitoring and comparison mechanics
 Use approved saved question versions; priority order is display metadata and never changes historical counts. New wording/language/location/provider configurations create compatibility boundaries.
-Prompt checks three times weekly only; full modules use separate slower schedules with last/next checked metadata. A prompt run never implicitly verifies uncollected site evidence.
+For current AI Prompt Analysis, create 5–10 planned sample slots per prompt version and provider in a single scan. Use separate conversation contexts and identical settings within each group. Identify slots by scan, prompt version, provider and sample index. A retry resolves the same slot. A recheck creates a new scan linked to the baseline and compares compatible groups. Persist the actual model and configuration to flag changed conditions. A prompt run never implicitly verifies uncollected site evidence.
 Worker claims unique schedule slot, snapshots scope, checks active subscription/credits and reserves cost atomically. Retries/restarts do not double-run or double-consume. Disable work on inactive entitlement under the finalized billing policy.
 Chart real counts, sample sizes and gaps; label any smoothing/trend. Avoid misleading inference from single-run variance. Reuse source snapshots only with explicit freshness/coverage labels, never as new observations.
 Pricing/cost estimates include all tasks, sources, advice, verification and failure overhead at each cadence; no old 48-call assumptions.

@@ -9,6 +9,10 @@ Product pages and checkout disclose price, coverage, limits, delivery, retention
 Reports include executive summary, sources/answer evidence, provider/model/date, successful/missing counts, PDF and optional requested email delivery.
 
 ## 1. AI Prompt Analysis
+Each AI Prompt Analysis is a one-time report. In one scan session, run each approved prompt 5–10 times on each engine (ChatGPT, Claude, Gemini and Perplexity) using fresh, independent conversations and consistent settings. Fix the target sample count before execution. Show recommendations and appearances separately as counts out of usable answers per prompt and engine, with planned and unavailable counts alongside them. For example, “Recommended in 3 of 10 ChatGPT answers for ‘emergency plumber San Juan.’” Retries fill the original sample slot.
+
+Offer a separate recheck 30–60 days later. Compare the same prompt versions, engines and settings, using the same planned sample counts. Show both dates, counts and percentage-point change. For example, 3/10 → 7/10 is an observed increase of 40 percentage points. Treat it as a change in sampled results and flag partial or incompatible comparisons. Each recheck produces a new snapshot. There is no ongoing monitoring between reports.
+
 
 **AI Prompt Analysis is the product name. AI Visibility Report is a previous working name for the same product.** Prompt generation, execution and the delivered report are one workflow, not separate products or purchases.
 
@@ -68,7 +72,7 @@ Outputs: side-by-side prompt/provider/location recommendations, competitors, cit
 Keep intent/settings/repetitions consistent apart from explicit location differences. Record wording and supported geographic settings; named place does not simulate a physically located searcher. Do not assume the business serves every tested location.
 
 ## 5. Dashboard and timed bundles
-Subscription dashboard: prompt checks three times per week with priority order, history, competitors in answers, sources, change annotations and rechecked checklist.
+Earlier dashboard monitoring concepts are future scope for AI Prompt Analysis. The current product delivers individual snapshots and separate rechecks.
 Full brand/competitive/location analyses refresh on a slower monthly or twice-monthly cadence, to be selected and priced. Last/next update dates per module; no implied daily or real-time full analysis.
 Timed bundles deliver defined reports periodically without assuming full dashboard access. Bundle cadence, entitlement quantities, recurring billing terms and dashboard inclusion remain open.
 Account access to purchased reports and setup is not the same as an active monitoring subscription.

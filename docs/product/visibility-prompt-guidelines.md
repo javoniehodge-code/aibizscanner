@@ -10,7 +10,7 @@ Create useful, neutral customer questions that assess whether a business is reco
 
 The tracking unit is a distinct customer search intent. Wording variants alone do not represent additional opportunities. Target 25–50 useful prompts for an expanded tracking set, returning fewer when additional prompts would be weak or repetitive. This is a working generation target, not a new paid entitlement or pricing decision. The free report remains a five-prompt subset of the same process.
 
-Prompt generation does not set monitoring cadence. Existing scheduling and commercial rules remain in the [report catalog](report-catalog.md).
+Each approved question is sampled 5–10 times per engine during a one-time report. Keep wording and settings stable for a separate recheck 30–60 days later. See the [report schema](visibility-report-schema.md#2-scope-and-shared-report-shell).
 
 ## 1. Build a structured business brief
 

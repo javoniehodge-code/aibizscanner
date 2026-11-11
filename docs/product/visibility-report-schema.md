@@ -45,9 +45,11 @@ Customer profiles, personas and demographic comparisons are excluded for now. Ow
 
 All four providers remain visible, including failed or untested providers. Use direct provider APIs under existing architecture; no OpenRouter or Google AI Overviews in MVP. Disclose that API outputs are not exact replicas of consumer applications.
 
-The free report uses five approved prompts from the same generation process and the same evidence structure. Expanded generation targets 25–50 useful prompts, not a confirmed paid entitlement. Do not manufacture weak prompts to reach a count. Pricing, sampling repetitions, retention and other commercial rules remain governed by existing decisions; this specification does not resolve them.
+The free report uses five approved prompts from the same generation process and the same evidence structure. Expanded generation targets 25–50 useful prompts, not a confirmed paid entitlement. Do not manufacture weak prompts to reach a count. Pricing, retention and other commercial rules remain governed by existing decisions; this specification does not resolve them.
 
-Prompt monitoring remains three times weekly under the existing product direction. A purchased snapshot does not imply a monitoring subscription.
+Each AI Prompt Analysis is a one-time report. In one scan session, run each approved prompt 5–10 times on each engine (ChatGPT, Claude, Gemini and Perplexity) using fresh, independent conversations and consistent settings. Fix the target sample count before execution. Show recommendations and appearances separately as counts out of usable answers per prompt and engine, with planned and unavailable counts alongside them. For example, “Recommended in 3 of 10 ChatGPT answers for ‘emergency plumber San Juan.’” Retries fill the original sample slot.
+
+Offer a separate recheck 30–60 days later. Compare the same prompt versions, engines and settings, using the same planned sample counts. Show both dates, counts and percentage-point change. For example, 3/10 → 7/10 is an observed increase of 40 percentage points. Treat it as a change in sampled results and flag partial or incompatible comparisons. Each recheck produces a new snapshot. There is no ongoing monitoring between reports.
 
 ### Visual and accessibility requirements
 
@@ -114,7 +116,7 @@ Each cell expands to:
 - Provider, actual model, timestamp, search requested versus observed, and sample identifier.
 - Explicit reasons or concerns, with answer excerpts; absence alone has no inferred rejection reason.
 
-If more than one sample exists for a prompt/provider pair, expose sample selection and named/recommended frequencies. Do not combine different lists into one invented ordered answer or hide variation behind an unexplained average position.
+For each prompt/provider pair, lead with named and recommended frequencies and expose the individual answers. Do not combine different lists into one invented ordered answer or hide variation behind an unexplained average position.
 
 ### 3. Businesses named
 
@@ -320,13 +322,13 @@ An answer can contain multiple contextual mentions; preserve supporting spans an
 11. Source fixes and AI discrepancy verification remain separate, with no completion from an owner click alone.
 12. Every visible text element is black on white. No gray text, color-only status or colored target name.
 13. Illustrative fixtures are labeled invented; unimplemented data collection, verification and historical improvements are not presented as live.
-14. Free and paid use the same report contract; commercial caps and sample repetitions are not invented here.
+14. Free and paid use the same report contract; commercial caps remain separate from the 5–10 sample rule.
 
 ## 7. Remaining implementation choices
 
 - Finalize source-category boundaries and validate page-role classification on mixed platforms.
 - Validate extraction rules for grouped lists, incidental mentions, branch identities and conflicting answer statements.
-- Choose sampling repetitions and multi-sample cell presentation within disclosed cost/plan limits.
+- Choose the exact sample count within 5–10 and finalize the multi-sample cell presentation.
 - Validate recommendation and explicit-first-choice extraction against reviewed examples; keep need-specific preferences and concerns attached to their supporting excerpts.
 - Validate responsive layout and black-only target emphasis.
 

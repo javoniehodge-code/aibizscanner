@@ -20,7 +20,7 @@ Version 0.3 supersedes conflicting earlier 20/22 October rules.
 | Signup facts import/owner approval separately from priorities/goals | Confirmed | Preserve source observations/corrections |
 | Priorities drive suggestions/order of reusable saved prompts | Confirmed | Reorder retains history; wording/version changes visible |
 | Dashboard subscription | Confirmed direction | Account ownership alone does not include monitoring |
-| Prompt monitoring three times weekly | Confirmed | Replaces daily/real-time claims |
+| One-time prompt analysis and separate recheck | Confirmed | 5–10 samples per prompt per engine in one session. Recheck 30–60 days later. Supersedes scheduled prompt monitoring for this product. |
 | Brand/competitive/location refresh monthly or twice monthly | Direction confirmed; exact choice open | Separate slower module cadence |
 | One-off and timed report bundles | Confirmed direction | Exact cadence/quantity/billing terms open |
 | Evidence-linked discrepancy checklist | Confirmed | Recheck applicable evidence; owner action not automatic verification |
@@ -124,3 +124,9 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 - Add selected one-level A/B follow-up tests, branching independently from the same initial conversation. Preserve initial and branch results separately from single-question totals.
 - Follow-up eligibility rubric, number of branched questions, cross-model clarification handling and allowance accounting remain open. Do not fabricate natural follow-ups or infer website causation from geographic gaps.
 - [Onboarding structure](../product/prompt-onboarding-flow.md) and [updated framework](../product/visibility-prompt-guidelines.md). Structure only; no visual uploaded or production functionality implemented.
+
+## Confirmed prompt sampling and rechecks
+
+Each AI Prompt Analysis is a one-time report. In one scan session, run each approved prompt 5–10 times on each engine (ChatGPT, Claude, Gemini and Perplexity) using fresh, independent conversations and consistent settings. Fix the target sample count before execution. Show recommendations and appearances separately as counts out of usable answers per prompt and engine, with planned and unavailable counts alongside them. For example, “Recommended in 3 of 10 ChatGPT answers for ‘emergency plumber San Juan.’” Retries fill the original sample slot.
+
+Offer a separate recheck 30–60 days later. Compare the same prompt versions, engines and settings, using the same planned sample counts. Show both dates, counts and percentage-point change. For example, 3/10 → 7/10 is an observed increase of 40 percentage points. Treat it as a change in sampled results and flag partial or incompatible comparisons. Each recheck produces a new snapshot. There is no ongoing monitoring between reports.
