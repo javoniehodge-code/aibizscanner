@@ -20,7 +20,7 @@ Version 0.3 supersedes conflicting earlier 20/22 October rules.
 | Signup facts import/owner approval separately from priorities/goals | Confirmed | Preserve source observations/corrections |
 | Priorities drive suggestions/order of reusable saved prompts | Confirmed | Reorder retains history; wording/version changes visible |
 | Dashboard subscription | Confirmed direction | Account ownership alone does not include monitoring |
-| One-time prompt analysis and separate recheck | Confirmed | 5–10 samples per prompt per engine in one session. Recheck 30–60 days later. Supersedes scheduled prompt monitoring for this product. |
+| One-time prompt analysis and separate recheck | Confirmed | One run per prompt per engine for local businesses. Repeat sampling for other businesses is open. Recheck 30–60 days later. Supersedes scheduled prompt monitoring for this product. |
 | Brand/competitive/location refresh monthly or twice monthly | Direction confirmed; exact choice open | Separate slower module cadence |
 | One-off and timed report bundles | Confirmed direction | Exact cadence/quantity/billing terms open |
 | Evidence-linked discrepancy checklist | Confirmed | Recheck applicable evidence; owner action not automatic verification |
@@ -127,6 +127,6 @@ Do not infer confirmation of prices, schedule details or implementation defaults
 
 ## Confirmed prompt sampling and rechecks
 
-Each AI Prompt Analysis is a one-time report. In one scan session, run each approved prompt 5–10 times on each engine (ChatGPT, Claude, Gemini and Perplexity) using fresh, independent conversations and consistent settings. Fix the target sample count before execution. Show recommendations and appearances separately as counts out of usable answers per prompt and engine, with planned and unavailable counts alongside them. For example, “Recommended in 3 of 10 ChatGPT answers for ‘emergency plumber San Juan.’” Retries fill the original sample slot.
+Each AI Prompt Analysis is a one-time report. For local businesses, run each approved prompt once on each engine (ChatGPT, Claude, Gemini and Perplexity), using the intended geographic scope. Report the observed outcome per engine, such as recommended, mentioned, absent, or unavailable. Treat each answer as a snapshot. Repeat sampling for other business types, including the earlier 5–10-run proposal, remains under consideration. Retries fill the original sample slot.
 
-Offer a separate recheck 30–60 days later. Compare the same prompt versions, engines and settings, using the same planned sample counts. Show both dates, counts and percentage-point change. For example, 3/10 → 7/10 is an observed increase of 40 percentage points. Treat it as a change in sampled results and flag partial or incompatible comparisons. Each recheck produces a new snapshot. There is no ongoing monitoring between reports.
+Offer a separate recheck 30–60 days later using the same prompt versions, geographic scope, engines and settings where possible. For local businesses, compare observed outcomes, such as absent → recommended, and show both dates. Flag unavailable results or changed test conditions. Each recheck produces a new snapshot.

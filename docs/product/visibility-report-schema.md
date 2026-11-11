@@ -47,9 +47,9 @@ All four providers remain visible, including failed or untested providers. Use d
 
 The free report uses five approved prompts from the same generation process and the same evidence structure. Expanded generation targets 25–50 useful prompts, not a confirmed paid entitlement. Do not manufacture weak prompts to reach a count. Pricing, retention and other commercial rules remain governed by existing decisions; this specification does not resolve them.
 
-Each AI Prompt Analysis is a one-time report. In one scan session, run each approved prompt 5–10 times on each engine (ChatGPT, Claude, Gemini and Perplexity) using fresh, independent conversations and consistent settings. Fix the target sample count before execution. Show recommendations and appearances separately as counts out of usable answers per prompt and engine, with planned and unavailable counts alongside them. For example, “Recommended in 3 of 10 ChatGPT answers for ‘emergency plumber San Juan.’” Retries fill the original sample slot.
+Each AI Prompt Analysis is a one-time report. For local businesses, run each approved prompt once on each engine (ChatGPT, Claude, Gemini and Perplexity), using the intended geographic scope. Report the observed outcome per engine, such as recommended, mentioned, absent, or unavailable. Treat each answer as a snapshot. Repeat sampling for other business types, including the earlier 5–10-run proposal, remains under consideration. Retries fill the original sample slot.
 
-Offer a separate recheck 30–60 days later. Compare the same prompt versions, engines and settings, using the same planned sample counts. Show both dates, counts and percentage-point change. For example, 3/10 → 7/10 is an observed increase of 40 percentage points. Treat it as a change in sampled results and flag partial or incompatible comparisons. Each recheck produces a new snapshot. There is no ongoing monitoring between reports.
+Offer a separate recheck 30–60 days later using the same prompt versions, geographic scope, engines and settings where possible. For local businesses, compare observed outcomes, such as absent → recommended, and show both dates. Flag unavailable results or changed test conditions. Each recheck produces a new snapshot.
 
 ### Visual and accessibility requirements
 
@@ -322,13 +322,13 @@ An answer can contain multiple contextual mentions; preserve supporting spans an
 11. Source fixes and AI discrepancy verification remain separate, with no completion from an owner click alone.
 12. Every visible text element is black on white. No gray text, color-only status or colored target name.
 13. Illustrative fixtures are labeled invented; unimplemented data collection, verification and historical improvements are not presented as live.
-14. Free and paid use the same report contract; commercial caps remain separate from the 5–10 sample rule.
+14. Free and paid use the same report contract; commercial caps remain separate from the local single-run rule.
 
 ## 7. Remaining implementation choices
 
 - Finalize source-category boundaries and validate page-role classification on mixed platforms.
 - Validate extraction rules for grouped lists, incidental mentions, branch identities and conflicting answer statements.
-- Choose the exact sample count within 5–10 and finalize the multi-sample cell presentation.
+- Decide whether repeat sampling is useful for other business types before specifying sample counts or presentation.
 - Validate recommendation and explicit-first-choice extraction against reviewed examples; keep need-specific preferences and concerns attached to their supporting excerpts.
 - Validate responsive layout and black-only target emphasis.
 
