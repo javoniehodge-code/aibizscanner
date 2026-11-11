@@ -25,3 +25,7 @@ Citation frequency prioritizes pages to inspect. A recommendation with a specifi
 The fictional moving company example shows three cited pages across twelve distinct moving prompts and one additional review profile checked separately. All pages, reviews, citations and provider observations are illustrative. No live scan was performed.
 
 This design replaces the earlier hotel example and the model-by-model claim-accuracy layout. Use the existing Prompt Analysis findings as the starting point; do not add a new named-business question set by default. Show provider names with observed citations rather than four answer-alignment scores. The broader instructions for using Prompt Analysis findings throughout the Brand Audit are still a [build-plan to-do](../../../../planning/build-plan.md#to-do--brand-audit-inputs-from-ai-prompt-analysis).
+
+## Related: Web Presence Map
+
+The [Web Presence Map](../../../web-presence-map.md) specifies the full diagnostic's website-by-information-category grid, covering business details, offerings, customer fit, reviews, recommendations and locations. It reuses cited-page evidence and separately labeled additional research. Use shared page assessments and findings rather than duplicating or contradicting this section's outside-support analysis.
