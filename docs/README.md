@@ -2,6 +2,8 @@
 Version 0.3 • 22 October 2026
 
 ## Start here
+Current build: [internal report testing application brief](build/internal-testing-app.md), with report designs in [design/reports](../design/reports/README.md).
+
 For a simple visual website skeleton, use the [Claude Design brief](product/claude-design-skeleton.md). It specifies pages, navigation, homepage sequence, customer flows and essential states; no production backend is implied.
 
 ## Product contracts
@@ -18,6 +20,7 @@ For a simple visual website skeleton, use the [Claude Design brief](product/clau
 5. [Website and journey map](product/website-and-journey-map.md)
 6. [Website structure and SEO](product/website-structure-and-seo.md)
 7. [Technical specification](engineering/technical-specification.md)
+   - [Full Business Diagnostic — technical requirements summary](engineering/report-tech-requirements.md)
 8. [Acceptance criteria](quality/acceptance-criteria.md)
 9. [Build plan](planning/build-plan.md)
 10. [Decision log](planning/decision-log.md)

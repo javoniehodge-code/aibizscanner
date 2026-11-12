@@ -203,3 +203,5 @@ Use [Multi-model Brand Perception implementation](multi-model-brand-perception.m
 ## Distinctive & relevant implementation
 [Section 5 process](distinctive-relevant.md) adds neutral named-site questions, evidence-bound association extraction, independent expression/alignment states, competitive comparison requirements and per-model history. Use the common provider provenance/budget/privacy pipeline. Present, emphasized, not mentioned, correctly excluded and misleading are not interchangeable. The reference is synthetic and does not implement or test a production scanner.
 
+## Full Business Diagnostic requirements summary — 12 November 2026
+APIs, data sources, the AI page-reading method (provider tools, not a rendered browser) and report data-contract gaps found in the MVP Miami test: [report technical requirements](report-tech-requirements.md).
