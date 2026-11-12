@@ -27,6 +27,7 @@ npm run dev                  # http://localhost:3000
 | `npm test` | Unit tests (Vitest, `src/**/*.test.ts`) |
 | `npm run build` | Production build (works without env vars; they are read at request time) |
 | `npm run e2e` | Playwright end-to-end tests against a local Supabase stack (see below) |
+| `npm run db:types` | Regenerate `src/lib/database.types.ts` from the local database (needs the Supabase CLI; CI fails if it is stale) |
 
 CI (`.github/workflows/ci.yml`) runs on every pull request:
 
@@ -57,6 +58,12 @@ scheduling, error and usage fields until they finish; then they are frozen. Reru
 - `/login` is the only route reachable without a session (`src/proxy.ts`). There is no sign-up UI, and sign-ups must be disabled in Supabase.
 - Pages under `src/app/(admin)` call `requireAdmin()`: a signed-in user who is not in `admin_user` sees `/no-access`.
 - `/health` (admin only) runs a live query and shows the deployed git commit.
+
+## Screens
+
+- `/businesses`: list of test businesses; `/businesses/new` and `/businesses/[id]/edit` share one form (brief §3.1).
+  Validation runs on the server (`src/lib/business/schema.ts`, zod). The Google Places identity check is Milestone 2;
+  the form shows a placeholder and never contacts Google.
 
 ## End-to-end tests
 
