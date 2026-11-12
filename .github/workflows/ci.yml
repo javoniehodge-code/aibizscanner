@@ -12,6 +12,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  SUPABASE_CLI_VERSION: 3.1.0
+  NEXT_TELEMETRY_DISABLED: "1"
+
 jobs:
   web:
     name: Web app (typecheck, lint, unit tests, build)
@@ -31,5 +35,56 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
+
+  database:
+    name: Database (migrations + SQL tests for RLS and append-only rules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - name: Start local Postgres and apply every migration
+        run: supabase db start
+      - name: Run pgTAP tests (supabase/tests)
+        run: supabase test db
+      - name: Lint database schema
+        run: supabase db lint --level warning --fail-on error
+
+  e2e:
+    name: End-to-end (local Supabase + production build + Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Start local Supabase (database, auth, REST)
+        run: supabase start -x realtime,storage-api,imgproxy,studio,edge-runtime,logflare,vector,supavisor,postgres-meta,mailpit
+      - name: Export local Supabase settings
+        run: |
+          supabase status -o json > /tmp/sb.json
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$(jq -r .API_URL /tmp/sb.json)"
+            echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$(jq -r .PUBLISHABLE_KEY /tmp/sb.json)"
+            echo "SUPABASE_SECRET_KEY=$(jq -r .SECRET_KEY /tmp/sb.json)"
+          } >> "$GITHUB_ENV"
+      - run: npm ci
+        working-directory: web
+      - run: npx playwright install --with-deps chromium
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+      - run: npm run e2e
+        working-directory: web
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: web/playwright-report
+          retention-days: 7
