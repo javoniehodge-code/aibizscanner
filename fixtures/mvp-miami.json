@@ -1,0 +1,5964 @@
+{
+  "schemaVersion": "1.0",
+  "fixture": {
+    "id": "mvp-miami",
+    "title": "MVP Miami (mixed live and sample data)",
+    "source": "design/reports/full-business-diagnostic-mvp-miami.dc.html@879241a",
+    "note": "Extracted from the MVP Miami comparison export, an older template. Claude answers and site checks are real (11 Nov 2026); ChatGPT, Gemini, Google and Yelp values are sample data (design/reports/README.md). Parts the older template did not have are marked missing; nothing is copied from Brownstone."
+  },
+  "evidence": {
+    "mvp-claude-live": {
+      "source": "legacy-design-export",
+      "ref": "design/reports/full-business-diagnostic-mvp-miami.dc.html@879241a",
+      "capturedOn": "2026-11-11",
+      "note": "Claude with web search, live run. The export holds the answers and excerpts shown; raw API responses were not stored."
+    },
+    "mvp-site-checks": {
+      "source": "legacy-design-export",
+      "ref": "design/reports/full-business-diagnostic-mvp-miami.dc.html@879241a",
+      "capturedOn": "2026-11-11",
+      "note": "Real checks of mvpmiami.com pages, robots.txt and listings, as recorded in the export. Raw page snapshots were not stored."
+    }
+  },
+  "meta": {
+    "v": {
+      "runDate": "11 Nov 2026",
+      "language": "English (US)"
+    },
+    "p": {
+      "kind": "observed",
+      "evidence": [
+        "mvp-site-checks"
+      ]
+    }
+  },
+  "business": {
+    "v": {
+      "key": "MV",
+      "name": "MVP Miami",
+      "location": "Miami, FL",
+      "domain": "mvpmiami.com"
+    },
+    "p": {
+      "kind": "observed",
+      "evidence": [
+        "mvp-site-checks"
+      ]
+    }
+  },
+  "engines": [
+    {
+      "v": {
+        "name": "ChatGPT",
+        "model": "gpt-5 · OpenAI API · sample data"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Claude",
+        "model": "Claude with web search · live run, 11 Nov 2026"
+      },
+      "p": {
+        "kind": "observed",
+        "evidence": [
+          "mvp-claude-live"
+        ]
+      }
+    },
+    {
+      "v": {
+        "name": "Gemini",
+        "model": "gemini-2.5-pro · Gemini API · sample data"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ],
+  "copy": {
+    "websiteSummary": {
+      "v": "Every AI is allowed to read your site, but Claude never found it in 14 live searches, and your car list loads empty for AI. Your FAQ explains your rules well, but no page shows a price. AI does see that you rent cars, mansions and yachts from one place.",
+      "p": {
+        "kind": "observed",
+        "evidence": [
+          "mvp-site-checks"
+        ]
+      }
+    },
+    "discoveryIntro": {
+      "v": "We selected six pages that explain what your business offers, what it costs, and how to book. Then we tested whether each AI could find those pages on its own and read them when given the links. The next slide checks the code behind them.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "discoveryWhyPages": {
+      "v": "Your homepage introduces all three rental lines. Your vehicle, mansion and yacht pages show what customers can rent. The FAQ and contact page cover your rules and booking. We checked these pages, not your whole website; “4 of 6” always means 4 of these 6. A full audit lets you add pages before testing.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "clearPagesChecked": {
+      "v": null,
+      "p": {
+        "kind": "missing",
+        "reason": "The MVP Miami export repeated Brownstone’s page list here, so it is not carried over."
+      }
+    },
+    "clearStandard": {
+      "v": "We use the same clear, concise and complete standard for every rental fact. Mentioning a service isn’t enough: your website has to give the details needed for that decision.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "clearFoot": {
+      "v": "5 rental facts · 6 selected pages · 11 Nov 2026. Each AI column shows what that AI repeated from your pages.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "consistentFoot": {
+      "v": "5 decision facts · 5 sources · 11 Nov 2026. This shows the information available to support AI recommendations. It doesn’t prove which sources an AI used, or that its answer will change after a correction.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "credibleFoot": {
+      "v": "12 rental prompts · 9 outside pages · ChatGPT, Claude and Gemini · 11 Nov 2026. Citation counts show which pages to check first; they don’t measure how strongly a page supports you or prove it shaped an answer.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "groupLegend": {
+      "v": "Baseline: general exotic rental questions · Products & services: specific cars, homes and yachts · Adjacent needs: related needs around a luxury trip",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorKicker": {
+      "v": "PUBLIC COMPETITOR FACTS · AI COUNTS PARTLY SAMPLE",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorTitle": {
+      "v": "How do you compare with the companies AI recommends most?",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorIntro": {
+      "v": "We compared you with the two other companies AI recommended most often in your Prompt Analysis. Facts come from their published pages, review profiles and the AI answers themselves.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorReasonsIntro": {
+      "v": "What AI and customers point to when they recommend each company.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorConcernsIntro": {
+      "v": "What AI or customers flag about each company. These are the reasons a customer might pick someone else.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "citedPagesTitle": {
+      "v": "Pages AI cited for luxury rental recommendations",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "citedPagesIntro": {
+      "v": "Outside pages cited across the 12 luxury rental prompts in your Prompt Analysis, ordered by how many prompts cited each page. A page counts once per prompt, even if several AIs cite it.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "reportDetails": {
+      "v": "MVP Miami · Miami, FL · English (US) · 6 pages, 5 facts, 9 cited pages, 3 strengths · Claude live run, ChatGPT and Gemini sample data · ChatGPT, Claude, Gemini · Run 11 Nov 2026, 1 answer per question · First run, no previous comparison",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "promptReportDetails": {
+      "v": "Miami, FL · English (US) · 12 questions, prompt set v1.0 · ChatGPT (sample), Claude (live), Gemini (sample) · Run 11 Nov 2026, 1 sample each · 35 of 36 answers usable · No previous comparison",
+      "p": {
+        "kind": "sample"
+      }
+    }
+  },
+  "summary": {
+    "clear": {
+      "v": {
+        "text": "facts on your website have enough detail · no prices, and your car list doesn’t load for AI"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  },
+  "promptAnalysis": {
+    "groups": [
+      {
+        "v": {
+          "name": "Baseline",
+          "description": "General category questions"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Products & services",
+          "description": "Cars, homes and yachts you rent"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Adjacent needs",
+          "description": "Related needs around a luxury trip"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "businesses": [
+      {
+        "v": {
+          "key": "MV",
+          "name": "MVP Miami"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "OC",
+          "name": "Octane Rent"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "PL",
+          "name": "Prestige Luxury Rentals"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "LX",
+          "name": "Luxx Miami"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "MC",
+          "name": "mph club"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "SL",
+          "name": "Starr Luxury Cars"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "DY",
+          "name": "Dynasty Luxury Rentals"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "RC",
+          "name": "RealCar Miami"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "TU",
+          "name": "Turo"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "EN",
+          "name": "Enterprise Exotic Car Collection"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "SX",
+          "name": "Sixt"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "HZ",
+          "name": "Hertz"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "GG",
+          "name": "Giggster"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "PE",
+          "name": "Peerspace"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "LR",
+          "name": "Luxury Rentals Miami Beach"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "BS",
+          "name": "Boatsetter"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "GB",
+          "name": "GetMyBoat"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "SA",
+          "name": "Sailo"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "LV",
+          "name": "Lou La Vie"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "QU",
+          "name": "Quintessentially"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      }
+    ],
+    "pages": [
+      {
+        "v": {
+          "key": "yw",
+          "url": "mvpmiami.com/faq",
+          "category": "your"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "yw2",
+          "url": "mvpmiami.com/mansion-rentals",
+          "category": "your"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "yw3",
+          "url": "mvpmiami.com/yacht-rentals",
+          "category": "your"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "oc1",
+          "url": "octane.rent/lamborghini-rental-miami",
+          "category": "other"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "oc2",
+          "url": "prestigeluxuryrentals.com",
+          "category": "other"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "oc3",
+          "url": "luxx.miami",
+          "category": "other"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "oc4",
+          "url": "mphclub.com",
+          "category": "other"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "oc5",
+          "url": "enterprise.com/en/car-rental-locations/us/fl/fort-lauderdale-hollywood-intl-airport-exotic-car-collection-41fe.html",
+          "category": "other"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "mp1",
+          "url": "google.com/maps/place/mvp-miami",
+          "category": "maps"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "rv1",
+          "url": "trustpilot.com/review/realcar.miami",
+          "category": "review"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "dr1",
+          "url": "turo.com/us/en/exotic-luxury-rental/united-states/miami-fl",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "dr2",
+          "url": "boatsetter.com (Miami yachts)",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "dr3",
+          "url": "giggster.com/find/miami--fl/home-party",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "dr4",
+          "url": "atly.com/location/MVPMiami",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "ed1",
+          "url": "sarasotamagazine.com/advantagepoint/2026/11/best-miami-bentley-rentals-in-2026",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "ed2",
+          "url": "vipcars.com/guide/car-rental-tips/luxury-car-rental-miami",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "ed3",
+          "url": "hauteliving.com/2013/05/exotic-car-company-lou-la-vie-take-to-the-ocean",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "ed4",
+          "url": "peerspace.com/resources/where-to-rent-a-mansion-miami",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      },
+      {
+        "v": {
+          "key": "nw1",
+          "url": "ipsnews.net/business/?p=249937 (press release)",
+          "category": "unc"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      }
+    ],
+    "questions": [
+      {
+        "question": {
+          "v": {
+            "id": "P1",
+            "group": 0,
+            "demand": "Observed demand",
+            "text": "Best exotic car rental companies in Miami"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "MV",
+                  "status": "M"
+                },
+                {
+                  "business": "OC",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc4",
+                "oc3"
+              ],
+              "uncitedMentions": [],
+              "text": "mph club is my top pick for supercars in Miami. Luxx Miami and Prestige Luxury Rentals also have large fleets with delivery. MVP Miami and Octane Rent are other options; MVP also rents mansions and yachts.",
+              "statedReason": "Also rents mansions and yachts.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "SL",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "nw1",
+                "oc4"
+              ],
+              "uncitedMentions": [],
+              "text": "Well-reviewed exotic rental companies in Miami include Octane Rent (insurance included in the price, 4.9★ on Google from 1,700+ reviews), Prestige Luxury Rentals (operating since 2004, delivers to hotels and residences), Luxx Miami (large fleet, 24/7 concierge from Brickell) and mph club (Lamborghini and Ferrari specialists). Starr Luxury Cars is another option.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "SL",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc1",
+                "oc4"
+              ],
+              "uncitedMentions": [],
+              "text": "Octane Rent, mph club and Prestige Luxury Rentals are the most consistently reviewed exotic rental companies in Miami. Starr Luxury Cars is another option.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P2",
+            "group": 0,
+            "demand": "Observed demand",
+            "text": "Most reliable luxury car rental in Miami with good reviews"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc2",
+                "ed1"
+              ],
+              "uncitedMentions": [],
+              "text": "Prestige Luxury Rentals (in business since 2004) and Octane Rent both have 4.9-star Google ratings. Luxx Miami is also well reviewed.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "DY",
+                  "status": "R"
+                },
+                {
+                  "business": "RC",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "rv1"
+              ],
+              "uncitedMentions": [],
+              "text": "For reliability and reviews: Octane Rent (4.9★ from 1,700+ Google reviews, insurance included), Prestige Luxury Rentals (4.9★, in business since 2004), Dynasty Luxury Rentals (4.9★ from 196 reviews, since 2008) and RealCar Miami (strong Trustpilot reviews). Turo has more choice, but quality varies by host.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "DY",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1"
+              ],
+              "uncitedMentions": [],
+              "text": "Octane Rent is the most reliable option, with 1,700+ Google reviews. Dynasty Luxury Rentals is also highly rated. Prestige Luxury Rentals is another established choice.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P3",
+            "group": 1,
+            "demand": "Observed demand",
+            "text": "Where can I rent a Lamborghini in Miami?"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc4",
+                "oc1"
+              ],
+              "uncitedMentions": [],
+              "text": "mph club and Octane Rent both rent Huracáns and Urus SUVs. Luxx Miami also lists Lamborghinis.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "SL",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc4",
+                "oc1",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "mph club, Octane Rent, Starr Luxury Cars and Prestige Luxury Rentals all list Huracáns and Urus models in Miami. Turo has private-owner Lamborghinis, often cheaper but with stricter host rules.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc1",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Octane Rent and mph club are the main Lamborghini rental options. Turo has some private listings.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P4",
+            "group": 0,
+            "demand": "Supported demand",
+            "text": "Affordable exotic car rental in Miami"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "RC",
+                  "status": "R"
+                },
+                {
+                  "business": "MC",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1",
+                "rv1"
+              ],
+              "uncitedMentions": [],
+              "text": "Turo is usually the cheapest way to drive an exotic car in Miami. RealCar Miami has lower daily rates than most specialists. mph club runs weekday specials.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "RC",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "M"
+                },
+                {
+                  "business": "HZ",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed2",
+                "ed1",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Exotic rentals in Miami usually start around $1,000 a day. Cheaper routes: Turo (private owners, lower rates) and RealCar Miami (Bentayga from $659 a day before fees). Octane Rent includes insurance, which can lower the total. Hertz’s Dream Collection is a mainstream fallback. Most companies require renters to be 25 or older.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "HZ",
+                  "status": "R"
+                },
+                {
+                  "business": "SX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1",
+                "ed2"
+              ],
+              "uncitedMentions": [],
+              "text": "For a lower price, try Turo or Hertz’s Dream Collection. Sixt has luxury cars at lower rates, though few true exotics.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P5",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Rent a Rolls-Royce in Miami for a wedding"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc3",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "Luxx Miami and Prestige Luxury Rentals both rent Rolls-Royce Cullinans and Ghosts for weddings. Octane Rent also has a Rolls-Royce.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "SL",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc1",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "For a wedding Rolls-Royce: Octane Rent and Luxx Miami rent Cullinans and Ghosts by the day, Prestige Luxury Rentals markets Rolls-Royce rentals for South Florida weddings, and Starr Luxury Cars offers a chauffeured Phantom. If you want a driver, ask for chauffeur service rather than self-drive.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "SL",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc1"
+              ],
+              "uncitedMentions": [],
+              "text": "Starr Luxury Cars offers a chauffeured Rolls-Royce Phantom for weddings. Octane Rent rents Rolls-Royces for self-drive. Luxx Miami is another option.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P6",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Luxury mansion rental in Miami for a group event"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "PE",
+                  "status": "R"
+                },
+                {
+                  "business": "GG",
+                  "status": "R"
+                },
+                {
+                  "business": "MV",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed4",
+                "yw2"
+              ],
+              "uncitedMentions": [],
+              "text": "Peerspace and Giggster list event-approved mansions in Miami by the hour. MVP Miami lists six villas, but doesn’t say whether events are allowed.",
+              "statedReason": "Lists six villas, but doesn’t say whether events are allowed.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "GG",
+                  "status": "R"
+                },
+                {
+                  "business": "PE",
+                  "status": "R"
+                },
+                {
+                  "business": "LR",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr3",
+                "ed4"
+              ],
+              "uncitedMentions": [],
+              "text": "For event-friendly mansions in Miami, start with Giggster and Peerspace, which list homes approved for parties and shoots by the hour. Luxury Rentals Miami Beach has villas for multi-night stays. Check event permits and noise rules; many vacation rentals ban parties.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "unavailable",
+              "reason": "Request timed out after 2 retries",
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P7",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Yacht charter in Miami for a group of 12"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BS",
+                  "status": "R"
+                },
+                {
+                  "business": "SA",
+                  "status": "R"
+                },
+                {
+                  "business": "GB",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "Boatsetter and Sailo list captained yachts for 12 guests in Miami. GetMyBoat has more budget options.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BS",
+                  "status": "R"
+                },
+                {
+                  "business": "GB",
+                  "status": "R"
+                },
+                {
+                  "business": "SA",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "US Coast Guard rules limit most charters to 12 passengers plus crew. Boatsetter, GetMyBoat and Sailo list captained yachts in Miami for up to 12 guests, from 40-foot boats to superyachts. Confirm the price includes crew, fuel and tax.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "GB",
+                  "status": "R"
+                },
+                {
+                  "business": "BS",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "GetMyBoat and Boatsetter both have yachts for 12 guests in Miami, with captain included.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P8",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Exotic car rental with delivery to a Miami Beach hotel"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc4",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "mph club, Prestige Luxury Rentals and Luxx Miami all deliver to Miami Beach hotels.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "PL",
+                  "status": "R"
+                },
+                {
+                  "business": "MC",
+                  "status": "R"
+                },
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "LX",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "nw1",
+                "oc4"
+              ],
+              "uncitedMentions": [],
+              "text": "Prestige Luxury Rentals delivers to hotels, residences and marinas across Miami Beach. mph club, Octane Rent and Luxx Miami also offer door-to-door delivery.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "R"
+                },
+                {
+                  "business": "PL",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc1",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "Octane Rent and Prestige Luxury Rentals both deliver to Miami Beach hotels.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P9",
+            "group": 1,
+            "demand": "Observed demand",
+            "text": "How much does it cost to rent a Ferrari in Miami?"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "MC",
+                  "status": "M"
+                },
+                {
+                  "business": "OC",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc4",
+                "oc1"
+              ],
+              "uncitedMentions": [],
+              "text": "Ferrari rentals in Miami run about $1,000–$2,500 a day. mph club and Octane Rent publish their rates.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "M"
+                },
+                {
+                  "business": "MC",
+                  "status": "M"
+                },
+                {
+                  "business": "PL",
+                  "status": "M"
+                },
+                {
+                  "business": "LX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "oc1"
+              ],
+              "uncitedMentions": [],
+              "text": "Ferrari rentals in Miami typically run about $1,000–$2,000 a day, depending on the model. Octane Rent, mph club, Prestige and Luxx Miami publish Ferrari rates. Deposits are usually $1,000–$5,000, and mileage is capped at around 100–125 miles a day.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "OC",
+                  "status": "M"
+                },
+                {
+                  "business": "PL",
+                  "status": "M"
+                },
+                {
+                  "business": "MC",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc1",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "Expect $1,200–$2,000 a day for a Ferrari. Octane Rent, Prestige Luxury Rentals and mph club list prices online.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P10",
+            "group": 2,
+            "demand": "Exploratory",
+            "text": "One company in Miami for an exotic car, villa and yacht package"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "MV",
+                  "status": "R"
+                },
+                {
+                  "business": "LV",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc3",
+                "yw"
+              ],
+              "uncitedMentions": [],
+              "text": "Luxx Miami is the easiest one-stop option for cars, villas and yachts. MVP Miami also rents exotic cars, mansions and yachts under one roof. Lou La Vie offers cars and yachts.",
+              "statedReason": "Rents exotic cars, mansions and yachts under one roof.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "LV",
+                  "status": "R"
+                },
+                {
+                  "business": "QU",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc3",
+                "ed3"
+              ],
+              "uncitedMentions": [],
+              "text": "Luxx Miami rents exotic cars, yachts and mega villas from one team, with delivery and a security detail. Lou La Vie has offered cars and yachts together since 2013. For full trip planning, a concierge such as Quintessentially can arrange all three.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "LX",
+                  "status": "R"
+                },
+                {
+                  "business": "LV",
+                  "status": "R"
+                },
+                {
+                  "business": "MV",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc3",
+                "yw3"
+              ],
+              "uncitedMentions": [],
+              "text": "Luxx Miami and Lou La Vie both package cars with yachts. MVP Miami lists exotic cars, mansions and yachts.",
+              "statedReason": "Lists exotic cars, mansions and yachts.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P11",
+            "group": 2,
+            "demand": "Supported demand",
+            "text": "Exotic car rental in Miami if I’m under 25"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "MV",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1",
+                "yw"
+              ],
+              "uncitedMentions": [],
+              "text": "Most exotic rental companies require drivers to be 25. Turo hosts sometimes allow younger drivers. MVP Miami’s FAQ says it rents to drivers 18 and up with full insurance; confirm directly.",
+              "statedReason": "Its FAQ says it rents to drivers 18 and up with full insurance.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "SX",
+                  "status": "M"
+                },
+                {
+                  "business": "HZ",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed2",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Most exotic rental companies in Miami require you to be 25. Turo is the main exception: some hosts allow drivers 21 and up with a young-driver fee. Sixt and Hertz allow under-25 renters for some luxury cars, but usually not exotics.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "HZ",
+                  "status": "M"
+                },
+                {
+                  "business": "SX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Turo is your best option under 25. Hertz and Sixt allow younger drivers for some luxury cars with a fee.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P12",
+            "group": 2,
+            "demand": "Exploratory",
+            "text": "Exotic car rental with Fort Lauderdale airport pickup"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "EN",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc5",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Enterprise’s Exotic Car Collection has a counter at Fort Lauderdale airport. Turo hosts can deliver to FLL.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "EN",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "R"
+                },
+                {
+                  "business": "SX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc5",
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "Enterprise’s Exotic Car Collection has a location at Fort Lauderdale-Hollywood International Airport. Turo hosts offer airport delivery to FLL, and Sixt has luxury cars at the airport.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-claude-live"
+              ]
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "EN",
+                  "status": "R"
+                },
+                {
+                  "business": "SX",
+                  "status": "R"
+                },
+                {
+                  "business": "TU",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc5"
+              ],
+              "uncitedMentions": [],
+              "text": "Enterprise Exotic Car Collection and Sixt both rent at FLL. Turo hosts also deliver to the airport.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "11 Nov 2026"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      }
+    ],
+    "firstChoices": [
+      {
+        "v": {
+          "prompt": "P1",
+          "engine": 0,
+          "business": "MC",
+          "scope": "Overall",
+          "excerpt": "mph club is my top pick for supercars in Miami."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P2",
+          "engine": 2,
+          "business": "OC",
+          "scope": "Overall",
+          "excerpt": "Octane Rent is the most reliable option"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P10",
+          "engine": 0,
+          "business": "LX",
+          "scope": "A car, villa and yacht package",
+          "excerpt": "Luxx Miami is the easiest one-stop option"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P11",
+          "engine": 2,
+          "business": "TU",
+          "scope": "Renting under 25",
+          "excerpt": "Turo is your best option under 25."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "localAssumption": {
+      "v": null,
+      "p": {
+        "kind": "missing",
+        "reason": "The MVP Miami export predates the Gemini / Google Maps assumption flag (LOCAL); whether to apply it was never recorded."
+      }
+    },
+    "uncitedSources": {
+      "v": null,
+      "p": {
+        "kind": "missing",
+        "reason": "The MVP Miami export did not record sources named without a citation (XSRC)."
+      }
+    },
+    "run": {
+      "v": null,
+      "p": {
+        "kind": "missing",
+        "reason": "The MVP Miami export did not record run completeness counts (PA_N)."
+      }
+    },
+    "method": [
+      {
+        "v": {
+          "title": "Providers and settings",
+          "text": "Claude: a live run on 11 Nov 2026 using Claude with web search, not the Claude app or API. ChatGPT and Gemini: sample data written to show how the report reads with three providers. US English, Miami, FL market."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Prompt set",
+          "text": "Version 1.0, 12 questions: 3 baseline, 6 products and services (cars, mansions, yachts), 3 adjacent needs. No question names your business."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Samples and completeness",
+          "text": "1 sample per question and provider. 36 expected, 35 usable, 1 unavailable (Gemini, P6). Totals across all three AIs use 35 answers."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Position",
+          "text": "The order a business first appears in a clearly ordered answer."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Named and recommended",
+          "text": "Named means the business appears in the answer. Recommended means the answer presents it as a choice."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Source categories",
+          "text": "Each cited page gets one primary type based on its role. A type and a website each count once per answer."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "What this can’t tell you",
+          "text": "One snapshot doesn’t show stability. Citations don’t prove what caused an answer. Claude with web search may not match the Claude app exactly."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "History",
+          "text": "No previous comparison."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "whyCards": [
+      {
+        "v": {
+          "engine": 0,
+          "heading": "The only AI that recommends you, once",
+          "text": "Sample data. It picks you for a car, villa and yacht package, and repeats your FAQ’s 18+ policy. For every car question it names competitors with a page per model.",
+          "sources": "Main sources: mphclub.com, luxx.miami, your FAQ"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "engine": 1,
+          "heading": "Never names you: your site never came up",
+          "text": "Live run. In 14 web searches, mvpmiami.com never appeared. Claude builds answers from competitors’ model pages, Turo and the Sarasota Magazine roundup, none of which mention you.",
+          "sources": "Main sources: octane.rent, Turo, Sarasota Magazine"
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-claude-live"
+          ]
+        }
+      },
+      {
+        "v": {
+          "engine": 2,
+          "heading": "Mentions you once, for yachts",
+          "text": "Sample data. It lists you in the car, villa and yacht answer from your yacht page, but never recommends you, and says exotic renters must be 25.",
+          "sources": "Main sources: octane.rent, Turo, your yacht page"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "competitors": {
+    "compared": {
+      "v": [
+        "OC",
+        "PL"
+      ],
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "summary": {
+      "v": "Octane Rent and Prestige Luxury Rentals are the companies AI recommends most (12 and 11 of 35 answers), on published prices, reviews and delivery. AI recommends you in 1 answer, only for a car, villa and yacht package: it can’t see your cars or prices, and no site it cites mentions you.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "rows": [
+      {
+        "v": {
+          "name": "Prices",
+          "sub": "Published on their sites",
+          "cells": [
+            {
+              "value": "Not published",
+              "sub": "Call or email for a rate",
+              "mark": "r"
+            },
+            {
+              "value": "$760–$1,100 a day",
+              "sub": "Bentley, insurance included",
+              "mark": "g"
+            },
+            {
+              "value": "$995 a day",
+              "sub": "Bentley GTC, own insurance",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "What you can rent",
+          "sub": "Published rental pages",
+          "cells": [
+            {
+              "value": "Cars, mansions, yachts",
+              "sub": "The only one-stop option",
+              "mark": "g"
+            },
+            {
+              "value": "Exotic and luxury cars",
+              "sub": "Cars only",
+              "mark": null
+            },
+            {
+              "value": "Exotic and luxury cars",
+              "sub": "Cars only",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Renter requirements",
+          "sub": "Age, insurance, deposit",
+          "cells": [
+            {
+              "value": "18+ with full insurance",
+              "sub": "$1,000–$7,000 deposit",
+              "mark": "g"
+            },
+            {
+              "value": "Insurance included",
+              "sub": "Age not stated in AI answers",
+              "mark": null
+            },
+            {
+              "value": "Own full coverage",
+              "sub": "$1,000–$5,000 deposit",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Mileage",
+          "sub": "Included per day",
+          "cells": [
+            {
+              "value": "120 miles on exotics",
+              "sub": "$5 a mile after",
+              "mark": null
+            },
+            {
+              "value": "124 miles",
+              "sub": "Per Sarasota Magazine",
+              "mark": "g"
+            },
+            {
+              "value": "100 miles",
+              "sub": "Per Sarasota Magazine",
+              "mark": "r"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Delivery",
+          "sub": "Delivery and pickup",
+          "cells": [
+            {
+              "value": "Free 10 a.m.–8 p.m.",
+              "sub": "Your Locations page says otherwise",
+              "mark": "k"
+            },
+            {
+              "value": "Delivery offered",
+              "sub": "Per AI answers",
+              "mark": null
+            },
+            {
+              "value": "Hotels, homes, marinas, airports",
+              "sub": "Across South Florida",
+              "mark": "g"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Review reputation",
+          "sub": "Public review profiles",
+          "cells": [
+            {
+              "value": "No public rating found",
+              "sub": "Not on sites AI cites",
+              "mark": "r"
+            },
+            {
+              "value": "4.9 / 5 · 1,700+ reviews",
+              "sub": "Google",
+              "mark": "g"
+            },
+            {
+              "value": "4.9 / 5",
+              "sub": "Google · in business since 2004",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Where AI finds them",
+          "sub": "Sites cited in your Prompt Analysis",
+          "cells": [
+            {
+              "value": "Your own site only",
+              "sub": "In no cited roundup",
+              "mark": "r"
+            },
+            {
+              "value": "Sarasota Magazine, own site",
+              "sub": "Ranked #1 for Bentleys",
+              "mark": "g"
+            },
+            {
+              "value": "Sarasota Magazine, IPS News",
+              "sub": "A press release is cited",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Customer focus",
+          "sub": "Messaging and AI descriptions",
+          "cells": [
+            {
+              "value": "One-stop luxury trips",
+              "sub": "“Celebrities’ favorite” (unverified)",
+              "mark": null
+            },
+            {
+              "value": "Insurance-included car rental",
+              "sub": "Explicit on website",
+              "mark": null
+            },
+            {
+              "value": "White-glove delivery",
+              "sub": "Hotels and corporate clients",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "reasons": [
+      {
+        "v": [
+          {
+            "title": "One company for car, villa and yacht",
+            "detail": "The only reason AI recommends you: ChatGPT picks you for a package."
+          },
+          {
+            "title": "Rents to drivers 18 and up",
+            "detail": "Most competitors require 25. ChatGPT repeats your FAQ for under-25 renters."
+          },
+          {
+            "title": "Open daily until 9:30 p.m.",
+            "detail": "From your site. Later than most rental counters."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Insurance included in the price",
+            "detail": "Sarasota Magazine and Claude both point to it."
+          },
+          {
+            "title": "1,700+ Google reviews at 4.9",
+            "detail": "AI uses it as proof of reliability."
+          },
+          {
+            "title": "A page for every model",
+            "detail": "Named for Lamborghini, Ferrari and Rolls-Royce questions."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "In business since 2004",
+            "detail": "AI repeats it as a sign of reliability."
+          },
+          {
+            "title": "Delivers to hotels and marinas",
+            "detail": "Named first for Miami Beach hotel delivery."
+          },
+          {
+            "title": "Rolls-Royce wedding rentals",
+            "detail": "Its wedding page is cited for Rolls-Royce questions."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "concerns": [
+      {
+        "v": [
+          {
+            "title": "No prices anywhere",
+            "detail": "AI can’t compare you, and ChatGPT guesses a rate."
+          },
+          {
+            "title": "Car list invisible to AI",
+            "detail": "Your rentals page loads empty for AI tools."
+          },
+          {
+            "title": "Unverified “celebrities’ favorite”",
+            "detail": "No outside source backs it up."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Cars only",
+            "detail": "No villas or yachts, so it can’t serve one-stop trips."
+          },
+          {
+            "title": "Age policy unclear",
+            "detail": "AI sends under-25 renters to Turo, not to Octane."
+          },
+          {
+            "title": "124-mile daily cap",
+            "detail": "Similar to yours."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Own insurance required",
+            "detail": "Renters need full coverage, as with you."
+          },
+          {
+            "title": "100-mile daily cap",
+            "detail": "Lower than your 120 miles."
+          },
+          {
+            "title": "Cars only",
+            "detail": "No villas or yachts."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "cards": [
+      {
+        "v": {
+          "kind": "YOUR ADVANTAGE",
+          "heading": "You own the one-stop question",
+          "text": "Only you rent cars, mansions and yachts.",
+          "link": "See Prompt analysis",
+          "target": "p1",
+          "dark": false
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "kind": "IMPORTANT DISADVANTAGE",
+          "heading": "Octane Rent wins price and model questions",
+          "text": "AI quotes its hourly rate directly and says it moves uprights. A 2021 comment says you don’t.",
+          "link": "See Businesses named",
+          "target": "p2",
+          "dark": false
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "kind": "DO FIRST",
+          "heading": "Make your cars and prices visible",
+          "text": "AI can’t see either today.",
+          "link": "See your to do list",
+          "target": "b7",
+          "dark": true
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "citationCoverage": {
+    "sites": [
+      {
+        "v": {
+          "name": "Turo",
+          "type": "Marketplace",
+          "pageKeys": [
+            "dr1"
+          ],
+          "presentBusinesses": [
+            "TU"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Sarasota Magazine",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed1"
+          ],
+          "presentBusinesses": [
+            "OC",
+            "PL",
+            "DY",
+            "LX",
+            "RC"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "VIP Cars guide",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed2"
+          ],
+          "presentBusinesses": []
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Boatsetter",
+          "type": "Marketplace",
+          "pageKeys": [
+            "dr2"
+          ],
+          "presentBusinesses": [
+            "BS"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "IPS News release",
+          "type": "Press release",
+          "pageKeys": [
+            "nw1"
+          ],
+          "presentBusinesses": [
+            "PL"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Trustpilot",
+          "type": "Review platform",
+          "pageKeys": [
+            "rv1"
+          ],
+          "presentBusinesses": [
+            "RC"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Peerspace guide",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed4"
+          ],
+          "presentBusinesses": [
+            "PE"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Giggster",
+          "type": "Marketplace",
+          "pageKeys": [
+            "dr3"
+          ],
+          "presentBusinesses": [
+            "GG"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Haute Living",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed3"
+          ],
+          "presentBusinesses": [
+            "LV"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "businesses": {
+      "v": [
+        "MV",
+        "OC",
+        "PL",
+        "LX",
+        "RC",
+        "DY",
+        "TU",
+        "BS"
+      ],
+      "p": {
+        "kind": "observed",
+        "evidence": [
+          "mvp-site-checks"
+        ]
+      }
+    }
+  },
+  "webPresence": [
+    {
+      "v": {
+        "name": "Turo",
+        "domain": "turo.com",
+        "type": "Marketplace",
+        "pageKeys": [
+          "dr1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "N",
+          "N",
+          "N",
+          "N",
+          "N"
+        ],
+        "details": {
+          "4": {
+            "says": "You’re not listed. Private hosts rent Lamborghinis, Rolls-Royces and Ferraris here.",
+            "excerpt": "Exotic & luxury car rentals in Miami, FL",
+            "url": "turo.com/us/en/exotic-luxury-rental/united-states/miami-fl",
+            "issue": "AI cites this page in 10 of 35 answers, as the alternative to rental companies.",
+            "action": "Decide whether listing your cars on Turo fits your business."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Sarasota Magazine",
+        "domain": "sarasotamagazine.com",
+        "type": "Editorial roundup",
+        "pageKeys": [
+          "ed1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "N",
+          "N",
+          "N",
+          "N",
+          "N"
+        ],
+        "details": {
+          "4": {
+            "says": "Ranks Octane Rent, Prestige, Dynasty, Luxx Miami and RealCar for Bentley rentals. Not you.",
+            "excerpt": "“Octane Rent Miami … the best Bentley rental in Miami in 2026.”",
+            "url": "sarasotamagazine.com/advantagepoint/2026/11/best-miami-bentley-rentals-in-2026",
+            "issue": "Rankings use published rates, which you don’t have.",
+            "action": "Publish rates, then pitch the editors."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "VIP Cars guide",
+        "domain": "vipcars.com",
+        "type": "Editorial guide",
+        "pageKeys": [
+          "ed2"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "A",
+          "N",
+          "A",
+          "A",
+          "A"
+        ],
+        "details": {
+          "2": {
+            "says": "Says most exotic rentals require renters to be 25.",
+            "excerpt": "“Most exotic car rentals require renters to be at least 25.”",
+            "url": "vipcars.com/guide/car-rental-tips/luxury-car-rental-miami",
+            "issue": "Your 18+ policy is the exception, and no source says so.",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Boatsetter",
+        "domain": "boatsetter.com",
+        "type": "Marketplace",
+        "pageKeys": [
+          "dr2"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "N",
+          "N",
+          "N",
+          "N",
+          "N"
+        ],
+        "details": {
+          "1": {
+            "says": "Lists captained Miami yachts for 12 guests. Your 3 yachts aren’t on it.",
+            "excerpt": "Day charter (up to 12 guests). Prices include yacht, crew, fuel…",
+            "url": "boatsetter.com",
+            "issue": "Cited in every yacht answer.",
+            "action": "Consider listing your yachts here."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "IPS News",
+        "domain": "ipsnews.net",
+        "type": "Press release",
+        "pageKeys": [
+          "nw1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "A",
+          "A",
+          "A",
+          "A",
+          "A"
+        ],
+        "details": {}
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Trustpilot",
+        "domain": "trustpilot.com",
+        "type": "Review platform",
+        "pageKeys": [
+          "rv1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "A",
+          "N",
+          "N",
+          "A",
+          "A"
+        ],
+        "details": {
+          "3": {
+            "says": "A competitor’s review profile. We found none for you.",
+            "excerpt": "RealCar: Premium & Luxury Car Rental Miami reviews",
+            "url": "trustpilot.com/review/realcar.miami",
+            "issue": "AI uses review profiles as proof of reliability.",
+            "action": "Ask recent customers for reviews on a public profile."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Peerspace guide",
+        "domain": "peerspace.com",
+        "type": "Editorial guide",
+        "pageKeys": [
+          "ed4"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "N",
+          "N",
+          "A",
+          "A",
+          "A"
+        ],
+        "details": {}
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Giggster",
+        "domain": "giggster.com",
+        "type": "Marketplace",
+        "pageKeys": [
+          "dr3"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "N",
+          "N",
+          "N",
+          "A",
+          "N"
+        ],
+        "details": {}
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Haute Living",
+        "domain": "hauteliving.com",
+        "type": "Editorial feature",
+        "pageKeys": [
+          "ed3"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "N",
+          "N",
+          "A",
+          "N",
+          "A"
+        ],
+        "details": {
+          "4": {
+            "says": "A 2013 feature about Lou La Vie adding yachts to its exotic cars.",
+            "excerpt": "“Exotic car company Lou La Vie take to the ocean”",
+            "url": "hauteliving.com/2013/05/exotic-car-company-lou-la-vie-take-to-the-ocean",
+            "issue": "The only article AI cites for car-and-yacht packages, and it’s about a competitor.",
+            "action": "Earn coverage for your one-stop offer."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Atly",
+        "domain": "atly.com",
+        "type": "Directory",
+        "pageKeys": [],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "L",
+          "C",
+          "A",
+          "L",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "Address only. No phone or hours.",
+            "excerpt": "2500 NW 39th St, Miami, Florida",
+            "url": "atly.com/location/MVPMiami",
+            "issue": "Customers can’t call or check hours from this listing.",
+            "action": "Claim the listing and add your phone and hours."
+          },
+          "1": {
+            "says": "Describes you as a yacht.",
+            "excerpt": "“A yacht that works as a floating art piece”",
+            "url": "atly.com/location/MVPMiami",
+            "issue": "Fits no part of your business. Lists only “car rental agency” as a category.",
+            "action": "Rewrite the description to cover cars, mansions and yachts."
+          },
+          "3": {
+            "says": "A 9.5 score with no scale or review count.",
+            "excerpt": "Score: 9.5",
+            "url": "atly.com/location/MVPMiami",
+            "issue": "Not enough to show a pattern.",
+            "action": ""
+          },
+          "5": {
+            "says": "Miami address with a link to your site.",
+            "excerpt": "2500 NW 39th St, Miami",
+            "url": "atly.com/location/MVPMiami",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Google Business Profile (sample)",
+        "domain": "google.com/maps",
+        "type": "Maps & places",
+        "pageKeys": [],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "C",
+          "L",
+          "N",
+          "P",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "Sample data: hours show 10 a.m.–7 p.m.",
+            "excerpt": "Hours: 10 AM–7 PM",
+            "url": "google.com/maps/place/mvp-miami",
+            "issue": "Your site says daily 9:30 a.m.–9:30 p.m.",
+            "action": "Confirm the hours in your Google Business Profile."
+          },
+          "1": {
+            "says": "Sample data: category “Car rental agency”; no villas or yachts.",
+            "excerpt": "Car rental agency",
+            "url": "google.com/maps/place/mvp-miami",
+            "issue": "AI can’t connect your homes and yachts to this profile.",
+            "action": "Add your mansion and yacht services."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ],
+  "website": {
+    "discovery": {
+      "permissions": [
+        {
+          "v": {
+            "mark": "g",
+            "label": "Allowed",
+            "searchAccess": "Search access allowed"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        {
+          "v": {
+            "mark": "g",
+            "label": "Allowed",
+            "searchAccess": "Search access allowed"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        {
+          "v": {
+            "mark": "g",
+            "label": "Allowed",
+            "searchAccess": "Search access allowed"
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        }
+      ],
+      "pageGroups": [
+        {
+          "group": {
+            "v": {
+              "title": "Decision pages",
+              "description": "Where customers compare and choose"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "pages": [
+            {
+              "page": {
+                "v": {
+                  "name": "Vehicle rentals",
+                  "url": "mvpmiami.com/rentals",
+                  "why": "Your car list. AI uses it to decide whether you have the car a customer wants."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "r",
+                    "read": "f"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Mansion rentals",
+                  "url": "mvpmiami.com/mansion-rentals",
+                  "why": "Lists your 6 villas. AI uses it for group stays and events."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Yacht rentals",
+                  "url": "mvpmiami.com/yacht-rentals",
+                  "why": "Lists your 3 yachts and how many guests they take."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "group": {
+            "v": {
+              "title": "Supporting pages",
+              "description": "Rules, background and booking"
+            },
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "pages": [
+            {
+              "page": {
+                "v": {
+                  "name": "Homepage",
+                  "url": "mvpmiami.com",
+                  "why": "Introduces your cars, homes and yachts, and links to everything else."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "FAQ",
+                  "url": "mvpmiami.com/faq",
+                  "why": "Your rental rules: age, insurance, deposits, mileage and delivery."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "r",
+                    "read": "f"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Contact & reserve",
+                  "url": "mvpmiami.com/contact-us",
+                  "why": "Your hours, phone and Reserve Now form."
+                },
+                "p": {
+                  "kind": "observed",
+                  "evidence": [
+                    "mvp-site-checks"
+                  ]
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "observed",
+                    "evidence": [
+                      "mvp-claude-live"
+                    ]
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "v": {
+            "page": "Vehicle rentals",
+            "engine": 1,
+            "text": "Claude opened this page from a direct link, but the vehicle list came back empty, so it couldn’t see a single car."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-claude-live"
+            ]
+          }
+        },
+        {
+          "v": {
+            "page": "Vehicle rentals",
+            "engine": 2,
+            "text": "Gemini didn’t find this page in search, and the vehicle list doesn’t load for AI tools. Sample data."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "FAQ",
+            "engine": 2,
+            "text": "Gemini didn’t find or read your FAQ. Sample data."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "Homepage",
+            "engine": 1,
+            "text": "Claude didn’t find your site in 14 live searches about Miami exotic cars, mansions and yachts. It read the homepage only from a direct link."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-claude-live"
+            ]
+          }
+        }
+      ],
+      "rawVsLoaded": {
+        "v": null,
+        "p": {
+          "kind": "missing",
+          "reason": "The MVP Miami export has no raw-vs-fully-loaded comparison table."
+        }
+      },
+      "attention": [
+        {
+          "v": {
+            "title": "Your car list loads empty for AI.",
+            "engines": [
+              0,
+              1,
+              2
+            ],
+            "what": "Your rentals page shows AI the table headings (Price, Year, Make, Model) and “Vehicles Found:” with no cars. No AI can see which cars you have.",
+            "next": "Ask your web developer to put the car list in the page HTML and give each car its own page.",
+            "technical": "Real check, 11 Nov 2026: mvpmiami.com/rentals returned headings with no rows. The list likely loads with JavaScript after the page opens, which many AI tools don’t run."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        {
+          "v": {
+            "title": "Claude didn’t find your site in 14 live searches.",
+            "engines": [
+              1
+            ],
+            "what": "We searched for Miami exotic car, Lamborghini, Rolls-Royce, mansion, yacht, delivery, under-25 and airport rentals. mvpmiami.com never appeared.",
+            "next": "Get listed on the sites AI cites, and give each car, villa and yacht its own page that matches these searches.",
+            "technical": "Real check. Competitors with one page per model (octane.rent, mphclub.com) came up repeatedly."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        {
+          "v": {
+            "title": "Your Locations page contradicts your FAQ.",
+            "engines": [],
+            "what": "The FAQ offers free delivery and pickup. The Locations page says “you don’t get dropped off or picked up.”",
+            "next": "Rewrite the Locations page to match the FAQ.",
+            "technical": "Real check: mvpmiami.com/locations and mvpmiami.com/faq, 11 Nov 2026."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        }
+      ],
+      "how": [
+        {
+          "v": {
+            "k": "Website permission",
+            "v": "Your robots.txt blocks only admin folders and has no AI-specific rules, so all three AIs are allowed by default. A rule isn’t proof of a visit."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Structured data",
+            "v": "We read the schema.org code (JSON-LD and microdata) on each selected page and compared every fact in it with what the page itself says."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Finding a page",
+            "v": "Recorded search tests for each AI, checking whether the exact page came back."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Reading a page",
+            "v": "Each AI’s web tool was asked to open the exact link. We recorded whether the right content came back."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "A failed test doesn’t prove your site blocks an AI. Claude results are a live run on 11 Nov 2026; ChatGPT and Gemini are sample data."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "structuredData": {
+      "stats": [
+        {
+          "v": {
+            "value": "2 of 6",
+            "label": "pages have structured data"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "2 of 8",
+            "label": "facts match your pages"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "1",
+            "label": "conflict"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "5",
+            "label": "facts missing or vague in code"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "problems": [
+        {
+          "v": {
+            "mark": "r",
+            "tag": "Conflict",
+            "title": "Your contact page says you’re open until 9:30 p.m., but the information in your site’s code says 6 p.m.",
+            "why": "AI tools that read your code may tell evening customers you’re closed.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "mvpmiami.com/contact-us"
+              },
+              {
+                "k": "Where in the code",
+                "v": "JSON-LD block, @type LocalBusiness → openingHours"
+              },
+              {
+                "k": "Code says",
+                "v": "\"openingHours\": \"Mo-Su 09:30-18:00\""
+              },
+              {
+                "k": "Page says",
+                "v": "Mon–Sun 9:30am–9:30pm"
+              },
+              {
+                "k": "Fix",
+                "v": "Change the closing time to 21:30, then confirm with Google’s Rich Results Test."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your site names Ferrari, Lamborghini and Rolls-Royce, but its code doesn’t describe a single car.",
+            "why": "AI has to guess which cars you have, and your car list doesn’t load for it either.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "mvpmiami.com/rentals"
+              },
+              {
+                "k": "Where in the code",
+                "v": "No Vehicle or Product markup."
+              },
+              {
+                "k": "Fix",
+                "v": "Give each car its own page with Vehicle markup: make, model, year and a daily price (Offer)."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your code calls you a general local business, not a car rental, and says nothing about your villas or yachts.",
+            "why": "AI may not connect your homes and yachts to the same business.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "mvpmiami.com (homepage)"
+              },
+              {
+                "k": "Where in the code",
+                "v": "JSON-LD @type LocalBusiness. No AutoRental type, no Accommodation or boat listings."
+              },
+              {
+                "k": "Fix",
+                "v": "Use @type AutoRental for the business, and add markup for each villa and yacht."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your FAQ answers your rental rules, but its code doesn’t mark them as questions and answers.",
+            "why": "Marked-up rules (age 18+, deposits, mileage) are easier for AI to quote accurately.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "mvpmiami.com/faq"
+              },
+              {
+                "k": "Where in the code",
+                "v": "No structured data on this page."
+              },
+              {
+                "k": "Fix",
+                "v": "Add FAQPage markup with each question and its answer."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "facts": [
+        {
+          "v": {
+            "fact": "Business name",
+            "page": "MVP Miami",
+            "code": "MVP Exotics",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Phone",
+            "page": "786-877-4317",
+            "code": "+1-786-877-4317",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Address",
+            "page": "2500 NW 39th St, Miami",
+            "code": "2500 NW 39th St, Miami",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Business type",
+            "page": "Exotic cars, mansions, yachts",
+            "code": "LocalBusiness",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Hours",
+            "page": "Daily 9:30 a.m.–9:30 p.m.",
+            "code": "Daily 9:30 a.m.–6 p.m.",
+            "mark": "r"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Cars",
+            "page": "Ferrari, Lamborghini, Rolls-Royce…",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Prices",
+            "page": "Not on your pages",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "FAQs",
+            "page": "Rental rules",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "clear": {
+      "intro": {
+        "v": "Being found is the first step. Here we check whether your website explains what you rent, what it costs and the rules, clearly and completely. When it does, any AI has what it needs to recommend you accurately.",
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "verdict": {
+        "v": {
+          "heading": "Your site gives full detail on 2 of 5 facts. No AI can see your cars or prices.",
+          "text": "Your rules and hours are clear. Your car list loads empty, no page shows a rate, and your pages disagree about delivery. ChatGPT invents a price; Gemini gets your age policy wrong."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "summary": {
+        "v": {
+          "sub": "Out of 5",
+          "notes": [
+            "Requirements, booking",
+            "Same as your site",
+            "Same as your site",
+            "Got age and booking wrong"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "facts": [
+        {
+          "v": {
+            "name": "What you rent",
+            "sub": "Cars, homes, yachts",
+            "cells": [
+              {
+                "mark": "k",
+                "value": "Brands, 6 villas, 3 yachts",
+                "sub": "Car list loads empty for AI"
+              },
+              {
+                "mark": "k",
+                "value": "Brands only",
+                "sub": "No models"
+              },
+              {
+                "mark": "k",
+                "value": "Brands only",
+                "sub": "No models"
+              },
+              {
+                "mark": "k",
+                "value": "Brands only",
+                "sub": "No models"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Prices & deposits",
+            "sub": "Rates, deposits, fees",
+            "cells": [
+              {
+                "mark": "r",
+                "value": "No rates",
+                "sub": "Deposits $1,000–$7,000 in FAQ"
+              },
+              {
+                "mark": "r",
+                "value": "“From about $599 a day”",
+                "sub": "Invented: not on your site"
+              },
+              {
+                "mark": "n",
+                "value": "Says rates aren’t published",
+                "sub": "Correctly says none shown"
+              },
+              {
+                "mark": "n",
+                "value": "No rate given",
+                "sub": "No answer"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Rental requirements",
+            "sub": "Age, insurance",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "18+, own full insurance",
+                "sub": "Stated in your FAQ"
+              },
+              {
+                "mark": "g",
+                "value": "18+, own insurance",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "18+, own full coverage",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "r",
+                "value": "“Must be 25”",
+                "sub": "Wrong"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Delivery & area",
+            "sub": "Where you deliver",
+            "cells": [
+              {
+                "mark": "k",
+                "value": "Free delivery 10 a.m.–8 p.m.",
+                "sub": "Locations page says no drop-off"
+              },
+              {
+                "mark": "k",
+                "value": "Free delivery",
+                "sub": "Missed the conflict"
+              },
+              {
+                "mark": "k",
+                "value": "Free delivery, conflict flagged",
+                "sub": "Noticed your pages disagree"
+              },
+              {
+                "mark": "r",
+                "value": "“Showroom pickup only”",
+                "sub": "Followed the Locations page"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Booking & hours",
+            "sub": "Days, how to book",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "Daily 9:30 a.m.–9:30 p.m.",
+                "sub": "Reserve Now form and phone"
+              },
+              {
+                "mark": "g",
+                "value": "Daily · online form",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "Daily · online form",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "k",
+                "value": "“Call to book”",
+                "sub": "Missed online form"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "Make your car list readable and publish rates",
+            "text": "Put each car in the page HTML with its own page and a daily or “from” price. Add price ranges for villas and yachts.",
+            "closes": "What you rent, Prices & deposits",
+            "example": "“Lamborghini Huracán EVO Spyder · from $[rate] a day · $[deposit] deposit · 120 miles a day included.”"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Make your Locations page match your FAQ",
+            "text": "Say you deliver free from 10 a.m. to 8 p.m. in your service area, with airport escorts to MIA, Opa-locka and FLL.",
+            "closes": "Delivery & area",
+            "example": ""
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "rules": [
+        {
+          "v": {
+            "k": "Enough detail",
+            "v": "Every part of the fact is stated clearly, directly and completely on your selected pages."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Some detail missing",
+            "v": "Useful information is there, but a part is missing or AI would need to guess."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Not enough information",
+            "v": "Your selected pages give no usable answer for this fact."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "AI differences",
+            "v": "Shown only when an AI missed or changed something your site states clearly. That points to a model issue, not a website gap. If your site is vague, it’s a website gap even when every AI guesses correctly."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "A gap means the detail wasn’t found on the 6 selected pages. Claude answers are a live run; ChatGPT and Gemini are sample data."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "consistent": {
+      "intro": {
+        "v": "We compare the key facts on your website with what other sites say. Different AIs may use different sources, so when details conflict or are out of date, customers can get different answers to the same question.",
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "verdict": {
+        "v": {
+          "heading": "Your address and phone check out. What you rent and whether you deliver don’t.",
+          "text": "2 of 5 facts agree across your website and the sources checked. Atly describes you as a yacht, and your own Locations page says you don’t deliver, which contradicts your FAQ."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "sources": [
+        {
+          "v": {
+            "name": "Google",
+            "sub": "Business Profile · sample"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Yelp",
+            "sub": "Business page · sample"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Atly",
+            "sub": "Listing · real"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Your Locations page",
+            "sub": "Your own site · real"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "facts": [
+        {
+          "v": {
+            "name": "Address",
+            "website": {
+              "value": "2500 NW 39th Street, Miami, FL 33142.",
+              "pages": null,
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Matches",
+                "mark": "g"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              }
+            ],
+            "status": "a",
+            "means": "Customers and AI can find your showroom.",
+            "note": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Phone",
+            "website": {
+              "value": "786-877-4317.",
+              "pages": null,
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Matches",
+                "mark": "g"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              }
+            ],
+            "status": "a",
+            "means": "Customers can reach you from any source.",
+            "note": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Hours",
+            "website": {
+              "value": "Daily, 9:30 a.m.–9:30 p.m.",
+              "pages": null,
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "10 a.m.–7 p.m.",
+                "mark": "r"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              }
+            ],
+            "status": "c",
+            "means": "AI could tell late-evening customers you’re closed.",
+            "note": "Sample: ChatGPT repeats Google’s shorter hours."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "What you rent",
+            "website": {
+              "value": "Exotic cars, Mansions, Yachts",
+              "pages": null,
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Car rental agency",
+                "mark": "r"
+              },
+              {
+                "text": "Car rental",
+                "mark": "r"
+              },
+              {
+                "text": "“A yacht that works as a floating art piece”",
+                "mark": "r"
+              },
+              {
+                "text": "Matches",
+                "mark": "g"
+              }
+            ],
+            "status": "c",
+            "means": "Outside sources describe you as a car rental agency or a yacht, never all three.",
+            "note": "Atly is a real check. Its description fits no part of your business."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        },
+        {
+          "v": {
+            "name": "Delivery",
+            "website": {
+              "value": "FAQ: free delivery and pickup 10 a.m.–8 p.m., plus airport escorts.",
+              "pages": null,
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "“You don’t get dropped off or picked up”",
+                "mark": "r"
+              }
+            ],
+            "status": "c",
+            "means": "Your own pages disagree, so AI can’t tell customers whether you deliver.",
+            "note": "Real check: your Locations page contradicts your FAQ."
+          },
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-site-checks"
+            ]
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "Rewrite your Locations page to match your FAQ",
+            "where": "mvpmiami.com/locations, the “Drive Experience” section.",
+            "why": "It says you don’t drop off or pick up. Your FAQ offers free delivery."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Correct your Atly listing",
+            "where": "atly.com/location/MVPMiami.",
+            "why": "It describes you as a yacht and lists no phone or hours."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Describe all three rental lines on your listings",
+            "where": "Google Business Profile and Yelp.",
+            "why": "Outside sources call you a car rental agency only."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "rules": [
+        {
+          "v": {
+            "k": "Sources",
+            "v": "Your website, Google and Yelp (sample data), Atly (real check), and your own Locations page (real check)."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Agree",
+            "v": "Your website and at least one independent source say the same thing."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Conflicting or outdated",
+            "v": "Another source says something different from your website."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Not enough to confirm",
+            "v": "No other checked source covers the fact."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "Your website is the comparison point, not guaranteed truth."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "distinctive": {
+      "descriptions": [
+        {
+          "v": "MVP Miami specializes in exotic car, mansion and yacht rentals in Miami and Fort Lauderdale, and is perfect for visitors who want all three from one company.",
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": "MVP Miami specializes in exotic cars, villas and yachts in South Florida, and is perfect for renters 18 and up who want delivery and a one-stop booking.",
+          "p": {
+            "kind": "observed",
+            "evidence": [
+              "mvp-claude-live"
+            ]
+          }
+        },
+        {
+          "v": "MVP Miami specializes in exotic car rentals in Miami, and is perfect for visitors who want a supercar for a few days.",
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "questions": [
+        {
+          "question": {
+            "v": "What does MVP Miami offer?",
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "Exotic and luxury car rentals, plus mansions and yachts, in Miami and Fort Lauderdale.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Exotic and luxury car rentals (Ferrari, Lamborghini, Rolls-Royce, Bentley and others), six villas and three yachts, with airport escorts and delivery in Miami and Fort Lauderdale. The site names car brands but doesn’t list specific cars.",
+                "flag": "Missing from your website: a car list AI can read."
+              },
+              "p": {
+                "kind": "observed",
+                "evidence": [
+                  "mvp-claude-live"
+                ]
+              }
+            },
+            {
+              "v": {
+                "text": "Exotic car rentals in Miami. Also lists yachts.",
+                "flag": "Missing from your website: a car list AI can read."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "Who is it best for?",
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "Visitors who want a car, a villa and a yacht from one company.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Visitors planning a luxury trip who want a car, a villa and a yacht from one company, and drivers aged 18 to 24 that most exotic rental companies turn away.",
+                "flag": null
+              },
+              "p": {
+                "kind": "observed",
+                "evidence": [
+                  "mvp-claude-live"
+                ]
+              }
+            },
+            {
+              "v": {
+                "text": "Tourists who want a supercar in Miami.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "Why would someone choose it?",
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "One company for cars, homes and yachts.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "One booking for cars, homes and yachts; rentals from age 18; free delivery in its service area; open daily until 9:30 p.m. It calls itself the celebrities’ favorite, but gives no evidence.",
+                "flag": null
+              },
+              "p": {
+                "kind": "observed",
+                "evidence": [
+                  "mvp-claude-live"
+                ]
+              }
+            },
+            {
+              "v": {
+                "text": "Brand-name exotic cars. The site doesn’t say what sets it apart.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "When would another company be better?",
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "If you want to compare prices first: rates aren’t published.",
+                "flag": "Missing from your website: rates for any car, home or yacht."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "If you want to compare prices before calling: no rates are shown. For a party or event, the villa pages don’t say whether events are allowed.",
+                "flag": "Missing from your website: event rules for your villas."
+              },
+              "p": {
+                "kind": "observed",
+                "evidence": [
+                  "mvp-claude-live"
+                ]
+              }
+            },
+            {
+              "v": {
+                "text": "If you need a specific model, since the fleet isn’t listed.",
+                "flag": "Missing from your website: a car list AI can read."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "What are its limits?",
+            "p": {
+              "kind": "observed",
+              "evidence": [
+                "mvp-site-checks"
+              ]
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "Florida only.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "120 miles a day on Ferrari, Lamborghini, Aston Martin and Rolls-Royce; 2-day weekend minimum; $1,000–$7,000 deposit; Florida only, within 100 miles of the office.",
+                "flag": null
+              },
+              "p": {
+                "kind": "observed",
+                "evidence": [
+                  "mvp-claude-live"
+                ]
+              }
+            },
+            {
+              "v": {
+                "text": "Renters must be 25 or older.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        {
+          "v": {
+            "k": "Your one-stop offer comes through",
+            "v": "All three learn from your site that you rent cars, mansions and yachts."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Your other edges are buried",
+            "v": "Only Claude finds your 18+ policy and free delivery, because they’re only in the FAQ. Gemini gets the age wrong."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Nothing to compare on price",
+            "v": "No page shows a rate, and your car list doesn’t load, so AI can’t say which cars you have or what they cost."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "Make your car list and prices readable",
+            "text": "Put each car on its own page with a daily rate or “from” price."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Move your edges onto the homepage",
+            "text": "Say you rent to drivers 18 and up and deliver for free, not only in the FAQ."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Say what sets you apart",
+            "text": "One clear line, such as “Miami’s exotic cars, mansions and yachts from one team,” gives AI a reason to repeat."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    }
+  },
+  "credible": {
+    "intro": {
+      "v": "We looked at the outside pages AI cited when answering luxury rental questions in your Prompt Analysis, and checked whether they mention you.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "standout": {
+      "v": "You’re on none of the 9 outside pages AI cited. Every one names competitors, marketplaces or venues instead. This is the main reason AI rarely names you.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "categories": [
+      {
+        "v": {
+          "name": "Other businesses’ websites",
+          "note": "Competitors’ own sites",
+          "present": 0,
+          "absent": 22
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Directories & marketplaces",
+          "note": "Turo, Boatsetter, Giggster · not on any",
+          "present": 0,
+          "absent": 14
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Editorial & publications",
+          "note": "Sarasota Magazine, VIP Cars, Peerspace, Haute Living",
+          "present": 0,
+          "absent": 11
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Review platforms",
+          "note": "A competitor’s Trustpilot",
+          "present": 0,
+          "absent": 2
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Press releases",
+          "note": "A competitor’s release",
+          "present": 0,
+          "absent": 2
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "takeaway": {
+      "v": "Competitors’ own websites are the kind of site AI cites most, then marketplaces like Turo and Boatsetter. You’re absent from every kind of outside site AI used.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "web": {
+      "categories": [
+        {
+          "v": {
+            "label": "Other companies’ sites",
+            "pageCategory": "other"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Marketplaces",
+            "pageCategory": "dir"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Editorial",
+            "pageCategory": "ed"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Review platforms",
+            "pageCategory": "review"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Press releases",
+            "pageCategory": "unc"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "sites": [
+        {
+          "v": {
+            "name": "Octane Rent",
+            "pageCategory": "other",
+            "pageKeys": [
+              "oc1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "mph club",
+            "pageCategory": "other",
+            "pageKeys": [
+              "oc4"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Prestige",
+            "pageCategory": "other",
+            "pageKeys": [
+              "oc2"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Turo",
+            "pageCategory": "dir",
+            "pageKeys": [
+              "dr1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Boatsetter",
+            "pageCategory": "dir",
+            "pageKeys": [
+              "dr2"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Giggster",
+            "pageCategory": "dir",
+            "pageKeys": [
+              "dr3"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Sarasota Magazine",
+            "pageCategory": "ed",
+            "pageKeys": [
+              "ed1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "VIP Cars guide",
+            "pageCategory": "ed",
+            "pageKeys": [
+              "ed2"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Peerspace guide",
+            "pageCategory": "ed",
+            "pageKeys": [
+              "ed4"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Trustpilot (RealCar)",
+            "pageCategory": "review",
+            "pageKeys": [
+              "rv1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "IPS News",
+            "pageCategory": "unc",
+            "pageKeys": [
+              "nw1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "pages": [
+      {
+        "v": {
+          "title": "Turo · Miami exotic and luxury rentals",
+          "type": "Marketplace",
+          "url": "turo.com/us/en/exotic-luxury-rental/united-states/miami-fl",
+          "prompts": 4,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "none",
+          "detail": "Private hosts only; you’re not listed",
+          "supports": "Cited in 10 of 35 answers, for Lamborghini, budget, under-25 and airport questions. AI uses it as the alternative to rental companies.",
+          "prompt": "Affordable exotic car rental in Miami"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Sarasota Magazine · Best Miami Bentley rentals 2026",
+          "type": "Editorial roundup",
+          "url": "sarasotamagazine.com/advantagepoint/2026/11/best-miami-bentley-rentals-in-2026",
+          "prompts": 4,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "none",
+          "detail": "Ranks Octane, Prestige, Dynasty, Luxx and RealCar",
+          "supports": "The roundup AI cites most for “best” and price questions. It compares published rates, which you don’t have.",
+          "prompt": "Best exotic car rental companies in Miami"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "VIP Cars · Luxury car rental Miami guide",
+          "type": "Editorial guide",
+          "url": "vipcars.com/guide/car-rental-tips/luxury-car-rental-miami",
+          "prompts": 2,
+          "engines": [
+            1,
+            2
+          ],
+          "presence": "none",
+          "detail": "No Miami companies named",
+          "supports": "Cited for price and age questions. Says most exotic rentals require renters to be 25, which is where your 18+ policy could stand out.",
+          "prompt": "Exotic car rental in Miami if I’m under 25"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "IPS News · Prestige Luxury Rentals press release",
+          "type": "Press release",
+          "url": "ipsnews.net/business/?p=249937",
+          "prompts": 2,
+          "engines": [
+            1
+          ],
+          "presence": "none",
+          "detail": "About a competitor only",
+          "supports": "A paid-style release about Prestige. Claude cites it for hotel delivery and reliability.",
+          "prompt": "Exotic car rental with delivery to a Miami Beach hotel"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Trustpilot · RealCar Miami reviews",
+          "type": "Customer reviews",
+          "url": "trustpilot.com/review/realcar.miami",
+          "prompts": 2,
+          "engines": [
+            0,
+            1
+          ],
+          "presence": "none",
+          "detail": "A competitor’s review profile",
+          "supports": "AI uses competitors’ review profiles as proof of reliability. We found no public review profile for you.",
+          "prompt": "Most reliable luxury car rental in Miami with good reviews"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Boatsetter · Miami yacht charters",
+          "type": "Marketplace",
+          "url": "boatsetter.com",
+          "prompts": 1,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "none",
+          "detail": "Other yachts listed; yours aren’t",
+          "supports": "Cited in every yacht answer. Your 3 yachts take 13 cruising guests but aren’t on it.",
+          "prompt": "Yacht charter in Miami for a group of 12"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Peerspace · Where to rent a mansion in Miami",
+          "type": "Editorial guide",
+          "url": "peerspace.com/resources/where-to-rent-a-mansion-miami",
+          "prompts": 1,
+          "engines": [
+            0,
+            1
+          ],
+          "presence": "none",
+          "detail": "Other venues listed",
+          "supports": "Cited for mansion events. Your villa pages don’t say whether events are allowed.",
+          "prompt": "Luxury mansion rental in Miami for a group event"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Giggster · Miami party homes",
+          "type": "Marketplace",
+          "url": "giggster.com/find/miami--fl/home-party",
+          "prompts": 1,
+          "engines": [
+            1
+          ],
+          "presence": "none",
+          "detail": "Other venues listed",
+          "supports": "Claude’s first pick for event mansions.",
+          "prompt": "Luxury mansion rental in Miami for a group event"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Haute Living · Lou La Vie takes to the ocean (2013)",
+          "type": "Editorial feature",
+          "url": "hauteliving.com/2013/05/exotic-car-company-lou-la-vie-take-to-the-ocean",
+          "prompts": 1,
+          "engines": [
+            1
+          ],
+          "presence": "none",
+          "detail": "About a competitor only",
+          "supports": "A 13-year-old article still makes Lou La Vie a car-and-yacht pick. No article covers your one-stop offer.",
+          "prompt": "One company in Miami for an exotic car, villa and yacht package"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "v": {
+          "label": "CHECKED SEPARATELY · SAMPLE DATA",
+          "title": "Your Google profile",
+          "rating": "4.6",
+          "count": "180",
+          "recent": "9 reviews in the last 90 days",
+          "themes": "Sample data. Customers praise the cars and the showroom; some mention deposit refunds taking a while.",
+          "cited": false,
+          "scale": 5
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "label": "CHECKED SEPARATELY · REAL CHECK",
+          "title": "Your Atly listing",
+          "rating": "9.5",
+          "count": null,
+          "recent": "No dated reviews",
+          "themes": "A score with no scale or review count, and a description of you as a yacht.",
+          "cited": false,
+          "scale": null
+        },
+        "p": {
+          "kind": "observed",
+          "evidence": [
+            "mvp-site-checks"
+          ]
+        }
+      }
+    ],
+    "fixes": [
+      {
+        "v": {
+          "title": "List on the marketplaces AI cites",
+          "text": "Turo is cited in 10 of 35 answers and Boatsetter in every yacht answer. Decide which fit your business and list your cars and yachts there."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Pitch the Miami roundups",
+          "text": "Sarasota Magazine’s roundup is cited for “best” and price questions. It compares published rates, so publish yours first."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Earn coverage for your one-stop offer",
+          "text": "The only article AI cites for car-and-yacht packages is from 2013 and about a competitor."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "rules": [
+      {
+        "v": {
+          "k": "Which pages",
+          "v": "Outside pages cited in answers to the 12 luxury rental prompts in your Prompt Analysis. Your own website and other rental companies’ sites aren’t included."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Counting",
+          "v": "A page counts once per prompt, even when several AIs cite it."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "How you show up",
+          "v": "Recommended with a reason, reviewed by customers, listed by name, mentioned with a concern, or not found on the page we checked."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Real vs sample",
+          "v": "Claude citations are real, from 11 Nov 2026. ChatGPT and Gemini citations are sample data."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Limits",
+          "v": "A citation doesn’t prove a page shaped an answer. “Not found” applies only to the page we checked."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "actions": {
+    "tasks": [
+      {
+        "v": {
+          "title": "Make your vehicle list readable to AI",
+          "kind": "Website fix",
+          "scope": "Find & read",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your rentals page shows AI an empty list (“Vehicles Found:” with no cars). No AI can tell which cars you have."
+            },
+            {
+              "k": "Action",
+              "v": "Ask your web developer to put the car list in the page HTML, not only in JavaScript, and give each car its own page with make, model, year and photos."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck finds the cars in the page text."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Publish daily rates or “from” prices",
+          "kind": "Website fix",
+          "scope": "Complete",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "No page shows a price for any car, home or yacht. ChatGPT guesses “from about $599 a day,” and competitors that publish rates are named for price questions."
+            },
+            {
+              "k": "Action",
+              "v": "Add a daily rate or a “from” price for each car, and price ranges for villas and yachts, next to deposits and mileage."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck, then price questions rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Fix the delivery contradiction on your Locations page",
+          "kind": "Website fix",
+          "scope": "Complete · Consistent",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your FAQ offers free delivery and pickup. Your Locations page says “you don’t get dropped off or picked up.”"
+            },
+            {
+              "k": "Action",
+              "v": "Rewrite the Locations page to match the FAQ: free delivery 10 a.m.–8 p.m. in your service area, and airport escorts."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Correct your Atly listing",
+          "kind": "Listing fix",
+          "scope": "Consistent",
+          "engines": [],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Atly lists your address but describes you as “a yacht that works as a floating art piece,” with no phone or hours."
+            },
+            {
+              "k": "Action",
+              "v": "Claim the listing and describe your cars, mansions and yachts, with your phone and hours."
+            },
+            {
+              "k": "How we check",
+              "v": "Listing recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Check your Google hours (sample finding)",
+          "kind": "Listing fix",
+          "scope": "Consistent",
+          "engines": [
+            0
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Sample data: Google shows shorter hours than your site’s daily 9:30 a.m.–9:30 p.m."
+            },
+            {
+              "k": "Action",
+              "v": "Confirm the hours in your Google Business Profile."
+            },
+            {
+              "k": "How we check",
+              "v": "Profile recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Get listed where AI looks for exotic rentals",
+          "kind": "Outside source",
+          "scope": "Credible",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Turo is cited in 10 of 35 answers. Boatsetter is cited for every yacht question, and Giggster and Peerspace for mansions. You’re on none of them."
+            },
+            {
+              "k": "Action",
+              "v": "Decide which marketplaces fit your business, then list your cars, yachts and villas there with links back to your site."
+            },
+            {
+              "k": "How we check",
+              "v": "Listing recheck, then recommendation questions rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Pitch the Miami roundups AI cites",
+          "kind": "Outside source",
+          "scope": "Credible",
+          "engines": [
+            1
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Sarasota Magazine’s Miami rental roundup is cited in 6 answers. It names Octane, Prestige, Dynasty, Luxx and RealCar, not you."
+            },
+            {
+              "k": "Action",
+              "v": "Send the editors your one-stop offer, your 18+ policy and published rates."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Make your 18+ policy easy to find",
+          "kind": "Website fix",
+          "scope": "Distinctive",
+          "engines": [
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Most competitors require renters to be 25. Your FAQ rents to drivers 18 and up, but only ChatGPT mentions it, and Gemini says you require 25."
+            },
+            {
+              "k": "Action",
+              "v": "State the age policy and its insurance requirements on your homepage and rentals page, not only in the FAQ."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck, then under-25 questions rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Say what sets you apart on your homepage",
+          "kind": "Website fix",
+          "scope": "Distinctive",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Only ChatGPT recommends you, and only for a car, villa and yacht package."
+            },
+            {
+              "k": "Action",
+              "v": "Add one clear line, such as “Miami’s exotic cars, mansions and yachts from one team.”"
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Add event rules and capacity to your mansion pages",
+          "kind": "Website fix",
+          "scope": "Complete",
+          "engines": [
+            0
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "AI sends event questions to Peerspace and Giggster. ChatGPT notes your villas don’t say whether events are allowed."
+            },
+            {
+              "k": "Action",
+              "v": "For each villa, state whether events are allowed, guest limits and minimum stay."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Name your marina and yacht rates",
+          "kind": "Website fix",
+          "scope": "Complete",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your yacht page lists 3 yachts but no prices, marina or what’s included. Yacht questions go to Boatsetter, GetMyBoat and Sailo."
+            },
+            {
+              "k": "Action",
+              "v": "Add where each yacht departs, a price range, and what’s included (crew, fuel, tax)."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Back up “celebrities’ favorite” or drop it",
+          "kind": "Reputation",
+          "scope": "Credible",
+          "engines": [
+            0
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your About page calls you the celebrities’ favorite and Miami’s #1 rental company. No outside source confirms either."
+            },
+            {
+              "k": "Action",
+              "v": "Link to press coverage or client permission, or replace the claim with facts customers can check."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Fix your site’s code so it matches your pages",
+          "kind": "Website fix",
+          "scope": "Find & read",
+          "engines": [],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Sample finding: your site’s code lists shorter hours than your pages and doesn’t describe your cars, villas or yachts."
+            },
+            {
+              "k": "Action",
+              "v": "Ask your web developer to add structured data for each rental and correct the hours. Details are on the Structured data slide."
+            },
+            {
+              "k": "How we check",
+              "v": "Structured data recheck with Google’s Rich Results Test."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Decide how MVP Atlanta and Charlotte appear",
+          "kind": "Offering",
+          "scope": "Distinctive",
+          "engines": [],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your Miami site links to MVP Atlanta and MVP Charlotte. This report covers Miami only."
+            },
+            {
+              "k": "Action",
+              "v": "Decide whether each city gets its own report and its own pages AI can find."
+            },
+            {
+              "k": "How we check",
+              "v": "Owner decision, recorded in the improvement log."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "cases": [
+      {
+        "v": {
+          "title": "Make your website readable to AI",
+          "finding": "Your car list loads empty for AI, and no AI found your site through search.",
+          "work": "Put the car list in the page HTML, give each car its own page, and add structured data.",
+          "owner": "Web developer",
+          "tasks": [
+            0,
+            12
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Show the details customers compare",
+          "finding": "No prices anywhere, no event rules for villas, and no marina or rates for yachts.",
+          "work": "Publish rates or ranges, event rules and yacht details.",
+          "owner": "Owner / content marketer",
+          "tasks": [
+            1,
+            9,
+            10
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Correct conflicting business information",
+          "finding": "Your Locations page contradicts your FAQ on delivery, and Atly describes you as a yacht.",
+          "work": "Align your own pages, then correct outside listings.",
+          "owner": "Owner / listings manager",
+          "tasks": [
+            2,
+            3,
+            4
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Build presence where AI finds recommendations",
+          "finding": "All 9 outside pages AI cited feature competitors. You appear on none.",
+          "work": "Join the marketplaces that fit, and pitch the Miami roundups AI cites.",
+          "owner": "Marketing / PR",
+          "tasks": [
+            5,
+            6
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Sharpen why customers should choose you",
+          "finding": "Your one-stop offer comes through, but your 18+ policy and free delivery are buried in the FAQ, and the celebrity claim is unverified.",
+          "work": "Put your real differences on the homepage and back up your claims.",
+          "owner": "Owner",
+          "tasks": [
+            7,
+            8,
+            11
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Decide on multi-city presence",
+          "finding": "Your site links to Atlanta and Charlotte, which this report doesn’t cover.",
+          "work": "Decide whether each city needs its own report and pages.",
+          "owner": "Owner",
+          "tasks": [
+            13
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "methodGroups": [
+    {
+      "v": {
+        "heading": "SECTION 2 · YOUR WEBSITE",
+        "items": [
+          {
+            "title": "Find & read",
+            "text": "Each AI searched for 6 selected pages, then tried to read each one. Search and reading are recorded separately. Published site rules are checked on their own. We also compared the structured data (schema.org code) on each page with what the page says."
+          },
+          {
+            "title": "Complete",
+            "text": "We checked your 6 selected pages against the 5 facts every luxury rental customer needs: what you rent, prices, requirements, delivery and booking."
+          },
+          {
+            "title": "Distinctive",
+            "text": "We gave each AI only your website, with web search off, and asked 5 neutral questions about your business. We didn’t tell the AIs what to mention."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "heading": "SECTION 3 · WEB PRESENCE",
+        "items": [
+          {
+            "title": "Sources",
+            "text": "The outside pages each AI cited across the 12 rental prompts in your Prompt Analysis, grouped by kind of site."
+          },
+          {
+            "title": "Credible",
+            "text": "For each cited page, we checked whether you appear and whether the mention helps you, is only a listing, or raises a concern. Each page counts once per prompt. One review profile was checked separately."
+          },
+          {
+            "title": "Consistent",
+            "text": "We compared 5 facts on your website with Google and Yelp (sample data), Atly and your own Locations page (real checks)."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "heading": "LIMITS",
+        "items": [
+          {
+            "title": "What we don’t claim",
+            "text": "Missing answers are never counted as failures. A citation doesn’t prove a page shaped an answer, and changes after a fix aren’t proof the fix caused them."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ]
+}
