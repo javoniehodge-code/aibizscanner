@@ -80,6 +80,7 @@ jobs:
             echo "NEXT_PUBLIC_SUPABASE_URL=$(jq -r .API_URL /tmp/sb.json)"
             echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$(jq -r .PUBLISHABLE_KEY /tmp/sb.json)"
             echo "SUPABASE_SECRET_KEY=$(jq -r .SECRET_KEY /tmp/sb.json)"
+            echo "CRON_SECRET=ci-only-cron-secret-$(openssl rand -hex 16)"
           } >> "$GITHUB_ENV"
       - run: npm ci
         working-directory: web

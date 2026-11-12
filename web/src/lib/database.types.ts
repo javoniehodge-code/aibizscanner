@@ -58,10 +58,22 @@ isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "engine_answer_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    },{
       foreignKeyName: "engine_answer_stage_run_id_fkey"
       columns: ["stage_run_id"]
 isOneToOne: false
       referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "engine_answer_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
                   ]
@@ -84,10 +96,22 @@ isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "finding_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    },{
       foreignKeyName: "finding_stage_run_id_fkey"
       columns: ["stage_run_id"]
 isOneToOne: false
       referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "finding_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
                   ]
@@ -136,10 +160,22 @@ isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "listing_snapshot_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    },{
       foreignKeyName: "listing_snapshot_stage_run_id_fkey"
       columns: ["stage_run_id"]
 isOneToOne: false
       referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "listing_snapshot_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
                   ]
@@ -162,10 +198,22 @@ isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "page_snapshot_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    },{
       foreignKeyName: "page_snapshot_stage_run_id_fkey"
       columns: ["stage_run_id"]
 isOneToOne: false
       referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "page_snapshot_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
                   ]
@@ -201,6 +249,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "prompt_set_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
     }
                   ]
                 },"report": {
@@ -241,6 +295,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "report"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "stage_run_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
     }
                   ]
                 },"stage_run_stale": {
@@ -262,10 +322,22 @@ isOneToOne: false
       referencedRelation: "stage_run"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "stage_run_stale_caused_by_run_id_fkey"
+      columns: ["caused_by_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "stage_run_stale_stage_run_id_fkey"
       columns: ["stage_run_id"]
 isOneToOne: false
       referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "stage_run_stale_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
                   ]
@@ -293,19 +365,135 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "stage_run"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "usage_event_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
+      referencedColumns: ["id"]
     }
                   ]
                 }
           }
           Views: {
-            [_ in never]: never
+            "report_cost_rollup": {
+                  Row: {
+                    "cost_usd": number | null,"duration_ms": number | null,"failed_runs": number | null,"report_id": string,"search_calls": number | null,"spending_cap_usd": number,"stage_runs": number | null,"tokens_in": number | null,"tokens_out": number | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    
+                  ]
+                },"stage_run_overview": {
+                  Row: {
+                    "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"failed_calls": number | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"is_latest": boolean | null,"is_stale": boolean | null,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "stage_run_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "stage_run_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    }
+                  ]
+                }
           }
           Functions: {
-            "health_check":
+            "claim_stage_runs":
+{ Args: { "p_lease_margin_ms"?: number,"p_limit": number,"p_max_timeout_ms": number }; Returns: {
+              "attempt": number,
+"cost_usd": number,
+"created_at": string,
+"created_by": string | null,
+"duration_ms": number | null,
+"error": string | null,
+"finished_at": string | null,
+"id": string,
+"input_run_ids": (string)[],
+"inputs_hash": string,
+"locked_until": string | null,
+"max_attempts": number,
+"output": Json | null,
+"output_hash": string | null,
+"params": NonNullable<Json>,
+"pricing_ids": (number)[],
+"report_id": string,
+"run_after": string,
+"search_calls": number,
+"stage": string,
+"started_at": string | null,
+"status": string,
+"timeout_ms": number,
+"tokens_in": number,
+"tokens_out": number,
+"version": number
+            }[]
+                          SetofOptions: {
+        from: "*"
+        to: "stage_run"
+        isOneToOne: false
+        isSetofReturn: true
+      } },
+"enqueue_stage_run":
+{ Args: { "p_downstream_stages": (string)[],"p_input_run_ids": (string)[],"p_inputs_hash": string,"p_max_attempts": number,"p_params": Json,"p_report_id": string,"p_stage": string,"p_timeout_ms": number }; Returns: {
+              "attempt": number,
+"cost_usd": number,
+"created_at": string,
+"created_by": string | null,
+"duration_ms": number | null,
+"error": string | null,
+"finished_at": string | null,
+"id": string,
+"input_run_ids": (string)[],
+"inputs_hash": string,
+"locked_until": string | null,
+"max_attempts": number,
+"output": Json | null,
+"output_hash": string | null,
+"params": NonNullable<Json>,
+"pricing_ids": (number)[],
+"report_id": string,
+"run_after": string,
+"search_calls": number,
+"stage": string,
+"started_at": string | null,
+"status": string,
+"timeout_ms": number,
+"tokens_in": number,
+"tokens_out": number,
+"version": number
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "stage_run"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
+"finish_stage_run":
+{ Args: { "p_attempt": number,"p_error": string,"p_id": string,"p_output": Json,"p_output_hash": string,"p_status": string }; Returns: boolean
+                           },
+"health_check":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"recover_expired_stage_runs":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"report_spend_usd":
+{ Args: { "p_report_id": string }; Returns: number
+                           },
+"retry_stage_run":
+{ Args: { "p_attempt": number,"p_error": string,"p_id": string,"p_run_after": string }; Returns: boolean
                            }
           }
           Enums: {

@@ -10,6 +10,9 @@ export default function Home() {
           <Link href="/businesses">Businesses</Link> — list, add and edit test businesses
         </li>
         <li>
+          <Link href="/reports">Reports</Link> — test reports, run monitor, stage reruns and cost
+        </li>
+        <li>
           <Link href="/health">Health</Link> — database connection and deployed commit
         </li>
       </ul>

@@ -65,11 +65,35 @@ scheduling, error and usage fields until they finish; then they are frozen. Reru
   Validation runs on the server (`src/lib/business/schema.ts`, zod). The Google Places identity check is Milestone 2;
   the form shows a placeholder and never contacts Google.
 
+## Stage runner (report engine + worker)
+
+- **Engine** (`src/engine/`): stage registry (`index.ts`), stage definitions (`stages/`), the executor (`execute.ts`)
+  and pure helpers (cost, backoff, inputs hash). Each stage declares `id`, `inputs` (upstream stages), timeout,
+  max attempts, a params parser and `run(ctx)`. Stages spend money only through `ctx.paidCall`, which checks the
+  report's spending cap first and logs tokens, search calls, estimated USD (with the `pricing` row) and duration.
+  The engine imports nothing from the worker, Next.js or Supabase (ESLint enforces it); storage goes through the
+  `RunStore` port.
+- **Queue**: `stage_run` rows. `enqueue_stage_run` inserts the next version (reruns never overwrite) and marks the
+  latest downstream runs stale. The worker claims due rows with `FOR UPDATE SKIP LOCKED`, increments `attempt`
+  (used as a fencing token), sets a lease, and either finishes the run (`done`/`partial`/`failed`) or re-queues it
+  with exponential backoff. Expired leases count as a failed attempt.
+- **Worker** (`src/worker/`, `src/app/api/worker/tick/route.ts`): `POST /api/worker/tick` with
+  `Authorization: Bearer $CRON_SECRET`. Each tick runs for at most ~50 s and only claims runs whose timeout fits.
+- **Schedule**: Supabase `pg_cron` + `pg_net` call the endpoint every minute
+  (`supabase/migrations/20261112000300_worker_cron.sql`). The URL and secret are read from Supabase Vault
+  (`worker_tick_url`, `worker_cron_secret`); until both are set the job does nothing.
+- **Run monitor**: `/reports/[id]/runs` shows each stage's latest status, attempts, time, tokens, search calls,
+  cost and errors, every version, every paid call, report totals, "Rerun this stage", and "Process queue now"
+  (runs one tick immediately, same code path).
+- Milestone 1 registers two dummy stages: `dummy_priced_call` (a fake priced call against the `dummy/fake-model-1`
+  price row; no AI API is called) and `dummy_summary` (reads its output, to show stale marking).
+
 ## End-to-end tests
 
 ```bash
 cd .. && supabase start && cd web
-# .env.local must point at the local stack: API_URL, PUBLISHABLE_KEY and SECRET_KEY from `supabase status`
+# .env.local must point at the local stack: API_URL, PUBLISHABLE_KEY and SECRET_KEY from `supabase status`,
+# plus any CRON_SECRET of 32+ characters
 npm run build
 npm run e2e
 ```
@@ -85,7 +109,8 @@ Copy `.env.example` to `.env.local`. Never commit real values.
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase dashboard → Project Settings → Data API → Project URL | browser + server |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase dashboard → Project Settings → API Keys → publishable key (the legacy `anon` key also works) | browser + server |
-| `SUPABASE_SECRET_KEY` | `supabase status` (local only, for e2e test-user setup) | e2e tests |
+| `SUPABASE_SECRET_KEY` | Supabase dashboard → Project Settings → API Keys → secret key (legacy `service_role` also works). Locally: `supabase status` | worker (server only), e2e setup |
+| `CRON_SECRET` | You generate it: `openssl rand -hex 32` (at least 32 characters). Store the same value in Supabase Vault as `worker_cron_secret` | `/api/worker/tick` bearer auth |
 
 The deployed git commit on `/health` comes from `VERCEL_GIT_COMMIT_SHA` (set automatically by Vercel) or `git rev-parse HEAD` at build time.
 
