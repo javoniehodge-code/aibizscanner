@@ -2,6 +2,8 @@
 Version 0.3 • 22 October 2026
 
 ## Start here
+Current build: [internal report testing application brief](build/internal-testing-app.md), with report designs in [design/reports](../design/reports/README.md).
+
 For a simple visual website skeleton, use the [Claude Design brief](product/claude-design-skeleton.md). It specifies pages, navigation, homepage sequence, customer flows and essential states; no production backend is implied.
 
 ## Product contracts
