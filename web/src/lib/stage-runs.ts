@@ -1,5 +1,5 @@
 import "server-only";
-import { inputsHash, registry, type JsonValue, type StageInput } from "@/engine";
+import { inputsHash, instructionRef, registry, type JsonValue, type StageInput } from "@/engine";
 import type { Json } from "@/lib/database.types";
 import type { createClient } from "@/lib/supabase/server";
 
@@ -38,11 +38,14 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
     inputs.push({ runId: data.id, stage: data.stage, output: data.output as JsonValue, outputHash: data.output_hash });
   }
 
+  // The exact instruction versions this run will use: recorded on the run and part of its inputs hash.
+  const instructions = await Promise.all((stage.instructions ?? []).map(instructionRef));
   const { data, error } = await db.rpc("enqueue_stage_run", {
     p_report_id: reportId,
     p_stage: stageId,
     p_params: params as Json,
-    p_inputs_hash: await inputsHash(stageId, params, inputs),
+    p_inputs_hash: await inputsHash(stageId, params, inputs, instructions),
+    p_instruction_refs: instructions as unknown as Json,
     p_input_run_ids: inputs.map((i) => i.runId),
     p_timeout_ms: stage.timeoutMs,
     p_max_attempts: stage.maxAttempts,

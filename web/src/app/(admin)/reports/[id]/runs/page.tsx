@@ -46,10 +46,14 @@ export default async function RunMonitorPage({ params }: { params: Promise<{ id:
   for (const r of [runsRes, rollupRes, pricingRes]) if (r.error) throw new Error(r.error.message);
   const runs = runsRes.data ?? [];
   const runIds = runs.map((r) => r.id).filter((x): x is string => Boolean(x));
-  const usageRes = runIds.length
-    ? await db.from("usage_event").select("*").in("stage_run_id", runIds).order("created_at")
-    : { data: [], error: null };
+  const [usageRes, llmRes] = runIds.length
+    ? await Promise.all([
+        db.from("usage_event").select("*").in("stage_run_id", runIds).order("created_at"),
+        db.from("llm_call").select("id, stage_run_id, attempt, instruction_id, instruction_version, model, served_model, valid, error, duration_ms").in("stage_run_id", runIds).order("created_at"),
+      ])
+    : [{ data: [], error: null }, { data: [], error: null }];
   if (usageRes.error) throw new Error(usageRes.error.message);
+  if (llmRes.error) throw new Error(llmRes.error.message);
   const pricingById = new Map((pricingRes.data ?? []).map((p) => [p.id, p]));
   const roll = rollupRes.data;
 
@@ -152,12 +156,15 @@ export default async function RunMonitorPage({ params }: { params: Promise<{ id:
               <th>Cost (est.)</th>
               <th>Pricing</th>
               <th>Inputs hash</th>
+              <th>Instructions</th>
               <th>Paid calls</th>
             </tr>
           </thead>
           <tbody>
             {runs.map((r) => {
               const calls = (usageRes.data ?? []).filter((u) => u.stage_run_id === r.id);
+              const llmCalls = (llmRes.data ?? []).filter((c) => c.stage_run_id === r.id);
+              const refs = (Array.isArray(r.instruction_refs) ? r.instruction_refs : []) as { id: string; version: number }[];
               return (
                 <tr key={r.id} data-testid="run-history-row">
                   <td>
@@ -187,6 +194,34 @@ export default async function RunMonitorPage({ params }: { params: Promise<{ id:
                   </td>
                   <td>
                     <code title={r.inputs_hash ?? ""}>{(r.inputs_hash ?? "").slice(0, 10)}</code>
+                  </td>
+                  <td>
+                    {refs.length === 0 ? (
+                      <span className="muted">none</span>
+                    ) : (
+                      refs.map((i) => (
+                        <div key={i.id}>
+                          <code>
+                            {i.id} v{i.version}
+                          </code>
+                        </div>
+                      ))
+                    )}
+                    {llmCalls.length > 0 ? (
+                      <details>
+                        <summary>
+                          {llmCalls.length} LLM call{llmCalls.length === 1 ? "" : "s"} · {llmCalls.filter((c) => !c.valid).length} invalid
+                        </summary>
+                        <ul style={{ paddingLeft: 16, margin: 0 }}>
+                          {llmCalls.map((c) => (
+                            <li key={c.id}>
+                              attempt {c.attempt}: {c.instruction_id} v{c.instruction_version} · {c.served_model ?? c.model} · {formatDuration(c.duration_ms)} ·{" "}
+                              {c.valid ? "valid" : `invalid: ${c.error ?? ""}`}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    ) : null}
                   </td>
                   <td>
                     {calls.length === 0 ? (

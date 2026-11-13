@@ -1,8 +1,9 @@
 import { backoffMs, estimateCostUsd } from "./cost";
-import { MissingPricingError, SpendingCapError, StageTimeoutError, errorMessage, isRetryable } from "./errors";
+import { MissingPricingError, NonRetryableError, SpendingCapError, StageTimeoutError, errorMessage, isRetryable } from "./errors";
 import { hashJson } from "./json";
+import { createStructuredCall, instructionRef, type LlmClient } from "./llm";
 import type { StageRegistry } from "./registry";
-import type { ClaimedRun, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
+import type { ClaimedRun, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
 
 export type RunOutcome =
   | { runId: string; stage: string; outcome: "done" | "partial"; costUsd: number }
@@ -12,6 +13,17 @@ export type RunOutcome =
   | { runId: string; stage: string; outcome: "lost" };
 
 export type Clock = { now(): Date };
+
+/** Data that doesn't match its declared schema. Never retried: the same code would produce the same result. */
+export class SchemaError extends NonRetryableError {
+  constructor(what: string, issues: { path: PropertyKey[]; message: string }[]) {
+    super(`${what} doesn't match its schema: ${issues.slice(0, 5).map((i) => `${i.path.map(String).join(".") || "(root)"}: ${i.message}`).join("; ")}`);
+    this.name = "SchemaError";
+  }
+}
+
+const sameRefs = (a: readonly InstructionRef[], b: readonly InstructionRef[]) =>
+  a.length === b.length && a.every((x) => b.some((y) => y.id === x.id && y.version === x.version && y.sha256 === x.sha256));
 const systemClock: Clock = { now: () => new Date() };
 
 const ZERO_USAGE: Usage = { tokensIn: 0, tokensOut: 0, searchCalls: 0, requests: 0 };
@@ -25,6 +37,7 @@ export async function executeRun(
   registry: StageRegistry,
   run: ClaimedRun,
   clock: Clock = systemClock,
+  llmClient: LlmClient | null = null,
 ): Promise<RunOutcome> {
   const base = { runId: run.id, stage: run.stage };
   const stage = registry.get(run.stage);
@@ -47,9 +60,22 @@ export async function executeRun(
 
   let attemptCost = 0;
   try {
+    // Instructions: the versions in the code must be the ones recorded when the run was queued.
+    const refs = await Promise.all((stage.instructions ?? []).map(instructionRef));
+    if (!sameRefs(refs, run.instructions)) {
+      throw new NonRetryableError("The stage's instructions changed after this run was queued. Rerun the stage to use the current versions.");
+    }
+    for (const [i, ref] of refs.entries()) await store.recordInstruction({ ...ref, text: (stage.instructions ?? [])[i]!.text });
+
     const loaded = await store.loadInputs(run.inputRunIds);
     const inputs: Record<string, StageInput> = {};
-    for (const input of loaded) inputs[input.stage] = input;
+    for (const input of loaded) {
+      // Re-check stored outputs against the upstream stage's current schema before using them.
+      const upstream = registry.get(input.stage);
+      const check = upstream?.output.safeParse(input.output);
+      if (check && !check.success) throw new SchemaError(`Input from ${input.stage} (run ${input.runId})`, check.error.issues);
+      inputs[input.stage] = input;
+    }
     const missing = stage.inputs.filter((s) => !inputs[s]);
     if (missing.length) throw new Error(`Missing inputs from stage(s): ${missing.join(", ")}`);
 
@@ -111,8 +137,19 @@ export async function executeRun(
       inputs,
       signal: controller.signal,
       paidCall,
+      llm: createStructuredCall({
+        client: llmClient,
+        declared: refs,
+        stageRunId: run.id,
+        attempt: run.attempt,
+        signal: controller.signal,
+        paidCall,
+        record: (r) => store.recordLlmCall(r),
+      }),
     };
     const result = await Promise.race([stage.run(ctx), timeout]);
+    const valid = stage.output.safeParse(result.output);
+    if (!valid.success) throw new SchemaError(`Output of ${stage.id}`, valid.error.issues);
     const outputHash = await hashJson(result.output);
     return (await store.finish(run.id, run.attempt, result.status, result.output, outputHash, null))
       ? { ...base, outcome: result.status, costUsd: attemptCost }
