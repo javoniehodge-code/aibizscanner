@@ -11,7 +11,7 @@ const SPEC = ENGINE_MODELS[0];
  * Provider defaults otherwise (no temperature, default reasoning), to stay close to what a customer would get.
  */
 export function openAiEngine(apiKey: string): AnswerEngine {
-  const client = new OpenAI({ apiKey, maxRetries: 1 });
+  const client = new OpenAI({ apiKey, maxRetries: 2 });
   const settings = { tool: "web_search", search_context_size: "medium", store: false };
   return {
     engine: 0,

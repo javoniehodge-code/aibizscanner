@@ -152,6 +152,51 @@ describe("prompt analysis pipeline (fake providers)", () => {
     expect(a0.store.usage).toHaveLength(1);
   });
 
+  it("after a rate limit, the next attempt asks only the questions still unanswered", async () => {
+    let limited = true;
+    const asked: string[] = [];
+    const engine = fakeEngine(0);
+    const limitedEngine: AnswerEngine = {
+      ...engine,
+      async ask(r, signal) {
+        asked.push(r.question);
+        if (limited && r.question.includes("yacht")) throw Object.assign(new Error("429 Rate limit reached for gpt-6.1-sol"), { status: 429 });
+        return engine.ask(r, signal);
+      },
+    };
+    const providers: Providers = { answers: (e) => (e === 0 ? limitedEngine : null) };
+    const set = await run("pa_prompt_set", [], providers, SET as unknown as Record<string, JsonValue>);
+
+    const def = registry.get("pa_answers_chatgpt")!;
+    const store = new MemoryStore(5, 0, [set.input]);
+    const base: ClaimedRun = {
+      id: "chatgpt-run",
+      reportId: "r1",
+      stage: def.id,
+      version: 1,
+      attempt: 1,
+      maxAttempts: def.maxAttempts,
+      timeoutMs: def.timeoutMs,
+      params: {},
+      inputRunIds: [set.input.runId],
+      instructions: [],
+    };
+    const first = await executeRun(store, registry, base, undefined, providers);
+    expect(first.outcome).toBe("retry");
+    expect(store.retried?.error).toMatch(/ChatGPT: 1 of 2 answered so far; 1 left because of the provider's rate limit/);
+    expect(store.engineAnswers.map((a) => [a.promptId, a.status])).toEqual([["P1", "ok"]]);
+
+    limited = false;
+    asked.length = 0;
+    const second = await executeRun(store, registry, { ...base, attempt: 2 }, undefined, providers);
+    expect(second.outcome).toBe("done");
+    expect(asked).toEqual([SET.prompts[1]!.text]); // P1 was not asked (or paid for) again
+    const out = store.finished?.output as { answers: { promptId: string; answerId: string; status: string }[] };
+    expect(out.answers.map((a) => [a.promptId, a.status])).toEqual([["P1", "ok"], ["P2", "ok"]]);
+    expect(out.answers[0]?.answerId).toBe(store.engineAnswers[0]?.id);
+    expect(store.usage.filter((u) => u.succeeded)).toHaveLength(2);
+  });
+
   it("refuses a prompt set with a question in an unknown group", () => {
     const bad = { ...SET, prompts: [{ ...SET.prompts[0]!, group: 3 }] };
     expect(() => registry.get("pa_prompt_set")!.parseParams(bad)).toThrow(/group out of range/);

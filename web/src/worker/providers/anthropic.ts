@@ -23,7 +23,7 @@ function addUsage(total: Usage, u: { input_tokens: number; output_tokens: number
  * defaults otherwise (adaptive thinking at default effort). Refusal fallbacks are on ("default").
  */
 export function anthropicEngine(apiKey: string): AnswerEngine {
-  const client = new Anthropic({ apiKey, maxRetries: 1 });
+  const client = new Anthropic({ apiKey, maxRetries: 2 });
   const settings = { tool: "web_search_20260209", fallbacks: "default", max_tokens: 16000 };
   return {
     engine: 1,
@@ -96,7 +96,7 @@ export function anthropicEngine(apiKey: string): AnswerEngine {
 
 /** Structured extraction calls (ctx.llm) for provider "anthropic". */
 export function anthropicLlm(apiKey: string): LlmClient {
-  const client = new Anthropic({ apiKey, maxRetries: 1 });
+  const client = new Anthropic({ apiKey, maxRetries: 2 });
   return {
     async complete(request, signal) {
       const effort = typeof request.settings.effort === "string" ? (request.settings.effort as "low" | "medium" | "high") : undefined;

@@ -58,6 +58,8 @@ export type StageContext = {
   llm: LlmStructuredCall;
   /** Stores an original AI engine answer as evidence (engine_answer); returns its id. Not a paid call. */
   recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
+  /** Engine answers stored by earlier attempts of this run, oldest first (to resume without paying twice). */
+  priorEngineAnswers(): Promise<StoredEngineAnswer[]>;
   /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
   answerEngine(engine: EngineIndex): AnswerEngine | null;
 };
@@ -140,6 +142,8 @@ export type EngineAnswerRecord = {
   respondedAt: string | null;
 };
 
+export type StoredEngineAnswer = EngineAnswerRecord & { id: string };
+
 export type FinishStatus = "done" | "partial" | "failed";
 
 /** Storage port implemented by the worker layer (Supabase) and by in-memory fakes in tests. */
@@ -154,6 +158,8 @@ export interface RunStore {
   recordLlmCall(record: LlmCallRecord): Promise<void>;
   /** Stores one original AI engine answer (append-only evidence) and returns its id. */
   recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
+  /** Engine answers already stored for a stage run (all attempts), oldest first. */
+  loadEngineAnswers(stageRunId: string): Promise<StoredEngineAnswer[]>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */
   retry(runId: string, attempt: number, error: string, runAfter: Date): Promise<boolean>;
   /** Returns false if the run is no longer ours (lease lost); the result is then discarded. */

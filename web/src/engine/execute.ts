@@ -158,6 +158,7 @@ export async function executeRun(
       signal: controller.signal,
       paidCall,
       recordEngineAnswer: (r) => store.recordEngineAnswer(r),
+      priorEngineAnswers: () => store.loadEngineAnswers(run.id),
       answerEngine: (engine) => providers.answers?.(engine) ?? null,
       llm: createStructuredCall({
         client: providers.llm ?? null,

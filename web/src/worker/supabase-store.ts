@@ -105,6 +105,31 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       );
       return row.id;
     },
+    async loadEngineAnswers(stageRunId) {
+      const rows = required(
+        await db.from("engine_answer").select("id, report_id, stage_run_id, prompt_set_id, prompt_id, prompt_text, engine, model, request_id, settings, answer_text, citations, status, error, requested_at, responded_at").eq("stage_run_id", stageRunId).order("created_at", { ascending: true }),
+        "load engine answers",
+      );
+      return rows.map((r) => ({
+        id: r.id,
+        reportId: r.report_id,
+        stageRunId: r.stage_run_id ?? stageRunId,
+        promptSetId: r.prompt_set_id,
+        promptId: r.prompt_id,
+        promptText: r.prompt_text,
+        engine: r.engine as "chatgpt" | "claude" | "gemini",
+        model: r.model,
+        requestId: r.request_id,
+        settings: (r.settings ?? {}) as JsonObject,
+        rawResponse: null, // not needed to resume; stays in the table
+        answerText: r.answer_text,
+        citations: (Array.isArray(r.citations) ? r.citations : []) as { url: string }[],
+        status: r.status as "ok" | "error" | "refused" | "unavailable",
+        error: r.error,
+        requestedAt: r.requested_at,
+        respondedAt: r.responded_at,
+      }));
+    },
     async recordUsage(r) {
       check(
         await db.from("usage_event").insert({

@@ -8,9 +8,10 @@ import type { ModelSpec } from "../../llm";
  * mostly reading search results); same web search tool, half the price per token.
  */
 export const ENGINE_MODELS = [
-  { engine: 0, provider: "openai", model: "gpt-6.1-sol", maxSearches: 3 },
-  { engine: 1, provider: "anthropic", model: "claude-sonnet-5-5", maxSearches: 3 },
-  { engine: 2, provider: "google", model: "gemini-3.1-pro-preview", maxSearches: 3 },
+  // concurrency: questions in flight at once. OpenAI's per-minute token limits are low on new accounts.
+  { engine: 0, provider: "openai", model: "gpt-6.1-sol", maxSearches: 3, concurrency: 3 },
+  { engine: 1, provider: "anthropic", model: "claude-sonnet-5-5", maxSearches: 3, concurrency: 6 },
+  { engine: 2, provider: "google", model: "gemini-3.1-pro-preview", maxSearches: 3, concurrency: 6 },
 ] as const;
 
 /**

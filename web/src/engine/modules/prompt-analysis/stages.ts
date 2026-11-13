@@ -21,8 +21,20 @@ import {
 
 const MODULE = "prompt-analysis";
 /** How many questions are in flight at once per engine, and per-answer time limit. Fits the 300 s worker tick. */
-const ANSWER_CONCURRENCY = 6;
 const ANSWER_TIMEOUT_MS = 120_000;
+const ANSWER_STAGE_TIMEOUT_MS = 280_000;
+/** Attempts per engine step. Each attempt keeps the answers it got; the next one asks only what is left. */
+const ANSWER_MAX_ATTEMPTS = 6;
+
+/** The provider said "too many requests" (per-minute limits on new accounts are low). */
+function isRateLimited(e: unknown): boolean {
+  const status = (e as { status?: unknown; code?: unknown } | null)?.status ?? (e as { code?: unknown } | null)?.code;
+  return status === 429 || /\b429\b|rate limit|RESOURCE_EXHAUSTED/i.test(errorMessage(e));
+}
+/** The answer took longer than ANSWER_TIMEOUT_MS. */
+function isAnswerTimeout(e: unknown): boolean {
+  return /timed? ?out|TimeoutError|aborted/i.test(`${(e as { name?: string } | null)?.name ?? ""} ${errorMessage(e)}`);
+}
 const EXTRACT_CONCURRENCY = 6;
 const EXTRACT_ATTEMPTS = 2;
 
@@ -81,9 +93,10 @@ function answersStage(engine: EngineIndex): StageDefinition {
     module: MODULE,
     label: `Prompt analysis 2/4: ${name} answers`,
     inputs: ["pa_prompt_set"],
-    timeoutMs: 280_000,
-    // Retrying re-asks every question; only a run where every question failed for a transient reason is retried.
-    maxAttempts: 2,
+    timeoutMs: ANSWER_STAGE_TIMEOUT_MS,
+    // Answers are stored as they arrive. A retry asks only the questions without an answer yet, so retrying after a
+    // rate limit or running out of time never pays twice for the same answer.
+    maxAttempts: ANSWER_MAX_ATTEMPTS,
     autoRun: true,
     parseParams: emptyParams,
     output: engineAnswers,
@@ -132,10 +145,40 @@ function answersStage(engine: EngineIndex): StageDefinition {
         return { status: "partial", output: output as unknown as JsonValue };
       }
 
+      // Answers from earlier attempts of this run are kept; only questions without one are asked again.
+      const kept = new Map<string, EngineAnswer>();
+      for (const r of await ctx.priorEngineAnswers()) {
+        if (r.status !== "ok" && r.status !== "refused") continue;
+        const queries = Array.isArray(r.settings.searchQueries) ? r.settings.searchQueries.filter((q): q is string => typeof q === "string") : [];
+        kept.set(r.promptId, {
+          answerId: r.id,
+          promptId: r.promptId,
+          engine,
+          status: r.status,
+          text: r.answerText,
+          error: r.error,
+          citations: r.citations.map((c) => c.url),
+          searchObserved: queries.length > 0 || r.citations.length > 0,
+          respondedAt: r.respondedAt,
+          searchQueries: queries,
+          servedModel: typeof r.settings.servedModel === "string" ? r.settings.servedModel : null,
+          requestId: r.requestId,
+        });
+      }
+      // Don't start a question that might not finish before the step's time limit.
+      const startBy = Date.now() + ANSWER_STAGE_TIMEOUT_MS - ANSWER_TIMEOUT_MS - 20_000;
+      const lastAttempt = ctx.attempt >= ANSWER_MAX_ATTEMPTS;
+      const leftOver: string[] = []; // questions to ask in the next attempt
       let stopReason: string | null = null; // set once the cap or a missing price makes further calls pointless
       const errors: unknown[] = [];
-      const answers = await mapLimit(set.prompts, ANSWER_CONCURRENCY, async (p): Promise<EngineAnswer> => {
+      const results = await mapLimit(set.prompts, spec.concurrency, async (p): Promise<EngineAnswer | null> => {
+        const earlier = kept.get(p.id);
+        if (earlier) return earlier;
         if (stopReason) return unavailable(p.id, stopReason, "error");
+        if (Date.now() > startBy && !lastAttempt) {
+          leftOver.push(p.id);
+          return null;
+        }
         const request = { question: p.text, location: set.location, maxSearches: spec.maxSearches };
         const requestedAt = new Date().toISOString();
         let r;
@@ -147,6 +190,10 @@ function answersStage(engine: EngineIndex): StageDefinition {
         } catch (e) {
           errors.push(e);
           if (e instanceof SpendingCapError || e instanceof MissingPricingError) stopReason = errorMessage(e);
+          else if (!lastAttempt && !ctx.signal.aborted && (isRateLimited(e) || isAnswerTimeout(e))) {
+            leftOver.push(p.id);
+            return null;
+          }
           return unavailable(p.id, errorMessage(e), "error");
         }
         const ok = r.status === "ok" && r.text.trim().length > 0;
@@ -168,6 +215,13 @@ function answersStage(engine: EngineIndex): StageDefinition {
           r.raw,
         );
       });
+      if (leftOver.length) {
+        const have = results.filter((a) => a?.status === "ok").length;
+        const why = errors.find(isRateLimited) ? "the provider's rate limit" : "time";
+        // Retryable: the queue retries with a growing wait; kept answers are reused then.
+        throw new Error(`${name}: ${have} of ${set.prompts.length} answered so far; ${leftOver.length} left because of ${why}. Continuing in the next attempt.`);
+      }
+      const answers = results.filter((a): a is EngineAnswer => a !== null);
       if (!answers.some((a) => a.status === "ok" || a.status === "refused")) {
         const first = errors[0];
         const message = `No ${name} answers: ${first ? errorMessage(first) : "every answer was empty"}`;
