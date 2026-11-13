@@ -5,7 +5,7 @@ const config = [
   ...nextVitals,
   ...nextTs,
   {
-    ignores: [".next/**", "node_modules/**", "next-env.d.ts", "coverage/**", "playwright-report/**", "test-results/**"],
+    ignores: ["src/report/generated/**", "public/**", ".next/**", "node_modules/**", "next-env.d.ts", "coverage/**", "playwright-report/**", "test-results/**"],
   },
   {
     // The report engine (stage registry + stage functions) must stay independent of the worker/HTTP layer,

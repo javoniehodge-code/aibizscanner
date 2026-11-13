@@ -88,6 +88,19 @@ scheduling, error and usage fields until they finish; then they are frozen. Reru
 - Milestone 1 registers two dummy stages: `dummy_priced_call` (a fake priced call against the `dummy/fake-model-1`
   price row; no AI API is called) and `dummy_summary` (reads its output, to show stale marking).
 
+## Report rendering
+
+- The template lives in `../design/reports/full-business-diagnostic.dc.html` and renders only from a report JSON
+  (`../fixtures/report.schema.json`, zod source `src/report/schema.ts`).
+- `npm run report:sync` (runs automatically before dev, build, typecheck and tests) copies the template, `support.js`
+  and the vendored React/Babel into `public/report-template/`, and the template + fixtures into `src/report/generated/`.
+  Both are generated, not committed.
+- `/reports/[id]` shows the report in an iframe whose document is `/reports/[id]/document`: the template with the
+  latest `report_document` JSON injected (admins only).
+- *Load example reports* on `/reports` loads `fixtures/brownstone.json` and `fixtures/mvp-miami.json` (idempotent).
+- `npm run report:extract-fixtures` re-extracts the fixtures from the legacy design files; `npm run report:schema`
+  regenerates the JSON Schema. CI checks both are up to date.
+
 ## End-to-end tests
 
 ```bash
@@ -97,6 +110,9 @@ cd .. && supabase start && cd web
 npm run build
 npm run e2e
 ```
+
+`e2e/report-template.spec.ts` renders the original Brownstone template (from git history, commit `879241a`) and the
+JSON-driven one, and compares every slide; it needs full git history (`git fetch --unshallow` in shallow clones).
 
 The global setup creates two local test users (one admin, one not). It refuses to run against anything but `127.0.0.1`/`localhost`.
 To use an already-installed Chromium, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE`; otherwise run `npx playwright install chromium`.
