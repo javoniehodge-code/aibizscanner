@@ -91,7 +91,7 @@ const answer = z.discriminatedUnion("status", [
 ]);
 export type Answer = z.infer<typeof answer>;
 
-const promptAnalysis = z
+export const promptAnalysis = z
   .object({
     groups: z.array(val(z.object({ name: nonEmpty, description: nonEmpty }).strict())).min(1),
     businesses: z.array(val(z.object({ key: businessKey, name: nonEmpty }).strict())).min(1),
@@ -403,7 +403,7 @@ export const COPY_KEYS = [
 
 const copy = z.object(Object.fromEntries(COPY_KEYS.map((k) => [k, maybe(copyText)])) as Record<(typeof COPY_KEYS)[number], ReturnType<typeof maybe<typeof copyText>>>).strict();
 
-const evidenceEntry = z
+export const evidenceEntry = z
   .object({
     source: nonEmpty,
     ref: nonEmpty,
@@ -539,3 +539,6 @@ export function stripProvenance(doc: unknown): unknown {
   }
   return doc;
 }
+
+export type PromptAnalysisSection = z.infer<typeof promptAnalysis>;
+export type EvidenceEntry = z.infer<typeof evidenceEntry>;

@@ -55,3 +55,79 @@ export const storedAnswer = z
   })
   .strict();
 export type StoredAnswer = z.infer<typeof storedAnswer>;
+
+// ---------------------------------------------------------------------------------------------------------------
+// Stage outputs
+// ---------------------------------------------------------------------------------------------------------------
+
+const text = z.string().trim().min(1);
+
+/** pa_prompt_set: the approved prompt set and the business it is about (params and output are the same). */
+export const promptSetSpec = z
+  .object({
+    promptSet: z.object({ id: z.string().uuid(), version: z.number().int().positive(), approvedAt: z.string() }).strict(),
+    target: z
+      .object({
+        name: text,
+        aliases: z.array(text),
+        domains: z.array(text),
+        location: text,
+        category: text,
+      })
+      .strict(),
+    /** Approximate customer location sent to engines that accept one. */
+    location: z.object({ city: text, region: text, country: z.string().regex(/^[A-Z]{2}$/), timezone: text }).strict().nullable(),
+    groups: z.array(z.object({ name: text, description: text }).strict()).min(1),
+    prompts: z
+      .array(z.object({ id: z.string().regex(/^P\d+$/), group: z.number().int().min(0), demand: text, text: text }).strict())
+      .min(1)
+      .max(30),
+  })
+  .strict()
+  .superRefine((s, ctx) => {
+    const ids = new Set<string>();
+    s.prompts.forEach((p, i) => {
+      if (ids.has(p.id)) ctx.addIssue({ code: "custom", message: `Duplicate prompt id ${p.id}`, path: ["prompts", i] });
+      ids.add(p.id);
+      if (p.group >= s.groups.length) ctx.addIssue({ code: "custom", message: `Prompt ${p.id} group out of range`, path: ["prompts", i] });
+    });
+  });
+export type PromptSetSpec = z.infer<typeof promptSetSpec>;
+
+/**
+ * One engine answer as passed downstream. answerId is the engine_answer row holding the original answer and the
+ * provider's full response (the evidence).
+ */
+export const engineAnswer = storedAnswer.extend({
+  searchQueries: z.array(z.string()),
+  servedModel: z.string().nullable(),
+  requestId: z.string().nullable(),
+});
+export type EngineAnswer = z.infer<typeof engineAnswer>;
+
+/** pa_answers_chatgpt / _claude / _gemini. */
+export const engineAnswers = z
+  .object({
+    engine: z.number().int().min(0).max(2),
+    provider: z.string(),
+    model: z.string(),
+    settings: z.record(z.string(), z.json()),
+    configured: z.boolean(),
+    answers: z.array(engineAnswer),
+  })
+  .strict();
+export type EngineAnswers = z.infer<typeof engineAnswers>;
+
+/** pa_extract: one entry per usable answer. "failed": no extraction passed the quote check (the answer becomes unavailable). */
+export const extractions = z
+  .object({
+    model: z.string(),
+    items: z.array(
+      z.discriminatedUnion("status", [
+        z.object({ answerId: z.string(), status: z.literal("verified"), extraction: answerExtraction, attempts: z.number().int() }).strict(),
+        z.object({ answerId: z.string(), status: z.literal("failed"), error: z.string(), attempts: z.number().int() }).strict(),
+      ]),
+    ),
+  })
+  .strict();
+export type Extractions = z.infer<typeof extractions>;

@@ -1,6 +1,7 @@
 import { backoffMs, estimateCostUsd } from "./cost";
 import { MissingPricingError, NonRetryableError, SpendingCapError, StageTimeoutError, errorMessage, isRetryable } from "./errors";
 import { hashJson } from "./json";
+import type { AnswerEngines } from "./answers";
 import { createStructuredCall, instructionRef, type LlmClient } from "./llm";
 import type { StageRegistry } from "./registry";
 import type { ClaimedRun, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
@@ -13,6 +14,9 @@ export type RunOutcome =
   | { runId: string; stage: string; outcome: "lost" };
 
 export type Clock = { now(): Date };
+
+/** Paid-API clients the worker hands to stages. Missing ones make ctx.llm throw / ctx.answerEngine return null. */
+export type Providers = { llm?: LlmClient | null; answers?: AnswerEngines };
 
 /** Data that doesn't match its declared schema. Never retried: the same code would produce the same result. */
 export class SchemaError extends NonRetryableError {
@@ -37,7 +41,7 @@ export async function executeRun(
   registry: StageRegistry,
   run: ClaimedRun,
   clock: Clock = systemClock,
-  llmClient: LlmClient | null = null,
+  providers: Providers = {},
 ): Promise<RunOutcome> {
   const base = { runId: run.id, stage: run.stage };
   const stage = registry.get(run.stage);
@@ -59,6 +63,9 @@ export async function executeRun(
   });
 
   let attemptCost = 0;
+  // Estimates of this attempt's calls still in flight. Stages may run calls concurrently; each cap check counts the
+  // others' estimates so together they can't pass the cap.
+  let inFlightUsd = 0;
   try {
     // Instructions: the versions in the code must be the ones recorded when the run was queued.
     const refs = await Promise.all((stage.instructions ?? []).map(instructionRef));
@@ -87,8 +94,19 @@ export async function executeRun(
       const pricing = await store.latestPricing(spec.provider, spec.model);
       if (!pricing) throw new MissingPricingError(spec.provider, spec.model);
       const estimate = estimateCostUsd(pricing, spec.estimate);
-      const [spent, cap] = await Promise.all([store.reportSpendUsd(run.reportId), store.reportSpendingCapUsd(run.reportId)]);
-      if (spent + estimate > cap) throw new SpendingCapError(spent, estimate, cap);
+      inFlightUsd += estimate;
+      let reserved = true;
+      const release = () => {
+        if (reserved) inFlightUsd -= estimate;
+        reserved = false;
+      };
+      try {
+        const [spent, cap] = await Promise.all([store.reportSpendUsd(run.reportId), store.reportSpendingCapUsd(run.reportId)]);
+        if (spent + inFlightUsd > cap) throw new SpendingCapError(spent + inFlightUsd - estimate, estimate, cap);
+      } catch (e) {
+        release();
+        throw e;
+      }
 
       const started = Date.now();
       try {
@@ -107,6 +125,7 @@ export async function executeRun(
           succeeded: true,
           error: null,
         });
+        release();
         return result;
       } catch (e) {
         // A failed call is still logged. Without a usage report we assume one billed request and no tokens.
@@ -125,6 +144,7 @@ export async function executeRun(
           succeeded: false,
           error: errorMessage(e),
         });
+        release();
         throw e;
       }
     };
@@ -137,8 +157,10 @@ export async function executeRun(
       inputs,
       signal: controller.signal,
       paidCall,
+      recordEngineAnswer: (r) => store.recordEngineAnswer(r),
+      answerEngine: (engine) => providers.answers?.(engine) ?? null,
       llm: createStructuredCall({
-        client: llmClient,
+        client: providers.llm ?? null,
         declared: refs,
         stageRunId: run.id,
         attempt: run.attempt,

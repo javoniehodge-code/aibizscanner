@@ -30,6 +30,15 @@ function Status({ status, stale }: { status: string; stale: boolean }) {
   );
 }
 
+/** The stage's default parameters as JSON, or null when it has none (it is started from its own screen). */
+function defaultParams(stage: { parseParams(raw: unknown): unknown }): string | null {
+  try {
+    return JSON.stringify(stage.parseParams({}));
+  } catch {
+    return null;
+  }
+}
+
 export default async function RunMonitorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!z.uuid().safeParse(id).success) notFound();
@@ -70,9 +79,12 @@ export default async function RunMonitorPage({ params }: { params: Promise<{ id:
         time {formatDuration(roll?.duration_ms)} · {formatCount(roll?.tokens_in)} tokens in / {formatCount(roll?.tokens_out)} out ·{" "}
         {formatCount(roll?.search_calls)} search calls · {roll?.failed_runs ?? 0} failed runs
       </p>
+      <p>
+        <Link href={`/reports/${id}/prompt-analysis`}>Prompt analysis results</Link> · <Link href={`/reports/${id}/prompts`}>Prompt set</Link>
+      </p>
       <ProcessQueueButton reportId={id} />
       <p className="muted">
-        The worker also runs every minute via Supabase pg_cron once it is configured (docs/build/milestone-1-setup.md).
+        The worker also runs every minute via Supabase pg_cron once it is configured (docs/build/milestone-1-setup.md). “Process queue now” only runs short stages; AI engine stages need the scheduled worker (up to 5 minutes each).
       </p>
 
       <h2>Stages</h2>
@@ -125,12 +137,14 @@ export default async function RunMonitorPage({ params }: { params: Promise<{ id:
                 <td style={{ minWidth: 170 }}>
                   {busy ? (
                     <span className="muted">in queue</span>
+                  ) : defaultParams(stage) === null ? (
+                    <Link href={`/reports/${id}/prompts`}>Start from the prompt set page</Link>
                   ) : (
                     <StageRunButton
                       reportId={id}
                       stage={stage.id}
                       label={latest ? "Rerun this stage" : "Run"}
-                      defaultParams={JSON.stringify(stage.parseParams({}))}
+                      defaultParams={defaultParams(stage) ?? "{}"}
                     />
                   )}
                 </td>

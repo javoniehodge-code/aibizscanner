@@ -84,7 +84,7 @@ describe("ctx.llm inside a stage run", () => {
   it("validates output, records the call with its instruction version and raw response, and logs cost", async () => {
     const s = store();
     const client = new FakeLlmClient(() => '{"label":"no","quote":"Say no."}');
-    const result = await executeRun(s, registry, await claimed(), undefined, client);
+    const result = await executeRun(s, registry, await claimed(), undefined, { llm: client });
     expect(result).toMatchObject({ outcome: "done" });
     expect(s.finished?.output).toEqual({ label: "no", quote: "Say no." });
     expect(s.instructions).toEqual([{ ...(await instructionRef(instruction)), text: instruction.text }]);
@@ -95,7 +95,7 @@ describe("ctx.llm inside a stage run", () => {
 
   it("invalid model output fails the attempt visibly, is recorded, and is retried; nothing is stored as done", async () => {
     const s = store();
-    const result = await executeRun(s, registry, await claimed(), undefined, new FakeLlmClient(() => '{"label":"maybe"}'));
+    const result = await executeRun(s, registry, await claimed(), undefined, { llm: new FakeLlmClient(() => '{"label":"maybe"}') });
     expect(result).toMatchObject({ outcome: "retry", error: expect.stringMatching(/failed validation/) });
     expect(s.finished).toBeNull();
     expect(s.llmCalls[0]).toMatchObject({ valid: false, output: null, error: expect.stringMatching(/label/) });
@@ -103,14 +103,14 @@ describe("ctx.llm inside a stage run", () => {
 
   it("fails without retrying when no LLM client is configured", async () => {
     const s = store();
-    const result = await executeRun(s, registry, await claimed(), undefined, null);
+    const result = await executeRun(s, registry, await claimed(), undefined, { llm: null });
     expect(result).toMatchObject({ outcome: "failed", error: expect.stringMatching(/No LLM client/) });
   });
 
   it("refuses to run if the instruction text changed after the run was queued", async () => {
     const s = store();
     const stale = await claimed({ instructions: [{ id: "test/classify", version: 1, sha256: "0".repeat(64) }] });
-    const result = await executeRun(s, registry, stale, undefined, new FakeLlmClient(() => "{}"));
+    const result = await executeRun(s, registry, stale, undefined, { llm: new FakeLlmClient(() => "{}") });
     expect(result).toMatchObject({ outcome: "failed", error: expect.stringMatching(/instructions changed/) });
     expect(s.llmCalls).toHaveLength(0);
   });
@@ -119,7 +119,7 @@ describe("ctx.llm inside a stage run", () => {
     const other = defineInstruction({ id: "test/other", version: 1, text: "x" });
     const sneaky: StageDefinition = { ...classify, id: "test_sneaky", instructions: [instruction], run: async (ctx) => ({ status: "done", output: await ctx.llm({ instruction: other, model: schemaModel, input: {}, output: out }) }) };
     const s = store();
-    const result = await executeRun(s, createRegistry([sneaky]), await claimed({ stage: "test_sneaky" }), undefined, new FakeLlmClient(() => '{"label":"yes","quote":""}'));
+    const result = await executeRun(s, createRegistry([sneaky]), await claimed({ stage: "test_sneaky" }), undefined, { llm: new FakeLlmClient(() => '{"label":"yes","quote":""}') });
     expect(result).toMatchObject({ outcome: "failed", error: expect.stringMatching(/not declared/) });
   });
 });

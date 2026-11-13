@@ -331,14 +331,14 @@ isOneToOne: false
                   ]
                 },"prompt_set": {
                   Row: {
-                    "approved_at": string | null,"approved_by": string | null,"created_at": string,"created_by": string | null,"id": string,"prompts": NonNullable<Json>,"report_id": string,"version": number
+                    "approved_at": string | null,"approved_by": string | null,"created_at": string,"created_by": string | null,"customer_location": Json | null,"groups": NonNullable<Json>,"id": string,"prompts": NonNullable<Json>,"report_id": string,"version": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"prompts"?: NonNullable<Json>,"report_id": string,"version": number
+                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"customer_location"?: Json | null,"groups"?: NonNullable<Json>,"id"?: string,"prompts"?: NonNullable<Json>,"report_id": string,"version": number
                   }
                   Update: {
-                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"prompts"?: NonNullable<Json>,"report_id"?: string,"version"?: number
+                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"customer_location"?: Json | null,"groups"?: NonNullable<Json>,"id"?: string,"prompts"?: NonNullable<Json>,"report_id"?: string,"version"?: number
                   }
                   Relationships: [
                     {

@@ -20,3 +20,12 @@ export function serverEnv(): ServerEnv {
   }
   return result.data;
 }
+
+/** AI provider keys (Vercel environment variables). Each is optional: a missing key leaves that provider unconfigured. */
+export function providerKeys(): { openai: string | null; anthropic: string | null; gemini: string | null } {
+  const get = (name: string) => {
+    const v = process.env[name]?.trim();
+    return v ? v : null;
+  };
+  return { openai: get("OPENAI_API_KEY"), anthropic: get("ANTHROPIC_API_KEY"), gemini: get("GEMINI_API_KEY") };
+}

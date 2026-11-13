@@ -9,9 +9,11 @@ import { runTick } from "@/worker/tick";
  * with `Authorization: Bearer $CRON_SECRET`. Claims and runs queued stage runs within the function time limit.
  */
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+// Asking an AI engine a dozen questions with web search takes minutes. 300 s is the Vercel limit on every plan with
+// Fluid compute (on by default); the tick claims only runs whose timeout fits in what is left.
+export const maxDuration = 300;
 
-const TICK_BUDGET_MS = 50_000;
+const TICK_BUDGET_MS = 290_000;
 
 export async function POST(request: NextRequest) {
   let secret: string;
