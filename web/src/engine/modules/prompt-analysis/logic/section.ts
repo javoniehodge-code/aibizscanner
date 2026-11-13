@@ -59,7 +59,8 @@ export function buildPromptAnalysisSection(input: {
     prompts: set.prompts,
     answers,
     extractions: extracted,
-    target: { key: targetKey, name: set.target.name, aliases: set.target.aliases },
+    // Answers sometimes name a business by its website ("mvpmiami.com"), so the domains count as names too.
+    target: { key: targetKey, name: set.target.name, aliases: [...set.target.aliases, ...set.target.domains] },
     ownDomains: set.target.domains,
   });
 

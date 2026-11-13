@@ -42,6 +42,23 @@ describe("extraction output", () => {
     expect(normalizeText("It’s  the “BEST” — really")).toBe(normalizeText("it's the \"best\" - really"));
   });
 
+  it("quotes are matched across Markdown formatting and inline source links (seen in the first real ChatGPT run)", () => {
+    const answer =
+      "**LIMITLESS Exotics Miami** — known for its “**Elite Black Card**” membership ([limitlessexotics.com](https://limitlessexotics.com/?utm_source=chatgpt.com)). *Prestige Luxury Rentals* publishes [stated prices](https://prestige.example/prices) online.";
+    const ex: AnswerExtraction = {
+      businesses: [
+        { name: "LIMITLESS Exotics Miami", status: "mentioned", quote: "LIMITLESS Exotics Miami — known for", reason: "its “Elite Black Card” membership" },
+        { name: "Prestige Luxury Rentals", status: "mentioned", quote: "Prestige Luxury Rentals publishes", reason: "Publishes stated prices online" },
+      ],
+      grouped: false,
+      firstChoice: null,
+      namedSources: [],
+    };
+    expect(unverifiedQuotes(ex, answer)).toEqual([]);
+    // Words still have to be there.
+    expect(unverifiedQuotes({ ...ex, businesses: [{ ...ex.businesses[0]!, reason: "its Gold Card membership" }] }, answer)).toHaveLength(1);
+  });
+
   it("a paraphrased or invented quote, reason or name is reported, so the extraction is rejected", () => {
     const bad: AnswerExtraction = {
       ...P1_EXTRACTION,
@@ -77,6 +94,16 @@ describe("names", () => {
     expect(matchBusiness("brownstone moving", [TARGET])).toBe("BM");
     expect(matchBusiness("Brownstone Movers Inc", [TARGET])).toBe("BM");
     expect(matchBusiness("Brownstone Storage", [TARGET])).toBeNull();
+    // Seen in the first real run: Gemini wrote "MVP Miami (MVP Exotics)".
+    const MVP = { key: "MM", name: "MVP Miami", aliases: ["mvpmiami.com"] };
+    expect(matchBusiness("MVP Miami (MVP Exotics)", [MVP])).toBe("MM");
+    expect(matchBusiness("MVP Exotics (MVP Miami)", [MVP])).toBe("MM");
+    expect(matchBusiness("MVP Miami Exotic Rentals", [MVP])).toBe("MM");
+    expect(matchBusiness("mvpmiami.com", [MVP])).toBe("MM");
+    expect(matchBusiness("MVP Rentals", [MVP])).toBeNull();
+    expect(matchBusiness("Miami Exotics", [MVP])).toBeNull();
+    // An exact match on another business wins over a longer-name match.
+    expect(matchBusiness("MVP Miami Exotic Rentals", [MVP, { key: "ME", name: "MVP Miami Exotic Rentals" }])).toBe("ME");
   });
   it("makes short unique keys in the report's format", () => {
     expect(newBusinessKey("Red Hook Moving Co.", new Set())).toBe("RHM");

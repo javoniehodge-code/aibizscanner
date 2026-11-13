@@ -4,6 +4,7 @@ import { z } from "zod";
 import { assembledSection } from "@/engine/modules/prompt-analysis/stages";
 import { createClient } from "@/lib/supabase/server";
 import { formatUsd } from "@/lib/format";
+import { CapForm } from "./cap-form";
 
 export const metadata = { title: "Prompt analysis — AIBizScanner internal" };
 
@@ -64,7 +65,8 @@ export default async function PromptAnalysisPage({ params }: { params: Promise<{
         Prompt analysis — {report.business?.name} v{report.version}
       </h1>
       <p>
-        Spent <strong data-testid="pa-spent">{formatUsd(rollRes.data?.cost_usd)}</strong> of the {formatUsd(report.spending_cap_usd)} cap.
+        Spent <strong data-testid="pa-spent">{formatUsd(rollRes.data?.cost_usd)}</strong> of the {formatUsd(report.spending_cap_usd)} cap.{" "}
+        <CapForm reportId={id} cap={Number(report.spending_cap_usd)} />
       </p>
 
       <ol className="stage-steps" data-testid="pa-progress" style={{ display: "flex", gap: 18, listStyle: "none", padding: 0, flexWrap: "wrap" }}>

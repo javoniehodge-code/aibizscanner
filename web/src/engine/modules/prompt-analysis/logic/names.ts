@@ -17,12 +17,24 @@ export function normalizeName(name: string): string {
     .join(" ");
 }
 
-/** Key of the known business this name refers to (exact match on the normalized name or an alias), or null. */
+/** The ways one written name can be read: as written, without its brackets, and what is inside the brackets. */
+function nameVariants(name: string): string[] {
+  const inside = [...name.matchAll(/\(([^)]*)\)/g)].map((m) => m[1] ?? "");
+  return [...new Set([name, name.replace(/\([^)]*\)/g, " "), ...inside].map(normalizeName).filter(Boolean))];
+}
+
+/**
+ * Key of the known business this name refers to, or null. Matches when any reading of the name (see nameVariants)
+ * equals the business's name or an alias, or starts with a name of two or more words followed by more words
+ * ("MVP Miami (MVP Exotics)", "MVP Miami Exotic Rentals" -> MVP Miami). Exact matches win over longer-name matches.
+ */
 export function matchBusiness(name: string, known: readonly KnownBusiness[]): string | null {
-  const n = normalizeName(name);
-  if (!n) return null;
+  const variants = nameVariants(name);
+  if (!variants.length) return null;
+  const namesOf = (b: KnownBusiness) => [b.name, ...(b.aliases ?? [])].map(normalizeName).filter(Boolean);
+  for (const b of known) if (namesOf(b).some((n) => variants.includes(n))) return b.key;
   for (const b of known) {
-    if ([b.name, ...(b.aliases ?? [])].some((x) => normalizeName(x) === n)) return b.key;
+    if (namesOf(b).some((n) => n.includes(" ") && variants.some((v) => v.startsWith(n + " ")))) return b.key;
   }
   return null;
 }
