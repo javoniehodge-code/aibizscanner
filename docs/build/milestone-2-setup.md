@@ -77,7 +77,7 @@ the reading model can be wrong, and those checks become our first evaluation cas
 | --- | --- | --- |
 | ChatGPT model | `gpt-6.1-sol` (OpenAI API, web search) | OpenAI's newest general model at $2 / $10 per million tokens. Their top model, `gpt-6-astra`, costs 5× more and alone would use most of the $5 cap. |
 | Claude model | `claude-sonnet-5-5` (Anthropic API, web search) | Anthropic's current Sonnet, at half Opus's price per token. The first run used `claude-opus-5-5` and spent $2.26 of the $5 cap on Claude alone, mostly reading search results, so we switched (13 Nov 2026). If its safety system declines a question, Anthropic's **refusal fallback** is on: another Claude model answers and the answer records which model served it. |
-| Gemini model | `gemini-3.1-pro-preview` (Gemini API, Google Search grounding) | Google's current Pro model in the SDK. Third-party sites mention a newer "Gemini 4" model I couldn't confirm on Google's own pages. |
+| Gemini model | `gemini-pro-latest` (Gemini API, Google Search grounding) | Google's alias for its current Pro model. `gemini-3.1-pro-preview` returned "not found" for our key on the first run. Each answer records the exact model that served it. Priced conservatively ($4 / $20 per MTok) until that model's price is confirmed. |
 | Reading model | `claude-haiku-5-5` | Cheap and fast. It only lists who an answer names; plain code checks that every quote really appears in the answer, and does all counting. |
 | Searches | up to 3 per answer (ChatGPT, Claude); Gemini decides itself | Keeps cost predictable. |
 | Settings | provider defaults, no temperature | Closest to what a customer gets. Answers vary from run to run, so a rerun can differ. |

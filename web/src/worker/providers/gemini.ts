@@ -32,7 +32,8 @@ async function resolveCitation(uri: string, title: string | undefined, signal: A
 
 /** Gemini engine: generateContent with Grounding with Google Search. Provider defaults otherwise. */
 export function geminiEngine(apiKey: string): AnswerEngine {
-  const ai = new GoogleGenAI({ apiKey });
+  // v1beta serves every Gemini API model (aliases and previews) and Google Search grounding.
+  const ai = new GoogleGenAI({ apiKey, apiVersion: "v1beta" });
   const settings = { tool: "googleSearch" };
   return {
     engine: 2,

@@ -197,6 +197,21 @@ describe("prompt analysis pipeline (fake providers)", () => {
     expect(store.usage.filter((u) => u.succeeded)).toHaveLength(2);
   });
 
+  it("an unknown model fails the step at once instead of retrying", async () => {
+    const notFound: AnswerEngine = {
+      ...fakeEngine(2),
+      async ask() {
+        throw new Error('{"error":{"code":404,"message":"models/x is not found for API version v1","status":"NOT_FOUND"}}');
+      },
+    };
+    const providers: Providers = { answers: (e) => (e === 2 ? notFound : null) };
+    const set = await run("pa_prompt_set", [], providers, SET as unknown as Record<string, JsonValue>);
+    const g = await run("pa_answers_gemini", [set.input], providers);
+    expect(g.outcome.outcome).toBe("failed");
+    expect(g.store.retried).toBeNull();
+    expect(g.store.finished?.error).toMatch(/No Gemini answers: .*not found/);
+  });
+
   it("refuses a prompt set with a question in an unknown group", () => {
     const bad = { ...SET, prompts: [{ ...SET.prompts[0]!, group: 3 }] };
     expect(() => registry.get("pa_prompt_set")!.parseParams(bad)).toThrow(/group out of range/);

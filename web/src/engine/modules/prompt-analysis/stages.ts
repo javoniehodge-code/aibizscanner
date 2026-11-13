@@ -31,6 +31,12 @@ function isRateLimited(e: unknown): boolean {
   const status = (e as { status?: unknown; code?: unknown } | null)?.status ?? (e as { code?: unknown } | null)?.code;
   return status === 429 || /\b429\b|rate limit|RESOURCE_EXHAUSTED/i.test(errorMessage(e));
 }
+/** A request the provider will refuse every time (unknown model, bad key, bad request): no point retrying. */
+function isPermanent(e: unknown): boolean {
+  const o = e as { status?: unknown; code?: unknown } | null;
+  const status = typeof o?.status === "number" ? o.status : typeof o?.code === "number" ? o.code : Number(/"code":\s*(\d{3})/.exec(errorMessage(e))?.[1]);
+  return Number.isInteger(status) && status >= 400 && status < 500 && status !== 408 && status !== 429;
+}
 /** The answer took longer than ANSWER_TIMEOUT_MS. */
 function isAnswerTimeout(e: unknown): boolean {
   return /timed? ?out|TimeoutError|aborted/i.test(`${(e as { name?: string } | null)?.name ?? ""} ${errorMessage(e)}`);
@@ -225,7 +231,7 @@ function answersStage(engine: EngineIndex): StageDefinition {
       if (!answers.some((a) => a.status === "ok" || a.status === "refused")) {
         const first = errors[0];
         const message = `No ${name} answers: ${first ? errorMessage(first) : "every answer was empty"}`;
-        if (first && errors.every(isRetryable)) throw new Error(message);
+        if (first && errors.every((e) => isRetryable(e) && !isPermanent(e))) throw new Error(message);
         throw new NonRetryableError(message);
       }
       const output: EngineAnswers = { engine, provider: client.provider, model: client.model, settings: client.settings, configured: true, answers };
