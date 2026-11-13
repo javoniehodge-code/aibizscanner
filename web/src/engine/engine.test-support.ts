@@ -53,6 +53,9 @@ export class MemoryStore implements RunStore {
     this.engineAnswers.push({ ...r, id });
     return id;
   }
+  async loadEngineAnswers(stageRunId: string) {
+    return this.engineAnswers.filter((a) => a.stageRunId === stageRunId);
+  }
   async retry(_id: string, _attempt: number, error: string, runAfter: Date) {
     if (!this.ownsRun) return false;
     this.retried = { error, runAfter };

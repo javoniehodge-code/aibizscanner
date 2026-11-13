@@ -7,7 +7,7 @@ import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
 const SPEC = ENGINE_MODELS[1];
-/** Server-side refusal fallback: if Opus 5.5's safety system declines, the API re-runs the request on another model. */
+/** Server-side refusal fallback: if Claude's safety system declines, the API re-runs the request on another model. */
 const FALLBACK_BETA = "server-side-fallback-2026-07-01";
 /** A long search turn can pause; we send it back to continue, at most this many times. */
 const MAX_CONTINUATIONS = 4;
@@ -23,7 +23,7 @@ function addUsage(total: Usage, u: { input_tokens: number; output_tokens: number
  * defaults otherwise (adaptive thinking at default effort). Refusal fallbacks are on ("default").
  */
 export function anthropicEngine(apiKey: string): AnswerEngine {
-  const client = new Anthropic({ apiKey, maxRetries: 1 });
+  const client = new Anthropic({ apiKey, maxRetries: 2 });
   const settings = { tool: "web_search_20260209", fallbacks: "default", max_tokens: 16000 };
   return {
     engine: 1,
@@ -96,7 +96,7 @@ export function anthropicEngine(apiKey: string): AnswerEngine {
 
 /** Structured extraction calls (ctx.llm) for provider "anthropic". */
 export function anthropicLlm(apiKey: string): LlmClient {
-  const client = new Anthropic({ apiKey, maxRetries: 1 });
+  const client = new Anthropic({ apiKey, maxRetries: 2 });
   return {
     async complete(request, signal) {
       const effort = typeof request.settings.effort === "string" ? (request.settings.effort as "low" | "medium" | "high") : undefined;

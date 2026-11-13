@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { hasBearerSecret } from "@/lib/bearer";
 import { serverEnv } from "@/lib/server-env";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -7,6 +7,11 @@ import { runTick } from "@/worker/tick";
 /**
  * Worker entry point. Called every minute by Supabase pg_cron + pg_net (see supabase/migrations/*_worker_cron.sql)
  * with `Authorization: Bearer $CRON_SECRET`. Claims and runs queued stage runs within the function time limit.
+ *
+ * Calls from pg_cron (body {"source":"pg_cron"}) get 202 at once and the tick runs after the response. pg_net works
+ * through its requests in batches, so a call held open for minutes would delay the next minute's call: with an
+ * immediate reply, each minute starts a new tick and long stages (e.g. the three AI engines) run side by side.
+ * Other callers (tests, manual calls) wait for the tick and get its summary.
  */
 export const dynamic = "force-dynamic";
 // Asking an AI engine a dozen questions with web search takes minutes. 300 s is the Vercel limit on every plan with
@@ -24,6 +29,18 @@ export async function POST(request: NextRequest) {
   }
   if (!hasBearerSecret(request.headers.get("authorization"), secret)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const body = (await request.json().catch(() => null)) as { source?: unknown } | null;
+  if (body?.source === "pg_cron") {
+    after(async () => {
+      try {
+        const summary = await runTick(createServiceClient(), TICK_BUDGET_MS);
+        if (summary.runs.length) console.log("worker tick", JSON.stringify(summary));
+      } catch (e) {
+        console.error("worker tick failed", e);
+      }
+    });
+    return NextResponse.json({ accepted: true }, { status: 202 });
   }
   try {
     const summary = await runTick(createServiceClient(), TICK_BUDGET_MS);
