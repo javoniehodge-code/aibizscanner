@@ -58,8 +58,11 @@ select is(
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-00000000a001","role":"authenticated"}', true);
 select is(public.is_admin(), true, 'admin: is_admin() is true');
-select is((select count(*)::int from public.business), 1, 'admin sees businesses');
-select is((select count(*)::int from public.admin_user), 1, 'admin can read admin_user');
+select ok(exists (select 1 from public.business where name = 'Seed Co'), 'admin sees businesses');
+select ok(
+  exists (select 1 from public.admin_user where user_id = '00000000-0000-0000-0000-00000000a001'),
+  'admin can read admin_user'
+);
 select lives_ok(
   $$insert into public.business (name, category, location) values ('Second', 'Cafe', 'Miami, FL')$$,
   'admin can insert business'

@@ -2,7 +2,7 @@
 const PUBLIC_PATHS = new Set(["/login"]);
 
 /** Paths that authenticate themselves (e.g. bearer tokens) and must not be redirected to /login. */
-const SELF_AUTHENTICATED_PREFIXES: readonly string[] = [];
+const SELF_AUTHENTICATED_PREFIXES: readonly string[] = ["/api/worker"];
 
 export function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.has(pathname);

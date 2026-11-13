@@ -24,3 +24,13 @@ describe("safeNextPath", () => {
     expect(safeNextPath(input)).toBe(expected);
   });
 });
+
+describe("isSelfAuthenticatedPath", () => {
+  it("only the worker API authenticates itself (bearer token)", async () => {
+    const { isSelfAuthenticatedPath } = await import("./auth-paths");
+    expect(isSelfAuthenticatedPath("/api/worker/tick")).toBe(true);
+    expect(isSelfAuthenticatedPath("/api/worker")).toBe(true);
+    expect(isSelfAuthenticatedPath("/api/workers")).toBe(false);
+    expect(isSelfAuthenticatedPath("/health")).toBe(false);
+  });
+});
