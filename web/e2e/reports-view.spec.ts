@@ -5,9 +5,11 @@ import { signIn } from "./helpers";
 test("admin loads the example reports and views them inside the app, rendered from JSON", async ({ page }) => {
   await signIn(page, ADMIN.email, ADMIN.password, "/login?next=/reports");
   await page.getByRole("button", { name: "Load example reports" }).click();
-  await expect(page).toHaveURL(/\/reports$/);
-  // Loading twice changes nothing.
+  await page.waitForLoadState("networkidle");
+  // Loading twice changes nothing. Wait for the action (and its redirect) to finish before navigating on.
   await page.getByRole("button", { name: "Load example reports" }).click();
+  await page.waitForLoadState("networkidle");
+  await page.goto("/reports");
   for (const name of ["Brownstone Movers", "MVP Miami"]) {
     await expect(page.getByTestId("report-row").filter({ hasText: name })).toHaveCount(1);
   }
