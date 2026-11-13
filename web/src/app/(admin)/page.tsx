@@ -7,6 +7,9 @@ export default function Home() {
       <p className="muted">Private tool for testing the Full Business Diagnostic. Milestone 1 skeleton.</p>
       <ul>
         <li>
+          <Link href="/businesses">Businesses</Link> — list, add and edit test businesses
+        </li>
+        <li>
           <Link href="/health">Health</Link> — database connection and deployed commit
         </li>
       </ul>

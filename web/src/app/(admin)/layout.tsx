@@ -14,6 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       >
         <strong>AIBizScanner internal</strong>
         <Link href="/">Home</Link>
+        <Link href="/businesses">Businesses</Link>
         <Link href="/health">Health</Link>
         <span style={{ marginLeft: "auto" }} className="muted">
           {session.email}
