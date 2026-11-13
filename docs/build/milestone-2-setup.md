@@ -4,7 +4,7 @@ Plain-English steps to run a real prompt analysis for MVP Miami. ChatGPT, Claude
 customer questions, with web search on. Do Milestone 1 first ([milestone-1-setup.md](milestone-1-setup.md)): the app
 must be deployed and the background worker running. Allow about 20 minutes plus the run itself (5–10 minutes).
 
-**This costs real money.** A run of 12 questions costs roughly $3–4 across the three providers. The report's spending
+**This costs real money.** A run of 12 questions costs roughly $2–3 across the three providers (Claude about $1.10 of it). The report's spending
 cap stops paid calls at $5 by default (you can change it on the prompt set screen).
 
 Never paste an API key into chat, GitHub or code. Keys go only into Vercel's environment variables.
@@ -76,7 +76,7 @@ the reading model can be wrong, and those checks become our first evaluation cas
 | Choice | Value | Why |
 | --- | --- | --- |
 | ChatGPT model | `gpt-6.1-sol` (OpenAI API, web search) | OpenAI's newest general model at $2 / $10 per million tokens. Their top model, `gpt-6-astra`, costs 5× more and alone would use most of the $5 cap. |
-| Claude model | `claude-opus-5-5` (Anthropic API, web search) | Anthropic's current main model. If its safety system declines a question, Anthropic's **refusal fallback** is on: the same question is answered by another Claude model and the answer is marked with the model that actually served it. |
+| Claude model | `claude-sonnet-5-5` (Anthropic API, web search) | Anthropic's current Sonnet, at half Opus's price per token. The first run used `claude-opus-5-5` and spent $2.26 of the $5 cap on Claude alone, mostly reading search results, so we switched (13 Nov 2026). If its safety system declines a question, Anthropic's **refusal fallback** is on: another Claude model answers and the answer records which model served it. |
 | Gemini model | `gemini-3.1-pro-preview` (Gemini API, Google Search grounding) | Google's current Pro model in the SDK. Third-party sites mention a newer "Gemini 4" model I couldn't confirm on Google's own pages. |
 | Reading model | `claude-haiku-5-5` | Cheap and fast. It only lists who an answer names; plain code checks that every quote really appears in the answer, and does all counting. |
 | Searches | up to 3 per answer (ChatGPT, Claude); Gemini decides itself | Keeps cost predictable. |

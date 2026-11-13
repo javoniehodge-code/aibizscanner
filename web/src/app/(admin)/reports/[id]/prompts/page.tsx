@@ -52,7 +52,7 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
       </p>
       <p className="muted">
         Each question is asked once to ChatGPT, Claude and Gemini through their APIs with web search on (up to 3 searches each), then a small model
-        reads every answer. Rough cost: about $0.30 per question for all three engines, so 12 questions ≈ $3.50. Paid calls stop at the spending cap
+        reads every answer. Rough cost: about $0.20 per question for all three engines, so 12 questions ≈ $2.50. Paid calls stop at the spending cap
         (currently {formatUsd(report.spending_cap_usd)}); anything not asked is shown as unavailable.
       </p>
       <PromptSetForm

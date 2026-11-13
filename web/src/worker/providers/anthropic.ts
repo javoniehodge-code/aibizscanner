@@ -7,7 +7,7 @@ import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
 const SPEC = ENGINE_MODELS[1];
-/** Server-side refusal fallback: if Opus 5.5's safety system declines, the API re-runs the request on another model. */
+/** Server-side refusal fallback: if Claude's safety system declines, the API re-runs the request on another model. */
 const FALLBACK_BETA = "server-side-fallback-2026-07-01";
 /** A long search turn can pause; we send it back to continue, at most this many times. */
 const MAX_CONTINUATIONS = 4;
