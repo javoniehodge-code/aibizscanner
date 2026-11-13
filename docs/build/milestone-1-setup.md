@@ -143,7 +143,8 @@ If you rotate `CRON_SECRET`, change it in both places and redeploy on Vercel (**
 select status_code, content::text, created from net._http_response order by created desc limit 5;
 ```
 
-You want `200` responses whose content starts with `{"recoveredExpiredLeases"`.
+You want `202` responses with content `{"accepted":true}`: the worker replies at once and then runs. What each
+run did is in the app's **Run monitor** (and in Vercel → Logs).
 
 | What you see | Meaning |
 | --- | --- |
