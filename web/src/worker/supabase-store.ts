@@ -77,6 +77,34 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       );
       return Number(row.spending_cap_usd);
     },
+    async recordEngineAnswer(r) {
+      const row = required(
+        await db
+          .from("engine_answer")
+          .insert({
+            report_id: r.reportId,
+            stage_run_id: r.stageRunId,
+            prompt_set_id: r.promptSetId,
+            prompt_id: r.promptId,
+            prompt_text: r.promptText,
+            engine: r.engine,
+            model: r.model,
+            request_id: r.requestId,
+            settings: r.settings as { [key: string]: Json },
+            raw_response: r.rawResponse as Json,
+            answer_text: r.answerText,
+            citations: r.citations as unknown as Json[],
+            status: r.status,
+            error: r.error,
+            requested_at: r.requestedAt,
+            responded_at: r.respondedAt,
+          })
+          .select("id")
+          .single(),
+        "record engine answer",
+      );
+      return row.id;
+    },
     async recordUsage(r) {
       check(
         await db.from("usage_event").insert({

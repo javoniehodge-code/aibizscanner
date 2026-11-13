@@ -1,5 +1,5 @@
 import type { LlmCallRecord } from "./llm";
-import type { FinishStatus, JsonValue, Pricing, RunStore, StageInput, UsageRecord } from "./types";
+import type { EngineAnswerRecord, FinishStatus, JsonValue, Pricing, RunStore, StageInput, UsageRecord } from "./types";
 
 /** In-memory RunStore for engine tests. */
 export const PRICE: Pricing = {
@@ -46,6 +46,12 @@ export class MemoryStore implements RunStore {
   }
   async recordLlmCall(r: LlmCallRecord) {
     this.llmCalls.push(r);
+  }
+  engineAnswers: (EngineAnswerRecord & { id: string })[] = [];
+  async recordEngineAnswer(r: EngineAnswerRecord) {
+    const id = `ea-${this.engineAnswers.length + 1}`;
+    this.engineAnswers.push({ ...r, id });
+    return id;
   }
   async retry(_id: string, _attempt: number, error: string, runAfter: Date) {
     if (!this.ownsRun) return false;

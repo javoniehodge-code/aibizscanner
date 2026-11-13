@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import type { AnswerEngine, EngineIndex } from "./answers";
 import type { Instruction, LlmCallRecord, LlmStructuredCall } from "./llm";
 
 /**
@@ -55,6 +56,10 @@ export type StageContext = {
    * every call, valid or not, is recorded with its raw response. Throws if no LLM client is configured.
    */
   llm: LlmStructuredCall;
+  /** Stores an original AI engine answer as evidence (engine_answer); returns its id. Not a paid call. */
+  recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
+  /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
+  answerEngine(engine: EngineIndex): AnswerEngine | null;
 };
 
 export type StageResult = { status: "done" | "partial"; output: JsonValue };
@@ -77,6 +82,11 @@ export type StageDefinition = {
   output: z.ZodType;
   /** LLM instructions the stage may use. Their exact versions are recorded on every run and in its inputs hash. */
   instructions?: readonly Instruction[];
+  /**
+   * Queue this stage automatically once every input stage has a finished run newer than the ones this stage last used
+   * (the worker checks after each run finishes). Stages without it are queued by an admin.
+   */
+  autoRun?: boolean;
   run(ctx: StageContext): Promise<StageResult>;
 };
 
@@ -111,6 +121,25 @@ export type UsageRecord = {
   error: string | null;
 };
 
+export type EngineAnswerRecord = {
+  reportId: string;
+  stageRunId: string;
+  promptSetId: string;
+  promptId: string;
+  promptText: string;
+  engine: "chatgpt" | "claude" | "gemini";
+  model: string;
+  requestId: string | null;
+  settings: JsonObject;
+  rawResponse: JsonValue | null;
+  answerText: string | null;
+  citations: { url: string }[];
+  status: "ok" | "error" | "refused" | "unavailable";
+  error: string | null;
+  requestedAt: string;
+  respondedAt: string | null;
+};
+
 export type FinishStatus = "done" | "partial" | "failed";
 
 /** Storage port implemented by the worker layer (Supabase) and by in-memory fakes in tests. */
@@ -123,6 +152,8 @@ export interface RunStore {
   /** Stores an instruction version's full text once; refuses a different text under an existing id and version. */
   recordInstruction(instruction: InstructionRef & { text: string }): Promise<void>;
   recordLlmCall(record: LlmCallRecord): Promise<void>;
+  /** Stores one original AI engine answer (append-only evidence) and returns its id. */
+  recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */
   retry(runId: string, attempt: number, error: string, runAfter: Date): Promise<boolean>;
   /** Returns false if the run is no longer ours (lease lost); the result is then discarded. */

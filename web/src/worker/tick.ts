@@ -1,6 +1,8 @@
 import "server-only";
 import { executeRun, registry, type RunOutcome } from "@/engine";
 import type { ServiceClient } from "@/lib/supabase/service";
+import { queueReadyDownstream } from "@/lib/stage-runs";
+import { workerProviders } from "./providers";
 import { supabaseRunStore, toClaimedRun } from "./supabase-store";
 
 export type TickSummary = {
@@ -22,6 +24,7 @@ export async function runTick(db: ServiceClient, budgetMs: number, safetyMarginM
   if (recovered.error) throw new Error(`recover expired leases: ${recovered.error.message}`);
 
   const runs: RunOutcome[] = [];
+  const providers = workerProviders();
   for (;;) {
     const remaining = budgetMs - (Date.now() - started) - safetyMarginMs;
     if (remaining < 1_000) return summary("time_budget");
@@ -29,7 +32,16 @@ export async function runTick(db: ServiceClient, budgetMs: number, safetyMarginM
     if (claimed.error) throw new Error(`claim: ${claimed.error.message}`);
     const row = claimed.data[0];
     if (!row) return summary("queue_empty");
-    runs.push(await executeRun(store, registry, toClaimedRun(row)));
+    const claimedRun = toClaimedRun(row);
+    const outcome = await executeRun(store, registry, claimedRun, undefined, providers);
+    runs.push(outcome);
+    if (outcome.outcome === "done" || outcome.outcome === "partial") {
+      try {
+        await queueReadyDownstream(db, claimedRun.reportId, claimedRun.stage);
+      } catch (e) {
+        console.error("auto-queue after", claimedRun.stage, e);
+      }
+    }
   }
 
   function summary(stoppedBecause: TickSummary["stoppedBecause"]): TickSummary {

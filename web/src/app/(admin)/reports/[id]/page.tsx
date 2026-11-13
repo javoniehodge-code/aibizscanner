@@ -28,9 +28,10 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             {new Date(doc.created_at).toISOString().slice(0, 16).replace("T", " ")} UTC
           </span>
         ) : null}
-        <Link href={`/reports/${id}/runs`} style={{ marginLeft: "auto" }}>
-          Run monitor
+        <Link href={`/reports/${id}/prompt-analysis`} style={{ marginLeft: "auto" }}>
+          Prompt analysis
         </Link>
+        <Link href={`/reports/${id}/runs`}>Run monitor</Link>
         {doc ? (
           <a href={`/reports/${id}/document`} target="_blank" rel="noreferrer">
             Open full screen

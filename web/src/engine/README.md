@@ -24,7 +24,19 @@ modules/<module>/
 A small module can keep everything in `stages.ts` until it grows; the folders are a convention, not a framework.
 Planned modules (brief §4): `prompt-analysis` (stages 2–4), `website-audit` (5–7), `web-presence` (8–9),
 `competitors` (10), `recommendations` (11), `report` (12), plus a small `business-identity` step (1).
-Today only `dummy` exists, as the example.
+Built so far: `dummy` (pipeline test) and `prompt-analysis`:
+
+| Stage | What it does | Paid? |
+| --- | --- | --- |
+| `pa_prompt_set` | Freezes the approved prompt set and target business into the pipeline (queued from the prompt set screen). | no |
+| `pa_answers_chatgpt` / `_claude` / `_gemini` | Asks every question to one engine with web search on (`ctx.answerEngine`), 6 at a time. Every answer, including failures, is stored in `engine_answer` with the provider's response. | yes |
+| `pa_extract` | Reads each usable answer with `ctx.llm` (instruction `prompt-analysis/extract-answer`), then checks every quote against the answer in plain code; one retry, then the answer is marked unreadable. | yes (small) |
+| `pa_assemble` | Builds the report's `promptAnalysis` section in plain code (`logic/section.ts`), validated against the report schema. | no |
+
+Stages with `autoRun: true` are queued by the worker as soon as all their inputs have fresh finished runs.
+Answer engines (`answers.ts`) are a port like `LlmClient`: the provider adapters (official OpenAI, Anthropic and
+Google SDKs) live in `worker/providers/`, so the engine never sees keys. Models and prices: `modules/prompt-analysis/models.ts`
+and the `pricing` table; setup: `docs/build/milestone-2-setup.md`.
 
 **Plain code vs LLM.** Use plain code for anything with a definite answer: counting mentions, positions, parsing
 structured data, comparing fetched facts, checking URLs, computing report metrics. Use an LLM only for interpretation:

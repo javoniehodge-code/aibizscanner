@@ -2,8 +2,10 @@ import "server-only";
 import { inputsHash, instructionRef, registry, type JsonValue, type StageInput } from "@/engine";
 import type { Json } from "@/lib/database.types";
 import type { createClient } from "@/lib/supabase/server";
+import type { ServiceClient } from "@/lib/supabase/service";
 
-type Db = Awaited<ReturnType<typeof createClient>>;
+/** The signed-in admin's client (RLS applies) or, for the worker's automatic queuing, the service client. */
+type Db = Awaited<ReturnType<typeof createClient>> | ServiceClient;
 
 export class EnqueueError extends Error {}
 
@@ -24,7 +26,7 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
 
   const inputs: StageInput[] = [];
   for (const upstream of stage.inputs) {
-    const { data, error } = await db
+    const { data, error } = await (db as ServiceClient)
       .from("stage_run")
       .select("id, stage, output, output_hash")
       .eq("report_id", reportId)
@@ -40,7 +42,7 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
 
   // The exact instruction versions this run will use: recorded on the run and part of its inputs hash.
   const instructions = await Promise.all((stage.instructions ?? []).map(instructionRef));
-  const { data, error } = await db.rpc("enqueue_stage_run", {
+  const { data, error } = await (db as ServiceClient).rpc("enqueue_stage_run", {
     p_report_id: reportId,
     p_stage: stageId,
     p_params: params as Json,
@@ -53,4 +55,45 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
   });
   if (error) throw new EnqueueError(error.message);
   return data;
+}
+
+/**
+ * After a run finishes, queues the stages marked autoRun that read from it, once every input stage has a finished,
+ * non-stale latest run and none is still queued or running. A stage is not queued again for inputs it already ran on
+ * (whatever that run's outcome), so a failure never loops.
+ */
+export async function queueReadyDownstream(db: ServiceClient, reportId: string, finishedStage: string): Promise<string[]> {
+  const queued: string[] = [];
+  for (const stage of registry.stages.filter((s) => s.autoRun && s.inputs.includes(finishedStage))) {
+    const names = [...stage.inputs, stage.id];
+    const { data: runs, error } = await db
+      .from("stage_run")
+      .select("id, stage, version, status, input_run_ids")
+      .eq("report_id", reportId)
+      .in("stage", names)
+      .order("version", { ascending: false });
+    if (error) throw new Error(error.message);
+    const latest = (s: string) => runs.find((r) => r.stage === s);
+    const busy = (s: string) => runs.some((r) => r.stage === s && (r.status === "queued" || r.status === "running"));
+    if (names.some(busy)) continue;
+    const inputs = stage.inputs.map(latestFinished);
+    if (inputs.some((r) => !r)) continue;
+    const ids = inputs.map((r) => r!.id);
+    const { data: stale, error: staleError } = await db.from("stage_run_stale").select("stage_run_id").in("stage_run_id", ids);
+    if (staleError) throw new Error(staleError.message);
+    if (stale.length) continue;
+    const own = latest(stage.id);
+    if (own && ids.every((id) => own.input_run_ids.includes(id))) continue;
+    try {
+      await enqueueStage(db, reportId, stage.id, {});
+      queued.push(stage.id);
+    } catch (e) {
+      if (!(e instanceof EnqueueError)) throw e; // e.g. another tick queued it first
+    }
+
+    function latestFinished(s: string) {
+      return runs!.find((r) => r.stage === s && (r.status === "done" || r.status === "partial"));
+    }
+  }
+  return queued;
 }
