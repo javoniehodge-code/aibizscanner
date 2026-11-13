@@ -1,8 +1,19 @@
 import type { AnswerExtraction } from "../schemas";
 
-/** Normalizes text for quote matching: curly quotes, dashes, ellipses, whitespace and case. */
+/**
+ * Normalizes text for quote matching. Engines answer in Markdown with inline source links; the reading model quotes
+ * the words as a person reads them. So formatting is removed on both sides: links become their text, source tags like
+ * "(mvpmiami.com)" are dropped, emphasis and heading marks go. Then curly quotes, dashes, ellipses, spacing and case.
+ * Only formatting is ignored: every word of a quote must still appear, in order, in the answer.
+ */
 export function normalizeText(s: string): string {
   return s
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1") // [text](url) -> text
+    .replace(/\(\s*(?:https?:\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+(?:\/[^\s)]*)?\s*\)/gi, " ") // (example.com)
+    .replace(/https?:\/\/\S+/g, " ")
+    .replace(/[*`]+|(^|\s)_+|_+(?=\s|$|[.,;:!?])/g, "$1")
+    .replace(/^\s*#{1,6}\s+/gm, "")
+    .replace(/\s+([.,;:!?])/g, "$1")
     .replace(/[‘’‛′]/g, "'")
     .replace(/[“”‟″]/g, '"')
     .replace(/[‐-―−]/g, "-")
