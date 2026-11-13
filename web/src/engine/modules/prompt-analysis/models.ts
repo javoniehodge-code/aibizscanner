@@ -6,12 +6,14 @@ import type { ModelSpec } from "../../llm";
  * each provider's current main model with web search on; $5 per-report cap (see docs/build/milestone-2-setup.md).
  * 2026-11-13: Claude engine moved from claude-opus-5-5 to claude-sonnet-5-5 after the first run (Opus spent $2.26 of $5,
  * mostly reading search results); same web search tool, half the price per token.
+ * 2026-11-13: Gemini engine moved from gemini-3.1-pro-preview (404 for the owner's key) to Google's alias
+ * gemini-pro-latest, which points at the current Pro model; the model that actually answered is recorded per answer.
  */
 export const ENGINE_MODELS = [
   // concurrency: questions in flight at once. OpenAI's per-minute token limits are low on new accounts.
   { engine: 0, provider: "openai", model: "gpt-6.1-sol", maxSearches: 3, concurrency: 3 },
   { engine: 1, provider: "anthropic", model: "claude-sonnet-5-5", maxSearches: 3, concurrency: 6 },
-  { engine: 2, provider: "google", model: "gemini-3.1-pro-preview", maxSearches: 3, concurrency: 6 },
+  { engine: 2, provider: "google", model: "gemini-pro-latest", maxSearches: 3, concurrency: 6 },
 ] as const;
 
 /**

@@ -11,7 +11,7 @@ insert into public.report (id, business_id) values ('20000000-0000-0000-0000-000
 
 select results_eq(
   $$select provider || '/' || model from public.pricing where provider in ('openai', 'anthropic', 'google') order by 1$$,
-  $$values ('anthropic/claude-haiku-5-5'), ('anthropic/claude-opus-5-5'), ('anthropic/claude-sonnet-5-5'), ('google/gemini-3.1-pro-preview'), ('openai/gpt-6.1-sol')$$,
+  $$values ('anthropic/claude-haiku-5-5'), ('anthropic/claude-opus-5-5'), ('anthropic/claude-sonnet-5-5'), ('google/gemini-3.1-pro-preview'), ('google/gemini-pro-latest'), ('openai/gpt-6.1-sol')$$,
   'every model the prompt analysis uses has a price'
 );
 
