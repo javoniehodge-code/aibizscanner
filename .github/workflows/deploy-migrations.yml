@@ -52,4 +52,5 @@ jobs:
       - name: Apply pending migrations
         if: steps.secrets.outputs.configured == 'true'
         # --skip-vault: Vault secrets (worker URL, cron secret) are set by the owner in the dashboard, not from config.
-        run: supabase db push --remote="$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD" --skip-vault
+        # --yes: the CLI asks for confirmation before changing a production project, and CI cannot answer.
+        run: supabase db push --remote="$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD" --skip-vault --yes
