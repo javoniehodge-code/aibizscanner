@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { JsonObject, StageDefinition } from "../types";
+import type { JsonObject, StageDefinition } from "../../types";
 
 /**
  * Milestone 1 dummy stages. They prove the queue, retries, timeouts, spending cap, cost logging and stale marking
@@ -31,13 +31,17 @@ function sleep(ms: number, signal: AbortSignal): Promise<void> {
   });
 }
 
+const usage = z.object({ tokensIn: z.number(), tokensOut: z.number(), searchCalls: z.number(), requests: z.number() }).strict();
+
 export const dummyPricedCall: StageDefinition = {
   id: "dummy_priced_call",
+  module: "dummy",
   label: "Dummy: fake priced call",
   inputs: [],
   timeoutMs: 20_000,
   maxAttempts: 3,
   parseParams: (raw) => pricedCallParams.parse(raw ?? {}) as JsonObject,
+  output: z.object({ answer: z.string(), usage }).strict(),
   async run(ctx) {
     const p = pricedCallParams.parse(ctx.params);
     const usage = { tokensIn: p.tokensIn, tokensOut: p.tokensOut, searchCalls: p.searchCalls, requests: 1 };
@@ -52,11 +56,13 @@ export const dummyPricedCall: StageDefinition = {
 
 export const dummySummary: StageDefinition = {
   id: "dummy_summary",
+  module: "dummy",
   label: "Dummy: summarize the fake answer (reads dummy_priced_call)",
   inputs: ["dummy_priced_call"],
   timeoutMs: 10_000,
   maxAttempts: 2,
   parseParams: () => ({}),
+  output: z.object({ sourceRunId: z.string(), answerLength: z.number().int().min(0) }).strict(),
   async run(ctx) {
     const input = ctx.inputs["dummy_priced_call"];
     if (!input) throw new Error("dummy_priced_call output missing");

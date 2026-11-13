@@ -77,6 +77,58 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"eval_case": {
+                  Row: {
+                    "created_at": string,"evidence": NonNullable<Json>,"expected": NonNullable<Json>,"id": string,"input": NonNullable<Json>,"note": string | null,"supersedes": string | null,"task": string,"verified_at": string,"verified_by": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"evidence"?: NonNullable<Json>,"expected": NonNullable<Json>,"id"?: string,"input": NonNullable<Json>,"note"?: string | null,"supersedes"?: string | null,"task": string,"verified_at"?: string,"verified_by"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"evidence"?: NonNullable<Json>,"expected"?: NonNullable<Json>,"id"?: string,"input"?: NonNullable<Json>,"note"?: string | null,"supersedes"?: string | null,"task"?: string,"verified_at"?: string,"verified_by"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "eval_case_supersedes_fkey"
+      columns: ["supersedes"]
+isOneToOne: false
+      referencedRelation: "eval_case"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"eval_result": {
+                  Row: {
+                    "actual": Json | null,"created_at": string,"eval_case_id": string,"id": string,"instruction_id": string,"instruction_version": number,"llm_call_id": string | null,"model": string,"passed": boolean,"provider": string,"score": NonNullable<Json>
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "actual"?: Json | null,"created_at"?: string,"eval_case_id": string,"id"?: string,"instruction_id": string,"instruction_version": number,"llm_call_id"?: string | null,"model": string,"passed": boolean,"provider": string,"score"?: NonNullable<Json>
+                  }
+                  Update: {
+                    "actual"?: Json | null,"created_at"?: string,"eval_case_id"?: string,"id"?: string,"instruction_id"?: string,"instruction_version"?: number,"llm_call_id"?: string | null,"model"?: string,"passed"?: boolean,"provider"?: string,"score"?: NonNullable<Json>
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "eval_result_eval_case_id_fkey"
+      columns: ["eval_case_id"]
+isOneToOne: false
+      referencedRelation: "eval_case"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eval_result_instruction_id_instruction_version_fkey"
+      columns: ["instruction_id","instruction_version"]
+isOneToOne: false
+      referencedRelation: "llm_instruction"
+      referencedColumns: ["instruction_id","version"]
+    },{
+      foreignKeyName: "eval_result_llm_call_id_fkey"
+      columns: ["llm_call_id"]
+isOneToOne: false
+      referencedRelation: "llm_call"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"finding": {
                   Row: {
                     "assumption_rule": string | null,"claim": string,"confidence": number | null,"created_at": string,"evidence": NonNullable<Json>,"id": string,"missing_reason": string | null,"provenance": string,"report_id": string,"section": string,"stage_run_id": string | null,"value": Json | null
@@ -178,6 +230,52 @@ isOneToOne: false
       referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
     }
+                  ]
+                },"llm_call": {
+                  Row: {
+                    "attempt": number,"created_at": string,"duration_ms": number,"error": string | null,"id": string,"input": Json | null,"instruction_id": string,"instruction_version": number,"model": string,"output": Json | null,"provider": string,"raw_response": Json | null,"request_id": string | null,"served_model": string | null,"settings": NonNullable<Json>,"stage_run_id": string,"valid": boolean
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attempt": number,"created_at"?: string,"duration_ms": number,"error"?: string | null,"id"?: string,"input"?: Json | null,"instruction_id": string,"instruction_version": number,"model": string,"output"?: Json | null,"provider": string,"raw_response"?: Json | null,"request_id"?: string | null,"served_model"?: string | null,"settings"?: NonNullable<Json>,"stage_run_id": string,"valid": boolean
+                  }
+                  Update: {
+                    "attempt"?: number,"created_at"?: string,"duration_ms"?: number,"error"?: string | null,"id"?: string,"input"?: Json | null,"instruction_id"?: string,"instruction_version"?: number,"model"?: string,"output"?: Json | null,"provider"?: string,"raw_response"?: Json | null,"request_id"?: string | null,"served_model"?: string | null,"settings"?: NonNullable<Json>,"stage_run_id"?: string,"valid"?: boolean
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "llm_call_instruction_id_instruction_version_fkey"
+      columns: ["instruction_id","instruction_version"]
+isOneToOne: false
+      referencedRelation: "llm_instruction"
+      referencedColumns: ["instruction_id","version"]
+    },{
+      foreignKeyName: "llm_call_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "llm_call_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"llm_instruction": {
+                  Row: {
+                    "body": string,"created_at": string,"instruction_id": string,"sha256": string,"version": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body": string,"created_at"?: string,"instruction_id": string,"sha256": string,"version": number
+                  }
+                  Update: {
+                    "body"?: string,"created_at"?: string,"instruction_id"?: string,"sha256"?: string,"version"?: number
+                  }
+                  Relationships: [
+                    
                   ]
                 },"page_snapshot": {
                   Row: {
@@ -317,14 +415,14 @@ isOneToOne: false
                   ]
                 },"stage_run": {
                   Row: {
-                    "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
+                    "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"instruction_refs": NonNullable<Json>,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "attempt"?: number,"cost_usd"?: number,"created_at"?: string,"created_by"?: string | null,"duration_ms"?: number | null,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_run_ids"?: (string)[],"inputs_hash": string,"locked_until"?: string | null,"max_attempts"?: number,"output"?: Json | null,"output_hash"?: string | null,"params"?: NonNullable<Json>,"pricing_ids"?: (number)[],"report_id": string,"run_after"?: string,"search_calls"?: number,"stage": string,"started_at"?: string | null,"status"?: string,"timeout_ms"?: number,"tokens_in"?: number,"tokens_out"?: number,"version": number
+                    "attempt"?: number,"cost_usd"?: number,"created_at"?: string,"created_by"?: string | null,"duration_ms"?: number | null,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_run_ids"?: (string)[],"inputs_hash": string,"instruction_refs"?: NonNullable<Json>,"locked_until"?: string | null,"max_attempts"?: number,"output"?: Json | null,"output_hash"?: string | null,"params"?: NonNullable<Json>,"pricing_ids"?: (number)[],"report_id": string,"run_after"?: string,"search_calls"?: number,"stage": string,"started_at"?: string | null,"status"?: string,"timeout_ms"?: number,"tokens_in"?: number,"tokens_out"?: number,"version": number
                   }
                   Update: {
-                    "attempt"?: number,"cost_usd"?: number,"created_at"?: string,"created_by"?: string | null,"duration_ms"?: number | null,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_run_ids"?: (string)[],"inputs_hash"?: string,"locked_until"?: string | null,"max_attempts"?: number,"output"?: Json | null,"output_hash"?: string | null,"params"?: NonNullable<Json>,"pricing_ids"?: (number)[],"report_id"?: string,"run_after"?: string,"search_calls"?: number,"stage"?: string,"started_at"?: string | null,"status"?: string,"timeout_ms"?: number,"tokens_in"?: number,"tokens_out"?: number,"version"?: number
+                    "attempt"?: number,"cost_usd"?: number,"created_at"?: string,"created_by"?: string | null,"duration_ms"?: number | null,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_run_ids"?: (string)[],"inputs_hash"?: string,"instruction_refs"?: NonNullable<Json>,"locked_until"?: string | null,"max_attempts"?: number,"output"?: Json | null,"output_hash"?: string | null,"params"?: NonNullable<Json>,"pricing_ids"?: (number)[],"report_id"?: string,"run_after"?: string,"search_calls"?: number,"stage"?: string,"started_at"?: string | null,"status"?: string,"timeout_ms"?: number,"tokens_in"?: number,"tokens_out"?: number,"version"?: number
                   }
                   Relationships: [
                     {
@@ -424,7 +522,7 @@ isOneToOne: false
                   ]
                 },"stage_run_overview": {
                   Row: {
-                    "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"failed_calls": number | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"is_latest": boolean | null,"is_stale": boolean | null,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
+                    "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"failed_calls": number | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"instruction_refs": NonNullable<Json>,"is_latest": boolean | null,"is_stale": boolean | null,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
                   }
                   ComputedFields: never
                   Relationships: [
@@ -457,6 +555,7 @@ isOneToOne: false
 "id": string,
 "input_run_ids": (string)[],
 "inputs_hash": string,
+"instruction_refs": NonNullable<Json>,
 "locked_until": string | null,
 "max_attempts": number,
 "output": Json | null,
@@ -481,7 +580,7 @@ isOneToOne: false
         isSetofReturn: true
       } },
 "enqueue_stage_run":
-{ Args: { "p_downstream_stages": (string)[],"p_input_run_ids": (string)[],"p_inputs_hash": string,"p_max_attempts": number,"p_params": Json,"p_report_id": string,"p_stage": string,"p_timeout_ms": number }; Returns: {
+{ Args: { "p_downstream_stages": (string)[],"p_input_run_ids": (string)[],"p_inputs_hash": string,"p_instruction_refs"?: Json,"p_max_attempts": number,"p_params": Json,"p_report_id": string,"p_stage": string,"p_timeout_ms": number }; Returns: {
               "attempt": number,
 "cost_usd": number,
 "created_at": string,
@@ -492,6 +591,7 @@ isOneToOne: false
 "id": string,
 "input_run_ids": (string)[],
 "inputs_hash": string,
+"instruction_refs": NonNullable<Json>,
 "locked_until": string | null,
 "max_attempts": number,
 "output": Json | null,
@@ -526,6 +626,9 @@ isOneToOne: false
                            },
 "load_fixture_report":
 { Args: { "p_category": string,"p_document": Json,"p_domains": (string)[],"p_fixture_id": string,"p_location": string,"p_name": string,"p_schema_version": string,"p_website": string }; Returns: string
+                           },
+"record_llm_instruction":
+{ Args: { "p_body": string,"p_id": string,"p_sha256": string,"p_version": number }; Returns: undefined
                            },
 "recover_expired_stage_runs":
 { Args: Record<PropertyKey, never>; Returns: number

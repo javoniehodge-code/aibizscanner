@@ -21,7 +21,8 @@
     "predev": "npm run report:sync",
     "prebuild": "npm run report:sync",
     "pretypecheck": "npm run report:sync",
-    "pretest": "npm run report:sync"
+    "pretest": "npm run report:sync",
+    "instructions:lock": "tsx scripts/report/lock-instructions.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

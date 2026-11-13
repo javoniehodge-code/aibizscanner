@@ -1,7 +1,7 @@
 import "server-only";
 import type { Json, Tables } from "@/lib/database.types";
 import type { ServiceClient } from "@/lib/supabase/service";
-import type { ClaimedRun, JsonObject, JsonValue, Pricing, RunStore, StageInput } from "@/engine";
+import type { ClaimedRun, InstructionRef, JsonObject, JsonValue, Pricing, RunStore, StageInput } from "@/engine";
 
 function check<T>(res: { data: T; error: { message: string } | null }, what: string): T {
   if (res.error) throw new Error(`${what}: ${res.error.message}`);
@@ -25,6 +25,7 @@ export function toClaimedRun(row: Tables<"stage_run">): ClaimedRun {
     timeoutMs: row.timeout_ms,
     params: (row.params ?? {}) as JsonObject,
     inputRunIds: row.input_run_ids,
+    instructions: (row.instruction_refs ?? []) as InstructionRef[],
   };
 }
 
@@ -94,6 +95,31 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
           error: r.error,
         }),
         "record usage",
+      );
+    },
+    async recordInstruction(i) {
+      check(await db.rpc("record_llm_instruction", { p_id: i.id, p_version: i.version, p_sha256: i.sha256, p_body: i.text }), "record instruction");
+    },
+    async recordLlmCall(r) {
+      check(
+        await db.from("llm_call").insert({
+          stage_run_id: r.stageRunId,
+          attempt: r.attempt,
+          instruction_id: r.instruction.id,
+          instruction_version: r.instruction.version,
+          provider: r.provider,
+          model: r.model,
+          served_model: r.servedModel,
+          request_id: r.requestId,
+          settings: r.settings as { [key: string]: Json },
+          input: r.input as Json,
+          raw_response: r.rawResponse as Json,
+          output: r.output as Json,
+          valid: r.valid,
+          error: r.error,
+          duration_ms: r.durationMs,
+        }),
+        "record LLM call",
       );
     },
     async retry(runId, attempt, error, runAfter) {

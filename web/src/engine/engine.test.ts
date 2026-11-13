@@ -4,58 +4,10 @@ import { executeRun } from "./execute";
 import { inputsHash } from "./hash";
 import { stableStringify } from "./json";
 import { createRegistry } from "./registry";
-import { dummyPricedCall, dummySummary } from "./stages/dummy";
-import type { ClaimedRun, FinishStatus, JsonValue, Pricing, RunStore, StageDefinition, StageInput, UsageRecord } from "./types";
+import { dummyPricedCall, dummySummary } from "./modules/dummy/stages";
+import type { ClaimedRun, StageDefinition, StageInput } from "./types";
 import { registry } from "./index";
-
-const PRICE: Pricing = {
-  id: 7,
-  provider: "dummy",
-  model: "fake-model-1",
-  version: 1,
-  inputUsdPerMtok: 1,
-  outputUsdPerMtok: 2,
-  searchUsdPerCall: 0.01,
-  requestUsdPerCall: 0,
-};
-
-class MemoryStore implements RunStore {
-  usage: UsageRecord[] = [];
-  finished: { status: FinishStatus; output: JsonValue | null; outputHash: string | null; error: string | null } | null = null;
-  retried: { error: string; runAfter: Date } | null = null;
-  ownsRun = true;
-  constructor(
-    public capUsd = 5,
-    public priorSpendUsd = 0,
-    public inputs: StageInput[] = [],
-    public pricing: Pricing | null = PRICE,
-  ) {}
-  async loadInputs(ids: readonly string[]) {
-    return this.inputs.filter((i) => ids.includes(i.runId));
-  }
-  async latestPricing() {
-    return this.pricing;
-  }
-  async reportSpendUsd() {
-    return this.priorSpendUsd + this.usage.reduce((s, u) => s + u.costUsd, 0);
-  }
-  async reportSpendingCapUsd() {
-    return this.capUsd;
-  }
-  async recordUsage(r: UsageRecord) {
-    this.usage.push(r);
-  }
-  async retry(_id: string, _attempt: number, error: string, runAfter: Date) {
-    if (!this.ownsRun) return false;
-    this.retried = { error, runAfter };
-    return true;
-  }
-  async finish(_id: string, _a: number, status: FinishStatus, output: JsonValue | null, outputHash: string | null, error: string | null) {
-    if (!this.ownsRun) return false;
-    this.finished = { status, output, outputHash, error };
-    return true;
-  }
-}
+import { MemoryStore, PRICE } from "./engine.test-support";
 
 function claimed(overrides: Partial<ClaimedRun> = {}): ClaimedRun {
   return {
@@ -68,6 +20,7 @@ function claimed(overrides: Partial<ClaimedRun> = {}): ClaimedRun {
     timeoutMs: 5_000,
     params: dummyPricedCall.parseParams({ delayMs: 1 }),
     inputRunIds: [],
+    instructions: [],
     ...overrides,
   };
 }
@@ -176,7 +129,8 @@ describe("executeRun", () => {
   });
 
   it("passes upstream outputs to downstream stages and reports partial results", async () => {
-    const input: StageInput = { runId: "up-1", stage: "dummy_priced_call", output: { answer: "" }, outputHash: "h" };
+    const usage = { tokensIn: 1, tokensOut: 1, searchCalls: 0, requests: 1 };
+    const input: StageInput = { runId: "up-1", stage: "dummy_priced_call", output: { answer: "", usage }, outputHash: "h" };
     const store = new MemoryStore(5, 0, [input]);
     const out = await executeRun(store, registry, claimed({ stage: "dummy_summary", params: {}, inputRunIds: ["up-1"] }));
     expect(out.outcome).toBe("partial");
