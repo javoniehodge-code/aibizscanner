@@ -14,6 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test --trace off",
+    "report:schema": "tsx scripts/report/export-json-schema.ts",
+    "report:extract-fixtures": "node scripts/report/extract-legacy-fixtures.mjs",
     "db:types": "supabase gen types --lang typescript -s public --workdir .. > src/lib/database.types.ts"
   },
   "dependencies": {
@@ -32,6 +34,7 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.6",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0"
   }

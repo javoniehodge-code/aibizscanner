@@ -25,12 +25,18 @@ jobs:
         working-directory: web
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fixture extraction reads the legacy report files from git history
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
+      - name: Report fixtures reproduce from the legacy design exports
+        run: |
+          npm run report:extract-fixtures
+          git diff --exit-code -- ../fixtures
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test

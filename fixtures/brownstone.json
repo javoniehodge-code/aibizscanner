@@ -1,0 +1,5444 @@
+{
+  "schemaVersion": "1.0",
+  "fixture": {
+    "id": "brownstone",
+    "title": "Brownstone Movers (sample report)",
+    "source": "design/reports/full-business-diagnostic.dc.html@879241a",
+    "note": "Extracted from the approved design export. Every value is sample data (design/reports/README.md)."
+  },
+  "evidence": {},
+  "meta": {
+    "v": {
+      "runDate": "29 Oct 2026",
+      "language": "English (US)"
+    },
+    "p": {
+      "kind": "sample"
+    }
+  },
+  "business": {
+    "v": {
+      "key": "BM",
+      "name": "Brownstone Movers",
+      "location": "Brooklyn, NY",
+      "domain": "brownstonemovers.com"
+    },
+    "p": {
+      "kind": "sample"
+    }
+  },
+  "engines": [
+    {
+      "v": {
+        "name": "ChatGPT",
+        "model": "gpt-5 · OpenAI API"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Claude",
+        "model": "claude-sonnet-4.5 · Anthropic API"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Gemini",
+        "model": "gemini-2.5-pro · Gemini API"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ],
+  "copy": {
+    "websiteSummary": {
+      "v": "ChatGPT and Claude can read your key pages, but not your booking form, which only loads with JavaScript. Gemini misses your pricing page and FAQ. Your site gives enough detail for most decisions, and AI clearly sees you as walk-up specialists. It can’t see several services you offer.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "discoveryIntro": {
+      "v": "We selected six pages that explain what your business offers, what it costs, and how to book. For each AI we tested two things: could it find each page through search, and could its own reading tool read the page. We also compared each page’s raw code with what appears once it fully loads, because most AI tools don’t wait for the extra content. The next slide checks the structured data behind them.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "discoveryWhyPages": {
+      "v": "Your homepage and services page explain what you do. Pricing and walk-up moves answer the questions customers ask most. The FAQ and contact page cover policies and booking. We checked these pages, not your whole website; “4 of 6” always means 4 of these 6. A full audit lets you add pages before testing.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "clearPagesChecked": {
+      "v": "Checked 6 pages: Homepage, Services, Pricing, Walk-up moves, FAQ and Contact & booking. Each AI read the same pages. Your website column is the baseline.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "clearStandard": {
+      "v": "We use the same clear, concise and complete standard for every moving fact. Mentioning a service isn’t enough: your website has to give the details needed for that decision.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "clearFoot": {
+      "v": "5 moving facts · 6 selected pages · 29 Oct 2026. Each AI column shows what that AI repeated from your pages.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "consistentFoot": {
+      "v": "5 decision facts · your website plus 4 sources · 29 Oct 2026. This shows the information available to support AI recommendations. It doesn’t prove which sources an AI used, or that its answer will change after a correction.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "credibleFoot": {
+      "v": "{prompts} moving prompts · 8 outside pages · ChatGPT, Claude and Gemini · 29 Oct 2026. Citation counts show which pages to check first; they don’t measure how strongly a page supports you or prove it shaped an answer.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "groupLegend": {
+      "v": "Baseline: general mover questions · Products & services: specific moves you offer · Adjacent needs: related services around a move",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorKicker": {
+      "v": "ILLUSTRATIVE · SAMPLE COMPETITOR DATA",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorTitle": {
+      "v": "How do you compare with the movers AI recommends most?",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorIntro": {
+      "v": "We compared you with the two other movers AI recommended most often in your Prompt Analysis. Facts come from their published pages, review profiles and the AI answers themselves.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorScope": {
+      "v": "top 2 other recommended movers",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorReasonsIntro": {
+      "v": "What AI and customers point to when they recommend each mover.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "competitorConcernsIntro": {
+      "v": "What AI or customers flag about each mover. These are the reasons a customer might pick someone else.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "citedPagesTitle": {
+      "v": "Pages AI cited for moving recommendations",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "citedPagesIntro": {
+      "v": "Outside pages cited across the {prompts} moving prompts in your Prompt Analysis, ordered by how many prompts cited each page. A page counts once per prompt, even if several AIs cite it.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "reportDetails": {
+      "v": "Brownstone Movers · Brooklyn, NY · English (US) · 6 pages, 5 facts, 8 cited pages, 5 strengths · ChatGPT, Claude, Gemini · Run 29 Oct 2026, 1 answer per question · First run, no previous comparison",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "promptReportDetails": {
+      "v": "Brooklyn, NY · English (US) · {prompts} questions, prompt set v1.2 · ChatGPT, Claude, Gemini · Run 29 Oct 2026, 1 sample each · {usable} of {expected} answers usable · No previous comparison",
+      "p": {
+        "kind": "sample"
+      }
+    }
+  },
+  "summary": {
+    "clear": {
+      "v": {
+        "text": "facts on your website have enough detail · move types are only partly covered"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  },
+  "promptAnalysis": {
+    "groups": [
+      {
+        "v": {
+          "name": "Baseline",
+          "description": "General category questions"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Products & services",
+          "description": "Specific things you offer"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Adjacent needs",
+          "description": "Related needs around a move"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "businesses": [
+      {
+        "v": {
+          "key": "BM",
+          "name": "Brownstone Movers"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "RH",
+          "name": "Red Hook Moving Co."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "FV",
+          "name": "Flatbush Van Lines"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "TB",
+          "name": "Two Bridges Movers"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "GM",
+          "name": "Gowanus Movers"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "AA",
+          "name": "Atlantic Ave Movers"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "PS",
+          "name": "Park Slope Hauling"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "BX",
+          "name": "Bushwick Box & Truck"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "HS",
+          "name": "Harbor Storage Co."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "GS",
+          "name": "Gowanus Self Storage"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "pages": [
+      {
+        "v": {
+          "key": "yw",
+          "url": "brownstonemovers.com/pricing",
+          "category": "your"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "yw2",
+          "url": "brownstonemovers.com/walk-up-moves",
+          "category": "your"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "oc1",
+          "url": "redhookmoving.com",
+          "category": "other"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "oc2",
+          "url": "flatbushvanlines.com/rates",
+          "category": "other"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "mp1",
+          "url": "google.com/maps/place/brownstone-movers",
+          "category": "maps"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "mp2",
+          "url": "google.com/maps/place/red-hook-moving-co",
+          "category": "maps"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "rv1",
+          "url": "yelp.com/biz/red-hook-moving-co-brooklyn",
+          "category": "review"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "rv2",
+          "url": "yelp.com/biz/brownstone-movers-brooklyn",
+          "category": "review"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "dr1",
+          "url": "thumbtack.com/ny/brooklyn/movers",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "dr2",
+          "url": "angi.com/companylist/brooklyn/movers",
+          "category": "dir"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "ed1",
+          "url": "brooklynmag.com/best-movers-2026",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "ed2",
+          "url": "timeout.com/newyork/moving-guide",
+          "category": "ed"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "cm1",
+          "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+          "category": "comm"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "key": "of1",
+          "url": "dot.ny.gov/household-goods-movers",
+          "category": "off"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "questions": [
+      {
+        "question": {
+          "v": {
+            "id": "P1",
+            "group": 0,
+            "demand": "Observed demand",
+            "text": "Low cost but good moving companies in Brooklyn"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "M"
+                },
+                {
+                  "business": "GM",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "rv1",
+                "yw",
+                "dr1"
+              ],
+              "uncitedMentions": [
+                {
+                  "source": "gbp",
+                  "text": "Brownstone Movers: 4.8★ across 600+ Google reviews",
+                  "page": "rv1"
+                }
+              ],
+              "text": "For affordable but reliable movers in Brooklyn, my top pick is Red Hook Moving Co. — from about $99/hr for two movers, no hidden fees. Brownstone Movers — flat-rate local moves, 4.8★ across 600+ Google reviews. Flatbush Van Lines — budget option with weekday discounts. Two Bridges Movers and Gowanus Movers are also worth a quote.",
+              "statedReason": "Flat-rate local moves, 4.8★ across 600+ reviews.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:10 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "PS",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "rv2"
+              ],
+              "uncitedMentions": [],
+              "text": "Good-value Brooklyn movers: Two Bridges Movers (careful packing, fair rates), Red Hook Moving Co. (transparent hourly pricing), Atlantic Ave Movers (low minimums for studios) and Brownstone Movers (affordable flat rates, fully insured). Park Slope Hauling handles very small jobs.",
+              "statedReason": "Affordable flat rates, fully insured.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:11 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "PS",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr2",
+                "mp2"
+              ],
+              "uncitedMentions": [
+                {
+                  "source": "yelp",
+                  "text": "Red Hook Moving Co.: consistent 5-star Yelp reviews",
+                  "page": null
+                }
+              ],
+              "text": "Flatbush Van Lines has some of the lowest hourly rates in Brooklyn. Red Hook Moving Co. gets consistent 5-star Yelp reviews, and Gowanus Movers offers free in-home estimates. Park Slope Hauling is good value for small loads.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:12 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P2",
+            "group": 0,
+            "demand": "Observed demand",
+            "text": "Best movers in Brooklyn"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "M"
+                },
+                {
+                  "business": "BM",
+                  "status": "M"
+                },
+                {
+                  "business": "PS",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "rv1",
+                "oc1"
+              ],
+              "uncitedMentions": [],
+              "text": "If I had to pick one, Two Bridges Movers is the top choice in Brooklyn. Red Hook Moving Co. and Gowanus Movers are also highly rated. Atlantic Ave Movers, Brownstone Movers and Park Slope Hauling also appear often in local reviews.",
+              "statedReason": "Also appear often in local reviews.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:13 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "ed1",
+                "of1"
+              ],
+              "uncitedMentions": [],
+              "text": "Frequently recommended: Two Bridges Movers, Red Hook Moving Co. and Brownstone Movers. All three are licensed with NYSDOT and well reviewed.",
+              "statedReason": "Licensed with NYSDOT and well reviewed.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:14 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "mp2",
+                "rv1"
+              ],
+              "uncitedMentions": [],
+              "text": "Red Hook Moving Co. is my top recommendation; it’s the most highly rated on Maps. Two Bridges Movers, Flatbush Van Lines and Gowanus Movers are also well rated. Atlantic Ave Movers is another option.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:15 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P3",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Movers for a 4th-floor walk-up in Park Slope"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "PS",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "yw2",
+                "rv2"
+              ],
+              "uncitedMentions": [],
+              "text": "Brownstone Movers is the best fit for a walk-up: it specializes in walk-ups and brownstones and quotes stair work up front. Two Bridges Movers is also experienced with narrow staircases. Park Slope Hauling can help with lighter loads.",
+              "statedReason": "Specializes in walk-ups and brownstones and quotes stair work up front.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:16 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "yw2",
+                "cm1"
+              ],
+              "uncitedMentions": [],
+              "text": "For a 4th-floor walk-up, I’d start with Brownstone Movers, which publishes a walk-up guide and doesn’t charge per flight. Two Bridges Movers and Red Hook Moving Co. are solid alternatives; Gowanus Movers also serves Park Slope.",
+              "statedReason": "Publishes a walk-up guide and doesn’t charge per flight.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:17 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "PS",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "mp1",
+                "rv2"
+              ],
+              "uncitedMentions": [],
+              "text": "Two Bridges Movers and Brownstone Movers both have strong reviews for stair-heavy moves in Park Slope. Park Slope Hauling is a local option for smaller apartments.",
+              "statedReason": "Strong reviews for stair-heavy moves in Park Slope.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:18 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P4",
+            "group": 1,
+            "demand": "Supported demand",
+            "text": "Same-day small move in Brooklyn, just a few items"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "PS",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "BX",
+                  "status": "R"
+                },
+                {
+                  "business": "FV",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1"
+              ],
+              "uncitedMentions": [],
+              "text": "For a same-day small move, Park Slope Hauling is your best bet. Gowanus Movers and Bushwick Box & Truck also take short-notice jobs through Thumbtack. Flatbush Van Lines sometimes has same-day slots.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:19 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "PS",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "BX",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1",
+                "cm1"
+              ],
+              "uncitedMentions": [],
+              "text": "Park Slope Hauling and Gowanus Movers both advertise same-day small moves. Bushwick Box & Truck is another option listed for single-item jobs.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:20 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "GM",
+                  "status": "R"
+                },
+                {
+                  "business": "PS",
+                  "status": "R"
+                },
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "dr1",
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "Gowanus Movers, Park Slope Hauling and Flatbush Van Lines offer same-day service for a few items. Red Hook Moving Co. requires a two-hour minimum.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:21 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P5",
+            "group": 1,
+            "demand": "Observed demand",
+            "text": "Brooklyn movers with flat-rate pricing"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "yw",
+                "oc2"
+              ],
+              "uncitedMentions": [],
+              "text": "Brownstone Movers is known for flat-rate local pricing. Flatbush Van Lines also posts flat rates for studios and one-bedrooms. Atlantic Ave Movers quotes flat rates on request.",
+              "statedReason": "Known for flat-rate local pricing.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:22 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "yw"
+              ],
+              "uncitedMentions": [],
+              "text": "For a flat rate, Brownstone Movers is the one I’d pick: it publishes flat rates by apartment size. Atlantic Ave Movers offers flat quotes after a video survey. Red Hook Moving Co. is hourly only.",
+              "statedReason": "Publishes flat rates by apartment size.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:23 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "FV",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "R"
+                },
+                {
+                  "business": "AA",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "oc2",
+                "yw"
+              ],
+              "uncitedMentions": [],
+              "text": "Flatbush Van Lines, Brownstone Movers and Atlantic Ave Movers all offer flat-rate local moves.",
+              "statedReason": "Offer flat-rate local moves.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:24 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P6",
+            "group": 1,
+            "demand": "Exploratory",
+            "text": "Piano movers in Brooklyn"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "AA",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "BM",
+                  "status": "X"
+                }
+              ],
+              "citations": [
+                "cm1"
+              ],
+              "uncitedMentions": [],
+              "text": "Atlantic Ave Movers and Red Hook Moving Co. both move upright and grand pianos. Brownstone Movers doesn’t move pianos, according to customers.",
+              "statedReason": "Brownstone Movers doesn’t move pianos, according to customers.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:25 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "AA",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "ed2"
+              ],
+              "uncitedMentions": [],
+              "text": "For a piano, Atlantic Ave Movers is my first choice; it’s a piano specialist. Red Hook Moving Co. moves uprights. Two Bridges Movers can refer you to a piano crew.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:26 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "AA",
+                  "status": "R"
+                },
+                {
+                  "business": "RH",
+                  "status": "R"
+                },
+                {
+                  "business": "TB",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "Piano-capable movers in Brooklyn include Atlantic Ave Movers, Red Hook Moving Co., Two Bridges Movers and Gowanus Movers — all list piano moving as a service.",
+              "statedReason": null,
+              "grouped": true,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:27 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P7",
+            "group": 2,
+            "demand": "Supported demand",
+            "text": "Short-term storage near Brooklyn during a move"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "HS",
+                  "status": "R"
+                },
+                {
+                  "business": "GS",
+                  "status": "R"
+                },
+                {
+                  "business": "GM",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "Harbor Storage Co. and Gowanus Self Storage both offer month-to-month units. Gowanus Movers can also store items between move dates.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:28 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "GS",
+                  "status": "R"
+                },
+                {
+                  "business": "HS",
+                  "status": "R"
+                }
+              ],
+              "citations": [
+                "dr2"
+              ],
+              "uncitedMentions": [],
+              "text": "Gowanus Self Storage is the best option for short-term storage: it’s the closest, with short-term units; Harbor Storage Co. runs first-month promotions.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:29 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "unavailable",
+              "reason": "Request timed out after 2 retries",
+              "runAt": "29 Oct 2026, 14:30 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      },
+      {
+        "question": {
+          "v": {
+            "id": "P8",
+            "group": 2,
+            "demand": "Observed demand",
+            "text": "How much does a local move in Brooklyn cost?"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        "answers": [
+          {
+            "v": {
+              "status": "ok",
+              "named": [],
+              "citations": [
+                "ed2"
+              ],
+              "uncitedMentions": [],
+              "text": "A local one-bedroom move in Brooklyn typically costs $400–$1,200 depending on stairs, distance and packing. Expect hourly rates of $90–$180 for two movers.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:31 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [],
+              "citations": [],
+              "uncitedMentions": [],
+              "text": "Most one-bedroom moves in Brooklyn cost roughly $500–$1,300. Walk-ups, long carries and packing add to the price.",
+              "statedReason": null,
+              "grouped": false,
+              "searchObserved": false,
+              "runAt": "29 Oct 2026, 14:32 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          {
+            "v": {
+              "status": "ok",
+              "named": [
+                {
+                  "business": "FV",
+                  "status": "M"
+                },
+                {
+                  "business": "BM",
+                  "status": "M"
+                }
+              ],
+              "citations": [
+                "oc2",
+                "yw"
+              ],
+              "uncitedMentions": [],
+              "text": "Expect $450–$1,200 for a one-bedroom. Flatbush Van Lines and Brownstone Movers publish price ranges on their websites.",
+              "statedReason": "Publish price ranges on their websites.",
+              "grouped": false,
+              "searchObserved": true,
+              "runAt": "29 Oct 2026, 14:33 ET"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          }
+        ]
+      }
+    ],
+    "firstChoices": [
+      {
+        "v": {
+          "prompt": "P1",
+          "engine": 0,
+          "business": "RH",
+          "scope": "Overall",
+          "excerpt": "my top pick is Red Hook Moving Co."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P2",
+          "engine": 0,
+          "business": "TB",
+          "scope": "Overall",
+          "excerpt": "If I had to pick one, Two Bridges Movers is the top choice in Brooklyn."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P2",
+          "engine": 2,
+          "business": "RH",
+          "scope": "Overall",
+          "excerpt": "Red Hook Moving Co. is my top recommendation"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P3",
+          "engine": 0,
+          "business": "BM",
+          "scope": "A walk-up move",
+          "excerpt": "Brownstone Movers is the best fit for a walk-up"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P3",
+          "engine": 1,
+          "business": "BM",
+          "scope": "A 4th-floor walk-up",
+          "excerpt": "For a 4th-floor walk-up, I’d start with Brownstone Movers"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P4",
+          "engine": 0,
+          "business": "PS",
+          "scope": "A same-day small move",
+          "excerpt": "For a same-day small move, Park Slope Hauling is your best bet."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P5",
+          "engine": 1,
+          "business": "BM",
+          "scope": "A flat-rate move",
+          "excerpt": "For a flat rate, Brownstone Movers is the one I’d pick"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P6",
+          "engine": 1,
+          "business": "AA",
+          "scope": "Moving a piano",
+          "excerpt": "For a piano, Atlantic Ave Movers is my first choice"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "prompt": "P7",
+          "engine": 1,
+          "business": "GS",
+          "scope": "Short-term storage",
+          "excerpt": "Gowanus Self Storage is the best option for short-term storage"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "localAssumption": {
+      "v": true,
+      "p": {
+        "kind": "assumed",
+        "rule": "Local business: assume every Gemini answer draws on Google Maps and Business Profile data, cited or not (brief §7)."
+      }
+    },
+    "uncitedSources": {
+      "v": [
+        {
+          "key": "gbp",
+          "name": "Google Maps & Business Profile",
+          "site": "Google Maps",
+          "named": "Google reviews, ratings or listing",
+          "assumedEngine": 2,
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM",
+            "AA",
+            "FV",
+            "PS"
+          ]
+        },
+        {
+          "key": "yelp",
+          "name": "Yelp",
+          "site": "Yelp",
+          "named": "Yelp reviews or ratings",
+          "assumedEngine": null,
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM",
+            "AA",
+            "FV",
+            "PS"
+          ]
+        }
+      ],
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "run": {
+      "v": {
+        "prompts": 8,
+        "expected": 24,
+        "usable": 23,
+        "unavailable": 1,
+        "gaps": "Gemini, P7"
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "method": [
+      {
+        "v": {
+          "title": "Providers and settings",
+          "text": "ChatGPT (gpt-5), Claude (claude-sonnet-4.5) and Gemini (gemini-2.5-pro), each called directly through its API with web search requested. US English, Brooklyn, NY market. API answers aren’t exact copies of what the consumer apps show."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Prompt set",
+          "text": "Version 1.2, 8 approved questions: 2 baseline, 4 products and services, 2 adjacent needs. No question names your business. Each question carries a demand label: observed, supported or exploratory."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Samples and completeness",
+          "text": "1 sample per question and provider, run 29 Oct 2026. 24 expected, 23 usable, 1 unavailable (Gemini, P7). Totals across all three AIs use 23 answers, so AIs with missing answers count for less."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Position",
+          "text": "The order a business first appears in a clearly ordered answer. “2nd of 5 named” counts distinct relevant businesses. Grouped answers show “order unclear” instead of a forced rank."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Named and recommended",
+          "text": "Named means the business appears in the answer. Recommended means the answer presents it as a choice. Mentions, concerns and explicit exclusions are kept separate."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Source categories",
+          "text": "Each cited page gets one primary type based on its role (rules v0.4). A type and a website each count once per answer. “No citations returned” is not the same as “answer unavailable.”"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Sources not cited",
+          "text": "Sources an answer names without linking to them (for example “4.8★ on Google”) are recorded separately and never counted as citations. For local businesses we also assume every Gemini answer draws on Google Maps and Business Profile data, and label it as an assumption."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "What this can’t tell you",
+          "text": "One snapshot doesn’t show stability or future results. Citations don’t prove what caused an answer. We don’t assign reasons when a business is left out without explanation."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "History",
+          "text": "No previous comparison. Later runs that change wording, location or settings start a new series."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "whyCards": [
+      {
+        "v": {
+          "engine": 0,
+          "heading": "Finds you often, but an old error holds it back",
+          "text": "It reads Yelp, Thumbtack and your pricing page, so it names you in more answers than any other AI. But a 2021 Reddit post says you don’t move pianos, so on that question it warns people away.",
+          "sources": "Main sources: Thumbtack, Yelp, your pricing page, Reddit"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "engine": 1,
+          "heading": "Recommends you most, but only for what it knows",
+          "text": "It relies on Brooklyn Magazine and your walk-up page, which describe you well, so every time it names you it recommends you. It doesn’t know you do same-day, piano or storage moves.",
+          "sources": "Main sources: Brooklyn Magazine, Time Out, your walk-up page"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "engine": 2,
+          "heading": "Goes by map and directory listings",
+          "text": "It ranks movers by Google Maps and Angi, where Red Hook Moving’s listing is cited twice as often as yours. It recommends you second at best and never picks you first.",
+          "sources": "Main sources: Angi, Google Maps, your pricing page"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "competitors": {
+    "compared": {
+      "v": [
+        "RH",
+        "TB"
+      ],
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "summary": {
+      "v": "Red Hook Moving Co. is the mover AI recommends most (10 of 23 answers), on price and reviews. You win walk-up questions, and Two Bridges Movers wins “top choice” questions. You lose piano and same-day questions because your website doesn’t mention either.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "rows": [
+      {
+        "v": {
+          "name": "Price & fees",
+          "sub": "What AI and their sites say",
+          "cells": [
+            {
+              "value": "Flat rate by home size",
+              "sub": "No per-flight stair fee",
+              "mark": "g"
+            },
+            {
+              "value": "From about $99/hr",
+              "sub": "Two movers · 2-hour minimum",
+              "mark": null
+            },
+            {
+              "value": "Not published",
+              "sub": "AI says “fair rates”",
+              "mark": "r"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Services",
+          "sub": "Published service pages",
+          "cells": [
+            {
+              "value": "Apartment, office, walk-ups",
+              "sub": "Pianos, same-day not on website",
+              "mark": "k"
+            },
+            {
+              "value": "Local moves, upright pianos",
+              "sub": "Hourly crews",
+              "mark": "g"
+            },
+            {
+              "value": "Local moves, careful packing",
+              "sub": "Refers pianos to a partner",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Hours & booking",
+          "sub": "Contact and booking pages",
+          "cells": [
+            {
+              "value": "Mon–Sat",
+              "sub": "Online booking form",
+              "mark": "g"
+            },
+            {
+              "value": "7 days",
+              "sub": "Phone quotes only",
+              "mark": null
+            },
+            {
+              "value": "Mon–Fri",
+              "sub": "Online quote form",
+              "mark": "r"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Area served",
+          "sub": "Location pages",
+          "cells": [
+            {
+              "value": "All five boroughs",
+              "sub": "Local moves only",
+              "mark": null
+            },
+            {
+              "value": "Brooklyn and Manhattan",
+              "sub": "Local moves only",
+              "mark": "r"
+            },
+            {
+              "value": "NYC and New Jersey",
+              "sub": "Local and regional",
+              "mark": "g"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Licensing",
+          "sub": "NYSDOT registry",
+          "cells": [
+            {
+              "value": "Licensed, insured",
+              "sub": "License # on site",
+              "mark": null
+            },
+            {
+              "value": "Licensed",
+              "sub": "License # on site",
+              "mark": null
+            },
+            {
+              "value": "Licensed",
+              "sub": "Not shown on site",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Review reputation",
+          "sub": "Google · full profile",
+          "cells": [
+            {
+              "value": "4.9 / 5 · 340 reviews",
+              "sub": "Praise: stairs, on time",
+              "mark": null
+            },
+            {
+              "value": "4.9 / 5 · 610 reviews",
+              "sub": "Most reviewed · Praise: price",
+              "mark": "g"
+            },
+            {
+              "value": "4.6 / 5 · 410 reviews",
+              "sub": "Concern: delays",
+              "mark": "r"
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Where AI finds them",
+          "sub": "Sites cited in your Prompt Analysis",
+          "cells": [
+            {
+              "value": "Brooklyn Magazine, Yelp, Google",
+              "sub": "Missing from Thumbtack, Time Out",
+              "mark": "k"
+            },
+            {
+              "value": "Time Out, Yelp, Google Maps",
+              "sub": "Named in Time Out’s guide",
+              "mark": "g"
+            },
+            {
+              "value": "Brooklyn Magazine, Yelp",
+              "sub": "Called “top choice”",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Customer focus",
+          "sub": "Messaging and AI descriptions",
+          "cells": [
+            {
+              "value": "Walk-ups and brownstones",
+              "sub": "Explicit on website",
+              "mark": null
+            },
+            {
+              "value": "Budget-conscious moves",
+              "sub": "“Transparent hourly pricing”",
+              "mark": null
+            },
+            {
+              "value": "Careful, full-service moves",
+              "sub": "Inferred from AI answers",
+              "mark": null
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "reasons": [
+      {
+        "v": [
+          {
+            "title": "Walk-up and brownstone specialist",
+            "detail": "AI names you first for 4th-floor walk-ups, and Brooklyn Magazine calls you its pick for walk-ups."
+          },
+          {
+            "title": "Flat rate with no stair fee",
+            "detail": "The only one of the three with a published flat price."
+          },
+          {
+            "title": "Careful with stairs and on time",
+            "detail": "The main themes across your 340 Google reviews."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Most reviewed, top rated",
+            "detail": "4.9 stars from 610 Google reviews. AI calls it the highest rated on Maps."
+          },
+          {
+            "title": "Clear hourly pricing",
+            "detail": "AI quotes “about $99/hr” directly and calls it transparent."
+          },
+          {
+            "title": "Moves upright pianos",
+            "detail": "AI names it for piano questions, where you’re missing."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Called the “top choice”",
+            "detail": "AI and Brooklyn Magazine name it first for general mover questions."
+          },
+          {
+            "title": "Careful packing",
+            "detail": "The praise AI repeats most often."
+          },
+          {
+            "title": "Covers NYC and New Jersey",
+            "detail": "The widest service area of the three."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "concerns": [
+      {
+        "v": [
+          {
+            "title": "AI repeats that you don’t move pianos",
+            "detail": "From a 2021 Reddit comment. ChatGPT still says it."
+          },
+          {
+            "title": "Old hourly pricing on Yelp",
+            "detail": "$140/hr from 2022. Gemini quotes it instead of your flat rate."
+          },
+          {
+            "title": "Weekend hours wrong on Google",
+            "detail": "Google shows Mon–Fri, so AI says you’re closed Saturdays."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Stair and add-on charges",
+            "detail": "Reviews mention extra fees on walk-ups, on top of the hourly rate."
+          },
+          {
+            "title": "2-hour minimum",
+            "detail": "AI flags it for small and same-day moves."
+          },
+          {
+            "title": "Phone quotes only",
+            "detail": "No way to get a price online."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": [
+          {
+            "title": "Late arrivals",
+            "detail": "The most common complaint in recent reviews."
+          },
+          {
+            "title": "Prices not published",
+            "detail": "AI can only say “fair rates,” with no numbers."
+          },
+          {
+            "title": "Pianos referred out",
+            "detail": "AI says it hands piano jobs to a partner."
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "cards": [
+      {
+        "v": {
+          "kind": "YOUR ADVANTAGE",
+          "heading": "You own walk-up questions",
+          "text": "Flat rates with no stair fee. AI names you first for 4th-floor walk-ups, ahead of both.",
+          "link": "See Prompt analysis",
+          "target": "p1",
+          "dark": false
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "kind": "IMPORTANT DISADVANTAGE",
+          "heading": "Red Hook Moving Co. wins price and piano questions",
+          "text": "AI quotes its hourly rate directly and says it moves uprights. A 2021 comment says you don’t.",
+          "link": "See Businesses named",
+          "target": "p2",
+          "dark": false
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "kind": "DO FIRST",
+          "heading": "Publish piano moving and same-day small moves",
+          "text": "You offer both, but only your competitors are named for them.",
+          "link": "See your to do list",
+          "target": "b7",
+          "dark": true
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "citationCoverage": {
+    "sites": [
+      {
+        "v": {
+          "name": "Yelp",
+          "type": "Review platform",
+          "pageKeys": [
+            "rv1",
+            "rv2"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM",
+            "AA",
+            "FV",
+            "PS"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Angi",
+          "type": "Directory",
+          "pageKeys": [
+            "dr2"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "GM",
+            "AA",
+            "FV"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Thumbtack",
+          "type": "Marketplace",
+          "pageKeys": [
+            "dr1"
+          ],
+          "presentBusinesses": [
+            "GM",
+            "FV",
+            "PS",
+            "BX"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Google Maps",
+          "type": "Maps & places",
+          "pageKeys": [
+            "mp1",
+            "mp2"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM",
+            "AA",
+            "FV",
+            "PS"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Brooklyn Magazine",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed1"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Reddit",
+          "type": "Community",
+          "pageKeys": [
+            "cm1"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "AA"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Time Out New York",
+          "type": "Editorial",
+          "pageKeys": [
+            "ed2"
+          ],
+          "presentBusinesses": [
+            "RH",
+            "TB",
+            "AA"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "NYSDOT mover registry",
+          "type": "Official record",
+          "pageKeys": [
+            "of1"
+          ],
+          "presentBusinesses": [
+            "BM",
+            "RH",
+            "TB",
+            "GM",
+            "AA",
+            "FV"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "businesses": {
+      "v": [
+        "BM",
+        "RH",
+        "TB",
+        "GM",
+        "AA",
+        "FV",
+        "PS",
+        "BX"
+      ],
+      "p": {
+        "kind": "sample"
+      }
+    }
+  },
+  "webPresence": [
+    {
+      "v": {
+        "name": "Yelp",
+        "domain": "yelp.com",
+        "type": "Review platform",
+        "pageKeys": [
+          "rv1",
+          "rv2"
+        ],
+        "pagesChecked": 2,
+        "pagesFailed": 0,
+        "marks": [
+          "P",
+          "C",
+          "L",
+          "P",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "Phone, address and Mon–Sat hours match your site.",
+            "excerpt": "Mon–Sat 8:00 AM–6:00 PM",
+            "url": "yelp.com/biz/brownstone-movers-brooklyn",
+            "issue": "",
+            "action": ""
+          },
+          "1": {
+            "says": "Lists hourly pricing from an old listing.",
+            "excerpt": "“Rates from $140/hour” (listing updated 2022)",
+            "url": "yelp.com/biz/brownstone-movers-brooklyn",
+            "issue": "Your site says flat rates by home size, with no per-flight stair fee.",
+            "action": "Edit your Yelp business info to show flat-rate pricing."
+          },
+          "2": {
+            "says": "Reviews describe walk-up and brownstone moves; nothing on pianos or same-day moves.",
+            "excerpt": "“They carried everything up five flights without a scratch.”",
+            "url": "yelp.com/biz/brownstone-movers-brooklyn",
+            "issue": "Customers who need piano or same-day moves won’t see you fit.",
+            "action": ""
+          },
+          "3": {
+            "says": "4.8 stars from 212 reviews. Themes: careful with stairs, on time.",
+            "excerpt": "“On time, careful, and the price was what they quoted.”",
+            "url": "yelp.com/biz/brownstone-movers-brooklyn",
+            "issue": "",
+            "action": ""
+          },
+          "5": {
+            "says": "Service area listed as Brooklyn, Manhattan, Queens, Bronx and Staten Island.",
+            "excerpt": "Serving all five boroughs",
+            "url": "yelp.com/biz/brownstone-movers-brooklyn",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Angi",
+        "domain": "angi.com",
+        "type": "Directory",
+        "pageKeys": [
+          "dr2"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "P",
+          "L",
+          "N",
+          "P",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "Contact details and license number listed.",
+            "excerpt": "Licensed · Insured · Background-checked",
+            "url": "angi.com/companylist/brooklyn/movers",
+            "issue": "",
+            "action": ""
+          },
+          "1": {
+            "says": "Lists local moving and packing only.",
+            "excerpt": "Services: Local moving, Packing",
+            "url": "angi.com/companylist/brooklyn/movers",
+            "issue": "No walk-up specialty, piano moving or storage.",
+            "action": "Add walk-up, piano and same-day moves to your Angi services."
+          },
+          "3": {
+            "says": "4.6 stars from 58 reviews.",
+            "excerpt": "“Great crew, fair price.”",
+            "url": "angi.com/companylist/brooklyn/movers",
+            "issue": "",
+            "action": ""
+          },
+          "5": {
+            "says": "All five boroughs listed.",
+            "excerpt": "Service area: New York City",
+            "url": "angi.com/companylist/brooklyn/movers",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Thumbtack",
+        "domain": "thumbtack.com",
+        "type": "Marketplace",
+        "pageKeys": [
+          "dr1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "N",
+          "N",
+          "N",
+          "N",
+          "N",
+          "N"
+        ],
+        "details": {
+          "0": {
+            "says": "No Brownstone Movers profile on the Brooklyn movers page.",
+            "excerpt": "Top movers near Brooklyn: Gowanus Movers, Flatbush Van Lines, Park Slope Hauling…",
+            "url": "thumbtack.com/ny/brooklyn/movers",
+            "issue": "AI cites this page in 4 answers, and you aren’t on it.",
+            "action": "Create a Thumbtack profile with your services, pricing and service area."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Google Maps",
+        "domain": "google.com/maps",
+        "type": "Maps & places",
+        "pageKeys": [
+          "mp1",
+          "mp2"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "C",
+          "L",
+          "N",
+          "P",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "Hours show Monday to Friday.",
+            "excerpt": "Hours: Mon–Fri 8 AM–6 PM · Sat Closed",
+            "url": "google.com/maps/place/brownstone-movers",
+            "issue": "Your site says Mon–Sat. ChatGPT and Gemini tell customers you’re closed weekends.",
+            "action": "Correct your Google Business Profile hours to Mon–Sat."
+          },
+          "1": {
+            "says": "Category is “Moving company”; the services list is empty.",
+            "excerpt": "Moving company",
+            "url": "google.com/maps/place/brownstone-movers",
+            "issue": "AI can’t see which moves you handle from this profile.",
+            "action": "Add your services to your Google Business Profile."
+          },
+          "3": {
+            "says": "4.9 stars from 340 reviews.",
+            "excerpt": "“Best movers for a walk-up, hands down.”",
+            "url": "google.com/maps/place/brownstone-movers",
+            "issue": "",
+            "action": ""
+          },
+          "5": {
+            "says": "Brooklyn address with a New York City service area.",
+            "excerpt": "Serves New York, NY",
+            "url": "google.com/maps/place/brownstone-movers",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Brooklyn Magazine",
+        "domain": "brooklynmag.com",
+        "type": "Editorial",
+        "pageKeys": [
+          "ed1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "P",
+          "P",
+          "A",
+          "P",
+          "L"
+        ],
+        "details": {
+          "1": {
+            "says": "Describes you as walk-up and brownstone specialists.",
+            "excerpt": "“The crew you call when the staircase is the problem.”",
+            "url": "brooklynmag.com/best-movers-2026",
+            "issue": "",
+            "action": ""
+          },
+          "2": {
+            "says": "Says you’re best for walk-ups and narrow staircases.",
+            "excerpt": "“Best for: walk-ups, brownstones, tight stairwells.”",
+            "url": "brooklynmag.com/best-movers-2026",
+            "issue": "",
+            "action": ""
+          },
+          "4": {
+            "says": "Named in “Best Movers in Brooklyn 2026,” with the reason given.",
+            "excerpt": "“Our pick for walk-ups.”",
+            "url": "brooklynmag.com/best-movers-2026",
+            "issue": "",
+            "action": ""
+          },
+          "5": {
+            "says": "Mentions Brooklyn only.",
+            "excerpt": "“A Brooklyn favorite.”",
+            "url": "brooklynmag.com/best-movers-2026",
+            "issue": "Doesn’t say you serve the other four boroughs.",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Reddit",
+        "domain": "reddit.com",
+        "type": "Community",
+        "pageKeys": [
+          "cm1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "C",
+          "L",
+          "L",
+          "P",
+          "A"
+        ],
+        "details": {
+          "1": {
+            "says": "A 2021 comment says you don’t move pianos.",
+            "excerpt": "“Heads up, they don’t do pianos.” (2021)",
+            "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+            "issue": "You confirmed you move upright pianos. ChatGPT still repeats this comment.",
+            "action": "Reply on the thread that you now move upright pianos."
+          },
+          "2": {
+            "says": "Users recommend you for walk-ups only.",
+            "excerpt": "“If you’re in a walk-up, call Brownstone.”",
+            "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+            "issue": "",
+            "action": ""
+          },
+          "3": {
+            "says": "3 comments: 2 positive, 1 about pianos.",
+            "excerpt": "“Moved my 4th-floor place in 3 hours.”",
+            "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+            "issue": "One comment is a concern, not a review of a move.",
+            "action": ""
+          },
+          "4": {
+            "says": "One user recommends you for walk-ups.",
+            "excerpt": "“If you’re in a walk-up, call Brownstone.”",
+            "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Time Out New York",
+        "domain": "timeout.com",
+        "type": "Editorial",
+        "pageKeys": [
+          "ed2"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "A",
+          "N",
+          "N",
+          "A",
+          "N",
+          "A"
+        ],
+        "details": {
+          "4": {
+            "says": "The moving guide names Red Hook, Atlantic Ave and Two Bridges, not you.",
+            "excerpt": "“The NYC movers we trust…”",
+            "url": "timeout.com/newyork/moving-guide",
+            "issue": "AI cites this guide in 2 answers, and you aren’t in it.",
+            "action": "Pitch Time Out on your walk-up specialty for the next update."
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "NYSDOT mover registry",
+        "domain": "dot.ny.gov",
+        "type": "Official record",
+        "pageKeys": [
+          "of1"
+        ],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "P",
+          "A",
+          "A",
+          "A",
+          "A",
+          "L"
+        ],
+        "details": {
+          "0": {
+            "says": "Active household-goods mover license.",
+            "excerpt": "License status: Active",
+            "url": "dot.ny.gov/household-goods-movers",
+            "issue": "",
+            "action": ""
+          },
+          "5": {
+            "says": "Registered business address only.",
+            "excerpt": "Brooklyn, NY 11215",
+            "url": "dot.ny.gov/household-goods-movers",
+            "issue": "A registry isn’t expected to list service areas.",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Better Business Bureau",
+        "domain": "bbb.org",
+        "type": "Directory",
+        "pageKeys": [],
+        "pagesChecked": 1,
+        "pagesFailed": 0,
+        "marks": [
+          "P",
+          "L",
+          "A",
+          "L",
+          "A",
+          "P"
+        ],
+        "details": {
+          "0": {
+            "says": "A+ rating, contact details and years in business.",
+            "excerpt": "BBB Rating: A+",
+            "url": "bbb.org/us/ny/brooklyn/profile/movers/brownstone-movers",
+            "issue": "",
+            "action": ""
+          },
+          "1": {
+            "says": "Lists “Movers” with no detail.",
+            "excerpt": "Business category: Movers",
+            "url": "bbb.org/us/ny/brooklyn/profile/movers/brownstone-movers",
+            "issue": "No services described.",
+            "action": ""
+          },
+          "3": {
+            "says": "3 customer reviews.",
+            "excerpt": "“Professional and on time.”",
+            "url": "bbb.org/us/ny/brooklyn/profile/movers/brownstone-movers",
+            "issue": "Too few reviews to show a pattern.",
+            "action": ""
+          },
+          "5": {
+            "says": "Brooklyn address with NYC service area.",
+            "excerpt": "Service area: New York City",
+            "url": "bbb.org/us/ny/brooklyn/profile/movers/brownstone-movers",
+            "issue": "",
+            "action": ""
+          }
+        }
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "name": "Nextdoor",
+        "domain": "nextdoor.com",
+        "type": "Community",
+        "pageKeys": [],
+        "pagesChecked": 1,
+        "pagesFailed": 1,
+        "marks": [
+          "U",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U"
+        ],
+        "details": {}
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ],
+  "website": {
+    "discovery": {
+      "permissions": [
+        {
+          "v": {
+            "mark": "g",
+            "label": "Allowed",
+            "searchAccess": "Search access allowed"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "g",
+            "label": "Allowed",
+            "searchAccess": "Search access allowed"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "d",
+            "label": "Not confirmed",
+            "searchAccess": "Permission not confirmed"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "pageGroups": [
+        {
+          "group": {
+            "v": {
+              "title": "Decision pages",
+              "description": "Where customers compare and choose"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "pages": [
+            {
+              "page": {
+                "v": {
+                  "name": "Services",
+                  "url": "brownstonemovers.com/services",
+                  "why": "Lists the kinds of moves you do. AI uses it to decide whether you fit a customer’s move."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Pricing",
+                  "url": "brownstonemovers.com/pricing",
+                  "why": "Explains your flat rates and stair policy, the top question for movers."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "r",
+                    "read": "f"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Walk-up moves",
+                  "url": "brownstonemovers.com/walk-up-moves",
+                  "why": "Shows your main specialty: brownstones and buildings without elevators."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "group": {
+            "v": {
+              "title": "Supporting pages",
+              "description": "Background, answers and booking"
+            },
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "pages": [
+            {
+              "page": {
+                "v": {
+                  "name": "Homepage",
+                  "url": "brownstonemovers.com",
+                  "why": "Introduces your business and links to everything else."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "FAQ",
+                  "url": "brownstonemovers.com/faq",
+                  "why": "Answers questions about insurance, packing and what you can move."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "k",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "r",
+                    "read": "f"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            },
+            {
+              "page": {
+                "v": {
+                  "name": "Contact & booking",
+                  "url": "brownstonemovers.com/contact",
+                  "why": "Shows your hours and how to book, so AI can tell customers how to reach you."
+                },
+                "p": {
+                  "kind": "sample"
+                }
+              },
+              "results": [
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "p"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "p"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                },
+                {
+                  "v": {
+                    "search": "g",
+                    "read": "g"
+                  },
+                  "p": {
+                    "kind": "sample"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "v": {
+            "page": "Contact & booking",
+            "engine": 0,
+            "text": "ChatGPT read your hours, phone and address, but not the booking form. The form loads with JavaScript after the page opens, and ChatGPT’s reader doesn’t run it."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "Contact & booking",
+            "engine": 1,
+            "text": "Claude read your hours, phone and address, but not the booking form. The form loads with JavaScript after the page opens, and Claude’s reader doesn’t run it."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "Contact & booking",
+            "engine": 2,
+            "text": "Gemini read the full page, including the booking form. Google loads JavaScript before reading."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "Pricing",
+            "engine": 2,
+            "text": "Gemini didn’t find your pricing page in search and couldn’t open it from a direct link. The reason isn’t confirmed. Your site’s rules don’t block it."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "FAQ",
+            "engine": 1,
+            "text": "Claude didn’t find your FAQ in search, but read it when given the direct link. It may not be linked from other pages."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "page": "FAQ",
+            "engine": 2,
+            "text": "Gemini didn’t find or read your FAQ. The reason isn’t confirmed."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "rawVsLoaded": {
+        "v": [
+          {
+            "page": "Homepage",
+            "raw": "Services, areas, contact links",
+            "loaded": "Same",
+            "mark": "g",
+            "result": "Same content"
+          },
+          {
+            "page": "Services",
+            "raw": "All 6 move types listed",
+            "loaded": "Same",
+            "mark": "g",
+            "result": "Same content"
+          },
+          {
+            "page": "Pricing",
+            "raw": "Flat-rate table by home size",
+            "loaded": "Adds a quote calculator",
+            "mark": "k",
+            "result": "Calculator needs JavaScript"
+          },
+          {
+            "page": "Walk-up moves",
+            "raw": "Full page text",
+            "loaded": "Same",
+            "mark": "g",
+            "result": "Same content"
+          },
+          {
+            "page": "FAQ",
+            "raw": "12 questions and answers",
+            "loaded": "Same",
+            "mark": "g",
+            "result": "Same content"
+          },
+          {
+            "page": "Contact & booking",
+            "raw": "Hours, phone, address",
+            "loaded": "Adds the booking form",
+            "mark": "k",
+            "result": "Booking form needs JavaScript"
+          }
+        ],
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "attention": [
+        {
+          "v": {
+            "title": "Gemini couldn’t find or read your pricing page and FAQ.",
+            "engines": [
+              2
+            ],
+            "what": "These are two of the pages customers rely on most. We haven’t confirmed why Gemini missed them.",
+            "next": "Ask your website manager to link both pages from your main menu and add them to your sitemap.",
+            "technical": "Simulated site check: /pricing and /faq are missing from sitemap.xml, and /faq is only linked from the footer. These are findings to fix, not proven causes of the test results."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Your booking form and quote calculator only load with JavaScript.",
+            "engines": [
+              0,
+              1
+            ],
+            "what": "ChatGPT and Claude read your contact page but can’t see the booking form, so they can only tell customers to call. Your rate table is fine; the calculator isn’t.",
+            "next": "Ask your website manager to add a plain link to an online booking page, and write “Book online” with your hours in the page text.",
+            "technical": "Raw HTML of /contact contains an empty container where a third-party booking widget loads by script; /pricing does the same for the quote calculator. Gemini read both because Google loads JavaScript. Our raw-vs-loaded comparison explains the gap; the AI reading tests confirm it."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Claude could only read your FAQ from a direct link.",
+            "engines": [
+              1
+            ],
+            "what": "Claude didn’t find the FAQ in search, but read it when given the exact link.",
+            "next": "Link your FAQ from your homepage and services page.",
+            "technical": "Claude-SearchBot is allowed in robots.txt. The FAQ has few internal links, which can make a page harder to discover."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Gemini’s permission to visit isn’t confirmed.",
+            "engines": [
+              2
+            ],
+            "what": "Your website’s rules don’t mention Google’s AI tools specifically.",
+            "next": "Ask your website manager whether you want to allow Google-Extended, then state it in your site rules.",
+            "technical": "robots.txt allows Googlebot but has no rule for Google-Extended. Googlebot rules for Google Search don’t establish access for every Gemini tool."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "how": [
+        {
+          "v": {
+            "k": "Website permission",
+            "v": "We read each AI’s published access rules on your site. A rule isn’t proof of a visit."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Structured data",
+            "v": "We read the schema.org code (JSON-LD and microdata) on each selected page and compared every fact in it with what the page itself says."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Finding a page",
+            "v": "Recorded search tests for each AI, checking whether the exact page came back."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Reading a page",
+            "v": "Each AI’s own page-reading tool was asked to open the exact link and report what was on it. This is the result shown in the table, because it’s how that AI actually reads pages."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Raw vs fully loaded",
+            "v": "We also fetched each page twice: as plain code, the way ChatGPT, Claude and Perplexity read pages, and fully loaded in a browser, the way Google reads pages. This explains gaps; it isn’t an AI’s own result."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Firewall check",
+            "v": "Our requests using each AI’s crawler name got normal responses. That’s a hint, not proof: only the AI tests confirm access."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "A failed test doesn’t prove your site blocks an AI. Results apply to the tools, pages and date tested: 29 Oct 2026."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "structuredData": {
+      "stats": [
+        {
+          "v": {
+            "value": "3 of 6",
+            "label": "pages have structured data"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "4 of 8",
+            "label": "facts match your pages"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "1",
+            "label": "conflict"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "value": "3",
+            "label": "facts missing from code"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "problems": [
+        {
+          "v": {
+            "mark": "r",
+            "tag": "Conflict",
+            "title": "Your contact page says you close at 6 p.m., but the information in your site’s code says 5 p.m.",
+            "why": "AI tools that read your code may tell customers you close an hour early.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "brownstonemovers.com/contact"
+              },
+              {
+                "k": "Where in the code",
+                "v": "JSON-LD block, @type MovingCompany → openingHoursSpecification"
+              },
+              {
+                "k": "Code says",
+                "v": "\"dayOfWeek\": Monday–Saturday, \"opens\": \"08:00\", \"closes\": \"17:00\""
+              },
+              {
+                "k": "Page says",
+                "v": "Mon–Sat 8:00 AM–6:00 PM"
+              },
+              {
+                "k": "Fix",
+                "v": "Change \"closes\" to \"18:00\", then confirm with Google’s Rich Results Test."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your pages say you serve all five boroughs, but your site’s code doesn’t list any service area.",
+            "why": "AI has to work out where you operate from page text, and may only say Brooklyn.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "brownstonemovers.com (homepage)"
+              },
+              {
+                "k": "Where in the code",
+                "v": "JSON-LD block, @type MovingCompany. No areaServed property."
+              },
+              {
+                "k": "Fix",
+                "v": "Add \"areaServed\" listing Brooklyn, Manhattan, Queens, The Bronx and Staten Island."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your pricing page lists flat rates by home size, but its code says nothing about prices.",
+            "why": "Prices are one of the first things customers ask AI about.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "brownstonemovers.com/pricing"
+              },
+              {
+                "k": "Where in the code",
+                "v": "No structured data on this page."
+              },
+              {
+                "k": "Fix",
+                "v": "Add an Offer for each home size with its price, and set \"priceRange\" on the MovingCompany block."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "mark": "k",
+            "tag": "Missing",
+            "title": "Your FAQ page answers 12 common questions, but its code doesn’t mark them as questions and answers.",
+            "why": "Marked-up answers are easier for AI to quote accurately.",
+            "details": [
+              {
+                "k": "Page",
+                "v": "brownstonemovers.com/faq"
+              },
+              {
+                "k": "Where in the code",
+                "v": "No structured data on this page."
+              },
+              {
+                "k": "Fix",
+                "v": "Add FAQPage markup with each question and its answer."
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "facts": [
+        {
+          "v": {
+            "fact": "Business name",
+            "page": "Brownstone Movers",
+            "code": "Brownstone Movers",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Phone",
+            "page": "(718) 555-0142",
+            "code": "+1-718-555-0142",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Address",
+            "page": "Brooklyn, NY 11215",
+            "code": "Brooklyn, NY 11215",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Services",
+            "page": "Apartment and office moves",
+            "code": "Apartment and office moves",
+            "mark": "g"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Hours",
+            "page": "Mon–Sat 8 AM–6 PM",
+            "code": "Mon–Sat 8 AM–5 PM",
+            "mark": "r"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Service area",
+            "page": "All five boroughs",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "Prices",
+            "page": "Flat rate by home size",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "fact": "FAQs",
+            "page": "12 questions",
+            "code": "Not in code",
+            "mark": "k"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "clear": {
+      "intro": {
+        "v": "Being found is the first step. Here we check whether your website explains your services clearly, concisely and completely. When it does, any AI has what it needs to recommend you accurately.",
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "verdict": {
+        "v": {
+          "heading": "Your site gives full detail on 4 of 5 facts. Gemini repeats only 2.",
+          "text": "ChatGPT and Claude match your site. Gemini dropped your stair policy and online booking. No AI mentions same-day small moves because your site doesn’t list them."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "summary": {
+        "v": {
+          "sub": "Out of 5",
+          "notes": [
+            "Move types partial",
+            "Same as your site",
+            "Same as your site",
+            "Dropped 2 details"
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "facts": [
+        {
+          "v": {
+            "name": "Service area",
+            "sub": "Boroughs served",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "All 5 boroughs",
+                "sub": "Listed on homepage"
+              },
+              {
+                "mark": "g",
+                "value": "All 5 boroughs",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "All 5 boroughs",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "All 5 boroughs",
+                "sub": "Matches site"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Pricing & fees",
+            "sub": "Rates, stair fees",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "Flat rate by home size",
+                "sub": "No per-flight stair fee"
+              },
+              {
+                "mark": "g",
+                "value": "Flat rate",
+                "sub": "No stair fee"
+              },
+              {
+                "mark": "g",
+                "value": "Flat rate",
+                "sub": "No stair fee"
+              },
+              {
+                "mark": "k",
+                "value": "Flat rate",
+                "sub": "Left out: no stair fee"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Move types",
+            "sub": "What you handle",
+            "cells": [
+              {
+                "mark": "k",
+                "value": "Apartment, office",
+                "sub": "Same-day small moves not listed"
+              },
+              {
+                "mark": "k",
+                "value": "Apartment, office",
+                "sub": "Missing small moves"
+              },
+              {
+                "mark": "k",
+                "value": "Apartment, office",
+                "sub": "Missing small moves"
+              },
+              {
+                "mark": "k",
+                "value": "Apartment, office",
+                "sub": "Missing small moves"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Licensing & insurance",
+            "sub": "License, coverage",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "NYSDOT licensed, insured",
+                "sub": "License # and coverage stated"
+              },
+              {
+                "mark": "g",
+                "value": "License + coverage",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "License number",
+                "sub": "Coverage not repeated"
+              },
+              {
+                "mark": "g",
+                "value": "License + coverage",
+                "sub": "Matches site"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Booking & availability",
+            "sub": "Days, how to book",
+            "cells": [
+              {
+                "mark": "g",
+                "value": "Mon–Sat · online form",
+                "sub": "Hours and booking form"
+              },
+              {
+                "mark": "g",
+                "value": "Mon–Sat · online form",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "g",
+                "value": "Mon–Sat · online form",
+                "sub": "Matches site"
+              },
+              {
+                "mark": "k",
+                "value": "“Call for availability”",
+                "sub": "Missed online booking"
+              }
+            ]
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "List same-day small moves on your services page",
+            "text": "Name each kind of move you handle, including same-day small moves, with any minimums or limits. A few factual sentences are enough; a new page isn’t required.",
+            "closes": "Move types",
+            "example": "“We handle apartment moves, office moves and same-day small moves within [areas]. Same-day moves need [minimum or booking cutoff].”"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Recheck Gemini on details your site already states",
+            "text": "Gemini left out your stair policy and online booking. Your site already states both, so this is a model issue, not missing content. Recheck after your next site update.",
+            "closes": "Pricing & fees, Booking & availability",
+            "example": ""
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "rules": [
+        {
+          "v": {
+            "k": "Enough detail",
+            "v": "Every part of the fact is stated clearly, directly and completely on your selected pages."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Some detail missing",
+            "v": "Useful information is there, but a part is missing or AI would need to guess."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Not enough information",
+            "v": "Your selected pages give no usable answer for this fact."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "AI differences",
+            "v": "Shown only when an AI missed or changed something your site states clearly. That points to a model issue, not a website gap. If your site is vague, it’s a website gap even when every AI guesses correctly."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "A gap means the detail wasn’t found on the 6 selected pages. It doesn’t prove you don’t offer the service."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "consistent": {
+      "intro": {
+        "v": "We compare the 5 key facts we tested for clarity on your website with what other sites say, to check that they’re consistent. Different AIs may use different sources, so when those details conflict or are out of date, customers can get different answers to the same question.",
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "verdict": {
+        "v": {
+          "heading": "Your service area and license check out. Your hours and pricing send mixed signals.",
+          "text": "2 of 5 facts agree across your website, Google, Yelp, Angi and the state registry. Two differ: Google lists weekday-only hours, and an old Yelp listing shows hourly pricing. Your own Walk-up moves page also lists different hours from your Contact page. Those could lead AI to tell customers you’re closed on Saturdays or quote the wrong price."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      "sources": [
+        {
+          "v": {
+            "name": "Google",
+            "sub": "Business Profile"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Yelp",
+            "sub": "Business page"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Angi",
+            "sub": "Profile"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "NYSDOT",
+            "sub": "Mover registry"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "facts": [
+        {
+          "v": {
+            "name": "Service area",
+            "website": {
+              "value": "All five boroughs.",
+              "pages": "Homepage, Services",
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "All five boroughs",
+                "mark": "g"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "All five boroughs",
+                "mark": "g"
+              },
+              {
+                "text": "Not covered",
+                "mark": "n"
+              }
+            ],
+            "status": "a",
+            "means": "Supports recommendations to customers anywhere in New York City.",
+            "note": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Pricing & fees",
+            "website": {
+              "value": "Flat rates by home size; no per-flight stair fee.",
+              "pages": "Pricing",
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "$140 an hour (2022 listing)",
+                "mark": "r"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not covered",
+                "mark": "n"
+              }
+            ],
+            "status": "o",
+            "means": "AI could quote an hourly rate you no longer use, so customers compare you on the wrong price.",
+            "note": "Gemini quotes “about $140 per hour” and cites Yelp."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Move types",
+            "website": {
+              "value": "Apartment moves, office moves.",
+              "pages": "Services",
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not covered",
+                "mark": "n"
+              }
+            ],
+            "status": "u",
+            "means": "Only your website describes your move types, so AI has nothing else to check them against.",
+            "note": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Licensing & insurance",
+            "website": {
+              "value": "NYSDOT license number and insurance coverage.",
+              "pages": "FAQ, Contact",
+              "issue": null
+            },
+            "sources": [
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "License number matches",
+                "mark": "g"
+              }
+            ],
+            "status": "a",
+            "means": "Supports recommendations to customers who want a licensed, insured mover.",
+            "note": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Hours & booking",
+            "website": {
+              "value": "Monday–Saturday, 8 a.m.–6 p.m.",
+              "pages": "Contact, FAQ",
+              "issue": "Walk-up moves page says 7 a.m.–7 p.m."
+            },
+            "sources": [
+              {
+                "text": "Monday–Friday",
+                "mark": "r"
+              },
+              {
+                "text": "Monday–Saturday",
+                "mark": "g"
+              },
+              {
+                "text": "Not listed",
+                "mark": "n"
+              },
+              {
+                "text": "Not covered",
+                "mark": "n"
+              }
+            ],
+            "status": "c",
+            "means": "AI could tell customers you’re closed on Saturdays, a common moving day, or quote the wrong hours from your own site.",
+            "note": "ChatGPT and Gemini both say you’re closed on weekends and cite Google."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "Fix the hours on your Walk-up moves page",
+            "where": "brownstonemovers.com/walk-up-moves, the booking section.",
+            "why": "It says 7 a.m.–7 p.m. while your Contact page and FAQ say 8 a.m.–6 p.m. When your own pages disagree, AI has no way to tell which is right."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Correct your Google hours to Monday–Saturday",
+            "where": "Google Business Profile, hours.",
+            "why": "ChatGPT and Gemini tell customers you’re closed on weekends, and both cite Google."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Replace the old hourly pricing on Yelp",
+            "where": "Yelp business details, and the 2022 pricing note.",
+            "why": "Gemini quotes $140 an hour from Yelp instead of your flat rates."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Add your move types to your listings",
+            "where": "Google Business Profile services and your Angi profile.",
+            "why": "Right now only your website describes them, so AI can’t confirm them anywhere else."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "rules": [
+        {
+          "v": {
+            "k": "Sources",
+            "v": "Your website, your Google Business Profile, Yelp, Angi, and the NYSDOT public registry for licensing. Your website is the comparison point; agreement doesn’t prove a claim is true."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Agree",
+            "v": "Your website and at least one independent source say the same thing."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Conflicting or outdated",
+            "v": "Another source says something different from your website, or shows information that no longer applies."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Not enough to confirm",
+            "v": "No other checked source covers the fact, or the details can’t be matched. This isn’t a conflict."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "What AI says",
+            "v": "Each AI looked up the same facts on its own. We show its answer only where it repeats a conflict or tells you something useful."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Limits",
+            "v": "Your website is the comparison point, not guaranteed truth. A correction is confirmed only when the source is checked again."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "distinctive": {
+      "descriptions": [
+        {
+          "v": "Brownstone Movers specializes in walk-up and brownstone moves for apartments and offices in New York City, and is perfect for upper-floor walk-up residents who want a predictable flat price.",
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": "Brownstone Movers specializes in local brownstone and walk-up moves within New York City, and is perfect for anyone who needs careful stair handling.",
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": "Brownstone Movers specializes in residential and office moves in New York City, and is perfect for households that want an upfront, flat price.",
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "questions": [
+        {
+          "question": {
+            "v": "What does Brownstone Movers offer?",
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "Local apartment and office moves in New York City, focused on walk-ups and brownstones, with flat-rate pricing.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Local moves within New York City, specializing in brownstones and walk-up buildings. Flat rates by home size.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Residential and office moves in New York City, with flat-rate pricing and packing help.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "Who is it best for?",
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "People moving in or out of walk-ups who want a predictable price.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Anyone moving to or from a brownstone or walk-up, where careful stair handling matters.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "New York City households that want an upfront, flat price.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "Why would someone choose it?",
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "No per-flight stair fees and flat rates, so an upper-floor move costs what was quoted.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Walk-up expertise, and it says up front there’s no per-flight stair charge.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Flat rates make budgeting easier. The site doesn’t say what sets it apart from other movers.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "When would another mover be better?",
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "For a piano: the site doesn’t say whether it moves them.",
+                "flag": "Missing from your website: upright piano moving."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "For same-day or very small moves, which the site doesn’t mention.",
+                "flag": "Missing from your website: same-day small moves."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "If you need storage, since none is listed.",
+                "flag": "Missing from your website: storage."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        },
+        {
+          "question": {
+            "v": "What are its limits?",
+            "p": {
+              "kind": "sample"
+            }
+          },
+          "answers": [
+            {
+              "v": {
+                "text": "Local moves within New York City. Piano moving isn’t mentioned.",
+                "flag": "Missing from your website: upright piano moving."
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Local moves within New York City only.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            },
+            {
+              "v": {
+                "text": "Local moves only. Specialty items aren’t covered on the site.",
+                "flag": null
+              },
+              "p": {
+                "kind": "sample"
+              }
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        {
+          "v": {
+            "k": "Your specialty comes through",
+            "v": "All three learn from your site that you specialize in walk-up and brownstone moves."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Your best reason is easy to miss",
+            "v": "ChatGPT and Claude find your no-per-flight stair policy. Gemini only finds the flat rates."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "k": "Services you offer are invisible",
+            "v": "Your site never mentions piano moving, same-day small moves or storage, so AI sends those customers elsewhere."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "fixes": [
+        {
+          "v": {
+            "title": "List every service you offer",
+            "text": "Add upright piano moving, same-day small moves and storage to your services page, each with a short description."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Explain why the stair policy matters",
+            "text": "Next to your flat rates, say what “no per-flight charge” saves on a fourth-floor walk-up."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "title": "Say what sets you apart",
+            "text": "One clear line on your homepage, such as “Brooklyn’s walk-up specialists,” gives AI a reason to repeat."
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    }
+  },
+  "credible": {
+    "intro": {
+      "v": "We looked at the outside pages AI cited when answering moving questions in your Prompt Analysis, and checked whether they give customers a reason to choose you. We also checked one review profile separately.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "standout": {
+      "v": "Brooklyn Magazine recommends you for walk-up moves, and your reviews back it up. The pages AI cites most for budget and same-day moves, Angi and Thumbtack, give no reason to choose you.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "categories": [
+      {
+        "v": {
+          "name": "Directories & marketplaces",
+          "note": "Listed on Angi · not on Thumbtack",
+          "present": 5,
+          "absent": 3
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Review platforms",
+          "note": "Your Yelp profile · also competitors’",
+          "present": 3,
+          "absent": 3
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Editorial & publications",
+          "note": "In Brooklyn Magazine · not in Time Out",
+          "present": 3,
+          "absent": 2
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Other businesses’ websites",
+          "note": "Competitors’ own sites",
+          "present": 0,
+          "absent": 4
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Maps & places",
+          "note": "Your Google profile · also competitors’",
+          "present": 1,
+          "absent": 2
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Communities & social",
+          "note": "The 2021 Reddit thread",
+          "present": 3,
+          "absent": 0
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "name": "Official & professional",
+          "note": "NYSDOT mover registry",
+          "present": 1,
+          "absent": 0
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "takeaway": {
+      "v": "Directories are the kind of site AI cites most. You’re listed on Angi but missing from Thumbtack, which is cited in every same-day answer. Competitors’ own websites are the only kind of site where you never appear.",
+      "p": {
+        "kind": "sample"
+      }
+    },
+    "web": {
+      "categories": [
+        {
+          "v": {
+            "label": "Directories",
+            "pageCategory": "dir"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Review platforms",
+            "pageCategory": "review"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Editorial",
+            "pageCategory": "ed"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Other movers’ sites",
+            "pageCategory": "other"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Maps & places",
+            "pageCategory": "maps"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Communities",
+            "pageCategory": "comm"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "label": "Official records",
+            "pageCategory": "off"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ],
+      "sites": [
+        {
+          "v": {
+            "name": "Angi",
+            "pageCategory": "dir",
+            "pageKeys": [
+              "dr2"
+            ],
+            "present": true,
+            "quality": "named",
+            "qualityLabel": "named only"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Thumbtack",
+            "pageCategory": "dir",
+            "pageKeys": [
+              "dr1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Yelp",
+            "pageCategory": "review",
+            "pageKeys": [
+              "rv1",
+              "rv2"
+            ],
+            "present": true,
+            "quality": "good",
+            "qualityLabel": "good reviews"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Brooklyn Magazine",
+            "pageCategory": "ed",
+            "pageKeys": [
+              "ed1"
+            ],
+            "present": true,
+            "quality": "good",
+            "qualityLabel": "endorses"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Time Out New York",
+            "pageCategory": "ed",
+            "pageKeys": [
+              "ed2"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Flatbush Van Lines",
+            "pageCategory": "other",
+            "pageKeys": [
+              "oc2"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Red Hook Moving Co.",
+            "pageCategory": "other",
+            "pageKeys": [
+              "oc1"
+            ],
+            "present": false,
+            "quality": null,
+            "qualityLabel": null
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Google Maps",
+            "pageCategory": "maps",
+            "pageKeys": [
+              "mp1",
+              "mp2"
+            ],
+            "present": true,
+            "quality": "good",
+            "qualityLabel": "good reviews"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "Reddit",
+            "pageCategory": "comm",
+            "pageKeys": [
+              "cm1"
+            ],
+            "present": true,
+            "quality": "concern",
+            "qualityLabel": "concern"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        },
+        {
+          "v": {
+            "name": "NYSDOT registry",
+            "pageCategory": "off",
+            "pageKeys": [
+              "of1"
+            ],
+            "present": true,
+            "quality": "named",
+            "qualityLabel": "license only"
+          },
+          "p": {
+            "kind": "sample"
+          }
+        }
+      ]
+    },
+    "pages": [
+      {
+        "v": {
+          "title": "Angi · Brooklyn movers list",
+          "type": "Directory",
+          "url": "angi.com/companylist/brooklyn/movers",
+          "prompts": 4,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "list",
+          "detail": "No reviews or services shown for you",
+          "supports": "Shows you’re an option, but gives AI no reason to pick you. Cited for budget, same-day and piano questions.",
+          "prompt": "Low cost but good moving companies in Brooklyn"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Reddit thread (2021)",
+          "type": "Community discussion",
+          "url": "reddit.com/r/Brooklyn/comments/movers_2021",
+          "prompts": 3,
+          "engines": [
+            0,
+            1
+          ],
+          "presence": "mixed",
+          "detail": "Praises your walk-up work; says you don’t move pianos",
+          "supports": "Backs up your walk-up reputation, but its piano claim is out of date. ChatGPT repeats it.",
+          "prompt": "Piano movers in Brooklyn"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Your Yelp profile",
+          "type": "Customer reviews",
+          "url": "yelp.com/biz/brownstone-movers-brooklyn",
+          "prompts": 2,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "rev",
+          "detail": "4.5 / 5 from 138 reviews",
+          "supports": "Reviews give a specific reason to choose you: stair-heavy walk-up moves.",
+          "prompt": "Movers for a 4th-floor walk-up in Park Slope"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Thumbtack · Brooklyn movers",
+          "type": "Marketplace",
+          "url": "thumbtack.com/ny/brooklyn/movers",
+          "prompts": 2,
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "presence": "none",
+          "detail": "Three competitors recommended",
+          "supports": "Cited in every same-day small-move answer. You have no profile, so AI names Park Slope Hauling, Gowanus Movers and Bushwick Box & Truck instead.",
+          "prompt": "Same-day small move in Brooklyn, just a few items"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Brooklyn Magazine · Best movers 2026",
+          "type": "Editorial roundup",
+          "url": "brooklynmag.com/best-movers-2026",
+          "prompts": 2,
+          "engines": [
+            0,
+            1
+          ],
+          "presence": "rec",
+          "detail": "Named for walk-up and brownstone moves",
+          "supports": "Your strongest outside support: an independent pick with a specific reason to choose you.",
+          "prompt": "Best movers in Brooklyn"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Time Out New York · Moving guide",
+          "type": "Editorial guide",
+          "url": "timeout.com/newyork/moving-guide",
+          "prompts": 2,
+          "engines": [
+            0,
+            1
+          ],
+          "presence": "none",
+          "detail": "Other movers recommended",
+          "supports": "Recommends other movers for pianos and gives Brooklyn price ranges. A coverage opportunity.",
+          "prompt": "How much does a local move in Brooklyn cost?"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "NYSDOT mover registry",
+          "type": "Official record",
+          "url": "dot.ny.gov/household-goods-movers",
+          "prompts": 1,
+          "engines": [
+            1
+          ],
+          "presence": "list",
+          "detail": "License confirmed",
+          "supports": "Confirms you’re licensed. Says nothing about the quality of your work.",
+          "prompt": "Best movers in Brooklyn"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Your Google profile",
+          "type": "Customer reviews",
+          "url": "google.com/maps/place/brownstone-movers",
+          "prompts": 1,
+          "engines": [
+            2
+          ],
+          "presence": "rev",
+          "detail": "4.8 / 5 from 612 reviews",
+          "supports": "Strong, recent praise for careful packing and stair handling.",
+          "prompt": "Movers for a 4th-floor walk-up in Park Slope"
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "v": {
+          "label": "CITED IN PROMPT ANALYSIS",
+          "title": "Your Google profile",
+          "rating": "4.8",
+          "count": "612",
+          "recent": "41 reviews in the last 90 days",
+          "themes": "Recent reviews often praise careful packing and stair handling. A few describe late arrivals.",
+          "cited": true,
+          "scale": 5
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "label": "CITED IN PROMPT ANALYSIS",
+          "title": "Your Yelp profile",
+          "rating": "4.5",
+          "count": "138",
+          "recent": "6 reviews in the last 90 days",
+          "themes": "Customers praise walk-up moves. Three 2022 reviews mention add-on charges.",
+          "cited": true,
+          "scale": 5
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "label": "CHECKED SEPARATELY · NOT CITED IN THIS RUN",
+          "title": "Your Angi profile",
+          "rating": "4.7",
+          "count": "23",
+          "recent": "1 review in the last 90 days",
+          "themes": "Customers praise clear communication. There’s little recent feedback here.",
+          "cited": false,
+          "scale": 5
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "fixes": [
+      {
+        "v": {
+          "title": "Create a Thumbtack profile for same-day small moves",
+          "text": "It’s cited in every same-day answer, and you’re not on it. List your same-day small moves and ask a few recent customers to review you there."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Build up your Angi profile",
+          "text": "Angi is the page AI cites most often. Add your services and flat-rate pricing, and ask customers for honest reviews after a move."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Post an update on the 2021 Reddit thread",
+          "text": "Say you’ve moved upright pianos since March 2024. ChatGPT still repeats the thread’s claim that you don’t."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "rules": [
+      {
+        "v": {
+          "k": "Which pages",
+          "v": "Outside pages cited in answers to the 8 moving prompts in your Prompt Analysis. Your own website and other movers’ sites aren’t included."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Counting",
+          "v": "A page counts once per prompt, even when several AIs cite it. Counts can overlap and don’t measure how strong the support is."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "How you show up",
+          "v": "Recommended with a reason, reviewed by customers, listed by name, mentioned with a concern, or not found on the page we checked."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Checked separately",
+          "v": "A review profile we checked on its own. It doesn’t count toward the cited-page ranking."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "k": "Limits",
+          "v": "A citation doesn’t prove a page shaped an answer. “Not found” applies only to the page we checked, not the whole site."
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "actions": {
+    "tasks": [
+      {
+        "v": {
+          "title": "Add your missing services to your website",
+          "kind": "Website fix",
+          "scope": "Complete · Distinctive",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your site never mentions upright piano moving, same-day small moves or storage. AI sends those customers to other movers, and ChatGPT says you don’t move pianos."
+            },
+            {
+              "k": "Action",
+              "v": "Add each service to brownstonemovers.com/services with a short description and any minimums or limits. A few factual sentences are enough."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck finds all three listed. AI answers are rechecked separately."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Correct your Google hours to Monday–Saturday",
+          "kind": "Listing fix",
+          "scope": "Consistent",
+          "engines": [
+            0,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Google says Monday to Friday. ChatGPT and Gemini tell customers you’re closed on weekends."
+            },
+            {
+              "k": "Action",
+              "v": "Update hours in your Google Business Profile."
+            },
+            {
+              "k": "How we check",
+              "v": "Profile recheck shows Saturday hours."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Replace the old hourly pricing on Yelp",
+          "kind": "Listing fix",
+          "scope": "Consistent",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "A 2022 Yelp listing shows $140 an hour. Gemini quotes it instead of your flat rates."
+            },
+            {
+              "k": "Action",
+              "v": "Edit your Yelp business details and the 2022 pricing note to describe flat-rate pricing."
+            },
+            {
+              "k": "How we check",
+              "v": "Listing recheck shows flat-rate pricing."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Post an update on the 2021 Reddit thread",
+          "kind": "Outside source",
+          "scope": "Credible",
+          "engines": [
+            0
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "The thread says you don’t move pianos. ChatGPT still repeats it."
+            },
+            {
+              "k": "Action",
+              "v": "Reply on the thread that you’ve moved upright pianos since March 2024."
+            },
+            {
+              "k": "How we check",
+              "v": "ChatGPT answers to piano questions are rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Make your pricing page and FAQ easier to find",
+          "kind": "Website fix",
+          "scope": "Find & read",
+          "engines": [
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Gemini couldn’t find or read either page. Claude only read the FAQ from a direct link."
+            },
+            {
+              "k": "Action",
+              "v": "Link both pages from your homepage and main menu, link the FAQ from your services page, and list both in your sitemap."
+            },
+            {
+              "k": "How we check",
+              "v": "Next search and reading test for each AI."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Create a Thumbtack profile for same-day small moves",
+          "kind": "Outside source",
+          "scope": "Credible",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Thumbtack is cited in every same-day answer, and you’re not on it. AI names three competitors instead."
+            },
+            {
+              "k": "Action",
+              "v": "Create a profile listing your same-day small moves, and ask a few recent customers to review you there."
+            },
+            {
+              "k": "How we check",
+              "v": "Profile recheck, then same-day answers rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Fill out your Angi and Google listings",
+          "kind": "Listing fix",
+          "scope": "Credible · Consistent",
+          "engines": [
+            0,
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Angi is the page AI cites most, but it only lists your name. Only your website describes your move types, so AI can’t confirm them anywhere else."
+            },
+            {
+              "k": "Action",
+              "v": "Add your services, move types and flat-rate pricing to Angi and your Google Business Profile. Ask customers for honest reviews after a move."
+            },
+            {
+              "k": "How we check",
+              "v": "Listing recheck shows services and pricing."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Explain why your stair policy matters",
+          "kind": "Website fix",
+          "scope": "Distinctive",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your strongest reason to choose you is easy to miss. Gemini only finds the flat rates."
+            },
+            {
+              "k": "Action",
+              "v": "Next to your flat rates, say what “no per-flight charge” saves on a fourth-floor walk-up."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck, then Gemini answers rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Say what sets you apart on your homepage",
+          "kind": "Website fix",
+          "scope": "Distinctive",
+          "engines": [],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your site doesn’t say why someone should choose you over other movers."
+            },
+            {
+              "k": "Action",
+              "v": "Add one clear line, such as “Brooklyn’s walk-up specialists.”"
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Decide whether to allow Google’s AI tools",
+          "kind": "Website settings",
+          "scope": "Find & read",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your site rules don’t mention Google-Extended, so Gemini’s permission to visit isn’t confirmed."
+            },
+            {
+              "k": "Action",
+              "v": "Ask your website manager whether to allow Google-Extended, then state it in robots.txt."
+            },
+            {
+              "k": "How we check",
+              "v": "Site rules recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Ask customers to mention arrival times in reviews",
+          "kind": "Reputation",
+          "scope": "Credible",
+          "engines": [
+            1,
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Reviews praise your stair handling but rarely mention punctuality, so Claude and Gemini say nothing about timing."
+            },
+            {
+              "k": "Action",
+              "v": "After each move, ask customers for an honest review and suggest they mention timing and arrival."
+            },
+            {
+              "k": "How we check",
+              "v": "Review recheck, then timing questions rechecked."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Pitch Time Out New York’s moving guide",
+          "kind": "Outside source",
+          "scope": "Credible",
+          "engines": [
+            0,
+            1
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Time Out’s guide is cited for price and piano questions and recommends other movers, not you."
+            },
+            {
+              "k": "Action",
+              "v": "Send the editor your walk-up specialty, flat-rate pricing and piano service, with recent customer examples."
+            },
+            {
+              "k": "How we check",
+              "v": "Page recheck."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Fix your site’s code so it matches your pages",
+          "kind": "Website fix",
+          "scope": "Find & read",
+          "engines": [],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your site’s code says you close at 5 p.m. instead of 6 p.m., and leaves out your service area, prices and FAQs."
+            },
+            {
+              "k": "Action",
+              "v": "Ask your web developer to correct the hours and add the missing structured data. Details are on the Structured data slide."
+            },
+            {
+              "k": "How we check",
+              "v": "Structured data recheck with Google’s Rich Results Test."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Assess demand for long-distance moves",
+          "kind": "Offering",
+          "scope": "Distinctive",
+          "engines": [
+            2
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Customers ask AI about long-distance moves, and competitors are named for them. You only move within New York City."
+            },
+            {
+              "k": "Action",
+              "v": "Check inquiry volume, costs, capacity and fit before deciding whether to test a long-distance offering. Until then, keep “local moves only” clear on your site."
+            },
+            {
+              "k": "How we check",
+              "v": "Owner decision, recorded in the improvement log."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Make your booking form readable without JavaScript",
+          "kind": "Website fix",
+          "scope": "Find & read",
+          "engines": [
+            0,
+            1
+          ],
+          "rows": [
+            {
+              "k": "What we found",
+              "v": "Your booking form and quote calculator only load with JavaScript, so ChatGPT and Claude can’t see them and tell customers to call."
+            },
+            {
+              "k": "Action",
+              "v": "Add a plain link to an online booking page, and write “Book online” with your hours in the page text."
+            },
+            {
+              "k": "How we check",
+              "v": "Raw-page recheck, then AI reading test on /contact."
+            }
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ],
+    "cases": [
+      {
+        "v": {
+          "title": "Get discovered for services you already offer",
+          "finding": "Piano moving, same-day small moves and storage are missing from your website, so AI sends those customers to other movers.",
+          "work": "Publish service details, a clear statement of what sets you apart, and why your stair policy matters.",
+          "owner": "Owner / content marketer",
+          "tasks": [
+            0,
+            7,
+            8
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Correct conflicting business information",
+          "finding": "Google shows weekday-only hours and Yelp shows 2022 hourly pricing. ChatGPT and Gemini repeat both.",
+          "work": "Confirm the correct facts and update the affected profiles.",
+          "owner": "Owner / listings manager",
+          "tasks": [
+            1,
+            2
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Make your website accessible to AI",
+          "finding": "Gemini can’t find or read your pricing page and FAQ, its permission to visit isn’t confirmed, and your site’s code lists the wrong closing time.",
+          "work": "Fix internal links and the sitemap, decide on Google-Extended, and verify each AI can read the pages.",
+          "owner": "Web developer",
+          "tasks": [
+            4,
+            9,
+            12,
+            14
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Build presence where customers find recommendations",
+          "finding": "Thumbtack, Angi and Time Out are cited for key questions but feature competitors and say little or nothing about you.",
+          "work": "Create and complete listings, and pitch relevant editorial guides.",
+          "owner": "Marketing / PR",
+          "tasks": [
+            5,
+            6,
+            11
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Strengthen your reputation",
+          "finding": "A 2021 Reddit thread wrongly says you don’t move pianos, and reviews rarely mention timing.",
+          "work": "Correct the record publicly and build review follow-up into your process.",
+          "owner": "Operations / customer service",
+          "tasks": [
+            3,
+            10
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      },
+      {
+        "v": {
+          "title": "Investigate an offering opportunity",
+          "finding": "Competitors are named for long-distance moves, which you don’t currently offer.",
+          "work": "Assess demand, costs, capacity and fit before testing an offering.",
+          "owner": "Owner",
+          "tasks": [
+            13
+          ]
+        },
+        "p": {
+          "kind": "sample"
+        }
+      }
+    ]
+  },
+  "methodGroups": [
+    {
+      "v": {
+        "heading": "SECTION 2 · YOUR WEBSITE",
+        "items": [
+          {
+            "title": "Find & read",
+            "text": "Each AI searched for 6 selected pages, then its own page-reading tool tried to read each one. Search and reading are recorded separately. We compared each page’s raw code with the fully loaded page to explain JavaScript gaps, checked published site rules, and compared structured data with page text."
+          },
+          {
+            "title": "Complete",
+            "text": "We checked your 6 selected pages against the 5 facts every moving customer needs. This is a website check, not an AI comparison."
+          },
+          {
+            "title": "Distinctive",
+            "text": "We gave each AI only your website, with web search off, and asked 5 neutral questions about your business. We didn’t tell the AIs what to mention."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "heading": "SECTION 3 · WEB PRESENCE",
+        "items": [
+          {
+            "title": "Sources",
+            "text": "The outside pages each AI cited across the 8 moving prompts in your Prompt Analysis, grouped by kind of site."
+          },
+          {
+            "title": "Credible",
+            "text": "For each cited page, we checked whether you appear and whether the mention helps you, is only a listing, or raises a concern. Each page counts once per prompt. One review profile was checked separately."
+          },
+          {
+            "title": "Consistent",
+            "text": "We compared 5 facts on your website with Google, Yelp and Angi. Each AI then looked up the same facts on the web by itself."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    },
+    {
+      "v": {
+        "heading": "LIMITS",
+        "items": [
+          {
+            "title": "What we don’t claim",
+            "text": "Missing answers are never counted as failures. A citation doesn’t prove a page shaped an answer, and changes after a fix aren’t proof the fix caused them."
+          }
+        ]
+      },
+      "p": {
+        "kind": "sample"
+      }
+    }
+  ]
+}
