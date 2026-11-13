@@ -252,6 +252,7 @@ function build(id) {
   put("competitorKicker", firstP(isMvp ? "PUBLIC COMPETITOR FACTS" : "ILLUSTRATIVE · SAMPLE COMPETITOR DATA"));
   put("competitorTitle", firstP("How do you compare with the"));
   put("competitorIntro", firstP("We compared you with the two other"));
+  put("competitorScope", /comparison points · ([^']*)'/.exec(html)?.[1]);
   put("competitorReasonsIntro", firstP("What AI and customers point to when they recommend each"));
   put("competitorConcernsIntro", firstP("What AI or customers flag about each"));
   put("citedPagesTitle", firstP("Pages AI cited for"));

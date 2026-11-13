@@ -392,6 +392,7 @@ export const COPY_KEYS = [
   "competitorKicker",
   "competitorTitle",
   "competitorIntro",
+  "competitorScope",
   "competitorReasonsIntro",
   "competitorConcernsIntro",
   "citedPagesTitle",

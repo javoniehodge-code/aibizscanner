@@ -129,6 +129,12 @@
         "kind": "sample"
       }
     },
+    "competitorScope": {
+      "v": "top 2 other recommended movers",
+      "p": {
+        "kind": "sample"
+      }
+    },
     "competitorReasonsIntro": {
       "v": "What AI and customers point to when they recommend each mover.",
       "p": {

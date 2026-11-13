@@ -155,6 +155,12 @@
         "kind": "sample"
       }
     },
+    "competitorScope": {
+      "v": "top 2 other recommended companies",
+      "p": {
+        "kind": "sample"
+      }
+    },
     "competitorReasonsIntro": {
       "v": "What AI and customers point to when they recommend each company.",
       "p": {

@@ -676,6 +676,42 @@
             }
           ]
         },
+        "competitorScope": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string"
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "null"
+                },
+                "p": {
+                  "$ref": "#/$defs/MissingProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
         "competitorReasonsIntro": {
           "anyOf": [
             {
@@ -906,6 +942,7 @@
         "competitorKicker",
         "competitorTitle",
         "competitorIntro",
+        "competitorScope",
         "competitorReasonsIntro",
         "competitorConcernsIntro",
         "citedPagesTitle",
