@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { EnqueueError, enqueueStage } from "@/lib/stage-runs";
 import { runTick } from "@/worker/tick";
+import { loadExampleReports } from "@/report/documents";
 
 const uuid = z.uuid();
 
@@ -70,4 +71,12 @@ export async function processQueueNow(_prev: RunActionState, formData: FormData)
   revalidatePath(`/reports/${reportId}/runs`);
   const counts = summary.runs.map((r) => `${r.stage}: ${r.outcome}`).join(", ");
   return { message: summary.runs.length ? `Processed ${counts}.` : "Queue empty: nothing due to run.", error: false };
+}
+
+/** Loads the example reports (fixtures/brownstone.json, fixtures/mvp-miami.json). Running it again changes nothing. */
+export async function loadExamples(): Promise<void> {
+  await requireAdmin();
+  await loadExampleReports(await createClient());
+  revalidatePath("/reports");
+  redirect("/reports");
 }

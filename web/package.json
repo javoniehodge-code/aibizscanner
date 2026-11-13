@@ -16,7 +16,12 @@
     "e2e": "playwright test --trace off",
     "report:schema": "tsx scripts/report/export-json-schema.ts",
     "report:extract-fixtures": "node scripts/report/extract-legacy-fixtures.mjs",
-    "db:types": "supabase gen types --lang typescript -s public --workdir .. > src/lib/database.types.ts"
+    "db:types": "supabase gen types --lang typescript -s public --workdir .. > src/lib/database.types.ts",
+    "report:sync": "node scripts/report/sync-template.mjs",
+    "predev": "npm run report:sync",
+    "prebuild": "npm run report:sync",
+    "pretypecheck": "npm run report:sync",
+    "pretest": "npm run report:sync"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

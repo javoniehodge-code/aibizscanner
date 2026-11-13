@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatDuration, formatUsd } from "@/lib/format";
-import { createReport } from "./actions";
+import { createReport, loadExamples } from "./actions";
 
 export const metadata = { title: "Reports — AIBizScanner internal" };
 
 export default async function ReportsPage() {
   const db = await createClient();
   const [reports, businesses, rollups] = await Promise.all([
-    db.from("report").select("id, version, status, created_at, business:business_id (id, name)").order("created_at", { ascending: false }),
+    db.from("report").select("id, version, status, created_at, business:business_id (id, name), report_document (id)").order("created_at", { ascending: false }),
     db.from("business").select("id, name").order("name"),
     db.from("report_cost_rollup").select("*"),
   ]);
@@ -17,7 +17,14 @@ export default async function ReportsPage() {
 
   return (
     <main>
-      <h1>Reports</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <h1>Reports</h1>
+        <form action={loadExamples}>
+          <button type="submit" className="secondary">
+            Load example reports
+          </button>
+        </form>
+      </div>
       {businesses.data && businesses.data.length > 0 ? (
         <form action={createReport} style={{ display: "flex", gap: 8, alignItems: "end", maxWidth: 560 }}>
           <div style={{ flex: 1 }}>
@@ -62,7 +69,13 @@ export default async function ReportsPage() {
                 <td>{roll?.failed_runs ?? 0}</td>
                 <td>{formatDuration(roll?.duration_ms)}</td>
                 <td>{formatUsd(roll?.cost_usd)}</td>
-                <td>
+                <td style={{ whiteSpace: "nowrap" }}>
+                  {r.report_document && r.report_document.length > 0 ? (
+                    <>
+                      <Link href={`/reports/${r.id}`}>View report</Link>
+                      {" · "}
+                    </>
+                  ) : null}
                   <Link href={`/reports/${r.id}/runs`}>Run monitor</Link>
                 </td>
               </tr>

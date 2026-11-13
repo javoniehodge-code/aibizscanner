@@ -277,6 +277,44 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"report_document": {
+                  Row: {
+                    "created_at": string,"created_by": string | null,"document": NonNullable<Json>,"fixture_id": string | null,"id": string,"report_id": string,"schema_version": string,"source": string,"stage_run_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by"?: string | null,"document": NonNullable<Json>,"fixture_id"?: string | null,"id"?: string,"report_id": string,"schema_version": string,"source": string,"stage_run_id"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string | null,"document"?: NonNullable<Json>,"fixture_id"?: string | null,"id"?: string,"report_id"?: string,"schema_version"?: string,"source"?: string,"stage_run_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "report_document_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "report_document_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
+    },{
+      foreignKeyName: "report_document_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "report_document_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"stage_run": {
                   Row: {
                     "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number
@@ -485,6 +523,9 @@ isOneToOne: false
                            },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"load_fixture_report":
+{ Args: { "p_category": string,"p_document": Json,"p_domains": (string)[],"p_fixture_id": string,"p_location": string,"p_name": string,"p_schema_version": string,"p_website": string }; Returns: string
                            },
 "recover_expired_stage_runs":
 { Args: Record<PropertyKey, never>; Returns: number
