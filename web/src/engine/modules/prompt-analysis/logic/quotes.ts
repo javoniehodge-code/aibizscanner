@@ -3,7 +3,8 @@ import type { AnswerExtraction } from "../schemas";
 /**
  * Normalizes text for quote matching. Engines answer in Markdown with inline source links; the reading model quotes
  * the words as a person reads them. So formatting is removed on both sides: links become their text, source tags like
- * "(mvpmiami.com)" are dropped, emphasis, heading marks and table dividers go. Then curly quotes, dashes, ellipses, spacing and case.
+ * "(mvpmiami.com)" are dropped, emphasis, heading marks and table dividers go,
+ * and accents are ignored. Then curly quotes, dashes, ellipses, spacing and case.
  * Only formatting is ignored: every word of a quote must still appear, in order, in the answer.
  */
 export function normalizeText(s: string): string {
@@ -20,6 +21,8 @@ export function normalizeText(s: string): string {
     .replace(/[“”‟″]/g, '"')
     .replace(/[‐-―−]/g, "-")
     .replace(/…/g, "...")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // accents: "Huracán" matches "Huracan"
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
