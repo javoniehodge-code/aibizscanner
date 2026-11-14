@@ -6,7 +6,7 @@ import { LlmNotConfiguredError } from "../../llm";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { extractAnswer } from "./instructions/extract-answer";
 import { buildPromptAnalysisSection } from "./logic/section";
-import { unverifiedQuotes } from "./logic/quotes";
+import { verifyExtraction } from "./logic/quotes";
 import { ENGINE_MODELS, EXTRACTION_MODEL } from "./models";
 import {
   answerExtraction,
@@ -269,18 +269,27 @@ export const paExtract: StageDefinition = {
     let stopReason: string | null = null;
     const items = await mapLimit(usable, EXTRACT_CONCURRENCY, async (a): Promise<Extractions["items"][number]> => {
       let lastError = "not attempted";
+      let problems: string[] = []; // quotes the previous attempt got wrong, shown to the next one
       for (let attempt = 1; attempt <= EXTRACT_ATTEMPTS; attempt++) {
         if (stopReason) return { answerId: a.answerId, status: "failed", error: stopReason, attempts: attempt - 1 };
         try {
-          const extraction = await ctx.llm({
+          const raw = await ctx.llm({
             instruction: extractAnswer,
             model: EXTRACTION_MODEL,
-            input: { question: prompts.get(a.promptId)?.text ?? "", answer: a.text, targetBusiness: target },
+            input: {
+              question: prompts.get(a.promptId)?.text ?? "",
+              answer: a.text,
+              targetBusiness: target,
+              ...(problems.length ? { problemsWithPreviousAttempt: problems } : {}),
+            },
             output: answerExtraction,
           });
-          const bad = unverifiedQuotes(extraction, a.text ?? "");
-          if (!bad.length) return { answerId: a.answerId, status: "verified", extraction, attempts: attempt };
-          lastError = `quoted words not found in the answer: ${bad.slice(0, 3).map((q) => JSON.stringify(q.slice(0, 80))).join(", ")}`;
+          const checked = verifyExtraction(raw, a.text ?? "");
+          if (!checked.problems.length) {
+            return { answerId: a.answerId, status: "verified", extraction: checked.extraction, attempts: attempt, dropped: checked.dropped };
+          }
+          problems = [...checked.problems, ...checked.dropped];
+          lastError = `quoted words not found in the answer: ${checked.problems.slice(0, 3).map((q) => JSON.stringify(q.slice(0, 80))).join(", ")}`;
         } catch (e) {
           lastError = errorMessage(e);
           if (e instanceof SpendingCapError || e instanceof MissingPricingError || e instanceof LlmNotConfiguredError) stopReason = lastError;
