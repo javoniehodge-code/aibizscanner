@@ -953,39 +953,46 @@
       "additionalProperties": false
     },
     "summary": {
-      "type": "object",
-      "properties": {
-        "clear": {
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "v": {
+            "clear": {
               "type": "object",
               "properties": {
-                "text": {
-                  "type": "string",
-                  "minLength": 1
+                "v": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
                 }
               },
               "required": [
-                "text"
+                "v",
+                "p"
               ],
               "additionalProperties": false
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
             }
           },
           "required": [
-            "v",
-            "p"
+            "clear"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "null"
         }
-      },
-      "required": [
-        "clear"
-      ],
-      "additionalProperties": false
+      ]
     },
     "promptAnalysis": {
       "type": "object",
@@ -1946,778 +1953,224 @@
       "additionalProperties": false
     },
     "competitors": {
-      "type": "object",
-      "properties": {
-        "compared": {
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "v": {
-              "type": "array",
-              "prefixItems": [
-                {
-                  "type": "string",
-                  "pattern": "^[A-Z][A-Z0-9]{1,5}$"
-                },
-                {
-                  "type": "string",
-                  "pattern": "^[A-Z][A-Z0-9]{1,5}$"
-                }
-              ],
-              "items": false,
-              "minItems": 2,
-              "maxItems": 2
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        },
-        "summary": {
-          "type": "object",
-          "properties": {
-            "v": {
-              "type": "string",
-              "minLength": 1
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        },
-        "rows": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "sub": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "cells": {
-                    "type": "array",
-                    "prefixItems": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "sub": {
-                            "type": "string"
-                          },
-                          "mark": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "enum": [
-                                  "g",
-                                  "r",
-                                  "k"
-                                ]
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          }
-                        },
-                        "required": [
-                          "value",
-                          "sub",
-                          "mark"
-                        ],
-                        "additionalProperties": false
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "sub": {
-                            "type": "string"
-                          },
-                          "mark": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "enum": [
-                                  "g",
-                                  "r",
-                                  "k"
-                                ]
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          }
-                        },
-                        "required": [
-                          "value",
-                          "sub",
-                          "mark"
-                        ],
-                        "additionalProperties": false
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "sub": {
-                            "type": "string"
-                          },
-                          "mark": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "enum": [
-                                  "g",
-                                  "r",
-                                  "k"
-                                ]
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          }
-                        },
-                        "required": [
-                          "value",
-                          "sub",
-                          "mark"
-                        ],
-                        "additionalProperties": false
-                      }
-                    ],
-                    "items": false,
-                    "minItems": 3,
-                    "maxItems": 3
-                  }
-                },
-                "required": [
-                  "name",
-                  "sub",
-                  "cells"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "reasons": {
-          "type": "array",
-          "prefixItems": [
-            {
+            "compared": {
               "type": "object",
               "properties": {
                 "v": {
                   "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            }
-          ],
-          "items": false,
-          "minItems": 3,
-          "maxItems": 3
-        },
-        "concerns": {
-          "type": "array",
-          "prefixItems": [
-            {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "detail": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "detail"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            }
-          ],
-          "items": false,
-          "minItems": 3,
-          "maxItems": 3
-        },
-        "cards": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "kind": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "heading": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "text": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "link": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "target": {
-                    "type": "string",
-                    "pattern": "^[bpx]\\d+$"
-                  },
-                  "dark": {
-                    "type": "boolean"
-                  }
-                },
-                "required": [
-                  "kind",
-                  "heading",
-                  "text",
-                  "link",
-                  "target",
-                  "dark"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": [
-        "compared",
-        "summary",
-        "rows",
-        "reasons",
-        "concerns",
-        "cards"
-      ],
-      "additionalProperties": false
-    },
-    "citationCoverage": {
-      "type": "object",
-      "properties": {
-        "sites": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "type": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "pageKeys": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
+                  "prefixItems": [
+                    {
                       "type": "string",
-                      "pattern": "^[a-z]{2}\\d*$"
-                    }
-                  },
-                  "presentBusinesses": {
-                    "type": "array",
-                    "items": {
+                      "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                    },
+                    {
                       "type": "string",
                       "pattern": "^[A-Z][A-Z0-9]{1,5}$"
                     }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            "summary": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "sub": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "cells": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "sub": {
+                                "type": "string"
+                              },
+                              "mark": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "g",
+                                      "r",
+                                      "k"
+                                    ]
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "sub",
+                              "mark"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "sub": {
+                                "type": "string"
+                              },
+                              "mark": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "g",
+                                      "r",
+                                      "k"
+                                    ]
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "sub",
+                              "mark"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "sub": {
+                                "type": "string"
+                              },
+                              "mark": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "enum": [
+                                      "g",
+                                      "r",
+                                      "k"
+                                    ]
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "sub",
+                              "mark"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 3,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "sub",
+                      "cells"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
                   }
                 },
                 "required": [
-                  "name",
-                  "type",
-                  "pageKeys",
-                  "presentBusinesses"
+                  "v",
+                  "p"
                 ],
                 "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
               }
             },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "businesses": {
-          "type": "object",
-          "properties": {
-            "v": {
-              "minItems": 1,
-              "type": "array",
-              "items": {
-                "type": "string",
-                "pattern": "^[A-Z][A-Z0-9]{1,5}$"
-              }
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        }
-      },
-      "required": [
-        "sites",
-        "businesses"
-      ],
-      "additionalProperties": false
-    },
-    "webPresence": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "v": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "domain": {
-                "type": "string",
-                "minLength": 1
-              },
-              "type": {
-                "type": "string",
-                "minLength": 1
-              },
-              "pageKeys": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "pattern": "^[a-z]{2}\\d*$"
-                }
-              },
-              "pagesChecked": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991
-              },
-              "pagesFailed": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 9007199254740991
-              },
-              "marks": {
-                "type": "array",
-                "prefixItems": [
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  },
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  },
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  },
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  },
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  },
-                  {
-                    "type": "string",
-                    "enum": [
-                      "P",
-                      "L",
-                      "C",
-                      "N",
-                      "U",
-                      "A"
-                    ]
-                  }
-                ],
-                "items": false,
-                "minItems": 6,
-                "maxItems": 6
-              },
-              "details": {
-                "type": "object",
-                "propertyNames": {
-                  "type": "string",
-                  "enum": [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5"
-                  ]
-                },
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "says": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "excerpt": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "issue": {
-                      "type": "string"
-                    },
-                    "action": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "says",
-                    "excerpt",
-                    "url",
-                    "issue",
-                    "action"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "required": [
-              "name",
-              "domain",
-              "type",
-              "pageKeys",
-              "pagesChecked",
-              "pagesFailed",
-              "marks",
-              "details"
-            ],
-            "additionalProperties": false
-          },
-          "p": {
-            "$ref": "#/$defs/PresentProvenance"
-          }
-        },
-        "required": [
-          "v",
-          "p"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "website": {
-      "type": "object",
-      "properties": {
-        "discovery": {
-          "type": "object",
-          "properties": {
-            "permissions": {
+            "reasons": {
               "type": "array",
               "prefixItems": [
                 {
                   "type": "object",
                   "properties": {
                     "v": {
-                      "type": "object",
-                      "properties": {
-                        "mark": {
-                          "type": "string",
-                          "enum": [
-                            "g",
-                            "d",
-                            "r"
-                          ]
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "detail": {
+                            "type": "string",
+                            "minLength": 1
+                          }
                         },
-                        "label": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "searchAccess": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      },
-                      "required": [
-                        "mark",
-                        "label",
-                        "searchAccess"
-                      ],
-                      "additionalProperties": false
+                        "required": [
+                          "title",
+                          "detail"
+                        ],
+                        "additionalProperties": false
+                      }
                     },
                     "p": {
                       "$ref": "#/$defs/PresentProvenance"
@@ -2733,31 +2186,25 @@
                   "type": "object",
                   "properties": {
                     "v": {
-                      "type": "object",
-                      "properties": {
-                        "mark": {
-                          "type": "string",
-                          "enum": [
-                            "g",
-                            "d",
-                            "r"
-                          ]
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "detail": {
+                            "type": "string",
+                            "minLength": 1
+                          }
                         },
-                        "label": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "searchAccess": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      },
-                      "required": [
-                        "mark",
-                        "label",
-                        "searchAccess"
-                      ],
-                      "additionalProperties": false
+                        "required": [
+                          "title",
+                          "detail"
+                        ],
+                        "additionalProperties": false
+                      }
                     },
                     "p": {
                       "$ref": "#/$defs/PresentProvenance"
@@ -2773,31 +2220,25 @@
                   "type": "object",
                   "properties": {
                     "v": {
-                      "type": "object",
-                      "properties": {
-                        "mark": {
-                          "type": "string",
-                          "enum": [
-                            "g",
-                            "d",
-                            "r"
-                          ]
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "detail": {
+                            "type": "string",
+                            "minLength": 1
+                          }
                         },
-                        "label": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "searchAccess": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      },
-                      "required": [
-                        "mark",
-                        "label",
-                        "searchAccess"
-                      ],
-                      "additionalProperties": false
+                        "required": [
+                          "title",
+                          "detail"
+                        ],
+                        "additionalProperties": false
+                      }
                     },
                     "p": {
                       "$ref": "#/$defs/PresentProvenance"
@@ -2814,271 +2255,9 @@
               "minItems": 3,
               "maxItems": 3
             },
-            "pageGroups": {
-              "minItems": 1,
+            "concerns": {
               "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "group": {
-                    "type": "object",
-                    "properties": {
-                      "v": {
-                        "type": "object",
-                        "properties": {
-                          "title": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "description": {
-                            "type": "string",
-                            "minLength": 1
-                          }
-                        },
-                        "required": [
-                          "title",
-                          "description"
-                        ],
-                        "additionalProperties": false
-                      },
-                      "p": {
-                        "$ref": "#/$defs/PresentProvenance"
-                      }
-                    },
-                    "required": [
-                      "v",
-                      "p"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "pages": {
-                    "minItems": 1,
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "page": {
-                          "type": "object",
-                          "properties": {
-                            "v": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "url": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "why": {
-                                  "type": "string",
-                                  "minLength": 1
-                                }
-                              },
-                              "required": [
-                                "name",
-                                "url",
-                                "why"
-                              ],
-                              "additionalProperties": false
-                            },
-                            "p": {
-                              "$ref": "#/$defs/PresentProvenance"
-                            }
-                          },
-                          "required": [
-                            "v",
-                            "p"
-                          ],
-                          "additionalProperties": false
-                        },
-                        "results": {
-                          "type": "array",
-                          "prefixItems": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "v": {
-                                  "type": "object",
-                                  "properties": {
-                                    "search": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "k",
-                                        "r",
-                                        "d"
-                                      ]
-                                    },
-                                    "read": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "p",
-                                        "f"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "search",
-                                    "read"
-                                  ],
-                                  "additionalProperties": false
-                                },
-                                "p": {
-                                  "$ref": "#/$defs/PresentProvenance"
-                                }
-                              },
-                              "required": [
-                                "v",
-                                "p"
-                              ],
-                              "additionalProperties": false
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "v": {
-                                  "type": "object",
-                                  "properties": {
-                                    "search": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "k",
-                                        "r",
-                                        "d"
-                                      ]
-                                    },
-                                    "read": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "p",
-                                        "f"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "search",
-                                    "read"
-                                  ],
-                                  "additionalProperties": false
-                                },
-                                "p": {
-                                  "$ref": "#/$defs/PresentProvenance"
-                                }
-                              },
-                              "required": [
-                                "v",
-                                "p"
-                              ],
-                              "additionalProperties": false
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "v": {
-                                  "type": "object",
-                                  "properties": {
-                                    "search": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "k",
-                                        "r",
-                                        "d"
-                                      ]
-                                    },
-                                    "read": {
-                                      "type": "string",
-                                      "enum": [
-                                        "g",
-                                        "p",
-                                        "f"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "search",
-                                    "read"
-                                  ],
-                                  "additionalProperties": false
-                                },
-                                "p": {
-                                  "$ref": "#/$defs/PresentProvenance"
-                                }
-                              },
-                              "required": [
-                                "v",
-                                "p"
-                              ],
-                              "additionalProperties": false
-                            }
-                          ],
-                          "items": false,
-                          "minItems": 3,
-                          "maxItems": 3
-                        }
-                      },
-                      "required": [
-                        "page",
-                        "results"
-                      ],
-                      "additionalProperties": false
-                    }
-                  }
-                },
-                "required": [
-                  "group",
-                  "pages"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "notes": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "page": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "engine": {
-                        "type": "integer",
-                        "minimum": 0,
-                        "maximum": 2
-                      },
-                      "text": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "page",
-                      "engine",
-                      "text"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "rawVsLoaded": {
-              "anyOf": [
+              "prefixItems": [
                 {
                   "type": "object",
                   "properties": {
@@ -3087,37 +2266,18 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "page": {
+                          "title": {
                             "type": "string",
                             "minLength": 1
                           },
-                          "raw": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "loaded": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "mark": {
-                            "type": "string",
-                            "enum": [
-                              "g",
-                              "k",
-                              "r"
-                            ]
-                          },
-                          "result": {
+                          "detail": {
                             "type": "string",
                             "minLength": 1
                           }
                         },
                         "required": [
-                          "page",
-                          "raw",
-                          "loaded",
-                          "mark",
-                          "result"
+                          "title",
+                          "detail"
                         ],
                         "additionalProperties": false
                       }
@@ -3136,10 +2296,62 @@
                   "type": "object",
                   "properties": {
                     "v": {
-                      "type": "null"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "detail": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "detail"
+                        ],
+                        "additionalProperties": false
+                      }
                     },
                     "p": {
-                      "$ref": "#/$defs/MissingProvenance"
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "detail": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "detail"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
                     }
                   },
                   "required": [
@@ -3148,9 +2360,12 @@
                   ],
                   "additionalProperties": false
                 }
-              ]
+              ],
+              "items": false,
+              "minItems": 3,
+              "maxItems": 3
             },
-            "attention": {
+            "cards": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -3158,37 +2373,109 @@
                   "v": {
                     "type": "object",
                     "properties": {
-                      "title": {
+                      "kind": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "engines": {
-                        "type": "array",
-                        "items": {
-                          "type": "integer",
-                          "minimum": 0,
-                          "maximum": 2
-                        }
-                      },
-                      "what": {
+                      "heading": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "next": {
+                      "text": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "technical": {
+                      "link": {
                         "type": "string",
                         "minLength": 1
+                      },
+                      "target": {
+                        "type": "string",
+                        "pattern": "^[bpx]\\d+$"
+                      },
+                      "dark": {
+                        "type": "boolean"
                       }
                     },
                     "required": [
-                      "title",
-                      "engines",
-                      "what",
-                      "next",
-                      "technical"
+                      "kind",
+                      "heading",
+                      "text",
+                      "link",
+                      "target",
+                      "dark"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
+                  }
+                },
+                "required": [
+                  "v",
+                  "p"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "compared",
+            "summary",
+            "rows",
+            "reasons",
+            "concerns",
+            "cards"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "citationCoverage": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "sites": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "type": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "pageKeys": {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-z]{2}\\d*$"
+                        }
+                      },
+                      "presentBusinesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "type",
+                      "pageKeys",
+                      "presentBusinesses"
                     ],
                     "additionalProperties": false
                   },
@@ -3203,7 +2490,2312 @@
                 "additionalProperties": false
               }
             },
-            "how": {
+            "businesses": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                  }
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "sites",
+            "businesses"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "webPresence": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "v": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "domain": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "pageKeys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z]{2}\\d*$"
+                    }
+                  },
+                  "pagesChecked": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pagesFailed": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "marks": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "P",
+                          "L",
+                          "C",
+                          "N",
+                          "U",
+                          "A"
+                        ]
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 6,
+                    "maxItems": 6
+                  },
+                  "details": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "enum": [
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5"
+                      ]
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "says": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "excerpt": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "issue": {
+                          "type": "string"
+                        },
+                        "action": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "says",
+                        "excerpt",
+                        "url",
+                        "issue",
+                        "action"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "domain",
+                  "type",
+                  "pageKeys",
+                  "pagesChecked",
+                  "pagesFailed",
+                  "marks",
+                  "details"
+                ],
+                "additionalProperties": false
+              },
+              "p": {
+                "$ref": "#/$defs/PresentProvenance"
+              }
+            },
+            "required": [
+              "v",
+              "p"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "website": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "discovery": {
+              "type": "object",
+              "properties": {
+                "permissions": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "object",
+                          "properties": {
+                            "mark": {
+                              "type": "string",
+                              "enum": [
+                                "g",
+                                "d",
+                                "r"
+                              ]
+                            },
+                            "label": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "searchAccess": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "mark",
+                            "label",
+                            "searchAccess"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "object",
+                          "properties": {
+                            "mark": {
+                              "type": "string",
+                              "enum": [
+                                "g",
+                                "d",
+                                "r"
+                              ]
+                            },
+                            "label": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "searchAccess": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "mark",
+                            "label",
+                            "searchAccess"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "object",
+                          "properties": {
+                            "mark": {
+                              "type": "string",
+                              "enum": [
+                                "g",
+                                "d",
+                                "r"
+                              ]
+                            },
+                            "label": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "searchAccess": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "mark",
+                            "label",
+                            "searchAccess"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "pageGroups": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "group": {
+                        "type": "object",
+                        "properties": {
+                          "v": {
+                            "type": "object",
+                            "properties": {
+                              "title": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "description": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "title",
+                              "description"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "p": {
+                            "$ref": "#/$defs/PresentProvenance"
+                          }
+                        },
+                        "required": [
+                          "v",
+                          "p"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "pages": {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "page": {
+                              "type": "object",
+                              "properties": {
+                                "v": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "url": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "why": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "url",
+                                    "why"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "p": {
+                                  "$ref": "#/$defs/PresentProvenance"
+                                }
+                              },
+                              "required": [
+                                "v",
+                                "p"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "results": {
+                              "type": "array",
+                              "prefixItems": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "v": {
+                                      "type": "object",
+                                      "properties": {
+                                        "search": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "k",
+                                            "r",
+                                            "d"
+                                          ]
+                                        },
+                                        "read": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "p",
+                                            "f"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "search",
+                                        "read"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "p": {
+                                      "$ref": "#/$defs/PresentProvenance"
+                                    }
+                                  },
+                                  "required": [
+                                    "v",
+                                    "p"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "v": {
+                                      "type": "object",
+                                      "properties": {
+                                        "search": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "k",
+                                            "r",
+                                            "d"
+                                          ]
+                                        },
+                                        "read": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "p",
+                                            "f"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "search",
+                                        "read"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "p": {
+                                      "$ref": "#/$defs/PresentProvenance"
+                                    }
+                                  },
+                                  "required": [
+                                    "v",
+                                    "p"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "v": {
+                                      "type": "object",
+                                      "properties": {
+                                        "search": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "k",
+                                            "r",
+                                            "d"
+                                          ]
+                                        },
+                                        "read": {
+                                          "type": "string",
+                                          "enum": [
+                                            "g",
+                                            "p",
+                                            "f"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "search",
+                                        "read"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "p": {
+                                      "$ref": "#/$defs/PresentProvenance"
+                                    }
+                                  },
+                                  "required": [
+                                    "v",
+                                    "p"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              ],
+                              "items": false,
+                              "minItems": 3,
+                              "maxItems": 3
+                            }
+                          },
+                          "required": [
+                            "page",
+                            "results"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "group",
+                      "pages"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "page": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "engine": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 2
+                          },
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "page",
+                          "engine",
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "rawVsLoaded": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "page": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "raw": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "loaded": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "mark": {
+                                "type": "string",
+                                "enum": [
+                                  "g",
+                                  "k",
+                                  "r"
+                                ]
+                              },
+                              "result": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "page",
+                              "raw",
+                              "loaded",
+                              "mark",
+                              "result"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "null"
+                        },
+                        "p": {
+                          "$ref": "#/$defs/MissingProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "attention": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "engines": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2
+                            }
+                          },
+                          "what": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "next": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "technical": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "engines",
+                          "what",
+                          "next",
+                          "technical"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "how": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "v": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "permissions",
+                "pageGroups",
+                "notes",
+                "rawVsLoaded",
+                "attention",
+                "how"
+              ],
+              "additionalProperties": false
+            },
+            "structuredData": {
+              "type": "object",
+              "properties": {
+                "stats": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "label": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "label"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "problems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "mark": {
+                            "type": "string",
+                            "enum": [
+                              "r",
+                              "k"
+                            ]
+                          },
+                          "tag": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "why": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "details": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "k": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "v": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "k",
+                                "v"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "mark",
+                          "tag",
+                          "title",
+                          "why",
+                          "details"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "facts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "fact": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "page": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "code": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "mark": {
+                            "type": "string",
+                            "enum": [
+                              "g",
+                              "r",
+                              "k"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "fact",
+                          "page",
+                          "code",
+                          "mark"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "stats",
+                "problems",
+                "facts"
+              ],
+              "additionalProperties": false
+            },
+            "clear": {
+              "type": "object",
+              "properties": {
+                "intro": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "verdict": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "object",
+                      "properties": {
+                        "heading": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "heading",
+                        "text"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "summary": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "object",
+                      "properties": {
+                        "sub": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "notes": {
+                          "type": "array",
+                          "prefixItems": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "items": false,
+                          "minItems": 4,
+                          "maxItems": 4
+                        }
+                      },
+                      "required": [
+                        "sub",
+                        "notes"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "facts": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "sub": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "cells": {
+                            "type": "array",
+                            "prefixItems": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mark": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "g",
+                                          "k",
+                                          "r",
+                                          "n"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "sub": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "mark",
+                                  "value",
+                                  "sub"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mark": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "g",
+                                          "k",
+                                          "r",
+                                          "n"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "sub": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "mark",
+                                  "value",
+                                  "sub"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mark": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "g",
+                                          "k",
+                                          "r",
+                                          "n"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "sub": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "mark",
+                                  "value",
+                                  "sub"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "mark": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": [
+                                          "g",
+                                          "k",
+                                          "r",
+                                          "n"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "sub": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "mark",
+                                  "value",
+                                  "sub"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ],
+                            "items": false,
+                            "minItems": 4,
+                            "maxItems": 4
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "sub",
+                          "cells"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "fixes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "closes": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "example": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "text",
+                          "closes",
+                          "example"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "v": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "intro",
+                "verdict",
+                "summary",
+                "facts",
+                "fixes",
+                "rules"
+              ],
+              "additionalProperties": false
+            },
+            "consistent": {
+              "type": "object",
+              "properties": {
+                "intro": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "verdict": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "object",
+                      "properties": {
+                        "heading": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "heading",
+                        "text"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "sources": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "sub": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "sub"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "facts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "website": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "pages": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "issue": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "pages",
+                              "issue"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "sources": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "mark": {
+                                  "type": "string",
+                                  "enum": [
+                                    "g",
+                                    "r",
+                                    "n"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "text",
+                                "mark"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "a",
+                              "c",
+                              "o",
+                              "u"
+                            ]
+                          },
+                          "means": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "note": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "website",
+                          "sources",
+                          "status",
+                          "means",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "fixes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "where": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "why": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "where",
+                          "why"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "v": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "intro",
+                "verdict",
+                "sources",
+                "facts",
+                "fixes",
+                "rules"
+              ],
+              "additionalProperties": false
+            },
+            "distinctive": {
+              "type": "object",
+              "properties": {
+                "descriptions": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
+                        }
+                      },
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "questions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "object",
+                        "properties": {
+                          "v": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "p": {
+                            "$ref": "#/$defs/PresentProvenance"
+                          }
+                        },
+                        "required": [
+                          "v",
+                          "p"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "v": {
+                                "type": "object",
+                                "properties": {
+                                  "text": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "flag": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "text",
+                                  "flag"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "p": {
+                                "$ref": "#/$defs/PresentProvenance"
+                              }
+                            },
+                            "required": [
+                              "v",
+                              "p"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "v": {
+                                "type": "object",
+                                "properties": {
+                                  "text": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "flag": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "text",
+                                  "flag"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "p": {
+                                "$ref": "#/$defs/PresentProvenance"
+                              }
+                            },
+                            "required": [
+                              "v",
+                              "p"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "v": {
+                                "type": "object",
+                                "properties": {
+                                  "text": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "flag": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "text",
+                                  "flag"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "p": {
+                                "$ref": "#/$defs/PresentProvenance"
+                              }
+                            },
+                            "required": [
+                              "v",
+                              "p"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 3,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "answers"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "takeaways": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "v": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "fixes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "descriptions",
+                "questions",
+                "takeaways",
+                "fixes"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "discovery",
+            "structuredData",
+            "clear",
+            "consistent",
+            "distinctive"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "credible": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "intro": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            "standout": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "note": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "present": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "absent": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "note",
+                      "present",
+                      "absent"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
+                  }
+                },
+                "required": [
+                  "v",
+                  "p"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "takeaway": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
+            },
+            "web": {
+              "type": "object",
+              "properties": {
+                "categories": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pageCategory": {
+                            "type": "string",
+                            "enum": [
+                              "your",
+                              "other",
+                              "maps",
+                              "review",
+                              "dir",
+                              "ed",
+                              "comm",
+                              "off",
+                              "unc"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "label",
+                          "pageCategory"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "sites": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pageCategory": {
+                            "type": "string",
+                            "enum": [
+                              "your",
+                              "other",
+                              "maps",
+                              "review",
+                              "dir",
+                              "ed",
+                              "comm",
+                              "off",
+                              "unc"
+                            ]
+                          },
+                          "pageKeys": {
+                            "minItems": 1,
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[a-z]{2}\\d*$"
+                            }
+                          },
+                          "present": {
+                            "type": "boolean"
+                          },
+                          "quality": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "good",
+                                  "named",
+                                  "concern"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "qualityLabel": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "pageCategory",
+                          "pageKeys",
+                          "present",
+                          "quality",
+                          "qualityLabel"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "categories",
+                "sites"
+              ],
+              "additionalProperties": false
+            },
+            "pages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "type": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "url": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "prompts": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "engines": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 2
+                        }
+                      },
+                      "presence": {
+                        "type": "string",
+                        "enum": [
+                          "rec",
+                          "rev",
+                          "list",
+                          "mixed",
+                          "none"
+                        ]
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "supports": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "prompt": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "type",
+                      "url",
+                      "prompts",
+                      "engines",
+                      "presence",
+                      "detail",
+                      "supports",
+                      "prompt"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
+                  }
+                },
+                "required": [
+                  "v",
+                  "p"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "rating": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "count": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "recent": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "themes": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "cited": {
+                        "type": "boolean"
+                      },
+                      "scale": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "label",
+                      "title",
+                      "rating",
+                      "count",
+                      "recent",
+                      "themes",
+                      "cited",
+                      "scale"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
+                  }
+                },
+                "required": [
+                  "v",
+                  "p"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "fixes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "p": {
+                    "$ref": "#/$defs/PresentProvenance"
+                  }
+                },
+                "required": [
+                  "v",
+                  "p"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "rules": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -3239,19 +4831,29 @@
             }
           },
           "required": [
-            "permissions",
-            "pageGroups",
-            "notes",
-            "rawVsLoaded",
-            "attention",
-            "how"
+            "intro",
+            "standout",
+            "categories",
+            "takeaway",
+            "web",
+            "pages",
+            "reviews",
+            "fixes",
+            "rules"
           ],
           "additionalProperties": false
         },
-        "structuredData": {
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "actions": {
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
-            "stats": {
+            "tasks": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -3259,60 +4861,27 @@
                   "v": {
                     "type": "object",
                     "properties": {
-                      "value": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "label": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "value",
-                      "label"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "problems": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "mark": {
-                        "type": "string",
-                        "enum": [
-                          "r",
-                          "k"
-                        ]
-                      },
-                      "tag": {
-                        "type": "string",
-                        "minLength": 1
-                      },
                       "title": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "why": {
+                      "kind": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "details": {
+                      "scope": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "engines": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 2
+                        }
+                      },
+                      "rows": {
                         "type": "array",
                         "items": {
                           "type": "object",
@@ -3335,11 +4904,11 @@
                       }
                     },
                     "required": [
-                      "mark",
-                      "tag",
                       "title",
-                      "why",
-                      "details"
+                      "kind",
+                      "scope",
+                      "engines",
+                      "rows"
                     ],
                     "additionalProperties": false
                   },
@@ -3354,341 +4923,7 @@
                 "additionalProperties": false
               }
             },
-            "facts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "fact": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "page": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "code": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "mark": {
-                        "type": "string",
-                        "enum": [
-                          "g",
-                          "r",
-                          "k"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "fact",
-                      "page",
-                      "code",
-                      "mark"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "stats",
-            "problems",
-            "facts"
-          ],
-          "additionalProperties": false
-        },
-        "clear": {
-          "type": "object",
-          "properties": {
-            "intro": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "verdict": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "object",
-                  "properties": {
-                    "heading": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "text": {
-                      "type": "string",
-                      "minLength": 1
-                    }
-                  },
-                  "required": [
-                    "heading",
-                    "text"
-                  ],
-                  "additionalProperties": false
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "summary": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "object",
-                  "properties": {
-                    "sub": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "notes": {
-                      "type": "array",
-                      "prefixItems": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ],
-                      "items": false,
-                      "minItems": 4,
-                      "maxItems": 4
-                    }
-                  },
-                  "required": [
-                    "sub",
-                    "notes"
-                  ],
-                  "additionalProperties": false
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "facts": {
-              "minItems": 1,
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "sub": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "cells": {
-                        "type": "array",
-                        "prefixItems": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "mark": {
-                                "anyOf": [
-                                  {
-                                    "type": "string",
-                                    "enum": [
-                                      "g",
-                                      "k",
-                                      "r",
-                                      "n"
-                                    ]
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "value": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "sub": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "mark",
-                              "value",
-                              "sub"
-                            ],
-                            "additionalProperties": false
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "mark": {
-                                "anyOf": [
-                                  {
-                                    "type": "string",
-                                    "enum": [
-                                      "g",
-                                      "k",
-                                      "r",
-                                      "n"
-                                    ]
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "value": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "sub": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "mark",
-                              "value",
-                              "sub"
-                            ],
-                            "additionalProperties": false
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "mark": {
-                                "anyOf": [
-                                  {
-                                    "type": "string",
-                                    "enum": [
-                                      "g",
-                                      "k",
-                                      "r",
-                                      "n"
-                                    ]
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "value": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "sub": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "mark",
-                              "value",
-                              "sub"
-                            ],
-                            "additionalProperties": false
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "mark": {
-                                "anyOf": [
-                                  {
-                                    "type": "string",
-                                    "enum": [
-                                      "g",
-                                      "k",
-                                      "r",
-                                      "n"
-                                    ]
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
-                              },
-                              "value": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "sub": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "mark",
-                              "value",
-                              "sub"
-                            ],
-                            "additionalProperties": false
-                          }
-                        ],
-                        "items": false,
-                        "minItems": 4,
-                        "maxItems": 4
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "sub",
-                      "cells"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "fixes": {
+            "cases": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -3700,332 +4935,33 @@
                         "type": "string",
                         "minLength": 1
                       },
-                      "text": {
+                      "finding": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "closes": {
+                      "work": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "example": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "text",
-                      "closes",
-                      "example"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "rules": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "k": {
+                      "owner": {
                         "type": "string",
                         "minLength": 1
                       },
-                      "v": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "k",
-                      "v"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "intro",
-            "verdict",
-            "summary",
-            "facts",
-            "fixes",
-            "rules"
-          ],
-          "additionalProperties": false
-        },
-        "consistent": {
-          "type": "object",
-          "properties": {
-            "intro": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "verdict": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "object",
-                  "properties": {
-                    "heading": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "text": {
-                      "type": "string",
-                      "minLength": 1
-                    }
-                  },
-                  "required": [
-                    "heading",
-                    "text"
-                  ],
-                  "additionalProperties": false
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "sources": {
-              "minItems": 1,
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "sub": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "sub"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "facts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "website": {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "pages": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          },
-                          "issue": {
-                            "type": [
-                              "string",
-                              "null"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "value",
-                          "pages",
-                          "issue"
-                        ],
-                        "additionalProperties": false
-                      },
-                      "sources": {
+                      "tasks": {
                         "type": "array",
                         "items": {
-                          "type": "object",
-                          "properties": {
-                            "text": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "mark": {
-                              "type": "string",
-                              "enum": [
-                                "g",
-                                "r",
-                                "n"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "text",
-                            "mark"
-                          ],
-                          "additionalProperties": false
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
                         }
-                      },
-                      "status": {
-                        "type": "string",
-                        "enum": [
-                          "a",
-                          "c",
-                          "o",
-                          "u"
-                        ]
-                      },
-                      "means": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "note": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "website",
-                      "sources",
-                      "status",
-                      "means",
-                      "note"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "fixes": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "where": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "why": {
-                        "type": "string",
-                        "minLength": 1
                       }
                     },
                     "required": [
                       "title",
-                      "where",
-                      "why"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "rules": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "k": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "v": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "k",
-                      "v"
+                      "finding",
+                      "work",
+                      "owner",
+                      "tasks"
                     ],
                     "additionalProperties": false
                   },
@@ -4042,339 +4978,19 @@
             }
           },
           "required": [
-            "intro",
-            "verdict",
-            "sources",
-            "facts",
-            "fixes",
-            "rules"
+            "tasks",
+            "cases"
           ],
           "additionalProperties": false
         },
-        "distinctive": {
-          "type": "object",
-          "properties": {
-            "descriptions": {
-              "type": "array",
-              "prefixItems": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "v": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "p": {
-                      "$ref": "#/$defs/PresentProvenance"
-                    }
-                  },
-                  "required": [
-                    "v",
-                    "p"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "v": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "p": {
-                      "$ref": "#/$defs/PresentProvenance"
-                    }
-                  },
-                  "required": [
-                    "v",
-                    "p"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "v": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "p": {
-                      "$ref": "#/$defs/PresentProvenance"
-                    }
-                  },
-                  "required": [
-                    "v",
-                    "p"
-                  ],
-                  "additionalProperties": false
-                }
-              ],
-              "items": false,
-              "minItems": 3,
-              "maxItems": 3
-            },
-            "questions": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "question": {
-                    "type": "object",
-                    "properties": {
-                      "v": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "p": {
-                        "$ref": "#/$defs/PresentProvenance"
-                      }
-                    },
-                    "required": [
-                      "v",
-                      "p"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "answers": {
-                    "type": "array",
-                    "prefixItems": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "v": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "flag": {
-                                "type": [
-                                  "string",
-                                  "null"
-                                ]
-                              }
-                            },
-                            "required": [
-                              "text",
-                              "flag"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "p": {
-                            "$ref": "#/$defs/PresentProvenance"
-                          }
-                        },
-                        "required": [
-                          "v",
-                          "p"
-                        ],
-                        "additionalProperties": false
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "v": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "flag": {
-                                "type": [
-                                  "string",
-                                  "null"
-                                ]
-                              }
-                            },
-                            "required": [
-                              "text",
-                              "flag"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "p": {
-                            "$ref": "#/$defs/PresentProvenance"
-                          }
-                        },
-                        "required": [
-                          "v",
-                          "p"
-                        ],
-                        "additionalProperties": false
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "v": {
-                            "type": "object",
-                            "properties": {
-                              "text": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "flag": {
-                                "type": [
-                                  "string",
-                                  "null"
-                                ]
-                              }
-                            },
-                            "required": [
-                              "text",
-                              "flag"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "p": {
-                            "$ref": "#/$defs/PresentProvenance"
-                          }
-                        },
-                        "required": [
-                          "v",
-                          "p"
-                        ],
-                        "additionalProperties": false
-                      }
-                    ],
-                    "items": false,
-                    "minItems": 3,
-                    "maxItems": 3
-                  }
-                },
-                "required": [
-                  "question",
-                  "answers"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "takeaways": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "k": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "v": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "k",
-                      "v"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "fixes": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "text": {
-                        "type": "string",
-                        "minLength": 1
-                      }
-                    },
-                    "required": [
-                      "title",
-                      "text"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "descriptions",
-            "questions",
-            "takeaways",
-            "fixes"
-          ],
-          "additionalProperties": false
+        {
+          "type": "null"
         }
-      },
-      "required": [
-        "discovery",
-        "structuredData",
-        "clear",
-        "consistent",
-        "distinctive"
-      ],
-      "additionalProperties": false
+      ]
     },
-    "credible": {
-      "type": "object",
-      "properties": {
-        "intro": {
-          "type": "object",
-          "properties": {
-            "v": {
-              "type": "string",
-              "minLength": 1
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        },
-        "standout": {
-          "type": "object",
-          "properties": {
-            "v": {
-              "type": "string",
-              "minLength": 1
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        },
-        "categories": {
+    "methodGroups": {
+      "anyOf": [
+        {
           "type": "array",
           "items": {
             "type": "object",
@@ -4382,489 +4998,35 @@
               "v": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "heading": {
                     "type": "string",
                     "minLength": 1
                   },
-                  "note": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "present": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 9007199254740991
-                  },
-                  "absent": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 9007199254740991
-                  }
-                },
-                "required": [
-                  "name",
-                  "note",
-                  "present",
-                  "absent"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "takeaway": {
-          "type": "object",
-          "properties": {
-            "v": {
-              "type": "string",
-              "minLength": 1
-            },
-            "p": {
-              "$ref": "#/$defs/PresentProvenance"
-            }
-          },
-          "required": [
-            "v",
-            "p"
-          ],
-          "additionalProperties": false
-        },
-        "web": {
-          "type": "object",
-          "properties": {
-            "categories": {
-              "minItems": 1,
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "label": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "pageCategory": {
-                        "type": "string",
-                        "enum": [
-                          "your",
-                          "other",
-                          "maps",
-                          "review",
-                          "dir",
-                          "ed",
-                          "comm",
-                          "off",
-                          "unc"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "label",
-                      "pageCategory"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "sites": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "v": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "pageCategory": {
-                        "type": "string",
-                        "enum": [
-                          "your",
-                          "other",
-                          "maps",
-                          "review",
-                          "dir",
-                          "ed",
-                          "comm",
-                          "off",
-                          "unc"
-                        ]
-                      },
-                      "pageKeys": {
-                        "minItems": 1,
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "pattern": "^[a-z]{2}\\d*$"
-                        }
-                      },
-                      "present": {
-                        "type": "boolean"
-                      },
-                      "quality": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "good",
-                              "named",
-                              "concern"
-                            ]
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "qualityLabel": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "pageCategory",
-                      "pageKeys",
-                      "present",
-                      "quality",
-                      "qualityLabel"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
-                  }
-                },
-                "required": [
-                  "v",
-                  "p"
-                ],
-                "additionalProperties": false
-              }
-            }
-          },
-          "required": [
-            "categories",
-            "sites"
-          ],
-          "additionalProperties": false
-        },
-        "pages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "type": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "url": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "prompts": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 9007199254740991
-                  },
-                  "engines": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 2
-                    }
-                  },
-                  "presence": {
-                    "type": "string",
-                    "enum": [
-                      "rec",
-                      "rev",
-                      "list",
-                      "mixed",
-                      "none"
-                    ]
-                  },
-                  "detail": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "supports": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "prompt": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "required": [
-                  "title",
-                  "type",
-                  "url",
-                  "prompts",
-                  "engines",
-                  "presence",
-                  "detail",
-                  "supports",
-                  "prompt"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "reviews": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "label": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "rating": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "count": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "recent": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "themes": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "cited": {
-                    "type": "boolean"
-                  },
-                  "scale": {
-                    "anyOf": [
-                      {
-                        "type": "number",
-                        "exclusiveMinimum": 0
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "label",
-                  "title",
-                  "rating",
-                  "count",
-                  "recent",
-                  "themes",
-                  "cited",
-                  "scale"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "fixes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "text": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "required": [
-                  "title",
-                  "text"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "rules": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "k": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "v": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "required": [
-                  "k",
-                  "v"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": [
-        "intro",
-        "standout",
-        "categories",
-        "takeaway",
-        "web",
-        "pages",
-        "reviews",
-        "fixes",
-        "rules"
-      ],
-      "additionalProperties": false
-    },
-    "actions": {
-      "type": "object",
-      "properties": {
-        "tasks": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "kind": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "scope": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "engines": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 2
-                    }
-                  },
-                  "rows": {
+                  "items": {
                     "type": "array",
                     "items": {
                       "type": "object",
                       "properties": {
-                        "k": {
+                        "title": {
                           "type": "string",
                           "minLength": 1
                         },
-                        "v": {
+                        "text": {
                           "type": "string",
                           "minLength": 1
                         }
                       },
                       "required": [
-                        "k",
-                        "v"
+                        "title",
+                        "text"
                       ],
                       "additionalProperties": false
                     }
                   }
                 },
                 "required": [
-                  "title",
-                  "kind",
-                  "scope",
-                  "engines",
-                  "rows"
+                  "heading",
+                  "items"
                 ],
                 "additionalProperties": false
               },
@@ -4879,116 +5041,10 @@
             "additionalProperties": false
           }
         },
-        "cases": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "v": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "finding": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "work": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "owner": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "tasks": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": 0,
-                      "maximum": 9007199254740991
-                    }
-                  }
-                },
-                "required": [
-                  "title",
-                  "finding",
-                  "work",
-                  "owner",
-                  "tasks"
-                ],
-                "additionalProperties": false
-              },
-              "p": {
-                "$ref": "#/$defs/PresentProvenance"
-              }
-            },
-            "required": [
-              "v",
-              "p"
-            ],
-            "additionalProperties": false
-          }
+        {
+          "type": "null"
         }
-      },
-      "required": [
-        "tasks",
-        "cases"
-      ],
-      "additionalProperties": false
-    },
-    "methodGroups": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "v": {
-            "type": "object",
-            "properties": {
-              "heading": {
-                "type": "string",
-                "minLength": 1
-              },
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "text": {
-                      "type": "string",
-                      "minLength": 1
-                    }
-                  },
-                  "required": [
-                    "title",
-                    "text"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "required": [
-              "heading",
-              "items"
-            ],
-            "additionalProperties": false
-          },
-          "p": {
-            "$ref": "#/$defs/PresentProvenance"
-          }
-        },
-        "required": [
-          "v",
-          "p"
-        ],
-        "additionalProperties": false
-      }
+      ]
     }
   },
   "required": [
