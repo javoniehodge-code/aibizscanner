@@ -64,7 +64,7 @@ export type Slide = { text: string; png: Buffer };
  * Opens a template and captures every slide (visible text + full-page screenshot). External requests (web fonts)
  * are blocked so renders are deterministic and nothing leaves the machine.
  */
-export async function captureSlides(page: Page, url: string, report?: unknown): Promise<{ slides: Slide[]; errors: string[] }> {
+export async function captureSlides(page: Page, url: string, report?: unknown, count = SLIDE_COUNT): Promise<{ slides: Slide[]; errors: string[] }> {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
@@ -74,7 +74,7 @@ export async function captureSlides(page: Page, url: string, report?: unknown): 
   await page.locator("#dc-root section").first().waitFor({ timeout: 30_000 });
   await page.addStyleTag({ content: "*{transition:none!important;animation:none!important;scroll-behavior:auto!important}" });
   const slides: Slide[] = [];
-  for (let i = 0; i < SLIDE_COUNT; i++) {
+  for (let i = 0; i < count; i++) {
     await page.waitForTimeout(120);
     slides.push({ text: await page.locator("#dc-root").innerText(), png: await page.screenshot({ fullPage: true }) });
     await page.keyboard.press("ArrowRight");

@@ -12,6 +12,9 @@ import { z } from "zod";
  *   - sample:   illustrative data, not from a real run
  *   - missing:  not available; `reason` says why, and `v` is null
  * Only envelopes declared with `maybe()` may be missing; the template has an explicit state for each of them.
+ *
+ * Whole sections: a report built by the pipeline has only the sections whose stages exist and have run. The others
+ * are `null` (see `SECTIONS`), and the template leaves their slides out. The prompt analysis is always present.
  */
 
 export const SCHEMA_VERSION = "1.0";
@@ -427,13 +430,13 @@ const reportShape = z
       val(z.object({ name: z.literal("Gemini"), model: nonEmpty }).strict()),
     ]),
     copy,
-    summary: z.object({ clear: val(z.object({ text: nonEmpty }).strict()) }).strict(),
+    summary: z.object({ clear: val(z.object({ text: nonEmpty }).strict()) }).strict().nullable(),
     promptAnalysis,
-    competitors,
-    citationCoverage,
-    webPresence,
-    website: z.object({ discovery, structuredData, clear, consistent, distinctive }).strict(),
-    credible,
+    competitors: competitors.nullable(),
+    citationCoverage: citationCoverage.nullable(),
+    webPresence: webPresence.nullable(),
+    website: z.object({ discovery, structuredData, clear, consistent, distinctive }).strict().nullable(),
+    credible: credible.nullable(),
     actions: z
       .object({
         tasks: z.array(
@@ -443,12 +446,17 @@ const reportShape = z
           val(z.object({ title: nonEmpty, finding: nonEmpty, work: nonEmpty, owner: nonEmpty, tasks: z.array(z.number().int().min(0)) }).strict()),
         ),
       })
-      .strict(),
-    methodGroups: z.array(val(z.object({ heading: nonEmpty, items: z.array(z.object({ title: nonEmpty, text: nonEmpty }).strict()) }).strict())),
+      .strict()
+      .nullable(),
+    methodGroups: z.array(val(z.object({ heading: nonEmpty, items: z.array(z.object({ title: nonEmpty, text: nonEmpty }).strict()) }).strict())).nullable(),
   })
   .strict();
 
 type Shape = z.infer<typeof reportShape>;
+
+/** Sections a report may leave out (null) until the stages that produce them have run. */
+export const SECTIONS = ["summary", "competitors", "citationCoverage", "webPresence", "website", "credible", "actions", "methodGroups"] as const;
+export type SectionKey = (typeof SECTIONS)[number];
 
 /** Walks every envelope in a document. */
 export function forEachEnvelope(doc: unknown, fn: (env: { v: unknown; p: Provenance }, path: string) => void, path = "$"): void {
@@ -502,26 +510,26 @@ function checkReferences(doc: Shape, ctx: z.RefinementCtx) {
       if (pa.run.v[k as keyof typeof want] !== n) issue(`run.${k} is ${pa.run.v[k as keyof typeof want]} but the answers give ${n}`, ["promptAnalysis", "run"]);
     }
   }
-  for (const k of doc.competitors.compared.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["competitors", "compared"]);
-  for (const k of doc.citationCoverage.businesses.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["citationCoverage", "businesses"]);
-  doc.citationCoverage.sites.forEach((s, i) => {
+  if (doc.competitors) for (const k of doc.competitors.compared.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["competitors", "compared"]);
+  if (doc.citationCoverage) for (const k of doc.citationCoverage.businesses.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["citationCoverage", "businesses"]);
+  doc.citationCoverage?.sites.forEach((s, i) => {
     for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["citationCoverage", "sites", i]);
     for (const k of s.v.presentBusinesses) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["citationCoverage", "sites", i]);
   });
-  doc.webPresence.forEach((w, i) => {
+  doc.webPresence?.forEach((w, i) => {
     for (const k of w.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["webPresence", i]);
   });
-  const webCats = new Set(doc.credible.web.categories.map((c) => c.v.pageCategory));
-  doc.credible.web.sites.forEach((s, i) => {
+  const webCats = new Set(doc.credible?.web.categories.map((c) => c.v.pageCategory));
+  doc.credible?.web.sites.forEach((s, i) => {
     if (!webCats.has(s.v.pageCategory)) issue(`Site category ${s.v.pageCategory} has no diagram category`, ["credible", "web", "sites", i]);
     for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["credible", "web", "sites", i]);
   });
-  const nSources = doc.website.consistent.sources.length;
-  doc.website.consistent.facts.forEach((f, i) => {
+  const nSources = doc.website?.consistent.sources.length ?? 0;
+  doc.website?.consistent.facts.forEach((f, i) => {
     if (f.v.sources.length !== nSources) issue(`Fact has ${f.v.sources.length} source cells; expected ${nSources}`, ["website", "consistent", "facts", i]);
   });
-  doc.actions.cases.forEach((c, i) => {
-    for (const t of c.v.tasks) if (t >= doc.actions.tasks.length) issue(`Task ${t} out of range`, ["actions", "cases", i]);
+  doc.actions?.cases.forEach((c, i) => {
+    for (const t of c.v.tasks) if (t >= doc.actions!.tasks.length) issue(`Task ${t} out of range`, ["actions", "cases", i]);
   });
 }
 

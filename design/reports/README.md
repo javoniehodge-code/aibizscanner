@@ -30,6 +30,12 @@ Credible slide are generated from data (`WEB` in the script). States kept: not f
 without 5 stars, sources named but not cited, the Gemini `LOCAL` assumption, unavailable answers, plus explicit
 "not recorded for this report" states for data a report marks missing.
 
+A report assembled by the pipeline (stage 12) contains only the sections whose stages have run. Sections it hasn't
+produced are `null` in the JSON (`SECTIONS` in `web/src/report/schema.ts`), and the template leaves their slides out:
+`NEEDS` in the script lists the sections each slide needs. Slide numbers, section numbers and the navigation follow
+the slides that remain, and cover links to a missing slide read "Not in this report yet". With every section present
+(both fixtures) the report is unchanged.
+
 The original hand-filled version is in git history (commit `879241a`). `web/e2e/report-template.spec.ts` renders both
 and requires identical text on all 24 slides and a pixel difference under 0.1%. `full-business-diagnostic-mvp-miami.dc.html`
 is kept unchanged as the source of `fixtures/mvp-miami.json`.

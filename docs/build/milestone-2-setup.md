@@ -59,7 +59,17 @@ With it on, every plan allows 300 seconds.
 5. The results page refreshes every 20 seconds. Within about a minute the three engines start (in parallel); then the
    answers are read and the result is assembled automatically.
 
-## 6. What to look at
+## 6. See it in the report design
+
+When the prompt analysis finishes, one more step, **Report: assemble the report document**, runs on its own and puts
+the results into the report design. Open **Reports → View report**. For now the report shows only the slides with
+real data: the cover, the AI Recommendation slides, the cited sources and the prompt method. The website, web presence,
+competitor and To Do slides appear as their stages are built.
+
+For a report whose prompt analysis finished before this step existed, open its **Run monitor** and click **Run** next
+to *Report: assemble the report document*. Each run adds a new version; the report view shows the latest.
+
+## 7. What to look at
 
 - **Summary**: how many answers were usable, and how often MVP Miami was recommended by each engine.
 - **Who the engines name**: every business named, with recommended / mentioned / excluded counts per engine.

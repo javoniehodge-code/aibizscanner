@@ -9,6 +9,7 @@ import { FakeLlmClient } from "../../../testing/fake-llm";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
 import { registry } from "../../../index";
 import type { AnswerExtraction, PromptSetSpec } from "../schemas";
+import { reportDocument, SECTIONS } from "@/report/schema";
 
 const SET: PromptSetSpec = {
   promptSet: { id: "00000000-0000-4000-8000-000000000001", version: 1, approvedAt: "2026-11-13T10:00:00Z" },
@@ -124,6 +125,20 @@ describe("prompt analysis pipeline (fake providers)", () => {
     expect(out.section.firstChoices).toHaveLength(3);
     expect(out.section.questions[0]!.answers[2]!.v).toMatchObject({ status: "unavailable", reason: "Gemini is not configured (its API key is not set)" });
     expect(out.evidence["ans-0-P1"]).toBeDefined();
+
+    // Stage 12 wraps the section into a full report document; sections not built yet are null.
+    const doc = await run("report_assemble", [asm.input], providers);
+    expect(doc.outcome.outcome).toBe("done");
+    const parsed = reportDocument.safeParse(doc.input.output);
+    expect(parsed.success, JSON.stringify(parsed.error?.issues.slice(0, 3))).toBe(true);
+    const d = parsed.data!;
+    expect(d.business.v).toMatchObject({ key: "MM", name: "MVP Miami", domain: "mvpmiami.com" });
+    expect(d.meta.v.runDate).toMatch(/^\d{1,2} [A-Z][a-z]{2} \d{4}$/);
+    expect(d.promptAnalysis).toEqual(out.section);
+    for (const k of SECTIONS) expect(d[k], k).toBeNull();
+    expect(d.copy.promptReportDetails.v).toContain("2 questions, prompt set v1");
+    expect(d.copy.promptReportDetails.v).toContain("3 of 6 answers usable");
+    expect(d.copy.websiteSummary).toMatchObject({ v: null, p: { kind: "missing" } });
   });
 
   it("an extraction whose business quote isn't in the answer is retried with the problem, then the answer is shown as unavailable", async () => {

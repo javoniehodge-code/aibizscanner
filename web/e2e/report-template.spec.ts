@@ -49,6 +49,39 @@ test("MVP Miami renders through the same template with no template edits", async
   }
 });
 
+test("a report with only the prompt analysis shows only its slides, numbered in order", async ({ browser }) => {
+  // What pipeline stage 12 produces before the website and web presence stages exist: those sections are null.
+  const doc = fixture("mvp-miami") as Record<string, unknown>;
+  for (const k of ["summary", "competitors", "citationCoverage", "webPresence", "website", "credible", "actions", "methodGroups"]) doc[k] = null;
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 11; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const heads = slides.map((t) => t.split("\n")[0]!.trim());
+    // Cover, AI Recommendation divider, guide, summary, prompts, businesses, Web Presence divider, sources, appendix,
+    // prompt method; the 11th press stays on the last slide.
+    expect(heads).toEqual(["ABOUT THIS REPORT", "SECTION 1", "02", "03", "04", "05", "SECTION 2", "07", "REFERENCE", "09", "09"]);
+    const all = slides.join("\n");
+    expect(all).toContain("NOT IN THIS REPORT YET");
+    for (const absent of ["AI Analysis of Your Website", "Action Plan", "Competitor Comparison", "Citation coverage"]) expect(all).not.toContain(absent);
+  } finally {
+    await srv.close();
+  }
+});
+
 test("the template contains no business data", () => {
   const html = currentTemplate();
   for (const word of ["Brownstone", "Brooklyn", "NYSDOT", "walk-up", "piano", "MVP", "Miami", "29 Oct 2026", "11 Nov 2026"]) {
