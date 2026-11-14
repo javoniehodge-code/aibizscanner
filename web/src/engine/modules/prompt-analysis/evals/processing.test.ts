@@ -55,6 +55,9 @@ describe("extraction output", () => {
       namedSources: [],
     };
     expect(unverifiedQuotes(ex, answer)).toEqual([]);
+    // Answers in a table (seen in Gemini P5): the reading model quotes across cell dividers.
+    const table = "| Company | Best for |\n|---|---|\n| **Aventura Limo / mph club** | if you want a modern Rolls-Royce |";
+    expect(unverifiedQuotes({ ...ex, businesses: [{ name: "Aventura Limo", status: "recommended", quote: "Aventura Limo / mph club if you want a modern Rolls-Royce", reason: "if you want a modern Rolls-Royce" }] }, table)).toEqual([]);
     // Words still have to be there.
     expect(unverifiedQuotes({ ...ex, businesses: [{ ...ex.businesses[0]!, reason: "its Gold Card membership" }] }, answer)).toHaveLength(1);
   });
