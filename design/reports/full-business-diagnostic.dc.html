@@ -1049,7 +1049,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
   <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="width:36px;height:36px;border-radius:8px;background:oklch(0.45 0.22 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:14px;font-weight:600">{{ slideNo.p2 }}</span><span style="font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">COMPETITOR APPEARANCES</span><span style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.3;text-align:right"><strong style="font-size:16px;font-weight:700">{{ biz.name }}</strong><span style="font-size:14px">{{ biz.location }}</span></span></span>
   <div style="display:flex;flex-direction:column;gap:10px;max-width:780px">
     <h2 style="margin:0;font-size:clamp(28px,3.2vw,32px);font-weight:700;letter-spacing:-0.02em;line-height:1.2;text-wrap:balance">Being named is only part of the picture</h2>
-    <p style="margin:0;font-size:18px;line-height:1.55;max-width:65ch;text-wrap:pretty">Three comparisons, each sorted highest to lowest. All three charts use the same answer-count scale. An explicit first choice is also a recommendation and an appearance, so the charts don’t add together.</p>
+    <p style="margin:0;font-size:18px;line-height:1.55;max-width:65ch;text-wrap:pretty">{{ pa.bnIntro }}</p>
   </div>
   <div style="display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;padding:12px 0;border-top:1px solid oklch(0.9 0.008 265);border-bottom:1px solid oklch(0.9 0.008 265)">
     <div data-noprint role="group" aria-label="Provider" style="display:flex;gap:4px;padding:4px;border:1px solid oklch(0.9 0.008 265);border-radius:999px;background:#fff;flex-wrap:wrap">
@@ -1075,7 +1075,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
         </div>
         <span></span>
         <div style="{{ ch.labelCols }}">
-          <sc-for list="{{ ch.bars }}" as="b" hint-placeholder-count="10"><span style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;min-width:0"><span style="{{ b.nameStyle }}">{{ b.name }}</span><sc-if value="{{ b.you }}"><span style="font-size:11px;font-weight:700;letter-spacing:0.04em;padding:2px 6px;border-radius:4px;background:oklch(0.62 0.18 150);color:#fff">YOUR BUSINESS</span></sc-if></span></sc-for>
+          <sc-for list="{{ ch.bars }}" as="b" hint-placeholder-count="10"><span style="{{ b.labelCell }}"><span style="{{ b.nameStyle }}">{{ b.name }}</span><sc-if value="{{ b.you }}"><span style="{{ b.badge }}">YOUR BUSINESS</span></sc-if></span></sc-for>
         </div>
       </div>
     </div>
@@ -1871,14 +1871,23 @@ class PromptPart extends Sub {
     const peak = Math.max(1, ...allIds.map(k => met.n[k].length));
     const step = peak <= 5 ? 1 : peak <= 10 ? 2 : peak <= 20 ? 4 : 10, top = Math.ceil(peak / step) * step;
     const ticks = []; for (let v = 0; v <= top; v += step) ticks.push({ v, label: { position: 'absolute', right: 0, bottom: (v / top * 100) + '%', transform: 'translateY(50%)', fontSize: 13 }, line: { position: 'absolute', left: 0, right: 0, bottom: (v / top * 100) + '%', height: 1, background: v ? 'oklch(0.9 0.006 265)' : 'transparent' } });
-    const colsStyle = { display: 'grid', gridTemplateColumns: 'repeat(' + allIds.length + ', minmax(0,1fr))', gap: 10 };
-    const chartDefs = [['n', 'Named', 'Answers that identify the business. Sorted by named count.'], ['r', 'Recommended', 'Answers that present the business as a suitable choice. Sorted by recommended count.'], ['f', 'Explicit first choice', 'Answers that directly call the business a top choice for the question or a stated need. Sorted by explicit first choice count.']];
+    // Each chart shows the TOP_N businesses for its measure; your business is added at the end when it isn't among them.
+    // With more than SLANT_AT bars, names under the chart are slanted to fit.
+    const TOP_N = 15, SLANT_AT = 8;
+    const topIds = m => { const sorted = allIds.slice().sort((a, b) => met[m][b].length - met[m][a].length || B[a].localeCompare(B[b])), top = sorted.slice(0, TOP_N); return top.includes(TARGET) ? top : [...top, TARGET]; };
+    const colsStyle = n => ({ display: 'grid', gridTemplateColumns: 'repeat(' + n + ', minmax(0,1fr))', gap: 10 });
+    const more = allIds.length > TOP_N ? ' Showing the ' + TOP_N + ' highest of ' + allIds.length + ' businesses named.' : '';
+    const chartDefs = [['n', 'Named', 'Answers that identify the business. Sorted by named count.' + more], ['r', 'Recommended', 'Answers that present the business as a suitable choice. Sorted by recommended count.' + more]];
+    const BADGE = { fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '2px 6px', borderRadius: 4, background: 'oklch(0.62 0.18 150)', color: '#fff', whiteSpace: 'nowrap' };
     const bnCharts = chartDefs.map(([m, t, d], ci) => {
-      const ids = allIds.slice().sort((a, b) => met[m][b].length - met[m][a].length || B[a].localeCompare(B[b]));
-      return { n: ci + 1, t, d, ticks, cols: { ...colsStyle, position: 'absolute', inset: '0 8px', alignItems: 'end' }, labelCols: { ...colsStyle, padding: '8px 8px 0' }, bars: ids.map(k => { const v = met[m][k].length, you = k === TARGET; return { name: B[k], you, v, tip: B[k] + ': ' + v + ' of ' + scope.length + ' answers', nameStyle: { fontSize: 13, lineHeight: 1.25, fontWeight: you ? 700 : 500 },
+      const ids = topIds(m), slant = ids.length > SLANT_AT;
+      return { n: ci + 1, t, d, ticks, cols: { ...colsStyle(ids.length), position: 'absolute', inset: '0 8px', alignItems: 'end' }, labelCols: { ...colsStyle(ids.length), padding: '8px 8px 0', ...(slant ? { height: 150 } : {}) }, bars: ids.map(k => { const v = met[m][k].length, you = k === TARGET; return { name: B[k] + (you && slant ? ' \u00b7 yours' : ''), you, v, tip: B[k] + ': ' + v + ' of ' + scope.length + ' answers',
+        labelCell: slant ? { position: 'relative', minWidth: 0 } : { display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 3, minWidth: 0 },
+        nameStyle: slant ? { position: 'absolute', top: 2, right: '50%', transform: 'rotate(-40deg)', transformOrigin: 'top right', whiteSpace: 'nowrap', maxWidth: 190, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 13, lineHeight: 1.25, fontWeight: you ? 700 : 500, color: you ? 'oklch(0.45 0.15 150)' : '#000' } : { fontSize: 13, lineHeight: 1.25, fontWeight: you ? 700 : 500 },
+        badge: slant ? { display: 'none' } : BADGE,
         bar: { display: 'block', width: '70%', maxWidth: 56, height: (v / top * 100) + '%', minHeight: v ? 2 : 0, borderRadius: '4px 4px 0 0', background: you ? 'repeating-linear-gradient(45deg, oklch(0.62 0.18 150) 0 6px, oklch(0.52 0.17 150) 6px 9px)' : 'linear-gradient(180deg,oklch(0.65 0.14 230),oklch(0.55 0.2 268))' } }; }) };
     });
-    const ids = allIds.slice().sort((a, b) => met.n[b].length - met.n[a].length || B[a].localeCompare(B[b]));
+    const ids = topIds('n');
     const yN = met.n[TARGET].length, yR = met.r[TARGET].length, yF = met.f[TARGET].length;
     const bnSel = s.bnSel || TARGET;
     const exO = met.f[bnSel][0] || met.r[bnSel][0] || met.n[bnSel][0] || null;
@@ -1945,6 +1954,7 @@ class PromptPart extends Sub {
       cvHeadGrid: { display: 'grid', gridTemplateColumns: s.cv === 'top3' ? 'minmax(240px,1.1fr) repeat(3,minmax(170px,0.85fr))' : 'minmax(0,1fr) repeat(3,100px)', gap: 8, alignItems: 'end' },
       cvHeadLabel: s.cv === 'top3' ? 'First 3 businesses in each answer · yours shaded green' : 'Number = your position in the answer \u00b7 color = how AI mentioned you',
       provOpts: ['all', ...AIS].map(k => ({ n: k === 'all' ? 'All AIs' : k, on: pv === k, go: () => this.setState({ prov: k }), style: seg(pv === k) })),
+      bnIntro: 'Two comparisons, each sorted highest to lowest' + (allIds.length > TOP_N ? ' and limited to the ' + TOP_N + ' businesses with the highest counts (plus yours)' : '') + '. Both charts use the same answer-count scale. A recommendation is also an appearance, so the charts don\u2019t add together.',
       bnScope: pv === 'all' ? 'All AIs' : pv, bnDenom: scope.length, bnUnavail, bnCharts,
       bnYou: B[TARGET] + ' is named in ' + yN + ' answers, recommended in ' + yR + ', and explicitly a first choice in ' + yF + '. Green hatching marks your business in every chart.',
       bnOptions: [TARGET, ...ids.filter(k => k !== TARGET)].map(k => ({ k, n: B[k] + (k === TARGET ? ' \u00b7 Your business' : '') })), bnSel, bnPick: e => this.setState({ bnSel: e.target.value }), ex, bnTable,

@@ -6,7 +6,10 @@ import { captureSlides, currentTemplate, diffRatio, fixture, legacyTemplate, ser
 test.describe.configure({ mode: "serial" });
 test.setTimeout(240_000);
 
-test("Brownstone: every slide matches the original hand-filled template", async ({ browser }) => {
+/** Slide indexes changed on purpose since the original: 5 Businesses named (top 15, no first-choice chart, slanted names; 14 Nov 2026). */
+const REDESIGNED = new Set([5]);
+
+test("Brownstone: every slide matches the original hand-filled template, except redesigned ones", async ({ browser }) => {
   const before = await serveDir(templateDir(legacyTemplate()));
   const after = await serveDir(templateDir(currentTemplate()));
   try {
@@ -18,6 +21,8 @@ test("Brownstone: every slide matches the original hand-filled template", async 
     expect(fromJson.errors).toEqual([]);
     const cmp = await browser.newPage();
     for (let i = 0; i < SLIDE_COUNT; i++) {
+      // Redesigned after the JSON refactor, so they no longer match the original (checked in the MVP Miami test).
+      if (REDESIGNED.has(i)) continue;
       const o = original.slides[i]!, n = fromJson.slides[i]!;
       expect(n.text, `slide ${i}: visible text`).toBe(o.text);
       // Text from a data hole is its own text run, which can shift anti-aliasing by a fraction of a pixel, and one
@@ -44,6 +49,11 @@ test("MVP Miami renders through the same template with no template edits", async
     // Missing states, not Brownstone values.
     expect(all).toContain("Not available for this report: The MVP Miami export has no raw-vs-fully-loaded comparison table.");
     expect(all).toContain("Not recorded for this report: The MVP Miami export did not record sources named without a citation (XSRC).");
+    // Businesses named (slide 5): two charts limited to the top 15 of 20 businesses, no first-choice chart.
+    const names = slides[5]!.text;
+    expect(names).toContain("Showing the 15 highest of 20 businesses named.");
+    expect(names).toContain("2. Recommended");
+    expect(names).not.toContain("3. Explicit first choice");
   } finally {
     await srv.close();
   }

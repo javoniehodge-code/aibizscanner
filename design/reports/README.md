@@ -39,3 +39,8 @@ the slides that remain, and cover links to a missing slide read "Not in this rep
 The original hand-filled version is in git history (commit `879241a`). `web/e2e/report-template.spec.ts` renders both
 and requires identical text on all 24 slides and a pixel difference under 0.1%. `full-business-diagnostic-mvp-miami.dc.html`
 is kept unchanged as the source of `fixtures/mvp-miami.json`.
+
+**Businesses named slide (14 Nov 2026):** the Named and Recommended charts show the 15 businesses with the highest
+counts, plus the report's business if it isn't among them; the "Explicit first choice" chart was removed (first
+choices still show in the example answer). With more than 8 bars, names under the charts are slanted. The appearance
+table lists the same top 15. The Brownstone pixel test skips this slide; the MVP Miami test checks it.
