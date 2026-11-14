@@ -124,7 +124,16 @@ export const extractions = z
     model: z.string(),
     items: z.array(
       z.discriminatedUnion("status", [
-        z.object({ answerId: z.string(), status: z.literal("verified"), extraction: answerExtraction, attempts: z.number().int() }).strict(),
+        z
+          .object({
+            answerId: z.string(),
+            status: z.literal("verified"),
+            extraction: answerExtraction,
+            attempts: z.number().int(),
+            /** Optional details removed because their words weren't in the answer (absent on runs before this check). */
+            dropped: z.array(z.string()).optional(),
+          })
+          .strict(),
         z.object({ answerId: z.string(), status: z.literal("failed"), error: z.string(), attempts: z.number().int() }).strict(),
       ]),
     ),

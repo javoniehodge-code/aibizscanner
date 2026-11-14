@@ -126,17 +126,44 @@ describe("prompt analysis pipeline (fake providers)", () => {
     expect(out.evidence["ans-0-P1"]).toBeDefined();
   });
 
-  it("an extraction whose quotes aren't in the answer is retried, then the answer is shown as unavailable", async () => {
-    const providers: Providers = {
-      llm: new FakeLlmClient(() => JSON.stringify({ ...EXTRACTION, firstChoice: { name: "MVP Miami", scope: "Overall", quote: "the very best in Florida" } })),
-      answers: (e) => (e === 0 ? fakeEngine(0) : null),
-    };
+  it("an extraction whose business quote isn't in the answer is retried with the problem, then the answer is shown as unavailable", async () => {
+    const llm = new FakeLlmClient(() =>
+      JSON.stringify({ ...EXTRACTION, businesses: [{ ...EXTRACTION.businesses[0]!, quote: "MVP Miami is the very best in Florida" }] }),
+    );
+    const providers: Providers = { llm, answers: (e) => (e === 0 ? fakeEngine(0) : null) };
     const set = await run("pa_prompt_set", [], providers, SET as unknown as Record<string, JsonValue>);
     const a = await Promise.all(["pa_answers_chatgpt", "pa_answers_claude", "pa_answers_gemini"].map((s) => run(s, [set.input], providers)));
     const ex = await run("pa_extract", [set.input, ...a.map((x) => x.input)], providers);
     expect(ex.outcome.outcome).toBe("failed");
     expect(ex.store.finished?.error).toMatch(/No answer could be read: quoted words not found/);
     expect(ex.store.llmCalls).toHaveLength(4); // 2 answers x 2 attempts
+    // The retry is told which quote was wrong; the first attempt isn't.
+    const inputs = llm.requests.map((r) => r.user);
+    expect(inputs.filter((u) => u.includes("problemsWithPreviousAttempt"))).toHaveLength(2);
+    expect(inputs.find((u) => u.includes("problemsWithPreviousAttempt"))).toContain("the very best in Florida");
+  });
+
+  it("a reason, first choice or source that isn't in the answer is dropped, and the answer stays usable", async () => {
+    const llm = new FakeLlmClient(() =>
+      JSON.stringify({
+        ...EXTRACTION,
+        businesses: [{ ...EXTRACTION.businesses[0]!, reason: "they deliver anywhere in Florida" }, EXTRACTION.businesses[1]],
+        firstChoice: { name: "MVP Miami", scope: "Overall", quote: "the very best in Florida" },
+        namedSources: [{ source: "Google", quote: "5 stars on Google" }],
+      }),
+    );
+    const providers: Providers = { llm, answers: (e) => (e === 0 ? fakeEngine(0) : null) };
+    const set = await run("pa_prompt_set", [], providers, SET as unknown as Record<string, JsonValue>);
+    const a = await Promise.all(["pa_answers_chatgpt", "pa_answers_claude", "pa_answers_gemini"].map((s) => run(s, [set.input], providers)));
+    const ex = await run("pa_extract", [set.input, ...a.map((x) => x.input)], providers);
+    expect(ex.outcome.outcome).toBe("done");
+    expect(llm.requests).toHaveLength(2); // no retry needed
+    const item = (ex.input.output as { items: { status: string; dropped?: string[]; extraction: { businesses: { reason: string | null }[]; firstChoice: unknown; namedSources: unknown[] } }[] }).items[0]!;
+    expect(item.status).toBe("verified");
+    expect(item.extraction.businesses[0]!.reason).toBeNull();
+    expect(item.extraction.firstChoice).toBeNull();
+    expect(item.extraction.namedSources).toEqual([]);
+    expect(item.dropped).toHaveLength(3);
   });
 
   it("stops asking once the spending cap is reached and keeps the answers already paid for", async () => {
