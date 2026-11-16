@@ -7,7 +7,7 @@ import { instructionRef } from "../../../llm";
 import { registry } from "../../../index";
 import { FakeLlmClient } from "../../../testing/fake-llm";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
-import { checkModelClassification, citationEvidence, pageKeyOf, ruleGroup, siteKeyOf, type PageEvidence } from "../logic/sources";
+import { applySiteOwnership, checkModelClassification, citationEvidence, pageKeyOf, ruleGroup, siteKeyOf, type PageEvidence, type SourceGroup } from "../logic/sources";
 import type { ClassifiedSources, EngineAnswers, PromptSetSpec } from "../schemas";
 import { CLASSIFIER_VERSION } from "../sources-stage";
 
@@ -77,20 +77,45 @@ describe("evidence from provider responses", () => {
   it("reads OpenAI url_citation titles and the sentence before the citation", () => {
     const text = "Rentals are popular. mph club has a large fleet in Miami. ([mphclub.com](https://mphclub.com/miami/))";
     const raw = { output: [{ content: [{ type: "output_text", annotations: [{ type: "url_citation", url: "https://mphclub.com/miami/?utm_source=openai", title: "Exotic Car Rental in Miami | mph club", start_index: text.indexOf("(["), end_index: text.length }] }] }] };
-    expect(citationEvidence(raw, text)).toEqual([{ url: "https://mphclub.com/miami/?utm_source=openai", title: "Exotic Car Rental in Miami | mph club", excerpt: "mph club has a large fleet in Miami." }]);
+    expect(citationEvidence(raw, text)).toEqual([{ url: "https://mphclub.com/miami/?utm_source=openai", title: "Exotic Car Rental in Miami | mph club", excerpt: "mph club has a large fleet in Miami.", from: "answer" }]);
   });
   it("reads Anthropic cited_text and Gemini grounding chunks with their support text", () => {
     const claude = [{ content: [{ type: "text", citations: [{ type: "web_search_result_location", url: "https://www.yelp.com/biz/x", title: "X - Yelp", cited_text: "4.8 stars from 120 reviews" }] }] }];
-    expect(citationEvidence(claude, null)).toEqual([{ url: "https://www.yelp.com/biz/x", title: "X - Yelp", excerpt: "4.8 stars from 120 reviews" }]);
+    expect(citationEvidence(claude, null)).toEqual([{ url: "https://www.yelp.com/biz/x", title: "X - Yelp", excerpt: "4.8 stars from 120 reviews", from: "page" }]);
     const gemini = { candidates: [{ groundingMetadata: { groundingChunks: [{ web: { uri: "https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc", title: "mphclub.com" } }], groundingSupports: [{ segment: { text: "mph club delivers cars." }, groundingChunkIndices: [0] }] } }] };
-    expect(citationEvidence(gemini, null)).toEqual([{ url: "https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc", title: "mphclub.com", excerpt: "mph club delivers cars." }]);
+    expect(citationEvidence(gemini, null)).toEqual([{ url: "https://vertexaisearch.cloud.google.com/grounding-api-redirect/abc", title: "mphclub.com", excerpt: "mph club delivers cars.", from: "answer" }]);
+  });
+});
+
+describe("a business's own website", () => {
+  const v = (pageKey: string, group: SourceGroup, method = "model", unclassified: "insufficient" | "outside" | null = null) => ({ pageKey, site: pageKey.split("/")[0]!, group, method, unclassified, reason: "r", evidence: null });
+  it("moves its articles and evidence-poor pages to Company websites when it is mostly company pages", () => {
+    const changed = applySiteOwnership([
+      v("mphclub.com/miami", "company"),
+      v("mphclub.com/contacts", "company"),
+      v("mphclub.com/luxury-car-rental-for-weddings-miami", "ed"),
+      v("mphclub.com/vehicle-delivery-services", "unc", "model", "insufficient"),
+      v("mphclub.com/odd", "unc", "model", "outside"),
+    ]);
+    expect([...changed.keys()].sort()).toEqual(["mphclub.com/luxury-car-rental-for-weddings-miami", "mphclub.com/vehicle-delivery-services"]);
+    expect(changed.get("mphclub.com/luxury-car-rental-for-weddings-miami")).toMatchObject({ group: "company", unclassified: null });
+    expect(changed.get("mphclub.com/luxury-car-rental-for-weddings-miami")!.reason).toContain("business's own website");
+  });
+  it("leaves publishers and rule-based pages alone", () => {
+    expect(applySiteOwnership([v("timeout.com/a", "ed"), v("timeout.com/b", "ed"), v("timeout.com/shop", "company")]).size).toBe(0);
+    expect(applySiteOwnership([v("turo.com/blog/x", "company", "rule"), v("turo.com/us/miami", "dir", "rule")]).size).toBe(0);
   });
 });
 
 describe("model fallback checks", () => {
-  const ev: PageEvidence = { pageKey: "carrentallist.com/company/mph-club", site: "carrentallist.com", url: "https://carrentallist.com/company/mph-club", titles: ["mph club - Exotic Car Rental Company Listing"], excerpts: [] };
+  const ev: PageEvidence = { pageKey: "carrentallist.com/company/mph-club", site: "carrentallist.com", url: "https://carrentallist.com/company/mph-club", titles: ["mph club - Exotic Car Rental Company Listing"], pageText: [], aiSaid: ["mph club:** Known for one of the largest exotic fleets"], siblings: [] };
   it("accepts a valid group with evidence found in what it was given", () => {
     expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "A third-party listing of a rental company.", evidence: "Company Listing" }, ev)).toMatchObject({ group: "dir", unclassified: null, accepted: true });
+  });
+  it("ignores punctuation and Markdown when checking the quote, but still requires the words", () => {
+    expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "Listing.", evidence: "mph club: known for one of the largest exotic fleets" }, ev)).toMatchObject({ group: "dir", accepted: true });
+    expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "Listing.", evidence: "Exotic-Car Rental, Company listing!" }, ev)).toMatchObject({ group: "dir", accepted: true });
+    expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "Listing.", evidence: "largest fleets in Florida" }, ev)).toMatchObject({ group: "unc", accepted: false });
   });
   it("leaves the page unclassified when the evidence isn't in the page details, or no verdict came back", () => {
     expect(checkModelClassification({ pageKey: ev.pageKey, group: "review", reason: "Reviews.", evidence: "4.9 stars from 300 reviews" }, ev)).toMatchObject({ group: "unc", unclassified: "insufficient", accepted: false });
@@ -150,7 +175,9 @@ const VERDICTS = (req: { user: string }) => {
   const pages = (JSON.parse(req.user.slice(req.user.indexOf("{"))) as { pages: { pageKey: string; titles: string[] }[] }).pages;
   return JSON.stringify({
     items: pages.map((p) =>
-      p.pageKey.startsWith("mphclub.com")
+      p.pageKey === "mphclub.com/exotic-car-rental"
+        ? { pageKey: p.pageKey, group: "ed", reason: "Reads like a review of the company.", evidence: "mph club" }
+        : p.pageKey.startsWith("mphclub.com")
         ? { pageKey: p.pageKey, group: "company", reason: "The rental company's own page.", evidence: "mph club" }
         : { pageKey: p.pageKey, group: "dir", reason: "A third-party company listing.", evidence: "Company Listing" },
     ),
@@ -180,11 +207,20 @@ describe("pa_sources stage", () => {
     expect(by.get("google.com/maps/place/x")).toMatchObject({ group: "maps", method: "rule" });
     expect(by.get("mphclub.com/miami")).toMatchObject({ group: "company", owner: "business", category: "other", method: "model", title: "Exotic Car Rental in Miami | mph club" });
     expect(by.get("mphclub.com")).toMatchObject({ category: "other", method: "model" }); // evidence from Gemini's support text
+    // The model called this page editorial, but mphclub.com is the business's own website: it stays a company page.
+    expect(by.get("mphclub.com/exotic-car-rental")).toMatchObject({ group: "company", category: "other" });
+    expect(by.get("mphclub.com/exotic-car-rental")!.reason).toContain("business's own website");
     expect(by.get("carrentallist.com/company/mph-club")).toMatchObject({ group: "dir", owner: "unknown", category: "dir", method: "model" });
     expect(out.unreadable).toEqual({ "e1-P1": 1 });
     // One batch, only the five pages no rule covers.
     expect(llm.requests).toHaveLength(1);
-    expect(JSON.parse(llm.requests[0]!.user.slice(llm.requests[0]!.user.indexOf("{"))).pages).toHaveLength(5);
+    const sent = JSON.parse(llm.requests[0]!.user.slice(llm.requests[0]!.user.indexOf("{"))).pages as { pageKey: string; aiSaid: string[]; pageText: string[]; otherPagesOnWebsite: { url: string }[] }[];
+    expect(sent).toHaveLength(5);
+    // Gemini's support text is the AI's sentence, labelled as such; other mphclub.com pages are listed as siblings.
+    const home = sent.find((x) => x.pageKey === "mphclub.com")!;
+    expect(home.aiSaid).toContain("mph club also lists yachts.");
+    expect(home.pageText).toEqual([]);
+    expect(home.otherPagesOnWebsite.map((o) => o.url)).toContain("mphclub.com/miami");
     expect(store.classifications.map((c) => c.classifierVersion)).toEqual(Array(5).fill(CLASSIFIER_VERSION));
 
     // A rerun uses the cache: no model call.
