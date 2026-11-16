@@ -4,7 +4,7 @@ import { hashJson } from "./json";
 import type { AnswerEngines } from "./answers";
 import { createStructuredCall, instructionRef, type LlmClient } from "./llm";
 import type { StageRegistry } from "./registry";
-import type { ClaimedRun, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
+import type { ClaimedRun, FetchedResource, FetchOptions, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
 
 export type RunOutcome =
   | { runId: string; stage: string; outcome: "done" | "partial"; costUsd: number }
@@ -16,7 +16,9 @@ export type RunOutcome =
 export type Clock = { now(): Date };
 
 /** Paid-API clients the worker hands to stages. Missing ones make ctx.llm throw / ctx.answerEngine return null. */
-export type Providers = { llm?: LlmClient | null; answers?: AnswerEngines };
+/** Fetches public web pages for the engine (implemented by the worker's protected fetcher). */
+export type WebFetcher = { fetch(url: string, opts: FetchOptions, signal: AbortSignal): Promise<FetchedResource> };
+export type Providers = { llm?: LlmClient | null; answers?: AnswerEngines; web?: WebFetcher | null };
 
 /** Data that doesn't match its declared schema. Never retried: the same code would produce the same result. */
 export class SchemaError extends NonRetryableError {
@@ -160,6 +162,11 @@ export async function executeRun(
       recordEngineAnswer: (r) => store.recordEngineAnswer(r),
       priorEngineAnswers: () => store.loadEngineAnswers(run.id),
       answerEvidence: (ids) => store.loadAnswerEvidence(ids),
+      fetchUrl: (url, opts) => {
+        if (!providers.web) throw new NonRetryableError("No web fetcher is configured for this worker");
+        return providers.web.fetch(url, opts, controller.signal);
+      },
+      recordPageSnapshot: (r) => store.recordPageSnapshot({ ...r, stageRunId: run.id, reportId: run.reportId }),
       cachedSourceClassifications: (keys, version) => store.loadSourceClassifications(keys, version),
       recordSourceClassification: (r) => store.recordSourceClassification({ ...r, stageRunId: run.id }),
       answerEngine: (engine) => providers.answers?.(engine) ?? null,

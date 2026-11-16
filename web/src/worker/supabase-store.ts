@@ -140,6 +140,32 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       }
       return out;
     },
+    async recordPageSnapshot(r) {
+      const row = required(
+        await db
+          .from("page_snapshot")
+          .insert({
+            report_id: r.reportId,
+            stage_run_id: r.stageRunId,
+            url: r.url,
+            final_url: r.finalUrl,
+            fetch_mode: r.fetchMode,
+            user_agent: r.userAgent,
+            http_status: r.httpStatus,
+            content_hash: r.contentHash,
+            text_hash: r.textHash,
+            error: r.error,
+            fetched_at: r.fetchedAt,
+          })
+          .select("id")
+          .single(),
+        "record page snapshot",
+      );
+      if (r.html !== null || r.text !== null) {
+        check(await db.from("page_snapshot_body").insert({ snapshot_id: row.id, html: r.html, text: r.text }), "record page snapshot body");
+      }
+      return row.id;
+    },
     async loadSourceClassifications(pageKeys, classifierVersion) {
       const out: SourceClassificationRecord[] = [];
       for (let i = 0; i < pageKeys.length; i += 100) {

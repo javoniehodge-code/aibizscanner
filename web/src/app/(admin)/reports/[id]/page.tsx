@@ -31,6 +31,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         <Link href={`/reports/${id}/prompt-analysis`} style={{ marginLeft: "auto" }}>
           Prompt analysis
         </Link>
+        <Link href={`/reports/${id}/website`}>Website pages</Link>
         <Link href={`/reports/${id}/runs`}>Run monitor</Link>
         {doc ? (
           <a href={`/reports/${id}/document`} target="_blank" rel="noreferrer">

@@ -1,5 +1,5 @@
 import type { LlmCallRecord } from "./llm";
-import type { AnswerEvidence, EngineAnswerRecord, FinishStatus, JsonValue, Pricing, RunStore, SourceClassificationRecord, StageInput, UsageRecord } from "./types";
+import type { AnswerEvidence, EngineAnswerRecord, PageSnapshotRecord, FinishStatus, JsonValue, Pricing, RunStore, SourceClassificationRecord, StageInput, UsageRecord } from "./types";
 
 /** In-memory RunStore for engine tests. */
 export const PRICE: Pricing = {
@@ -63,6 +63,12 @@ export class MemoryStore implements RunStore {
       const rec = this.engineAnswers.find((a) => a.id === id);
       return { answerId: id, rawResponse: this.rawResponses.get(id) ?? rec?.rawResponse ?? null, answerText: rec?.answerText ?? null };
     });
+  }
+  snapshots: (PageSnapshotRecord & { id: string })[] = [];
+  async recordPageSnapshot(r: PageSnapshotRecord) {
+    const id = `ps-${this.snapshots.length + 1}`;
+    this.snapshots.push({ ...r, id });
+    return id;
   }
   classifications: SourceClassificationRecord[] = [];
   async loadSourceClassifications(keys: readonly string[], version: string) {

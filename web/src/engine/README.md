@@ -24,7 +24,7 @@ modules/<module>/
 A small module can keep everything in `stages.ts` until it grows; the folders are a convention, not a framework.
 Planned modules (brief §4): `prompt-analysis` (stages 2–4), `website-audit` (5–7), `web-presence` (8–9),
 `competitors` (10), `recommendations` (11), `report` (12), plus a small `business-identity` step (1).
-Built so far: `dummy` (pipeline test), `prompt-analysis` and `report` (stage 12, assembly):
+Built so far: `dummy` (pipeline test), `prompt-analysis`, `website` (stage 5: `ws_discover`, `ws_page_set`, `ws_snapshot`; see `docs/build/milestone-3-setup.md`) and `report` (stage 12, assembly):
 
 | Stage | What it does | Paid? |
 | --- | --- | --- |
@@ -36,6 +36,8 @@ Built so far: `dummy` (pipeline test), `prompt-analysis` and `report` (stage 12,
 | `report_assemble` | Builds the whole report document (`report/logic/document.ts`) from the finished sections, in plain code. Sections whose stages aren't built yet are `null`, and the template leaves their slides out. When the run finishes, the database stores its output as a new `report_document` version, which the report view shows. | no |
 
 Stages with `autoRun: true` are queued by the worker as soon as all their inputs have fresh finished runs.
+Web pages are fetched only through `ctx.fetchUrl`, a port implemented by the worker's protected fetcher
+(`worker/fetcher.ts`: public addresses only at every redirect, size/time caps, honest user agent).
 Answer engines (`answers.ts`) are a port like `LlmClient`: the provider adapters (official OpenAI, Anthropic and
 Google SDKs) live in `worker/providers/`, so the engine never sees keys. Models and prices: `modules/prompt-analysis/models.ts`
 and the `pricing` table; setup: `docs/build/milestone-2-setup.md`.

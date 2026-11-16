@@ -315,6 +315,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"page_snapshot_body": {
+                  Row: {
+                    "created_at": string,"html": string | null,"snapshot_id": string,"text": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"html"?: string | null,"snapshot_id": string,"text"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"html"?: string | null,"snapshot_id"?: string,"text"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "page_snapshot_body_snapshot_id_fkey"
+      columns: ["snapshot_id"]
+isOneToOne: true
+      referencedRelation: "page_snapshot"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"pricing": {
                   Row: {
                     "created_at": string,"effective_from": string,"id": number,"input_usd_per_mtok": number,"model": string,"output_usd_per_mtok": number,"provider": string,"request_usd_per_call": number,"search_usd_per_call": number,"source": string,"version": number
@@ -533,6 +553,32 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "stage_run_overview"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"website_page_set": {
+                  Row: {
+                    "approved_at": string | null,"approved_by": string | null,"created_at": string,"created_by": string | null,"id": string,"pages": NonNullable<Json>,"report_id": string,"version": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"pages"?: NonNullable<Json>,"report_id": string,"version": number
+                  }
+                  Update: {
+                    "approved_at"?: string | null,"approved_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"pages"?: NonNullable<Json>,"report_id"?: string,"version"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "website_page_set_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "website_page_set_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "report_cost_rollup"
+      referencedColumns: ["report_id"]
     }
                   ]
                 }

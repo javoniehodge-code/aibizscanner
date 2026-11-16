@@ -66,6 +66,13 @@ export type StageContext = {
   cachedSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
   /** Caches one source classification (append-only; an existing page key + version is left as it is). */
   recordSourceClassification(record: Omit<SourceClassificationRecord, "stageRunId">): Promise<void>;
+  /**
+   * Fetches a public web page through the worker's protected fetcher (public http(s) only, private and internal
+   * addresses refused at every redirect, size and time capped). Never bypasses blocks or logins. Not a paid call.
+   */
+  fetchUrl(url: string, opts: FetchOptions): Promise<FetchedResource>;
+  /** Stores one page snapshot (append-only evidence) with its bounded body; returns its id. */
+  recordPageSnapshot(record: Omit<PageSnapshotRecord, "reportId" | "stageRunId">): Promise<string>;
   /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
   answerEngine(engine: EngineIndex): AnswerEngine | null;
 };
@@ -150,6 +157,44 @@ export type EngineAnswerRecord = {
 
 export type StoredEngineAnswer = EngineAnswerRecord & { id: string };
 
+export type FetchOptions = {
+  /** What we expect back; the fetcher refuses other content types. */
+  accept: "html" | "text" | "xml";
+  /** Byte cap for the body (default 2 MB); longer bodies are cut and marked truncated. */
+  maxBytes?: number;
+};
+
+/** Result of one protected fetch. A refused or failed fetch has `error` set and no body. */
+export type FetchedResource = {
+  requestedUrl: string;
+  finalUrl: string | null;
+  status: number | null;
+  contentType: string | null;
+  body: string | null;
+  truncated: boolean;
+  /** Each redirect hop, in order. */
+  redirects: string[];
+  error: string | null;
+  durationMs: number;
+  userAgent: string;
+};
+
+export type PageSnapshotRecord = {
+  reportId: string;
+  stageRunId: string;
+  url: string;
+  finalUrl: string | null;
+  fetchMode: "raw" | "rendered";
+  userAgent: string;
+  httpStatus: number | null;
+  contentHash: string | null;
+  textHash: string | null;
+  html: string | null;
+  text: string | null;
+  error: string | null;
+  fetchedAt: string;
+};
+
 export type AnswerEvidence = { answerId: string; rawResponse: JsonValue | null; answerText: string | null };
 
 /** A model classification of one cited page, cached by page key and classifier version. */
@@ -182,6 +227,7 @@ export interface RunStore {
   /** Engine answers already stored for a stage run (all attempts), oldest first. */
   loadEngineAnswers(stageRunId: string): Promise<StoredEngineAnswer[]>;
   loadAnswerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
+  recordPageSnapshot(record: PageSnapshotRecord): Promise<string>;
   loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
   recordSourceClassification(record: SourceClassificationRecord): Promise<void>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */
