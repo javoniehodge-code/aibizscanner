@@ -24,7 +24,10 @@ function addUsage(total: Usage, u: { input_tokens: number; output_tokens: number
  */
 export function anthropicEngine(apiKey: string): AnswerEngine {
   const client = new Anthropic({ apiKey, maxRetries: 2 });
-  const settings = { tool: "web_search_20260209", fallbacks: "default", max_tokens: 16000 };
+  // allowed_callers ["direct"]: Claude runs each search itself and cites the pages in its answer. The tool's default
+  // (dynamic filtering) runs searches inside code execution, so answers came back with no citations at all (MVP Miami,
+  // 13 Nov 2026: 17 searches, 0 citations). Direct search reads every result, so it uses more tokens.
+  const settings = { tool: "web_search_20260209", allowed_callers: ["direct"], fallbacks: "default", max_tokens: 16000 };
   return {
     engine: 1,
     provider: SPEC.provider,
@@ -52,6 +55,7 @@ export function anthropicEngine(apiKey: string): AnswerEngine {
                 {
                   type: "web_search_20260209",
                   name: "web_search",
+                  allowed_callers: ["direct"],
                   max_uses: request.maxSearches,
                   ...(loc ? { user_location: { type: "approximate" as const, city: loc.city, region: loc.region, country: loc.country, timezone: loc.timezone } } : {}),
                 },

@@ -8,12 +8,18 @@ import type { ModelSpec } from "../../llm";
  * mostly reading search results); same web search tool, half the price per token.
  * 2026-11-13: Gemini engine moved from gemini-3.1-pro-preview (404 for the owner's key) to Google's alias
  * gemini-pro-latest, which points at the current Pro model; the model that actually answered is recorded per answer.
+ * 2026-11-16, owner decision: reports measure what a typical FREE user sees, so each engine uses the API model closest
+ * to that provider's free consumer app (checked against the providers' API model and pricing pages that day):
+ *   ChatGPT Free runs the Luna model -> gpt-6-luna (GPT-5.6 Luna is no longer in the API);
+ *   Gemini's free app uses Auto selection, mostly Flash-Lite -> gemini-3.5-flash-lite (no single API model mirrors Auto);
+ *   Claude Free offers Sonnet (and Haiku) -> claude-sonnet-5-5, unchanged.
+ * The API is not the consumer app (no app instructions, memory or personalization); the report's method says so.
  */
 export const ENGINE_MODELS = [
   // concurrency: questions in flight at once. OpenAI's per-minute token limits are low on new accounts.
-  { engine: 0, provider: "openai", model: "gpt-6.1-sol", maxSearches: 3, concurrency: 3 },
+  { engine: 0, provider: "openai", model: "gpt-6-luna", maxSearches: 3, concurrency: 3 },
   { engine: 1, provider: "anthropic", model: "claude-sonnet-5-5", maxSearches: 3, concurrency: 6 },
-  { engine: 2, provider: "google", model: "gemini-pro-latest", maxSearches: 3, concurrency: 6 },
+  { engine: 2, provider: "google", model: "gemini-3.5-flash-lite", maxSearches: 3, concurrency: 6 },
 ] as const;
 
 /**
