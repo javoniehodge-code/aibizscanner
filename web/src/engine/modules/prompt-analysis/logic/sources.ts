@@ -226,9 +226,13 @@ export function checkModelClassification(v: ModelVerdict | undefined, ev: PageEv
   const reason = v.reason.trim();
   if (!reason) return insufficient("The classifier gave no reason.");
   if (v.group === "unc") return { group: "unc", unclassified: "insufficient", reason, evidence: null, accepted: true };
-  const quote = norm(v.evidence ?? "");
+  // The model often joins several short quotes ("title words; page words"). Each part must be found somewhere in the
+  // evidence it was given; parts may come from different fields.
+  const parts = (v.evidence ?? "").split(/;|\u2026|\.\.\./).map(norm).filter((q) => q.length > 0);
   const sources = [ev.url, ev.pageKey, ...ev.titles, ...ev.pageText, ...ev.aiSaid, ...ev.siblings.flatMap((x) => [x.url, x.title ?? ""])].map(norm);
-  if (quote.length < 3 || !sources.some((s) => s.includes(quote))) return insufficient("The classifier's evidence wasn't found in the page details it was given.");
+  if (!parts.length || parts.join(" ").length < 3 || !parts.every((q) => sources.some((s) => s.includes(q)))) {
+    return insufficient("The classifier's evidence wasn't found in the page details it was given.");
+  }
   if (v.group === "outside") return { group: "unc", unclassified: "outside", reason, evidence: v.evidence.trim(), accepted: true };
   return { group: v.group, unclassified: null, reason, evidence: v.evidence.trim(), accepted: true };
 }
