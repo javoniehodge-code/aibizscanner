@@ -117,6 +117,13 @@ describe("model fallback checks", () => {
     expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "Listing.", evidence: "Exotic-Car Rental, Company listing!" }, ev)).toMatchObject({ group: "dir", accepted: true });
     expect(checkModelClassification({ pageKey: ev.pageKey, group: "dir", reason: "Listing.", evidence: "largest fleets in Florida" }, ev)).toMatchObject({ group: "unc", accepted: false });
   });
+  it("accepts several quotes joined with ';' when every part is in the evidence (title and page text alike)", () => {
+    const page: PageEvidence = { pageKey: "signatureexoticcars.com", site: "signatureexoticcars.com", url: "https://signatureexoticcars.com/", titles: ["Exotic Luxury Car Rental Services in Miami, Florida"], pageText: ["Drivers under the age of 25 years can still rent a vehicle from us but will be subject to an additional fee."], aiSaid: [], siblings: [] };
+    const joined = "Exotic Luxury Car Rental Services in Miami; Drivers under the age of 25 years can still rent a vehicle from us";
+    expect(checkModelClassification({ pageKey: page.pageKey, group: "company", reason: "Own rental page.", evidence: joined }, page)).toMatchObject({ group: "company", accepted: true });
+    // One invented part is enough to reject the verdict.
+    expect(checkModelClassification({ pageKey: page.pageKey, group: "company", reason: "Own rental page.", evidence: joined + "; family owned since 1990" }, page)).toMatchObject({ group: "unc", accepted: false });
+  });
   it("leaves the page unclassified when the evidence isn't in the page details, or no verdict came back", () => {
     expect(checkModelClassification({ pageKey: ev.pageKey, group: "review", reason: "Reviews.", evidence: "4.9 stars from 300 reviews" }, ev)).toMatchObject({ group: "unc", unclassified: "insufficient", accepted: false });
     expect(checkModelClassification(undefined, ev)).toMatchObject({ group: "unc", unclassified: "insufficient", accepted: false });
