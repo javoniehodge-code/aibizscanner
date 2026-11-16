@@ -157,8 +157,12 @@ export function ruleGroup(pageKey: string, siteKey: string): RuleResult | null {
 // Evidence from the stored provider responses
 // ---------------------------------------------------------------------------------------------------------------
 
-/** What the providers said about one cited URL: its title and the text it was cited for. */
-export type CitationEvidence = { url: string; title: string | null; excerpt: string | null };
+/**
+ * What the providers said about one cited URL: its title, and an excerpt. `from` says whose words the excerpt is:
+ * "page" when the provider quotes the page itself (Anthropic cited_text), "answer" when it is the AI's own sentence
+ * that cites the page (OpenAI, Gemini). The AI's sentence shows what a page covers, not who published it.
+ */
+export type CitationEvidence = { url: string; title: string | null; excerpt: string | null; from: "page" | "answer" };
 
 const str = (x: unknown) => (typeof x === "string" && x.trim() ? x.trim() : null);
 const clip = (s: string | null, n: number) => (s && s.length > n ? s.slice(0, n) + "…" : s);
@@ -176,10 +180,10 @@ export function citationEvidence(raw: unknown, answerText: string | null): Citat
     // OpenAI: { type: "url_citation", url, title, start_index, end_index } (indexes point into the answer text)
     if (o.type === "url_citation" && str(o.url)) {
       const s = typeof o.start_index === "number" && answerText ? answerText.slice(Math.max(0, o.start_index - 300), o.start_index).trim().split(/(?<=[.!?\n])\s/).pop() ?? null : null;
-      out.push({ url: str(o.url)!, title: str(o.title), excerpt: clip(str(s), 300) });
+      out.push({ url: str(o.url)!, title: str(o.title), excerpt: clip(str(s), 300), from: "answer" });
     }
     // Anthropic: { type: "web_search_result_location", url, title, cited_text }
-    if (o.type === "web_search_result_location" && str(o.url)) out.push({ url: str(o.url)!, title: str(o.title), excerpt: clip(str(o.cited_text), 300) });
+    if (o.type === "web_search_result_location" && str(o.url)) out.push({ url: str(o.url)!, title: str(o.title), excerpt: clip(str(o.cited_text), 300), from: "page" });
     // Gemini: groundingChunks[].web { uri, title }; groundingSupports[] { segment.text, groundingChunkIndices }
     const gm = o.groundingMetadata as { groundingChunks?: { web?: { uri?: unknown; title?: unknown } }[]; groundingSupports?: { segment?: { text?: unknown }; groundingChunkIndices?: unknown }[] } | undefined;
     if (gm && Array.isArray(gm.groundingChunks)) {
@@ -190,7 +194,7 @@ export function citationEvidence(raw: unknown, answerText: string | null): Citat
       }
       gm.groundingChunks.forEach((c, i) => {
         const uri = str(c.web?.uri);
-        if (uri) out.push({ url: uri, title: str(c.web?.title), excerpt: clip(texts.get(i) ?? null, 300) });
+        if (uri) out.push({ url: uri, title: str(c.web?.title), excerpt: clip(texts.get(i) ?? null, 300), from: "answer" });
       });
     }
     for (const v of Object.values(o)) if (v && typeof v === "object") walk(v);
@@ -203,15 +207,17 @@ export function citationEvidence(raw: unknown, answerText: string | null): Citat
 // Model fallback: checking its answer
 // ---------------------------------------------------------------------------------------------------------------
 
-export type PageEvidence = { pageKey: string; site: string; url: string; titles: string[]; excerpts: string[] };
+/** What the classifier is given about one page. `siblings`: other cited pages on the same website (url and title). */
+export type PageEvidence = { pageKey: string; site: string; url: string; titles: string[]; pageText: string[]; aiSaid: string[]; siblings: { url: string; title: string | null }[] };
 export type ModelVerdict = { pageKey: string; group: SourceGroup | "outside"; reason: string; evidence: string };
 export type CheckedClassification = { group: SourceGroup; unclassified: UnclassifiedKind | null; reason: string; evidence: string | null; accepted: boolean };
 
-const norm = (s: string) => s.normalize("NFKD").replace(/\p{M}/gu, "").replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim().toLowerCase();
+/** Letters and digits only, lower-cased, accents removed: punctuation and Markdown don't decide whether a quote is there. */
+const norm = (s: string) => s.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 
 /**
  * Accepts a model verdict only when it names a valid group, gives a short reason, and quotes evidence that really is in
- * what it was given (the URL, a title or an excerpt). Anything else leaves the page unclassified for lack of evidence.
+ * what it was given (the URL, a title, an excerpt or a sibling page; compared on letters and digits only). Anything else leaves the page unclassified for lack of evidence.
  * "outside" (a page that fits none of the groups) is kept as Other / Unclassified, marked as outside the taxonomy.
  */
 export function checkModelClassification(v: ModelVerdict | undefined, ev: PageEvidence): CheckedClassification {
@@ -221,8 +227,42 @@ export function checkModelClassification(v: ModelVerdict | undefined, ev: PageEv
   if (!reason) return insufficient("The classifier gave no reason.");
   if (v.group === "unc") return { group: "unc", unclassified: "insufficient", reason, evidence: null, accepted: true };
   const quote = norm(v.evidence ?? "");
-  const sources = [ev.url, ev.pageKey, ...ev.titles, ...ev.excerpts].map(norm);
+  const sources = [ev.url, ev.pageKey, ...ev.titles, ...ev.pageText, ...ev.aiSaid, ...ev.siblings.flatMap((x) => [x.url, x.title ?? ""])].map(norm);
   if (quote.length < 3 || !sources.some((s) => s.includes(quote))) return insufficient("The classifier's evidence wasn't found in the page details it was given.");
   if (v.group === "outside") return { group: "unc", unclassified: "outside", reason, evidence: v.evidence.trim(), accepted: true };
   return { group: v.group, unclassified: null, reason, evidence: v.evidence.trim(), accepted: true };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Website ownership: a business's own website
+// ---------------------------------------------------------------------------------------------------------------
+
+export type PageVerdict = { pageKey: string; site: string; group: SourceGroup; method: string; unclassified: UnclassifiedKind | null; reason: string; evidence: string | null };
+
+/**
+ * A business publishing about itself stays in Company websites, articles and guides included. When a website's pages
+ * were judged company pages at least as often as editorial ones, the website is taken to be that business's own site,
+ * and its pages judged editorial or left unclassified for lack of evidence become company pages. Rule-based groups
+ * are never changed. Returns the pages that changed.
+ */
+export function applySiteOwnership(pages: readonly PageVerdict[]): Map<string, PageVerdict> {
+  const bySite = new Map<string, PageVerdict[]>();
+  for (const p of pages) bySite.set(p.site, [...(bySite.get(p.site) ?? []), p]);
+  const changed = new Map<string, PageVerdict>();
+  for (const [site, list] of bySite) {
+    const company = list.filter((p) => p.group === "company");
+    const editorial = list.filter((p) => p.group === "ed").length;
+    if (!company.length || company.length < editorial) continue;
+    const anchor = company[0]!;
+    for (const p of list) {
+      if (p.method === "rule" || p.method === "alias" || !(p.group === "ed" || (p.group === "unc" && p.unclassified === "insufficient"))) continue;
+      changed.set(p.pageKey, {
+        ...p,
+        group: "company",
+        unclassified: null,
+        reason: `On ${site}, a business's own website (${company.length} of its cited page${company.length === 1 ? " is a company page" : "s are its own company pages"}, e.g. ${anchor.pageKey}): the business publishing about itself.`,
+      });
+    }
+  }
+  return changed;
 }

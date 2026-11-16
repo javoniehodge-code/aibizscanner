@@ -4,6 +4,7 @@ import { LlmNotConfiguredError } from "../../llm";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { classifySource } from "./instructions/classify-source";
 import {
+  applySiteOwnership,
   bareDomains,
   categoryOf,
   checkModelClassification,
@@ -32,7 +33,7 @@ function input<T>(ctx: StageContext, stage: string, schema: z.ZodType<T>): T {
   return schema.parse(i.output);
 }
 
-type Draft = { pageKey: string; site: string; url: string; answerIds: Set<string>; titles: Set<string>; excerpts: Set<string> };
+type Draft = { pageKey: string; site: string; url: string; answerIds: Set<string>; titles: Set<string>; pageText: Set<string>; aiSaid: Set<string> };
 type Verdict = Pick<ClassifiedPage, "group" | "method" | "unclassified" | "reason" | "evidence">;
 
 /**
@@ -73,7 +74,7 @@ export const paSources: StageDefinition = {
           unreadable[a.answerId] = (unreadable[a.answerId] ?? 0) + 1;
           continue;
         }
-        const d = pages.get(pageKey) ?? { pageKey, site: siteKeyOf(pageKey, { aliases }), url, answerIds: new Set(), titles: new Set(), excerpts: new Set() };
+        const d = pages.get(pageKey) ?? { pageKey, site: siteKeyOf(pageKey, { aliases }), url, answerIds: new Set(), titles: new Set(), pageText: new Set(), aiSaid: new Set() };
         d.answerIds.add(a.answerId);
         pages.set(pageKey, d);
       }
@@ -89,7 +90,8 @@ export const paSources: StageDefinition = {
         const targets = key && pages.has(key) ? [pages.get(key)!] : cited.filter((p) => ev.title && (p.pageKey.split("/")[0] === ev.title.toLowerCase().replace(/^www\./, "") || p.site === ev.title.toLowerCase()));
         for (const p of targets) {
           if (ev.title && p.titles.size < 3) p.titles.add(ev.title);
-          if (ev.excerpt && p.excerpts.size < 3) p.excerpts.add(ev.excerpt);
+          const into = ev.from === "page" ? p.pageText : p.aiSaid;
+          if (ev.excerpt && into.size < 3) into.add(ev.excerpt);
         }
       }
     }
@@ -118,7 +120,8 @@ export const paSources: StageDefinition = {
     const work = async () => {
       while (batches.length) {
         const batch = batches.shift()!;
-        const given = new Map<string, PageEvidence>(batch.map((p) => [p.pageKey, { pageKey: p.pageKey, site: p.site, url: p.url, titles: [...p.titles], excerpts: [...p.excerpts] }]));
+        const siblings = (p: Draft) => [...pages.values()].filter((o) => o.site === p.site && o.pageKey !== p.pageKey).slice(0, 6).map((o) => ({ url: o.pageKey, title: [...o.titles][0] ?? null }));
+        const given = new Map<string, PageEvidence>(batch.map((p) => [p.pageKey, { pageKey: p.pageKey, site: p.site, url: p.url, titles: [...p.titles], pageText: [...p.pageText], aiSaid: [...p.aiSaid], siblings: siblings(p) }]));
         if (stop) {
           for (const p of batch) verdicts.set(p.pageKey, { group: "unc", method: "none", unclassified: "insufficient", reason: `Not classified: ${stop}`, evidence: null });
           continue;
@@ -127,7 +130,7 @@ export const paSources: StageDefinition = {
           const out = await ctx.llm({
             instruction: classifySource,
             model: EXTRACTION_MODEL,
-            input: { pages: [...given.values()].map((g) => ({ pageKey: g.pageKey, url: g.url, website: g.site, titles: g.titles, excerpts: g.excerpts })) },
+            input: { pages: [...given.values()].map((g) => ({ pageKey: g.pageKey, url: g.url, website: g.site, titles: g.titles, pageText: g.pageText, aiSaid: g.aiSaid, otherPagesOnWebsite: g.siblings })) },
             output: sourceVerdicts,
           });
           const byKey = new Map(out.items.map((v) => [v.pageKey, v] as const));
@@ -155,6 +158,11 @@ export const paSources: StageDefinition = {
       }
     };
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, batches.length) }, work));
+
+    // A business's own website: its articles, guides and thin pages are company pages too (logic/sources.ts).
+    for (const [key, v] of applySiteOwnership([...pages.values()].map((p) => ({ pageKey: p.pageKey, site: p.site, ...verdicts.get(p.pageKey)! })))) {
+      verdicts.set(key, { group: v.group, method: verdicts.get(key)!.method, unclassified: v.unclassified, reason: v.reason, evidence: verdicts.get(key)!.evidence });
+    }
 
     // Website ownership: the audited business through its verified domains; another business when any of the site's
     // pages is a company page (the business publishing about itself); otherwise not established.
