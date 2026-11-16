@@ -78,6 +78,10 @@ const answer = z.discriminatedUnion("status", [
       named: z.array(z.object({ business: businessKey, status: z.enum(["R", "M", "X"]) }).strict()),
       /** Cited pages (keys into promptAnalysis.pages). */
       citations: z.array(pageKey),
+      /** The original citation URLs as the provider returned them, each with its page key (absent in older reports). */
+      citationUrls: z.array(z.object({ page: pageKey, url: nonEmpty }).strict()).optional(),
+      /** Citation links that weren't web URLs: a metadata gap, never counted as pages (absent in older reports). */
+      unreadableCitations: z.number().int().min(0).optional(),
       /** Sources the answer names without citing them. Never counted as citations (brief §7). */
       uncitedMentions: z.array(z.object({ source: nonEmpty, text: nonEmpty, page: pageKey.nullable() }).strict()),
       text: nonEmpty,
@@ -98,7 +102,34 @@ export const promptAnalysis = z
   .object({
     groups: z.array(val(z.object({ name: nonEmpty, description: nonEmpty }).strict())).min(1),
     businesses: z.array(val(z.object({ key: businessKey, name: nonEmpty }).strict())).min(1),
-    pages: z.array(val(z.object({ key: pageKey, url: nonEmpty, category: pageCategory }).strict())),
+    /**
+     * Distinct cited pages. Pipeline reports add the website each page belongs to (registrable domain, verified
+     * overrides and aliases), its title, website ownership, and how its source group was decided. Older reports have
+     * only key, url and category; the template then derives the website from the URL's host.
+     */
+    pages: z.array(
+      val(
+        z
+          .object({
+            key: pageKey,
+            url: nonEmpty,
+            category: pageCategory,
+            site: nonEmpty.optional(),
+            title: z.string().nullable().optional(),
+            owner: z.enum(["target", "business", "unknown"]).optional(),
+            basis: z
+              .object({
+                method: z.enum(["alias", "rule", "model", "cache", "none"]),
+                reason: nonEmpty,
+                evidence: z.string().nullable(),
+                unclassified: z.enum(["outside", "insufficient"]).nullable(),
+              })
+              .strict()
+              .optional(),
+          })
+          .strict(),
+      ),
+    ),
     questions: z
       .array(
         z
@@ -495,6 +526,7 @@ function checkReferences(doc: Shape, ctx: z.RefinementCtx) {
       if (a.v.status !== "ok") return;
       for (const n of a.v.named) if (!bizKeys.has(n.business)) issue(`Unknown business ${n.business}`, ["promptAnalysis", "questions", qi, "answers", ai]);
       for (const c of a.v.citations) if (!pageKeys.has(c)) issue(`Unknown cited page ${c}`, ["promptAnalysis", "questions", qi, "answers", ai]);
+      for (const c of a.v.citationUrls ?? []) if (!a.v.citations.includes(c.page)) issue(`Citation URL page ${c.page} isn't among the answer's citations`, ["promptAnalysis", "questions", qi, "answers", ai]);
       for (const m of a.v.uncitedMentions) if (m.page && !pageKeys.has(m.page)) issue(`Unknown page ${m.page}`, ["promptAnalysis", "questions", qi, "answers", ai]);
     });
   });

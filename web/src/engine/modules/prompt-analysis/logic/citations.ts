@@ -1,71 +1,47 @@
-/** Page categories of the report schema (fixtures/report.schema.json → promptAnalysis.pages[].category). */
-export type PageCategory = "your" | "other" | "maps" | "review" | "dir" | "ed" | "comm" | "off" | "unc";
+import type { ClassifiedPage } from "../schemas";
+import { pageKeyOf, type PageCategory } from "./sources";
+
+export type { PageCategory } from "./sources";
 
 const PREFIX: Record<PageCategory, string> = { your: "yw", other: "oc", maps: "mp", review: "rv", dir: "dr", ed: "ed", comm: "cm", off: "of", unc: "un" };
-const TRACKING = /^(utm_\w+|gclid|fbclid|msclkid|mc_cid|mc_eid|ref|ref_src|srsltid)$/i;
 
-/** "https://www.Yelp.com/biz/x/?utm_source=chatgpt.com#top" -> "yelp.com/biz/x". Returns null for non-web URLs. */
-export function normalizeUrl(raw: string): string | null {
-  let u: URL;
-  try {
-    u = new URL(raw.trim());
-  } catch {
-    return null;
-  }
-  if (u.protocol !== "http:" && u.protocol !== "https:") return null;
-  const host = u.hostname.toLowerCase().replace(/^www\./, "");
-  for (const k of [...u.searchParams.keys()]) if (TRACKING.test(k)) u.searchParams.delete(k);
-  const path = u.pathname.replace(/\/+$/, "");
-  const query = u.searchParams.toString();
-  return host + path + (query ? "?" + query : "");
-}
-
-const RULES: [PageCategory, RegExp][] = [
-  ["maps", /^(maps\.google\.[a-z.]+|google\.[a-z.]+\/maps|maps\.apple\.com|bing\.com\/maps|goo\.gl\/maps)/],
-  ["review", /^(yelp\.[a-z.]+|trustpilot\.com|tripadvisor\.[a-z.]+|consumeraffairs\.com|birdeye\.com|reviews\.io|sitejabber\.com)(\/|$)/],
-  ["dir", /^(angi\.com|angieslist\.com|thumbtack\.com|yellowpages\.com|bbb\.org|homeadvisor\.com|houzz\.com|porch\.com|nextdoor\.com\/pages|manta\.com|superpages\.com)(\/|$)/],
-  ["comm", /^(reddit\.com|old\.reddit\.com|quora\.com|nextdoor\.com|facebook\.com\/groups|community\.)/],
-  ["off", /^([a-z0-9.-]+\.gov|[a-z0-9.-]+\.gov\.[a-z]{2}|[a-z0-9.-]+\.mil)(\/|$)/],
-];
+/** A distinct cited page as the report lists it: a short key, its page key (as url) and its classification. Answers keep the original URLs. */
+export type CitedPage = {
+  key: string;
+  url: string;
+  category: PageCategory;
+  site: string;
+  title: string | null;
+  owner: ClassifiedPage["owner"];
+  basis: { method: ClassifiedPage["method"]; reason: string; evidence: string | null; unclassified: ClassifiedPage["unclassified"] };
+};
 
 /**
- * Category by rule. Own domains -> "your", known competitor domains -> "other", well-known platforms by pattern.
- * Anything else is "unc" (unclassified) and is left for the source-classification step (stage 8) to judge.
+ * Assigns stable report keys (yw, yw2, rv1, …) to distinct pages (by page key) in order of first citation, taking each
+ * page's website and source group from the pa_sources classification.
  */
-export function classifyPage(page: string, ownDomains: readonly string[], competitorDomains: readonly string[]): PageCategory {
-  const host = page.split("/")[0] ?? "";
-  const onDomain = (d: string) => host === d || host.endsWith("." + d);
-  if (ownDomains.some(onDomain)) return "your";
-  if (competitorDomains.some(onDomain)) return "other";
-  for (const [cat, re] of RULES) if (re.test(page)) return cat;
-  return "unc";
-}
-
-export type CitedPage = { key: string; url: string; category: PageCategory };
-
-/** Assigns stable keys (yw, yw2, rv1, …) to distinct pages in order of first citation. */
 export class PageRegistry {
-  private readonly byUrl = new Map<string, CitedPage>();
+  private readonly byPage = new Map<string, CitedPage>();
   private readonly counts = new Map<PageCategory, number>();
-  constructor(
-    private readonly ownDomains: readonly string[],
-    private readonly competitorDomains: readonly string[],
-  ) {}
-  /** Key for a cited URL (registering it on first sight), or null if it isn't a web URL. */
+  constructor(private readonly classified: ReadonlyMap<string, ClassifiedPage>) {}
+  /** Report key for a cited URL (registering it on first sight), or null if it isn't a web URL. */
   keyFor(rawUrl: string): string | null {
-    const url = normalizeUrl(rawUrl);
-    if (!url) return null;
-    const existing = this.byUrl.get(url);
+    const pageKey = pageKeyOf(rawUrl);
+    if (!pageKey) return null;
+    const existing = this.byPage.get(pageKey);
     if (existing) return existing.key;
-    const category = classifyPage(url, this.ownDomains, this.competitorDomains);
+    const c = this.classified.get(pageKey);
+    const category: PageCategory = c?.category ?? "unc";
     const n = (this.counts.get(category) ?? 0) + 1;
     this.counts.set(category, n);
     const key = category === "your" && n === 1 ? "yw" : PREFIX[category] + n;
-    const page = { key, url, category };
-    this.byUrl.set(url, page);
+    const page: CitedPage = c
+      ? { key, url: pageKey, category, site: c.site, title: c.title, owner: c.owner, basis: { method: c.method, reason: c.reason, evidence: c.evidence, unclassified: c.unclassified } }
+      : { key, url: pageKey, category, site: pageKey.split("/")[0]!, title: null, owner: "unknown", basis: { method: "none", reason: "Not in the source classification.", evidence: null, unclassified: "insufficient" } };
+    this.byPage.set(pageKey, page);
     return key;
   }
   pages(): CitedPage[] {
-    return [...this.byUrl.values()];
+    return [...this.byPage.values()];
   }
 }

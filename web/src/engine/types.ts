@@ -60,6 +60,12 @@ export type StageContext = {
   recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
   /** Engine answers stored by earlier attempts of this run, oldest first (to resume without paying twice). */
   priorEngineAnswers(): Promise<StoredEngineAnswer[]>;
+  /** Stored provider responses and answer texts for engine_answer rows (evidence for reading citations). */
+  answerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
+  /** Cached source classifications for these page keys made by this classifier version. */
+  cachedSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
+  /** Caches one source classification (append-only; an existing page key + version is left as it is). */
+  recordSourceClassification(record: Omit<SourceClassificationRecord, "stageRunId">): Promise<void>;
   /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
   answerEngine(engine: EngineIndex): AnswerEngine | null;
 };
@@ -144,6 +150,21 @@ export type EngineAnswerRecord = {
 
 export type StoredEngineAnswer = EngineAnswerRecord & { id: string };
 
+export type AnswerEvidence = { answerId: string; rawResponse: JsonValue | null; answerText: string | null };
+
+/** A model classification of one cited page, cached by page key and classifier version. */
+export type SourceClassificationRecord = {
+  pageKey: string;
+  classifierVersion: string;
+  group: string;
+  /** For Other / Unclassified: outside the taxonomy, or not enough evidence. */
+  unclassified: "outside" | "insufficient" | null;
+  reason: string;
+  evidence: string | null;
+  model: string;
+  stageRunId: string;
+};
+
 export type FinishStatus = "done" | "partial" | "failed";
 
 /** Storage port implemented by the worker layer (Supabase) and by in-memory fakes in tests. */
@@ -160,6 +181,9 @@ export interface RunStore {
   recordEngineAnswer(record: EngineAnswerRecord): Promise<string>;
   /** Engine answers already stored for a stage run (all attempts), oldest first. */
   loadEngineAnswers(stageRunId: string): Promise<StoredEngineAnswer[]>;
+  loadAnswerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
+  loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
+  recordSourceClassification(record: SourceClassificationRecord): Promise<void>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */
   retry(runId: string, attempt: number, error: string, runAfter: Date): Promise<boolean>;
   /** Returns false if the run is no longer ours (lease lost); the result is then discarded. */

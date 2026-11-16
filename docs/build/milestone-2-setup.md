@@ -69,7 +69,15 @@ competitor and To Do slides appear as their stages are built.
 For a report whose prompt analysis finished before this step existed, open its **Run monitor** and click **Run** next
 to *Report: assemble the report document*. Each run adds a new version; the report view shows the latest.
 
-## 7. What to look at
+## 7. Recompute the cited sources for an existing report
+
+The **Sources** slide groups citations by website and classifies every cited page (16 Nov 2026). For a report whose
+prompt analysis ran before that, open its **Run monitor** and click **Run** next to *Prompt analysis 4/5: classify
+cited sources*. When it finishes, the section and the report document are rebuilt on their own (about two minutes).
+It reads the stored answers and their original provider responses; nothing is asked of ChatGPT, Claude or Gemini
+again. Pages that no rule covers are classified by the reading model, a few cents per report, within the spending cap.
+
+## 8. What to look at
 
 - **Summary**: how many answers were usable, and how often MVP Miami was recommended by each engine.
 - **Who the engines name**: every business named, with recommended / mentioned / excluded counts per engine.

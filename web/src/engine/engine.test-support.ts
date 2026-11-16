@@ -1,5 +1,5 @@
 import type { LlmCallRecord } from "./llm";
-import type { EngineAnswerRecord, FinishStatus, JsonValue, Pricing, RunStore, StageInput, UsageRecord } from "./types";
+import type { AnswerEvidence, EngineAnswerRecord, FinishStatus, JsonValue, Pricing, RunStore, SourceClassificationRecord, StageInput, UsageRecord } from "./types";
 
 /** In-memory RunStore for engine tests. */
 export const PRICE: Pricing = {
@@ -55,6 +55,21 @@ export class MemoryStore implements RunStore {
   }
   async loadEngineAnswers(stageRunId: string) {
     return this.engineAnswers.filter((a) => a.stageRunId === stageRunId);
+  }
+  /** Raw responses by engine_answer id (tests set these; recorded answers are included automatically). */
+  rawResponses = new Map<string, JsonValue>();
+  async loadAnswerEvidence(ids: readonly string[]): Promise<AnswerEvidence[]> {
+    return ids.map((id) => {
+      const rec = this.engineAnswers.find((a) => a.id === id);
+      return { answerId: id, rawResponse: this.rawResponses.get(id) ?? rec?.rawResponse ?? null, answerText: rec?.answerText ?? null };
+    });
+  }
+  classifications: SourceClassificationRecord[] = [];
+  async loadSourceClassifications(keys: readonly string[], version: string) {
+    return this.classifications.filter((c) => keys.includes(c.pageKey) && c.classifierVersion === version);
+  }
+  async recordSourceClassification(r: SourceClassificationRecord) {
+    if (!this.classifications.some((c) => c.pageKey === r.pageKey && c.classifierVersion === r.classifierVersion)) this.classifications.push(r);
   }
   async retry(_id: string, _attempt: number, error: string, runAfter: Date) {
     if (!this.ownsRun) return false;

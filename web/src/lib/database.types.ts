@@ -413,6 +413,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"source_classification": {
+                  Row: {
+                    "classifier_version": string,"created_at": string,"evidence": string | null,"id": string,"model": string,"page_key": string,"reason": string,"source_group": string,"stage_run_id": string,"unclassified": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "classifier_version": string,"created_at"?: string,"evidence"?: string | null,"id"?: string,"model": string,"page_key": string,"reason": string,"source_group": string,"stage_run_id": string,"unclassified"?: string | null
+                  }
+                  Update: {
+                    "classifier_version"?: string,"created_at"?: string,"evidence"?: string | null,"id"?: string,"model"?: string,"page_key"?: string,"reason"?: string,"source_group"?: string,"stage_run_id"?: string,"unclassified"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "source_classification_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "source_classification_stage_run_id_fkey"
+      columns: ["stage_run_id"]
+isOneToOne: false
+      referencedRelation: "stage_run_overview"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"stage_run": {
                   Row: {
                     "attempt": number,"cost_usd": number,"created_at": string,"created_by": string | null,"duration_ms": number | null,"error": string | null,"finished_at": string | null,"id": string,"input_run_ids": (string)[],"inputs_hash": string,"instruction_refs": NonNullable<Json>,"locked_until": string | null,"max_attempts": number,"output": Json | null,"output_hash": string | null,"params": NonNullable<Json>,"pricing_ids": (number)[],"report_id": string,"run_after": string,"search_calls": number,"stage": string,"started_at": string | null,"status": string,"timeout_ms": number,"tokens_in": number,"tokens_out": number,"version": number

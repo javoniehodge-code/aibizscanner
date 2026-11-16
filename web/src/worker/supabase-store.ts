@@ -1,7 +1,7 @@
 import "server-only";
 import type { Json, Tables } from "@/lib/database.types";
 import type { ServiceClient } from "@/lib/supabase/service";
-import type { ClaimedRun, InstructionRef, JsonObject, JsonValue, Pricing, RunStore, StageInput } from "@/engine";
+import type { AnswerEvidence, ClaimedRun, InstructionRef, JsonObject, JsonValue, Pricing, RunStore, SourceClassificationRecord, StageInput } from "@/engine";
 
 function check<T>(res: { data: T; error: { message: string } | null }, what: string): T {
   if (res.error) throw new Error(`${what}: ${res.error.message}`);
@@ -129,6 +129,60 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
         requestedAt: r.requested_at,
         respondedAt: r.responded_at,
       }));
+    },
+    async loadAnswerEvidence(answerIds) {
+      const out: AnswerEvidence[] = [];
+      // Raw responses run to tens of KB each; fetch in small pages.
+      for (let i = 0; i < answerIds.length; i += 10) {
+        const ids = answerIds.slice(i, i + 10);
+        const rows = required(await db.from("engine_answer").select("id, raw_response, answer_text").in("id", ids), "load answer evidence");
+        for (const r of rows) out.push({ answerId: r.id, rawResponse: (r.raw_response ?? null) as JsonValue, answerText: r.answer_text });
+      }
+      return out;
+    },
+    async loadSourceClassifications(pageKeys, classifierVersion) {
+      const out: SourceClassificationRecord[] = [];
+      for (let i = 0; i < pageKeys.length; i += 100) {
+        const rows = required(
+          await db
+            .from("source_classification")
+            .select("page_key, classifier_version, source_group, unclassified, reason, evidence, model, stage_run_id")
+            .eq("classifier_version", classifierVersion)
+            .in("page_key", pageKeys.slice(i, i + 100)),
+          "load source classifications",
+        );
+        for (const r of rows) {
+          out.push({
+            pageKey: r.page_key,
+            classifierVersion: r.classifier_version,
+            group: r.source_group,
+            unclassified: r.unclassified as "outside" | "insufficient" | null,
+            reason: r.reason,
+            evidence: r.evidence,
+            model: r.model,
+            stageRunId: r.stage_run_id,
+          });
+        }
+      }
+      return out;
+    },
+    async recordSourceClassification(r) {
+      check(
+        await db.from("source_classification").upsert(
+          {
+            page_key: r.pageKey,
+            classifier_version: r.classifierVersion,
+            source_group: r.group,
+            unclassified: r.unclassified,
+            reason: r.reason,
+            evidence: r.evidence,
+            model: r.model,
+            stage_run_id: r.stageRunId,
+          },
+          { onConflict: "page_key,classifier_version", ignoreDuplicates: true },
+        ),
+        "record source classification",
+      );
     },
     async recordUsage(r) {
       check(

@@ -4,7 +4,7 @@
 import { describe, expect, it } from "vitest";
 import { buildRequest, parseOutput, type ModelSpec } from "../../../llm";
 import { assemblePromptAnalysis, formatRunAt } from "../logic/aggregate";
-import { classifyPage, normalizeUrl, PageRegistry } from "../logic/citations";
+import { classifyByRules } from "./sources.test-support";
 import { matchBusiness, newBusinessKey, normalizeName } from "../logic/names";
 import { normalizeText, unverifiedQuotes } from "../logic/quotes";
 import { extractAnswer } from "../instructions/extract-answer";
@@ -118,33 +118,6 @@ describe("names", () => {
   });
 });
 
-describe("citations", () => {
-  it("normalizes URLs: protocol, www, trailing slash, fragments and tracking parameters", () => {
-    expect(normalizeUrl("https://www.Yelp.com/biz/red-hook/?utm_source=chatgpt.com#reviews")).toBe("yelp.com/biz/red-hook");
-    expect(normalizeUrl("https://example.com/a?page=2&utm_medium=x")).toBe("example.com/a?page=2");
-    expect(normalizeUrl("mailto:a@b.c")).toBeNull();
-    expect(normalizeUrl("not a url")).toBeNull();
-  });
-  it("classifies own pages, known platforms and government records; leaves the rest unclassified", () => {
-    const own = ["brownstonemovers.com"];
-    expect(classifyPage("brownstonemovers.com/pricing", own, [])).toBe("your");
-    expect(classifyPage("google.com/maps/place/x", own, [])).toBe("maps");
-    expect(classifyPage("yelp.com/biz/x", own, [])).toBe("review");
-    expect(classifyPage("angi.com/companylist/brooklyn", own, [])).toBe("dir");
-    expect(classifyPage("reddit.com/r/Brooklyn/comments/1", own, [])).toBe("comm");
-    expect(classifyPage("dot.ny.gov/movers", own, [])).toBe("off");
-    expect(classifyPage("brooklynmag.com/best-movers", own, [])).toBe("unc");
-  });
-  it("keys each distinct page once, in order of first citation", () => {
-    const r = new PageRegistry(["brownstonemovers.com"], []);
-    expect(r.keyFor("https://brownstonemovers.com/pricing")).toBe("yw");
-    expect(r.keyFor("https://www.brownstonemovers.com/pricing/")).toBe("yw");
-    expect(r.keyFor("https://brownstonemovers.com/faq")).toBe("yw2");
-    expect(r.keyFor("https://yelp.com/biz/a")).toBe("rv1");
-    expect(r.pages().map((p) => p.key)).toEqual(["yw", "yw2", "rv1"]);
-  });
-});
-
 describe("assembly", () => {
   const answers: StoredAnswer[] = [
     { answerId: "a1", promptId: "P1", engine: 0, status: "ok", text: P1_CHATGPT, error: null, citations: ["https://www.yelp.com/biz/red-hook-moving-co-brooklyn", "https://brownstonemovers.com/pricing"], searchObserved: true, respondedAt: "2026-11-13T14:05:00Z" },
@@ -160,7 +133,7 @@ describe("assembly", () => {
     answers,
     extractions,
     target: TARGET,
-    ownDomains: ["brownstonemovers.com"],
+    classified: classifyByRules(answers.flatMap((a) => a.citations), ["brownstonemovers.com"]),
   });
 
   it("reproduces the sample report's recorded result for this answer (positions, statuses, reason, first choice)", () => {
@@ -173,6 +146,10 @@ describe("assembly", () => {
     expect(a.statedReason).toBe("flat-rate local moves, 4.8★ across 600+ Google reviews");
     expect(a.uncitedMentions).toEqual([{ source: "Google reviews", text: "4.8★ across 600+ Google reviews", page: null }]);
     expect(a.citations).toEqual(["rv1", "yw"]);
+    expect(a.citationUrls).toEqual([
+      { page: "rv1", url: "https://www.yelp.com/biz/red-hook-moving-co-brooklyn" },
+      { page: "yw", url: "https://brownstonemovers.com/pricing" },
+    ]);
     expect(a.runAt).toBe("13 Nov 2026, 14:05 UTC");
     expect(assembled.firstChoices).toEqual([{ prompt: "P1", engine: 0, business: "RHM", scope: "Overall", excerpt: "my top pick is Red Hook Moving Co.", answerId: "a1" }]);
   });
@@ -188,7 +165,7 @@ describe("assembly", () => {
   });
 
   it("refuses to assemble a usable answer that has no verified extraction", () => {
-    expect(() => assemblePromptAnalysis({ prompts: [{ id: "P1", group: 0, demand: "x", text: "q" }], answers, extractions: new Map(), target: TARGET, ownDomains: [] })).toThrow(/No verified extraction for answer a1/);
+    expect(() => assemblePromptAnalysis({ prompts: [{ id: "P1", group: 0, demand: "x", text: "q" }], answers, extractions: new Map(), target: TARGET, classified: new Map() })).toThrow(/No verified extraction for answer a1/);
   });
 
   it("formats run times, and says so when there is none", () => {

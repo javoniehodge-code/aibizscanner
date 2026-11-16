@@ -1096,6 +1096,70 @@
                       "off",
                       "unc"
                     ]
+                  },
+                  "site": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "title": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "owner": {
+                    "type": "string",
+                    "enum": [
+                      "target",
+                      "business",
+                      "unknown"
+                    ]
+                  },
+                  "basis": {
+                    "type": "object",
+                    "properties": {
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "alias",
+                          "rule",
+                          "model",
+                          "cache",
+                          "none"
+                        ]
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "evidence": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "unclassified": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "outside",
+                              "insufficient"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "method",
+                      "reason",
+                      "evidence",
+                      "unclassified"
+                    ],
+                    "additionalProperties": false
                   }
                 },
                 "required": [
@@ -1211,6 +1275,32 @@
                                   "pattern": "^[a-z]{2}\\d*$"
                                 }
                               },
+                              "citationUrls": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "page": {
+                                      "type": "string",
+                                      "pattern": "^[a-z]{2}\\d*$"
+                                    },
+                                    "url": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "page",
+                                    "url"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "unreadableCitations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
                               "uncitedMentions": {
                                 "type": "array",
                                 "items": {
@@ -1357,6 +1447,32 @@
                                   "pattern": "^[a-z]{2}\\d*$"
                                 }
                               },
+                              "citationUrls": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "page": {
+                                      "type": "string",
+                                      "pattern": "^[a-z]{2}\\d*$"
+                                    },
+                                    "url": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "page",
+                                    "url"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "unreadableCitations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
                               "uncitedMentions": {
                                 "type": "array",
                                 "items": {
@@ -1502,6 +1618,32 @@
                                   "type": "string",
                                   "pattern": "^[a-z]{2}\\d*$"
                                 }
+                              },
+                              "citationUrls": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "page": {
+                                      "type": "string",
+                                      "pattern": "^[a-z]{2}\\d*$"
+                                    },
+                                    "url": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "page",
+                                    "url"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "unreadableCitations": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
                               },
                               "uncitedMentions": {
                                 "type": "array",

@@ -106,6 +106,25 @@ export default async function PromptAnalysisPage({ params }: { params: Promise<{
 
 type Result = z.infer<typeof assembledSection>;
 
+const GROUP_NAMES: Record<string, string> = {
+  your: "Company websites · Your website",
+  other: "Company websites · Other businesses",
+  maps: "Maps & places",
+  review: "Review platforms",
+  dir: "Directories & marketplaces",
+  ed: "Editorial & specialist publications",
+  comm: "Communities & social platforms",
+  off: "Official & professional sources",
+  unc: "Other / Unclassified",
+};
+const METHOD_NAMES: Record<string, string> = {
+  alias: "Your verified domain",
+  rule: "Verified rule",
+  model: "Model",
+  cache: "Model (cached)",
+  none: "Not classified",
+};
+
 function Result({ result, stale, finishedAt }: { result: Result; stale: boolean; finishedAt: string | null }) {
   const pa = result.section;
   const target = result.business.key;
@@ -250,21 +269,44 @@ function Result({ result, stale, finishedAt }: { result: Result; stale: boolean;
       </table>
 
       <h2>Cited pages</h2>
+      <p className="muted">
+        One row per page, grouped by website. &ldquo;Answers&rdquo; counts the usable answers that cite the page; a website counts once per answer in
+        the report, however many of its pages an answer cites.
+      </p>
       <table data-testid="pa-pages">
         <thead>
           <tr>
+            <th>Website</th>
             <th>Page</th>
-            <th>Type</th>
-            <th>Times cited</th>
+            <th>Source group</th>
+            <th>How it was decided</th>
+            <th>Answers</th>
           </tr>
         </thead>
         <tbody>
           {[...pages.values()]
-            .sort((a, b) => (pageCites.get(b.key) ?? 0) - (pageCites.get(a.key) ?? 0))
+            .sort((a, b) => (a.site ?? "").localeCompare(b.site ?? "") || (pageCites.get(b.key) ?? 0) - (pageCites.get(a.key) ?? 0))
             .map((p) => (
               <tr key={p.key}>
-                <td style={{ wordBreak: "break-all" }}>{p.url}</td>
-                <td>{p.category === "unc" ? "not yet classified" : p.category}</td>
+                <td style={{ wordBreak: "break-all" }}>{p.site ?? "—"}</td>
+                <td style={{ wordBreak: "break-all" }}>
+                  {p.url}
+                  {p.title ? <div className="muted">{p.title}</div> : null}
+                </td>
+                <td>
+                  {GROUP_NAMES[p.category] ?? p.category}
+                  {p.category === "unc" && p.basis ? <div className="muted">{p.basis.unclassified === "outside" ? "outside these groups" : "not enough evidence"}</div> : null}
+                </td>
+                <td>
+                  {p.basis ? (
+                    <>
+                      {METHOD_NAMES[p.basis.method]}: {p.basis.reason}
+                      {p.basis.evidence ? <div className="muted">Evidence: &ldquo;{p.basis.evidence}&rdquo;</div> : null}
+                    </>
+                  ) : (
+                    <span className="muted">Not recorded (older run)</span>
+                  )}
+                </td>
                 <td>{pageCites.get(p.key) ?? 0}</td>
               </tr>
             ))}

@@ -1186,7 +1186,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
   <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="width:36px;height:36px;border-radius:8px;background:oklch(0.45 0.22 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:14px;font-weight:600">{{ slideNo.p3 }}</span><span style="font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">WHERE AI GETS ITS INFORMATION</span><span style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.3;text-align:right"><strong style="font-size:16px;font-weight:700">{{ biz.name }}</strong><span style="font-size:14px">{{ biz.location }}</span></span></span>
   <div style="display:flex;flex-direction:column;gap:10px;max-width:780px">
     <h2 style="margin:0;font-size:clamp(28px,3.2vw,32px);font-weight:700;letter-spacing:-0.02em;line-height:1.2;text-wrap:balance">Which sources AI relies on</h2>
-    <p style="margin:0;font-size:18px;line-height:1.55;max-width:65ch;text-wrap:pretty">A source type counts once per answer, and one answer can cite several types, so percentages don't add up to 100%. Citations show what a model linked, not everything it used. Select a tile for the specific sites and pages.</p>
+    <p style="margin:0;font-size:18px;line-height:1.55;max-width:65ch;text-wrap:pretty">A source type counts once per answer, and one answer can cite several types, so percentages don't add up to 100%. Citations show what a model linked, not everything it used. Select a tile for the websites and pages in that group; the table below lists every website cited.</p>
   </div>
   <sc-if value="{{ true }}" hint-placeholder-val="{{ true }}">
   <div style="display:flex;flex-direction:column;gap:20px">
@@ -1209,17 +1209,31 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     <sc-for list="{{ pa.hmOpen }}" as="c" hint-placeholder-count="0">
       <div data-keep style="border:1.5px solid #000;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:700">{{ c.name }}</span><span style="font-size:14px;color:oklch(0.42 0.01 265)">Sites and pages cited, across all AIs</span></span>
+          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:700">{{ c.name }}</span><span style="font-size:14px;color:oklch(0.42 0.01 265)">{{ c.scope }}</span></span>
           <button data-noprint onClick="{{ c.toggle }}" style="font:inherit;font-size:14px;font-weight:600;background:#fff;border:1px solid oklch(0.85 0.01 265);border-radius:10px;padding:8px 14px;cursor:pointer">Close ✕</button>
         </div>
-        <sc-if value="{{ c.none }}"><span style="font-size:16px">No sources of this type were cited in the sampled answers.</span></sc-if>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px 32px">
-          <sc-for list="{{ c.domains }}" as="d" hint-placeholder-count="2">
-            <div style="display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid oklch(0.92 0.006 265)">
-              <span style="font-size:16px;font-weight:700">{{ d.d }} <span style="font-weight:500">· {{ d.count }}</span></span>
-              <sc-for list="{{ d.pages }}" as="p" hint-placeholder-count="1"><span style="font-size:14px;line-height:1.5"><a href="{{ p.href }}" style="font-family:'Geist Mono',monospace;font-size:12px;word-break:break-all">{{ p.url }}</a> · {{ p.refs }}</span></sc-for>
-            </div>
-          </sc-for>
+        <sc-if value="{{ c.none }}"><span style="font-size:16px">No sources of this type were cited in these answers.</span></sc-if>
+        <div data-scrollx style="overflow-x:auto">
+          <div style="min-width:680px;display:flex;flex-direction:column;font-size:15px">
+            <div style="display:grid;grid-template-columns:28px minmax(200px,1.4fr) minmax(160px,1.2fr) minmax(110px,0.6fr) minmax(90px,0.5fr);gap:10px;align-items:end;padding:8px 4px;border-bottom:2px solid #000;font-size:13px;font-weight:700"><span></span><span>Website</span><span>Source groups</span><span>Answers citing this website</span><span>Distinct pages cited</span></div>
+            <sc-for list="{{ c.rows }}" as="w" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;border-bottom:1px solid oklch(0.9 0.008 265)">
+                <button onClick="{{ w.toggle }}" aria-expanded="{{ w.open }}" style="font:inherit;color:#000;text-align:left;cursor:pointer;background:none;border:0;padding:10px 4px;display:grid;grid-template-columns:28px minmax(200px,1.4fr) minmax(160px,1.2fr) minmax(110px,0.6fr) minmax(90px,0.5fr);gap:10px;align-items:center" style-hover="background:oklch(0.985 0.003 265)"><span style="font-family:'Geist Mono',monospace;font-weight:700">{{ w.caret }}</span><span style="font-weight:700;word-break:break-all">{{ w.site }}</span><span style="font-size:13px;line-height:1.4">{{ w.groups }}</span><span style="font-weight:600">{{ w.answers }}</span><span>{{ w.pages }}</span></button>
+                <sc-if value="{{ w.open }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:10px;padding:4px 4px 14px 42px">
+                  <sc-for list="{{ w.pageRows }}" as="pg" hint-placeholder-count="2">
+                    <div style="display:flex;flex-direction:column;gap:3px;padding-top:8px;border-top:1px solid oklch(0.94 0.005 265)">
+                      <a href="{{ pg.href }}" style="font-family:'Geist Mono',monospace;font-size:12px;word-break:break-all">{{ pg.url }}</a>
+                      <sc-if value="{{ pg.hasTitle }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:oklch(0.42 0.01 265)">{{ pg.title }}</span></sc-if>
+                      <span style="font-size:13px"><strong style="font-weight:600">{{ pg.group }}</strong><sc-if value="{{ pg.hasWhy }}" hint-placeholder-val="{{ false }}"> · {{ pg.why }}</sc-if></span>
+                      <span style="display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px;align-items:baseline"><span>Cited in {{ pg.count }}:</span><sc-for list="{{ pg.refs }}" as="a" hint-placeholder-count="2"><button data-noprint onClick="{{ a.go }}" style="font:inherit;font-size:13px;color:oklch(0.45 0.2 265);text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0;cursor:pointer">{{ a.t }}</button></sc-for></span>
+                    </div>
+                  </sc-for>
+                </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
         </div>
       </div>
     </sc-for>
@@ -1227,6 +1241,35 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     <div style="display:flex;gap:8px 20px;flex-wrap:wrap;align-items:center;font-size:14px">
       <span style="display:flex;align-items:center;gap:8px">0%<span style="width:160px;height:12px;border-radius:6px;background:linear-gradient(90deg,#fff,oklch(0.45 0.22 265));border:1px solid oklch(0.88 0.008 265)"></span>100%</span>
       <span style="color:oklch(0.42 0.01 265)">{{ pa.hmNote }}</span>
+    </div>
+    <span style="font-size:14px;line-height:1.5;color:oklch(0.42 0.01 265)">{{ pa.citeGaps }}</span>
+    <div style="display:flex;flex-direction:column;gap:10px;padding-top:8px">
+      <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:700;line-height:1.3">{{ pa.siteTitle }}</span><span style="font-size:14px;line-height:1.5;color:oklch(0.42 0.01 265);max-width:90ch">{{ pa.siteSub }} Select a website for its pages and the answers that cited them.</span></div>
+      <sc-if value="{{ pa.siteLinksMissing }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px;line-height:1.5;padding:12px 16px;border:1.5px dashed oklch(0.62 0.01 265);border-radius:12px">{{ pa.siteLinksNote }}</span></sc-if>
+      <sc-if value="{{ pa.siteNone }}" hint-placeholder-val="{{ false }}"><span style="font-size:16px">No pages were cited in these answers.</span></sc-if>
+      <div data-scrollx style="overflow-x:auto">
+          <div style="min-width:680px;display:flex;flex-direction:column;font-size:15px">
+            <div style="display:grid;grid-template-columns:28px minmax(200px,1.4fr) minmax(160px,1.2fr) minmax(110px,0.6fr) minmax(90px,0.5fr);gap:10px;align-items:end;padding:8px 4px;border-bottom:2px solid #000;font-size:13px;font-weight:700"><span></span><span>Website</span><span>Source groups</span><span>Answers citing this website</span><span>Distinct pages cited</span></div>
+            <sc-for list="{{ pa.siteRows }}" as="w" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;border-bottom:1px solid oklch(0.9 0.008 265)">
+                <button onClick="{{ w.toggle }}" aria-expanded="{{ w.open }}" style="font:inherit;color:#000;text-align:left;cursor:pointer;background:none;border:0;padding:10px 4px;display:grid;grid-template-columns:28px minmax(200px,1.4fr) minmax(160px,1.2fr) minmax(110px,0.6fr) minmax(90px,0.5fr);gap:10px;align-items:center" style-hover="background:oklch(0.985 0.003 265)"><span style="font-family:'Geist Mono',monospace;font-weight:700">{{ w.caret }}</span><span style="font-weight:700;word-break:break-all">{{ w.site }}</span><span style="font-size:13px;line-height:1.4">{{ w.groups }}</span><span style="font-weight:600">{{ w.answers }}</span><span>{{ w.pages }}</span></button>
+                <sc-if value="{{ w.open }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:10px;padding:4px 4px 14px 42px">
+                  <sc-for list="{{ w.pageRows }}" as="pg" hint-placeholder-count="2">
+                    <div style="display:flex;flex-direction:column;gap:3px;padding-top:8px;border-top:1px solid oklch(0.94 0.005 265)">
+                      <a href="{{ pg.href }}" style="font-family:'Geist Mono',monospace;font-size:12px;word-break:break-all">{{ pg.url }}</a>
+                      <sc-if value="{{ pg.hasTitle }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:oklch(0.42 0.01 265)">{{ pg.title }}</span></sc-if>
+                      <span style="font-size:13px"><strong style="font-weight:600">{{ pg.group }}</strong><sc-if value="{{ pg.hasWhy }}" hint-placeholder-val="{{ false }}"> · {{ pg.why }}</sc-if></span>
+                      <span style="display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px;align-items:baseline"><span>Cited in {{ pg.count }}:</span><sc-for list="{{ pg.refs }}" as="a" hint-placeholder-count="2"><button data-noprint onClick="{{ a.go }}" style="font:inherit;font-size:13px;color:oklch(0.45 0.2 265);text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0;cursor:pointer">{{ a.t }}</button></sc-for></span>
+                    </div>
+                  </sc-for>
+                </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      <sc-if value="{{ pa.siteMore }}" hint-placeholder-val="{{ true }}"><button data-noprint onClick="{{ pa.siteMoreGo }}" style="align-self:flex-start;font:inherit;font-size:14px;font-weight:600;background:#fff;border:1px solid oklch(0.85 0.01 265);border-radius:10px;padding:8px 14px;cursor:pointer">{{ pa.siteMoreLabel }}</button></sc-if>
     </div>
   </div>
   </sc-if>
@@ -1683,6 +1726,12 @@ const B = Object.fromEntries(PAR.businesses.map(b => [b.key, b.name]));
 const PAGES = Object.fromEntries(PAR.pages.map(p => [p.key, [p.url, p.category]]));
 const CATS = [['your', 'Company websites \u00b7 Your website'], ['other', 'Company websites \u00b7 Other businesses'], ['maps', 'Maps & places'], ['review', 'Review platforms'], ['dir', 'Directories & marketplaces'], ['ed', 'Editorial & specialist publications'], ['comm', 'Communities & social platforms'], ['off', 'Official & professional sources'], ['unc', 'Other / Unclassified']];
 const CATN = Object.fromEntries(CATS);
+// Cited pages with their website. Pipeline reports give each page's website (registrable domain, verified overrides
+// and aliases); older reports don't, so the host without "www." stands in.
+const PINFO = Object.fromEntries(PAR.pages.map(p => [p.key, { key: p.key, url: p.url, cat: p.category, site: p.site || p.url.replace(/^https?:\/\//, '').split(/[/?#]/)[0].replace(/^www\./, ''), title: p.title || '', basis: p.basis || null }]));
+// Website answer counts need answer-level citation links. A report that lists cited pages but links none of them to
+// an answer can't say how many answers cited a website.
+const CITE_LINKS = !PAR.pages.length || PAR.questions.some(q => q.answers.some(a => a.status === 'ok' && a.citations.length));
 const GROUPS = PAR.groups.map(g => [g.name, g.description]);
 // Local businesses: assume Gemini draws on Google Maps / Business Profile for every answer, cited or not (a labeled
 // assumption in the report). If the report doesn't record the assumption, it isn't applied.
@@ -1692,6 +1741,7 @@ const XSRC = (PAR.uncitedSources || []).map(x => ({ id: x.key, n: x.name, site: 
 // w stated reason, o 'G' grouped order, nosearch, u unavailable reason, runAt.
 const P = PAR.questions.map(q => ({ id: q.question.id, g: q.question.group, ev: q.question.demand, q: q.question.text, c: q.answers.map(a => a.status !== 'ok' ? { u: a.reason, runAt: a.runAt } : Object.assign(
   { n: a.named.map(x => x.business + ':' + x.status).join(' '), c: a.citations.join(' '), a: a.text, runAt: a.runAt },
+  a.citationUrls ? { cu: a.citationUrls } : {}, a.unreadableCitations ? { ux: a.unreadableCitations } : {},
   a.uncitedMentions.length ? { ns: a.uncitedMentions.map(m => [m.source, m.text, m.page || '']) } : {},
   a.statedReason != null ? { w: a.statedReason } : {}, a.grouped ? { o: 'G' } : {}, a.searchObserved ? {} : { nosearch: true })) }));
 const COL = { R: ['oklch(0.95 0.06 155)', 'oklch(0.62 0.18 150)', 'oklch(0.38 0.13 150)'], M: ['oklch(0.965 0.06 85)', 'oklch(0.75 0.13 80)', 'oklch(0.45 0.1 70)'], X: ['oklch(0.95 0.04 25)', 'oklch(0.6 0.18 25)', 'oklch(0.48 0.18 25)'] };
@@ -1714,7 +1764,7 @@ const segs = (list, big) => { const c = tally(list); return ['R', 'M', 'X', 'N',
 const sw = k => ({ width: 12, height: 12, borderRadius: 3, flex: 'none', background: SC[k], border: k === 'U' ? '1px solid oklch(0.8 0.01 265)' : 'none', boxSizing: 'border-box' });
 const SECS = [['summary', 'Summary'], ['prompts', 'Prompt analysis'], ['names', 'Businesses named'], ['sources', 'Sources'], ['brand', 'Brand summary'], ['actions', 'Action checklist'], ['method', 'Method']];
 class PromptPart extends Sub {
-  init = { hmAi: -1, wpmScope: 'cited', wpmCell: null, srcView: 'heat', pa: null, paModel: 0, paRow: null, view: null, prov: 'all', cell: null, biz: null, cat: null, task: 0, method: true, sec: 0, all: false };
+  init = { siteOpen: null, sitesAll: false, hmAi: -1, wpmScope: 'cited', wpmCell: null, srcView: 'heat', pa: null, paModel: 0, paRow: null, view: null, prov: 'all', cell: null, biz: null, cat: null, task: 0, method: true, sec: 0, all: false };
   summaryVals(s, usable, named, rec, seg) {
     const tot = tally(usable), U = usable.length;
     let acc = 0;
@@ -1835,7 +1885,7 @@ class PromptPart extends Sub {
           order: o.cell.o === 'G' ? 'grouped, no single order' : 'in order of appearance',
           names: o.names.map((x, j) => ({ n: o.cell.o === 'G' ? '\u2022' : j + 1, name: B[x.id] + (x.id === TARGET ? ' \u00b7 Your business (matched to ' + BUSINESS.domain + ')' : ''), st: ST[x.st][1], stStyle: { fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 6, background: COL[x.st][0], color: COL[x.st][2], whiteSpace: 'nowrap' }, nameStyle: { fontWeight: x.id === TARGET ? 700 : 500 } })),
           noNames: !o.usable ? 'No answer to extract from.' : o.names.length ? '' : 'No businesses named in this answer.',
-          cites: o.cites.map(k => ({ t: PAGES[k][0], href: 'https://' + PAGES[k][0], cat: CATN[PAGES[k][1]] })),
+          cites: o.cell.cu ? o.cell.cu.map(c => ({ t: c.url, href: c.url, cat: CATN[PAGES[c.page][1]] + ' \u00b7 ' + PINFO[c.page].site })) : o.cites.map(k => ({ t: PAGES[k][0], href: 'https://' + PAGES[k][0], cat: CATN[PAGES[k][1]] })),
           noCites: !o.usable ? 'No answer, so no citation data.' : o.cites.length ? '' : 'No citations returned. This doesn\u2019t prove no sources were used.',
           meta: [['Provider', AIS[o.i]], ['Model', MODELS[o.i]], ['Run', o.cell.runAt], ['Web search', o.usable ? 'Requested \u00b7 ' + (o.cell.nosearch ? 'not observed' : 'observed') : 'Requested'], ['Sample', 'S1 of 1 \u00b7 ' + p.id + '-' + AIS[o.i].slice(0, 2).toUpperCase() + '-01'], ['Status', o.usable ? 'Usable' : 'Unavailable']].map(([k, v]) => ({ k, v })) };
       }
@@ -1965,7 +2015,33 @@ class PromptPart extends Sub {
         const share = (k, i) => { const os = scope(i), n = os.filter(o => o.cites.some(c => PAGES[c][1] === k)).length; return { n, d: os.length, v: os.length ? n / os.length : 0 }; };
         const order = CATS.map(([k, n]) => ({ k, n, all: share(k, -1) })).sort((a, b) => b.all.v - a.all.v);
         const tabs = [[-1, 'All AIs'], ...AIS.map((a, i) => [i, a])];
+        // Websites: one row per website. A website counts once per usable answer however many of its pages that answer
+        // cites; with a group, only the pages in that group qualify (a mixed-purpose site shows only those pages there).
+        const tabName = sel < 0 ? 'All AIs' : AIS[sel], answersIn = scope(sel);
+        const openAnswer = o => () => { this.setState({ cell: [o.p.id, o.i], paRow: null }); this.go(1); };
+        const siteRows = cat => {
+          const m = {};
+          answersIn.forEach(o => o.cites.forEach(k => { const pg = PINFO[k]; if (!pg || (cat && pg.cat !== cat)) return; const S = m[pg.site] = m[pg.site] || { site: pg.site, ans: new Set(), pages: {} }; S.ans.add(o); (S.pages[k] = S.pages[k] || []).includes(o) || S.pages[k].push(o); }));
+          return Object.values(m).map(S => ({ ...S, n: S.ans.size, np: Object.keys(S.pages).length })).sort((a, b) => b.n - a.n || b.np - a.np || (a.site < b.site ? -1 : a.site > b.site ? 1 : 0)).map(S => {
+            const id = (cat || 'all') + '|' + S.site, open = s.siteOpen === id;
+            const cats = [...new Set(Object.keys(S.pages).map(k => PINFO[k].cat))];
+            return { site: S.site, open, caret: open ? '\u2212' : '+', toggle: () => this.setState({ siteOpen: open ? null : id }),
+              answers: CITE_LINKS ? S.n + ' of ' + answersIn.length : 'Unavailable', pages: String(S.np), groups: cats.map(c => CATN[c]).join(' \u00b7 '),
+              pageRows: Object.entries(S.pages).sort((a, b) => b[1].length - a[1].length || (a[0] < b[0] ? -1 : 1)).map(([k, os]) => { const pg = PINFO[k];
+                return { url: pg.url, href: /^https?:/.test(pg.url) ? pg.url : 'https://' + pg.url, title: pg.title, hasTitle: !!pg.title, group: CATN[pg.cat] + (pg.cat === 'unc' && pg.basis && pg.basis.unclassified === 'outside' ? ' (outside these groups)' : pg.cat === 'unc' && pg.basis ? ' (not enough evidence)' : ''), why: pg.basis ? pg.basis.reason : '', hasWhy: !!(pg.basis && pg.basis.reason),
+                  count: os.length + (os.length === 1 ? ' answer' : ' answers'),
+                  refs: os.slice().sort((a, b) => P.indexOf(a.p) - P.indexOf(b.p) || a.i - b.i).map(o => ({ t: o.p.id + ' \u00b7 ' + AIS[o.i], go: openAnswer(o) })) }; }) };
+          });
+        };
+        const allSites = siteRows(null), SITE_TOP = 15;
+        const gapsIn = OBS.filter(o => sel < 0 || o.i === sel), noCite = answersIn.filter(o => !o.cites.length).length, unread = answersIn.reduce((t, o) => t + (o.cell.ux || 0), 0), unav = gapsIn.filter(o => !o.usable).length;
         return {
+          siteTitle: 'Websites cited \u00b7 ' + tabName,
+          siteSub: allSites.length + ' website' + (allSites.length === 1 ? '' : 's') + ' and ' + new Set(answersIn.flatMap(o => o.cites)).size + ' distinct pages, across ' + answersIn.length + ' usable answers. A website counts once per answer, however many of its pages that answer cites, so page counts don\u2019t add up to the answer count.',
+          siteRows: s.sitesAll ? allSites : allSites.slice(0, SITE_TOP), siteNone: !allSites.length, siteMore: allSites.length > SITE_TOP,
+          siteMoreLabel: s.sitesAll ? 'Show the top ' + SITE_TOP + ' only' : 'Show all ' + allSites.length + ' websites', siteMoreGo: () => this.setState({ sitesAll: !s.sitesAll }),
+          siteLinksMissing: !CITE_LINKS, siteLinksNote: 'This report lists the pages cited but doesn\u2019t link them to individual answers, so the number of answers citing each website is unavailable.',
+          citeGaps: 'Citation data \u00b7 ' + tabName + ': ' + noCite + ' of ' + answersIn.length + ' usable answers returned no citations' + (unread ? ' \u00b7 ' + unread + ' citation link' + (unread === 1 ? '' : 's') + ' couldn\u2019t be read' : '') + (unav ? ' \u00b7 ' + unav + ' answer' + (unav === 1 ? '' : 's') + ' unavailable, not counted' : '') + '.',
       cov: (() => {
         const covSel = s.hmAi ?? -1;
         const SITES0 = R.citationCoverage.sites.map(s => [s.name, s.type, s.pageKeys.join(' '), s.presentBusinesses.join(' ')]);
@@ -2092,7 +2168,7 @@ class PromptPart extends Sub {
           hmSub: 'Share of ' + scope(sel).length + ' usable answers that cited each source type' + (sel < 0 ? ' · ranked' : ' · same order as All AIs, for comparison'),
           hmNote: sel < 0 ? 'Pick an AI to see how its citations differ from the overall picture.' : '\u25B2\u25BC = points above or below all AIs',
           hmTabs: tabs.map(([i, n]) => ({ n, on: sel === i, go: () => this.setState({ hmAi: i }), style: { font: 'inherit', fontSize: 14, fontWeight: 600, padding: '8px 14px', borderRadius: 9, border: 0, cursor: 'pointer', background: sel === i ? '#000' : 'transparent', color: sel === i ? '#fff' : '#000' } })),
-          hmOpen: catRows.filter(r => r.open), hmNoOpen: !catRows.some(r => r.open),
+          hmOpen: catRows.filter(r => r.open).map(r => { const k = CATS.find(c => c[1] === r.name)[0], rows = siteRows(k); return { name: r.name, toggle: r.toggle, scope: 'Websites and pages in this group \u00b7 ' + tabName + ' \u00b7 ' + answersIn.length + ' usable answers', rows, none: !rows.length }; }), hmNoOpen: !catRows.some(r => r.open),
           hmTiles: order.map((c, r) => { const v = share(c.k, sel), dark = v.v >= 0.45, dd = sel < 0 ? 0 : Math.round((v.v - c.all.v) * 100), row = catRows[CATS.findIndex(x => x[0] === c.k)], on = row.open;
             return { toggle: row.toggle, open: on, showRank: sel < 0, noRank: sel >= 0, rank: r + 1, name: c.n, pct: pf(v.v), frac: v.n + ' of ' + v.d + ' answers', title: c.n + ' · ' + pf(v.v),
               delta: dd ? (dd > 0 ? '\u25B2 ' : '\u25BC ') + Math.abs(dd) + ' pts' : '',

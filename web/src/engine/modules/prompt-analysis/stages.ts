@@ -8,8 +8,10 @@ import { extractAnswer } from "./instructions/extract-answer";
 import { buildPromptAnalysisSection } from "./logic/section";
 import { verifyExtraction } from "./logic/quotes";
 import { ENGINE_MODELS, EXTRACTION_MODEL } from "./models";
+import { paSources } from "./sources-stage";
 import {
   answerExtraction,
+  classifiedSources,
   engineAnswers,
   extractions,
   promptSetSpec,
@@ -76,7 +78,7 @@ function input<T>(ctx: StageContext, stage: string, schema: z.ZodType<T>): T & {
 export const paPromptSet: StageDefinition = {
   id: "pa_prompt_set",
   module: MODULE,
-  label: "Prompt analysis 1/4: approved prompt set",
+  label: "Prompt analysis 1/5: approved prompt set",
   inputs: [],
   timeoutMs: 10_000,
   maxAttempts: 1,
@@ -97,7 +99,7 @@ function answersStage(engine: EngineIndex): StageDefinition {
   return {
     id: `pa_answers_${name.toLowerCase()}`,
     module: MODULE,
-    label: `Prompt analysis 2/4: ${name} answers`,
+    label: `Prompt analysis 2/5: ${name} answers`,
     inputs: ["pa_prompt_set"],
     timeoutMs: ANSWER_STAGE_TIMEOUT_MS,
     // Answers are stored as they arrive. A retry asks only the questions without an answer yet, so retrying after a
@@ -252,7 +254,7 @@ const ANSWER_STAGES = [paAnswersChatGpt.id, paAnswersClaude.id, paAnswersGemini.
 export const paExtract: StageDefinition = {
   id: "pa_extract",
   module: MODULE,
-  label: "Prompt analysis 3/4: read answers",
+  label: "Prompt analysis 3/5: read answers",
   inputs: ["pa_prompt_set", ...ANSWER_STAGES],
   timeoutMs: 240_000,
   maxAttempts: 2,
@@ -326,8 +328,8 @@ export const assembledSection = z
 export const paAssemble: StageDefinition = {
   id: "pa_assemble",
   module: MODULE,
-  label: "Prompt analysis 4/4: assemble section",
-  inputs: ["pa_prompt_set", ...ANSWER_STAGES, "pa_extract"],
+  label: "Prompt analysis 5/5: assemble section",
+  inputs: ["pa_prompt_set", ...ANSWER_STAGES, "pa_extract", "pa_sources"],
   timeoutMs: 20_000,
   maxAttempts: 1,
   autoRun: true,
@@ -337,9 +339,10 @@ export const paAssemble: StageDefinition = {
     const set: PromptSetSpec & { runId: string } = input(ctx, "pa_prompt_set", promptSetSpec);
     const [a0, a1, a2] = ANSWER_STAGES.map((s) => input(ctx, s, engineAnswers));
     const ex = input(ctx, "pa_extract", extractions);
-    const built = buildPromptAnalysisSection({ set, setRunId: set.runId, engines: [a0!, a1!, a2!], extractions: ex, extractRunId: ex.runId });
+    const src = input(ctx, "pa_sources", classifiedSources);
+    const built = buildPromptAnalysisSection({ set, setRunId: set.runId, engines: [a0!, a1!, a2!], extractions: ex, extractRunId: ex.runId, sources: src, sourcesRunId: src.runId });
     return { status: built.section.run.v && built.section.run.v.unavailable === 0 ? "done" : "partial", output: built as unknown as JsonValue };
   },
 };
 
-export const PROMPT_ANALYSIS_STAGES = [paPromptSet, paAnswersChatGpt, paAnswersClaude, paAnswersGemini, paExtract, paAssemble] as const;
+export const PROMPT_ANALYSIS_STAGES = [paPromptSet, paAnswersChatGpt, paAnswersClaude, paAnswersGemini, paExtract, paSources, paAssemble] as const;

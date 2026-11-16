@@ -44,3 +44,10 @@ is kept unchanged as the source of `fixtures/mvp-miami.json`.
 counts, plus the report's business if it isn't among them; the "Explicit first choice" chart was removed (first
 choices still show in the example answer). With more than 8 bars, names under the charts are slanted. The appearance
 table lists the same top 15. The Brownstone pixel test skips this slide; the MVP Miami test checks it.
+
+**Sources slide (16 Nov 2026):** the nine source-group tiles and the provider tabs are unchanged. Selecting a tile
+lists that group's websites (only the pages that belong to the group), and a new "Websites cited" table lists every
+website: answers citing it (a website counts once per answer, from the answers' citation keys) and distinct pages
+cited; a row expands to its pages, their source groups and links that open the citing answers. Both follow the
+selected provider tab. Answers show their original citation URLs (`citationUrls`). A report that lists pages but
+links none to an answer shows the website answer count as unavailable.

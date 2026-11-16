@@ -1,13 +1,17 @@
 import type { EvidenceEntry, PromptAnalysisSection } from "@/report/schema";
 import { ENGINE_NAMES } from "../../../answers";
-import type { EngineAnswers, Extractions, PromptSetSpec, StoredAnswer } from "../schemas";
+import type { ClassifiedSources, EngineAnswers, Extractions, PromptSetSpec, StoredAnswer } from "../schemas";
 import { assemblePromptAnalysis, formatRunAt } from "./aggregate";
 import { newBusinessKey } from "./names";
+import { EXTRACTION_MODEL } from "../models";
+
+const EXTRACTION_MODEL_NAME = EXTRACTION_MODEL.model;
 
 type Envelope<T> = { v: T; p: { kind: "observed"; evidence: string[] } };
 const observed = <T>(v: T, evidence: string[]): Envelope<T> => ({ v, p: { kind: "observed", evidence: [...new Set(evidence)] } });
 
 export const PROMPT_SET_EVIDENCE = "prompt-set";
+export const SOURCES_EVIDENCE = "sources";
 export const answerEvidenceId = (engine: number, promptId: string) => `ans-${engine}-${promptId}`;
 export const runEvidenceId = (engine: number) => `run-${ENGINE_NAMES[engine]!.toLowerCase()}`;
 
@@ -29,6 +33,8 @@ export function buildPromptAnalysisSection(input: {
   engines: readonly [EngineAnswers & { runId: string }, EngineAnswers & { runId: string }, EngineAnswers & { runId: string }];
   extractions: Extractions;
   extractRunId: string;
+  sources: ClassifiedSources;
+  sourcesRunId: string;
 }): BuiltSection {
   const { set } = input;
   const extracted = new Map(input.extractions.items.flatMap((i) => (i.status === "verified" ? [[i.answerId, i.extraction] as const] : [])));
@@ -61,7 +67,7 @@ export function buildPromptAnalysisSection(input: {
     extractions: extracted,
     // Answers sometimes name a business by its website ("mvpmiami.com"), so the domains count as names too.
     target: { key: targetKey, name: set.target.name, aliases: [...set.target.aliases, ...set.target.domains] },
-    ownDomains: set.target.domains,
+    classified: new Map(input.sources.pages.map((p) => [p.pageKey, p])),
   });
 
   const evidence: Record<string, EvidenceEntry> = {};
@@ -114,13 +120,13 @@ export function buildPromptAnalysisSection(input: {
   const section: PromptAnalysisSection = {
     groups: set.groups.map((g) => observed(g, [PROMPT_SET_EVIDENCE])),
     businesses: assembled.businesses.map((b) => observed({ key: b.key, name: b.name }, bizEvidence.get(b.key) ?? [PROMPT_SET_EVIDENCE])),
-    pages: assembled.pages.map((p) => observed(p, pageEvidence.get(p.key) ?? allRuns)),
+    pages: assembled.pages.map((p) => observed(p, [...(pageEvidence.get(p.key) ?? allRuns), SOURCES_EVIDENCE])),
     questions: assembled.questions.map((q) => ({
       question: observed(q.prompt, [PROMPT_SET_EVIDENCE]),
       answers: q.answers.map((a, engine) => {
         const ev = a.answerId ? [answerEvidenceId(engine, q.prompt.id)] : [runEvidenceId(engine)];
         if (a.status === "ok") {
-          return observed({ status: a.status, named: a.named, citations: a.citations, uncitedMentions: a.uncitedMentions, text: a.text, statedReason: a.statedReason, grouped: a.grouped, searchObserved: a.searchObserved, runAt: a.runAt }, ev);
+          return observed({ status: a.status, named: a.named, citations: a.citations, citationUrls: a.citationUrls, unreadableCitations: a.unreadableCitations, uncitedMentions: a.uncitedMentions, text: a.text, statedReason: a.statedReason, grouped: a.grouped, searchObserved: a.searchObserved, runAt: a.runAt }, ev);
         }
         return observed({ status: "unavailable" as const, reason: a.reason, runAt: a.runAt }, ev);
       }) as PromptAnalysisSection["questions"][number]["answers"],
@@ -158,9 +164,27 @@ export function buildPromptAnalysisSection(input: {
         },
         [`extract`],
       ),
+      observed(
+        {
+          title: "How cited sources were grouped",
+          text: (() => {
+            const ps = input.sources.pages;
+            const n = (m: string) => ps.filter((p) => p.method === m).length;
+            const unc = ps.filter((p) => p.group === "unc");
+            return (
+              `${ps.length} distinct pages on ${new Set(ps.map((p) => p.site)).size} websites. A website is its registrable domain (the audited business's verified domains count as one). ` +
+              `Each page has one source group: ${n("alias")} from the business's own domains, ${n("rule")} from verified domain and URL rules, ${n("model") + n("cache")} by ${EXTRACTION_MODEL_NAME} from the titles and excerpts the AIs returned (accepted only when its quoted evidence was found there)` +
+              (n("none") ? `, ${n("none")} not classified` : "") +
+              `. ${unc.length} page${unc.length === 1 ? " is" : "s are"} Other / Unclassified (${unc.filter((p) => p.unclassified === "outside").length} outside the groups, ${unc.filter((p) => p.unclassified !== "outside").length} without enough evidence). Counts use answers: a website or group counts once per answer, however many of its pages the answer cites.`
+            );
+          })(),
+        },
+        [SOURCES_EVIDENCE],
+      ),
     ],
     whyCards: [],
   };
+  evidence[SOURCES_EVIDENCE] = { source: `Cited-source classification (${input.sources.classifierVersion})`, ref: `stage_run ${input.sourcesRunId}`, capturedOn: day(null) };
   evidence["extract"] = { source: `Answer reading (${input.extractions.model})`, ref: `stage_run ${input.extractRunId}`, capturedOn: day(null) };
 
   const describe = (e: EngineAnswers) => `${e.model} · ${e.provider} API with web search${e.configured ? "" : " · not configured"}`;
