@@ -4,7 +4,7 @@ Plain-English steps to run a real prompt analysis for MVP Miami. ChatGPT, Claude
 customer questions, with web search on. Do Milestone 1 first ([milestone-1-setup.md](milestone-1-setup.md)): the app
 must be deployed and the background worker running. Allow about 20 minutes plus the run itself (5–10 minutes).
 
-**This costs real money.** A run of 12 questions costs roughly $2–3 across the three providers (Claude about $1.10 of it). The report's spending
+**This costs real money.** With the free-tier models (16 Nov 2026) most of a 12-question run's cost is Claude's; expect well under $2 in total, and check the run monitor after the first run. The report's spending
 cap stops paid calls at $5 by default (you can change it on the prompt set screen).
 
 Never paste an API key into chat, GitHub or code. Keys go only into Vercel's environment variables.
@@ -93,9 +93,9 @@ the reading model can be wrong, and those checks become our first evaluation cas
 
 | Choice | Value | Why |
 | --- | --- | --- |
-| ChatGPT model | `gpt-6.1-sol` (OpenAI API, web search) | OpenAI's newest general model at $2 / $10 per million tokens. Their top model, `gpt-6-astra`, costs 5× more and alone would use most of the $5 cap. |
-| Claude model | `claude-sonnet-5-5` (Anthropic API, web search) | Anthropic's current Sonnet, at half Opus's price per token. The first run used `claude-opus-5-5` and spent $2.26 of the $5 cap on Claude alone, mostly reading search results, so we switched (13 Nov 2026). If its safety system declines a question, Anthropic's **refusal fallback** is on: another Claude model answers and the answer records which model served it. |
-| Gemini model | `gemini-pro-latest` (Gemini API, Google Search grounding) | Google's alias for its current Pro model. `gemini-3.1-pro-preview` returned "not found" for our key on the first run. Each answer records the exact model that served it. Priced conservatively ($4 / $20 per MTok) until that model's price is confirmed. |
+| ChatGPT model | `gpt-6-luna` (OpenAI API, web search) | Owner decision 16 Nov 2026: reports measure what a typical **free** user sees. ChatGPT Free runs the Luna model; `gpt-6-luna` is its API version ($0.10 / $0.50 per MTok, web search $10 per 1k calls). Before that: `gpt-6.1-sol`. |
+| Claude model | `claude-sonnet-5-5` (Anthropic API, web search, searching directly) | Claude's Free plan offers Sonnet. Web search is set to `allowed_callers: ["direct"]` so Claude cites the pages it reads; with the tool's default (dynamic filtering) the 13 Nov answers had no citations. Direct search uses more tokens. If its safety system declines a question, Anthropic's **refusal fallback** answers and the answer records which model served it. |
+| Gemini model | `gemini-3.5-flash-lite` (Gemini API, Google Search grounding) | The free Gemini app uses automatic model selection, mostly Flash-Lite; no single API model mirrors that ($0.30 / $2.50 per MTok, Google Search $14 per 1k queries after 5,000 free a month). Before that: `gemini-pro-latest`. Each answer records the exact model that served it. |
 | Reading model | `claude-haiku-5-5` | Cheap and fast. It only lists who an answer names; plain code checks that every quote really appears in the answer, and does all counting. |
 | Searches | up to 3 per answer (ChatGPT, Claude); Gemini decides itself | Keeps cost predictable. |
 | Settings | provider defaults, no temperature | Closest to what a customer gets. Answers vary from run to run, so a rerun can differ. |
