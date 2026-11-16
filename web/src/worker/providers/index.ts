@@ -3,6 +3,7 @@ import type { Providers } from "@/engine";
 import type { AnswerEngine, EngineIndex } from "@/engine/answers";
 import type { LlmClient } from "@/engine";
 import { providerKeys } from "@/lib/server-env";
+import { protectedFetcher } from "../fetcher";
 import { anthropicEngine, anthropicLlm } from "./anthropic";
 import { geminiEngine } from "./gemini";
 import { openAiEngine } from "./openai";
@@ -26,5 +27,5 @@ export function workerProviders(): Providers {
       return client.complete(request, signal);
     },
   };
-  return { llm, answers: (engine) => engines[engine] };
+  return { llm, answers: (engine) => engines[engine], web: protectedFetcher() };
 }

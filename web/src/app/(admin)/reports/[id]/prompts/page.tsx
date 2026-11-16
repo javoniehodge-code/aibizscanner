@@ -8,7 +8,7 @@ import { PromptSetForm } from "./prompt-set-form";
 
 export const metadata = { title: "Prompt set — AIBizScanner internal" };
 
-const PA_STAGES = ["pa_prompt_set", "pa_answers_chatgpt", "pa_answers_claude", "pa_answers_gemini", "pa_extract", "pa_assemble"];
+const PA_STAGES = ["pa_prompt_set", "pa_answers_chatgpt", "pa_answers_claude", "pa_answers_gemini", "pa_extract", "pa_sources", "pa_assemble"];
 
 export default async function PromptSetPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
