@@ -1,4 +1,4 @@
-import type { AnswerExtraction, StoredAnswer } from "../schemas";
+import type { AnswerExtraction, ClassifiedPage, StoredAnswer } from "../schemas";
 import { PageRegistry, type CitedPage } from "./citations";
 import { matchBusiness, newBusinessKey, type KnownBusiness } from "./names";
 
@@ -10,6 +10,10 @@ export type AssembledAnswer =
       status: "ok";
       named: { business: string; status: "R" | "M" | "X" }[];
       citations: string[];
+      /** Original citation URLs as the provider returned them, with the report page key each maps to. */
+      citationUrls: { page: string; url: string }[];
+      /** Citation links that weren't http(s) URLs (metadata gaps). */
+      unreadableCitations: number;
       uncitedMentions: { source: string; text: string; page: string | null }[];
       text: string;
       statedReason: string | null;
@@ -51,7 +55,8 @@ export function assemblePromptAnalysis(input: {
   answers: readonly StoredAnswer[];
   extractions: ReadonlyMap<string, AnswerExtraction>;
   target: KnownBusiness;
-  ownDomains: readonly string[];
+  /** pa_sources: every cited page's website and source group, by page key. */
+  classified: ReadonlyMap<string, ClassifiedPage>;
 }): AssembledPromptAnalysis {
   const known: KnownBusiness[] = [input.target];
   const taken = new Set([input.target.key]);
@@ -63,7 +68,7 @@ export function assemblePromptAnalysis(input: {
     known.push({ key, name });
     return key;
   };
-  const pages = new PageRegistry(input.ownDomains, []);
+  const pages = new PageRegistry(input.classified);
   const firstChoices: AssembledPromptAnalysis["firstChoices"] = [];
 
   const questions = input.prompts.map((prompt) => {
@@ -87,11 +92,15 @@ export function assemblePromptAnalysis(input: {
       if (ex.firstChoice) {
         firstChoices.push({ prompt: prompt.id, engine, business: keyOf(ex.firstChoice.name), scope: ex.firstChoice.scope, excerpt: ex.firstChoice.quote, answerId: a.answerId });
       }
-      const citations = [...new Set(a.citations.map((u) => pages.keyFor(u)).filter((k): k is string => k !== null))];
+      const linked = a.citations.map((url) => ({ page: pages.keyFor(url), url }));
+      const citationUrls = linked.filter((l): l is { page: string; url: string } => l.page !== null);
+      const citations = [...new Set(citationUrls.map((l) => l.page))];
       return {
         status: "ok",
         named,
         citations,
+        citationUrls,
+        unreadableCitations: linked.length - citationUrls.length,
         uncitedMentions: ex.namedSources.map((n) => ({ source: n.source, text: n.quote, page: null })),
         text: a.text,
         statedReason,

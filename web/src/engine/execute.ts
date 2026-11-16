@@ -159,6 +159,9 @@ export async function executeRun(
       paidCall,
       recordEngineAnswer: (r) => store.recordEngineAnswer(r),
       priorEngineAnswers: () => store.loadEngineAnswers(run.id),
+      answerEvidence: (ids) => store.loadAnswerEvidence(ids),
+      cachedSourceClassifications: (keys, version) => store.loadSourceClassifications(keys, version),
+      recordSourceClassification: (r) => store.recordSourceClassification({ ...r, stageRunId: run.id }),
       answerEngine: (engine) => providers.answers?.(engine) ?? null,
       llm: createStructuredCall({
         client: providers.llm ?? null,

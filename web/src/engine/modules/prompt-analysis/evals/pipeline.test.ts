@@ -111,7 +111,11 @@ describe("prompt analysis pipeline (fake providers)", () => {
     expect(llm.requests[0]?.user).toContain("untrusted");
     expect(ex.store.llmCalls.every((c) => c.valid && c.instruction.id === "prompt-analysis/extract-answer")).toBe(true);
 
-    const asm = await run("pa_assemble", [set.input, a0.input, a1.input, a2.input, ex.input], providers);
+    // Both cited pages are covered by the business's own domain and a verified rule, so no model call is needed.
+    const src = await run("pa_sources", [set.input, a0.input, a1.input, a2.input], providers);
+    expect(src.outcome.outcome).toBe("done");
+    expect(llm.requests).toHaveLength(3);
+    const asm = await run("pa_assemble", [set.input, a0.input, a1.input, a2.input, ex.input, src.input], providers);
     expect(asm.outcome.outcome).toBe("partial");
     const out = asm.input.output as {
       section: { run: { v: { prompts: number; expected: number; usable: number; unavailable: number } }; businesses: { v: { key: string } }[]; pages: { v: { key: string; category: string } }[]; firstChoices: unknown[]; questions: { answers: { v: { status: string; reason?: string } }[] }[] };

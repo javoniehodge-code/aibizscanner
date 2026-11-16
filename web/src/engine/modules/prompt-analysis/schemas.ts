@@ -140,3 +140,58 @@ export const extractions = z
   })
   .strict();
 export type Extractions = z.infer<typeof extractions>;
+
+// ---------------------------------------------------------------------------------------------------------------
+// pa_sources: cited pages, their websites and source groups
+// ---------------------------------------------------------------------------------------------------------------
+
+export const sourceGroup = z.enum(["company", "maps", "review", "dir", "ed", "comm", "off", "unc"]);
+export const pageCategoryEnum = z.enum(["your", "other", "maps", "review", "dir", "ed", "comm", "off", "unc"]);
+
+/** One distinct cited page (by page key), with the website it belongs to and its source group. */
+export const classifiedPage = z
+  .object({
+    pageKey: z.string(),
+    /** Website key: registrable domain, or a verified override / confirmed alias. */
+    site: z.string(),
+    /** First original URL seen for this page (answers keep their own original URLs). */
+    url: z.string(),
+    title: z.string().nullable(),
+    group: sourceGroup,
+    /** Website ownership, stored separately from the group: company pages map to Your website / Other businesses by it. */
+    owner: z.enum(["target", "business", "unknown"]),
+    category: pageCategoryEnum,
+    /** alias: the audited business's verified domain; rule: verified domain/URL rule; model / cache: model fallback; none: not classified. */
+    method: z.enum(["alias", "rule", "model", "cache", "none"]),
+    unclassified: z.enum(["outside", "insufficient"]).nullable(),
+    reason: z.string(),
+    evidence: z.string().nullable(),
+  })
+  .strict();
+export type ClassifiedPage = z.infer<typeof classifiedPage>;
+
+export const classifiedSources = z
+  .object({
+    classifierVersion: z.string(),
+    pages: z.array(classifiedPage),
+    /** Citation links that weren't http(s) URLs, per answer id (counted as metadata gaps, never as pages). */
+    unreadable: z.record(z.string(), z.number().int().min(1)),
+  })
+  .strict();
+export type ClassifiedSources = z.infer<typeof classifiedSources>;
+
+/** What the classifier model returns for a batch of pages. */
+export const sourceVerdicts = z
+  .object({
+    items: z.array(
+      z
+        .object({
+          pageKey: z.string(),
+          group: z.enum(["company", "maps", "review", "dir", "ed", "comm", "off", "outside", "unc"]),
+          reason: z.string().max(400),
+          evidence: z.string().max(400),
+        })
+        .strict(),
+    ),
+  })
+  .strict();
