@@ -23,6 +23,23 @@ const PATTERNS: { kind: KeyFact["kind"]; re: RegExp }[] = [
   { kind: "hours", re: /\b\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)\s?(?:-|–|to)\s?\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)/gi },
 ];
 
+/**
+ * The answer key for the extraction test: the prices, phone numbers and hours a visitor sees (the browser's text, or
+ * our plain text when the browser couldn't load the page), each marked jsOnly when its value isn't in the plain text.
+ */
+export function visitorKeyFacts(visitorText: string, plainText: string | null): { kind: KeyFact["kind"]; text: string; jsOnly: boolean }[] {
+  const lines = (t: string) => t.split("\n").map((l) => l.trim()).filter(Boolean);
+  const plain = plainText === null ? null : keyFacts(lines(plainText)).map((f) => `${f.kind}:${valueOf(f)}`);
+  const out = new Map<string, { kind: KeyFact["kind"]; text: string; jsOnly: boolean }>();
+  for (const f of keyFacts(lines(visitorText))) {
+    const k = `${f.kind}:${valueOf(f)}`;
+    if (!out.has(k)) out.set(k, { kind: f.kind, text: f.text, jsOnly: plain !== null && !plain.includes(k) });
+  }
+  return [...out.values()].slice(0, MAX_KEY_FACTS);
+}
+const valueOf = (f: { text: string }) => f.text.replace(/[^0-9apm]/gi, "").toLowerCase();
+const MAX_KEY_FACTS = 60;
+
 export function keyFacts(lines: readonly string[]): KeyFact[] {
   const out: KeyFact[] = [];
   for (const line of lines)

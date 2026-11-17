@@ -67,10 +67,9 @@ result for each page.
   (at least 80 words and a quarter of the page only with scripts), *Mostly readable*, *Readable*, or *Couldn't check*.
   The evidence lists the facts and a sample of the lines that appear only with scripts. The browser's copy is stored as
   a `rendered` page snapshot, separate from our plain fetch and from the AIs' tool content.
-- **How it changes find & read.** ChatGPT's and Claude's page readers generally don't run scripts. When key facts load
-  only with JavaScript, their reading result for that page is at most **partly read** (the reading test's own result is
-  kept alongside), unless the content the tool returned includes those facts. Gemini's result stays as tested, with a
-  note, because Google can run scripts. Every such note says it comes from our check.
+- **The answer key for key facts.** The browser's copy is what a visitor sees, so its prices, phone numbers and opening
+  hours are the answer key for the key-fact extraction below (our plain copy is used when the browser couldn't load the
+  page). Each fact is marked *JavaScript only* when it isn't in the plain copy.
 - **Ours, not an AI's.** This is a diagnostic that explains reading results; it is never shown as what an AI saw.
 - **Safety, as for the plain fetcher.** Chromium never reaches the network itself: every request the page makes is
   fetched by the worker under the same rules (public addresses only, checked at every redirect, ports 80/443), and
@@ -80,5 +79,20 @@ result for each page.
   too; that is recorded as *Couldn't check*, never retried or worked around.
 - **Comparison copy.** If this run's plain fetch of a page failed, the browser's text is compared with our most recent
   good plain copy of that page, and the screen says so with its date.
+
+### Key-fact extraction (part of the reading test)
+
+The reading test also asks each AI to list the key facts it can get from the page: prices, phone numbers, opening
+hours and the products or services offered, with no expected facts given. The combined step scores them against the
+answer key: a fact counts when the AI listed the same value (prices by amount, phones by number, hours by times),
+whatever its wording. Products and services can't be listed from a page by rule, so they're checked the other way: how
+many of the names it gave appear on the page.
+
+- **Partly read** when the AI read the page but missed a fact that loads only with JavaScript (the brief's rule:
+  inventory or prices loaded only by JavaScript must surface as partly read), or missed most of the key facts. The
+  reading test's own result is kept alongside, and the note says what was missed and why.
+- Each engine's column shows "x of y key facts on n pages read".
+- Reading tests run before 17 Nov 2026 didn't ask for facts; rerun them to get scores.
+- Cost: the same calls with slightly longer answers (a few cents more per report).
 
 Running it locally: set `CHROMIUM_PATH` to a Chromium binary (or install a Playwright browser).

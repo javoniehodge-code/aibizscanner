@@ -12,6 +12,7 @@ import {
   searchPrompt,
   targetKeys,
   TEST_TEMPLATE_VERSION,
+  scoreExtraction,
   verifiedPassages,
   type ReadStatus,
   type SearchStatus,
@@ -94,6 +95,8 @@ export const readTests = z
           provenance: z.enum(["live", "cached", "unknown"]),
           titleReported: z.string().nullable(),
           passages: z.array(z.object({ text: z.string(), onPage: z.boolean() }).strict()),
+          /** Key facts it listed from the page (absent on tests run before 17 Nov 2026, which didn't ask). */
+          facts: z.array(z.object({ kind: z.enum(["price", "phone", "hours", "item"]), text: z.string() }).strict()).optional(),
           /** page_snapshot row holding the content the provider's tool returned (engine_tool), when it returned any. */
           evidenceSnapshotId: z.string().nullable(),
           /** Our snapshot the passages were checked against; fallback = the latest fetch failed, so an earlier good copy was used. */
@@ -226,6 +229,7 @@ function readStage(engine: EngineIndex): StageDefinition {
             provenance: r.provenance,
             titleReported: reply.title,
             passages: reply.passages.map((text, i) => ({ text, onPage: onPage[i] ?? false })),
+            facts: reply.facts,
             evidenceSnapshotId,
             reference: ref ? { snapshotId: ref.snapshotId, fetchedAt: ref.fetchedAt ?? new Date().toISOString(), fallback: ref.fallback } : null,
             replyExcerpt: r.text.slice(0, 800),
@@ -264,8 +268,22 @@ export const findRead = z
                   label: z.string(),
                   /** The reading test's own result, when the JavaScript check changed `read` (readable -> partial). */
                   toolRead: readStatus.optional(),
-                  /** Why, in plain English (our JavaScript diagnostic, labelled as ours). */
+                  /** Why, in plain English (the key-fact score, and our JavaScript diagnostic, labelled as ours). */
                   note: z.string().nullable().optional(),
+                  /** Key facts (prices, phones, hours) a visitor sees that this AI listed; null when it didn't read the page or wasn't asked. */
+                  extraction: z
+                    .object({
+                      got: z.number().int(),
+                      of: z.number().int(),
+                      missed: z.array(z.object({ kind: z.enum(["price", "phone", "hours"]), text: z.string(), jsOnly: z.boolean() }).strict()),
+                      missedJsOnly: z.number().int(),
+                      itemsOnPage: z.number().int(),
+                      itemsNamed: z.number().int(),
+                      answerKey: z.enum(["browser", "plain"]),
+                    })
+                    .strict()
+                    .nullable()
+                    .optional(),
                 })
                 .strict(),
             )
@@ -277,6 +295,8 @@ export const findRead = z
     ),
     /** Per engine: pages found and read, out of every selected page (null when nothing ran). */
     foundAndRead: z.array(z.number().int().nullable()).length(3),
+    /** Per engine: key facts got, out of the key facts on the pages it read (null when none was scored). */
+    keyFacts: z.array(z.object({ got: z.number().int(), of: z.number().int(), pages: z.number().int() }).strict().nullable()).length(3).optional(),
     selectedPageCount: z.number().int(),
   })
   .strict();
@@ -312,7 +332,7 @@ export const wsFindRead: StageDefinition = {
     const search = SEARCH_STAGES.map((s) => input(ctx, s, searchTests));
     const read = READ_STAGES.map((s) => input(ctx, s, readTests));
     const js = input(ctx, "ws_render", jsCheck);
-    const toolTexts = await ctx.snapshotTexts(read.flatMap((r) => r.pages.flatMap((p) => (p.evidenceSnapshotId ? [p.evidenceSnapshotId] : []))));
+    const visitorTexts = await ctx.snapshotTexts(js.pages.flatMap((p) => (p.answerKey ? [p.answerKey.snapshotId] : [])));
     const pages = snap.pages.map((pg) => {
       const check = js.pages.find((p) => p.url === pg.url) ?? null;
       return {
@@ -324,8 +344,8 @@ export const wsFindRead: StageDefinition = {
           const s = search[e]!.pages.find((p) => p.url === pg.url)?.status ?? "not_tested";
           const rp = read[e]!.pages.find((p) => p.url === pg.url);
           const tool = rp?.status ?? "not_tested";
-          const adj = jsAdjustedRead(e as EngineIndex, tool, check, rp?.evidenceSnapshotId ? (toolTexts.get(rp.evidenceSnapshotId) ?? null) : null);
-          return { search: s, read: adj.read, label: combinedLabel(s, adj.read), ...(adj.read !== tool ? { toolRead: tool } : {}), note: adj.note };
+          const adj = scoredRead(tool, rp?.facts, check, check?.answerKey ? (visitorTexts.get(check.answerKey.snapshotId) ?? null) : null);
+          return { search: s, read: adj.read, label: combinedLabel(s, adj.read), ...(adj.read !== tool ? { toolRead: tool } : {}), note: adj.note, extraction: adj.extraction };
         }),
         js: check ? { verdict: check.verdict, label: check.label } : null,
       };
@@ -334,31 +354,44 @@ export const wsFindRead: StageDefinition = {
       const ran = pages.some((p) => p.results[e]!.search !== "not_tested" || p.results[e]!.read !== "not_tested");
       return ran ? pages.filter((p) => p.results[e]!.search === "found" && p.results[e]!.read === "readable").length : null;
     });
-    const out: FindRead = { pages, foundAndRead, selectedPageCount: pages.length };
+    const keyFacts = [0, 1, 2].map((e) => {
+      const scored = pages.flatMap((p) => (p.results[e]!.extraction && p.results[e]!.extraction!.of ? [p.results[e]!.extraction!] : []));
+      return scored.length ? { got: scored.reduce((n, x) => n + x.got, 0), of: scored.reduce((n, x) => n + x.of, 0), pages: scored.length } : null;
+    });
+    const out: FindRead = { pages, foundAndRead, keyFacts, selectedPageCount: pages.length };
     return { status: "done", output: out as unknown as JsonValue };
   },
 };
 
+type Extraction = NonNullable<FindRead["pages"][number]["results"][number]["extraction"]>;
+
 /**
- * Inventory or prices loaded only by JavaScript surface as "partly read" (internal-testing-app.md acceptance): when our
- * JavaScript check found prices, phone numbers or hours that appear only after scripts run, a ChatGPT or Claude read is
- * at most partial, unless the content their tool returned contains those facts. Gemini is left as tested (Google can
- * run scripts), with a note. The note always says this comes from our check.
+ * Key-fact extraction (the AI's own listing, scored against what a visitor sees). A read counts as partly read when the
+ * AI missed a key fact that loads only with JavaScript (internal-testing-app.md: inventory or prices loaded only by
+ * JavaScript must surface as "partly read"), or missed most key facts. Our JavaScript check only explains the miss.
  */
-export function jsAdjustedRead(engine: EngineIndex, tool: ReadStatus, check: JsCheck["pages"][number] | null, toolText: string | null): { read: ReadStatus; note: string | null } {
-  if (!check || (check.verdict !== "key_facts_need_js" && check.verdict !== "content_needs_js")) return { read: tool, note: null };
-  if (tool !== "readable" && tool !== "partial") return { read: tool, note: null };
-  const facts = check.keyFactsOnlyRendered;
-  const example = facts.length ? ` (e.g. ${facts.slice(0, 2).map((f) => f.text).join(", ")})` : "";
-  if (engine === 2) return { read: tool, note: `Our JavaScript check: ${check.verdict === "key_facts_need_js" ? "key facts" : "much of the content"} on this page load with JavaScript${example}. Google can run scripts, so Gemini may still see them.` };
-  const name = ENGINE_NAMES[engine];
-  if (check.verdict === "content_needs_js") return { read: tool, note: `Our JavaScript check: much of this page's content loads with JavaScript, which ${name}'s reader generally doesn't run.` };
-  const n = (x: string) => x.toLowerCase().replace(/[^a-z0-9$]+/g, "");
-  if (toolText && facts.every((f) => n(toolText).includes(n(f.text)))) return { read: tool, note: `Our JavaScript check found facts that load with JavaScript${example}, but the content ${name}'s tool returned includes them.` };
-  return {
-    read: "partial",
-    note: `Read, but key facts load with JavaScript${example} (our check) and ${name}'s reader generally doesn't run scripts${tool === "readable" ? "; counted as partly read" : ""}.`,
-  };
+export function scoredRead(
+  tool: ReadStatus,
+  facts: ReadTests["pages"][number]["facts"],
+  check: JsCheck["pages"][number] | null,
+  visitorText: string | null,
+): { read: ReadStatus; note: string | null; extraction: Extraction | null } {
+  if ((tool !== "readable" && tool !== "partial") || !check?.answerKey) return { read: tool, note: null, extraction: null };
+  if (!facts) return { read: tool, note: "Key facts weren't asked for in this (older) reading test.", extraction: null };
+  const sc = scoreExtraction(check.answerKey.facts, facts, visitorText);
+  const extraction: Extraction = { ...sc, answerKey: check.answerKey.source };
+  const items = sc.itemsNamed ? ` Named ${sc.itemsNamed} products or services, ${sc.itemsOnPage} of them found on the page.` : "";
+  if (!sc.of) return { read: tool, note: `The page shows no prices, phone numbers or hours to check.${items}`, extraction };
+  const eg = sc.missed.length ? ` Missed e.g. ${sc.missed.slice(0, 3).map((f) => f.text).join(", ")}.` : "";
+  const got = `Got ${sc.got} of ${sc.of} key facts (prices, phone numbers, hours).`;
+  if (sc.missedJsOnly)
+    return {
+      read: "partial",
+      note: `${got}${eg} ${sc.missedJsOnly} of the missed facts load only with JavaScript (our check), which this AI's reader didn't get.${items}`,
+      extraction,
+    };
+  if (sc.got * 2 < sc.of) return { read: "partial", note: `${got}${eg}${items}`, extraction };
+  return { read: tool, note: `${got}${eg}${items}`, extraction };
 }
 
 export const TEST_STAGES = [...([0, 1, 2] as const).map(searchStage), ...([0, 1, 2] as const).map(readStage), wsFindRead] as const;

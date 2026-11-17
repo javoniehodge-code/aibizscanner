@@ -3,7 +3,7 @@ import { errorMessage } from "../../errors";
 import { sha256Hex } from "../../json";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { extractPage } from "./logic/extract";
-import { compareTexts, JS_CHECK_VERSION, verdictLabel, type JsVerdict } from "./logic/jscheck";
+import { compareTexts, JS_CHECK_VERSION, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
 import { snapshots, type Snapshots } from "./schemas";
 
 const MODULE = "website";
@@ -41,6 +41,18 @@ export const jsCheck = z
           removedWords: z.number().int(),
           onlyRendered: z.array(z.string()),
           keyFactsOnlyRendered: z.array(z.object({ kind: z.enum(["price", "phone", "hours"]), text: z.string(), line: z.string() }).strict()),
+          /**
+           * The answer key for the AIs' key-fact extraction: prices, phone numbers and hours a visitor sees, from the
+           * browser's copy (or our plain copy when the browser couldn't load the page). jsOnly = not in the plain copy.
+           */
+          answerKey: z
+            .object({
+              source: z.enum(["browser", "plain"]),
+              snapshotId: z.string(),
+              facts: z.array(z.object({ kind: z.enum(["price", "phone", "hours"]), text: z.string(), jsOnly: z.boolean() }).strict()),
+            })
+            .strict()
+            .nullable(),
         })
         .strict(),
     ),
@@ -108,6 +120,7 @@ export const wsRender: StageDefinition = {
         removedWords: 0,
         onlyRendered: [],
         keyFactsOnlyRendered: [],
+        answerKey: raw ? { source: "plain", snapshotId: raw.snapshotId, facts: visitorKeyFacts(raw.text, null) } : null,
       });
 
       let r;
@@ -133,7 +146,12 @@ export const wsRender: StageDefinition = {
       });
       const rendered = { snapshotId, status: r.status, finalUrl: r.finalUrl, error: r.error, title: ex?.title ?? null, durationMs: Math.round(r.durationMs), requests: r.requests };
       if (!ex) return notChecked(`Our browser couldn't load the page: ${r.error ?? "no content"}`, rendered);
-      if (!raw) return notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount);
+      if (!raw)
+        return {
+          ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount),
+          // The browser's copy still shows what a visitor sees; without a plain copy no fact can be marked JavaScript-only.
+          answerKey: { source: "browser", snapshotId, facts: visitorKeyFacts(ex.text, null) },
+        };
       const c = compareTexts(raw.text, ex.text);
       return {
         url: pg.url,
@@ -148,6 +166,7 @@ export const wsRender: StageDefinition = {
         removedWords: c.removedWords,
         onlyRendered: c.onlyRendered,
         keyFactsOnlyRendered: c.keyFactsOnlyRendered,
+        answerKey: { source: "browser", snapshotId, facts: visitorKeyFacts(ex.text, raw.text) },
       };
     });
 

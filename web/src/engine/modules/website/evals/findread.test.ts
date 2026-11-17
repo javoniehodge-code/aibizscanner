@@ -6,7 +6,7 @@ import { executeRun, type PageRenderer, type Providers } from "../../../execute"
 import { registry } from "../../../index";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
 import { combinedLabel } from "../test-stages";
-import { pagePurpose, parseReadReply, readInstruction, readOutcome, searchOutcome, searchPrompt, targetKeys, verifiedPassages } from "../logic/findread";
+import { hoursValue, pagePurpose, parseReadReply, priceValue, scoreExtraction, readInstruction, readOutcome, searchOutcome, searchPrompt, targetKeys, verifiedPassages } from "../logic/findread";
 import { excluded, pageKind, suggestPages } from "../logic/pages";
 import { extractPage } from "../logic/extract";
 import type { FindRead } from "../test-stages";
@@ -22,6 +22,36 @@ describe("prompts", () => {
     expect(searchPrompt(BIZ, { kind: "home", title: "Exotic Car Rentals | MVP Miami", reason: "Home page" })).toBe("Find the official website of MVP Miami (Miami, FL). Return the official page and the sources used.");
     expect(searchPrompt(BIZ, faq)).not.toContain("mvpmiami.com");
     expect(readInstruction("https://www.mvpmiami.com/faq/")).toContain("Open this official page: https://www.mvpmiami.com/faq/");
+  });
+});
+
+describe("key-fact extraction", () => {
+  it("asks for key facts without giving any, and parses them", () => {
+    const instr = readInstruction("https://www.mvpmiami.com/rentals/");
+    expect(instr).toContain("FACT: price | <price as written");
+    expect(instr).not.toMatch(/\$\d/);
+    const r = parseReadReply('TITLE: Rentals\nPASSAGE 1: "a b c d e"\nPASSAGE 2: "f g h i j"\nFACT: price | Lamborghini Huracan $1,495/day\n- FACT: phone | (305) 555-0100\nFACT: hours: 9am - 6pm daily\nFACT: item | Rolls-Royce Cullinan');
+    expect(r.facts).toEqual([
+      { kind: "price", text: "Lamborghini Huracan $1,495/day" },
+      { kind: "phone", text: "(305) 555-0100" },
+      { kind: "hours", text: "9am - 6pm daily" },
+      { kind: "item", text: "Rolls-Royce Cullinan" },
+    ]);
+  });
+
+  it("matches facts by value, whatever the wording or the kind the AI gave them", () => {
+    expect([priceValue("$1,495.00/day"), priceValue("US$3,500 per hour"), priceValue("$99.5")]).toEqual(["1495", "3500", "99.50"]);
+    expect(hoursValue("9:00 AM to 6:00 PM")).toBe("9-18");
+    const key = [
+      { kind: "price" as const, text: "$1,495/day", jsOnly: true },
+      { kind: "price" as const, text: "$1,495 per day", jsOnly: false }, // same value shown without scripts elsewhere
+      { kind: "price" as const, text: "$1,995/day", jsOnly: true },
+      { kind: "phone" as const, text: "+1 (305) 555-0100", jsOnly: false },
+      { kind: "hours" as const, text: "9am - 6pm", jsOnly: false },
+    ];
+    const sc = scoreExtraction(key, [{ kind: "item", text: "Huracan from 1495 dollars a day" }, { kind: "phone", text: "305.555.0100" }, { kind: "item", text: "Rolls-Royce Cullinan" }, { kind: "item", text: "Bugatti Chiron" }], "Rolls-Royce Cullinan from $1,995/day");
+    expect(sc).toMatchObject({ got: 2, of: 4, missedJsOnly: 1, itemsNamed: 3, itemsOnPage: 1 });
+    expect(sc.missed.map((f) => f.text)).toEqual(["$1,995/day", "9am - 6pm"]);
   });
 });
 
@@ -46,7 +76,7 @@ describe("reading outcome", () => {
   const ok = [{ url: "https://www.mvpmiami.com/faq/", status: "success" as const, detail: null, retrievedAt: null, title: null, content: null }];
 
   it("parses the reply and checks passages word for word against the page (punctuation ignored)", () => {
-    expect(reply).toEqual({ couldNotOpen: null, title: "FAQ's | MVP Miami", passages: ["The renter must provide proof of an active insurance policy", "Deliveries are free within Miami-Dade."] });
+    expect(reply).toEqual({ couldNotOpen: null, title: "FAQ's | MVP Miami", passages: ["The renter must provide proof of an active insurance policy", "Deliveries are free within Miami-Dade."], facts: [] });
     expect(verifiedPassages(reply.passages, [page])).toEqual([true, true]);
     expect(verifiedPassages(["We offer free yacht parties"], [page])).toEqual([false]);
     expect(verifiedPassages(["free"], [page])).toEqual([false]); // too short to identify the page
@@ -94,7 +124,7 @@ describe("page choice fixes (MVP Miami, 17 Nov 2026)", () => {
 
 const SNAP_TEXT = "Do I need insurance? The renter must provide proof of an active insurance policy in their name. Deliveries are free within Miami-Dade county.";
 
-function fakeEngine(engine: EngineIndex, mode: "good" | "hallucinate" | "blocked"): AnswerEngine {
+function fakeEngine(engine: EngineIndex, mode: "good" | "hallucinate" | "blocked", factLines = ""): AnswerEngine {
   const usage = { tokensIn: 1000, tokensOut: 200, searchCalls: 1, requests: 1 };
   return {
     engine,
@@ -110,7 +140,7 @@ function fakeEngine(engine: EngineIndex, mode: "good" | "hallucinate" | "blocked
     async readPage(r: ReadRequest) {
       if (mode === "blocked") return { status: "ok", text: "COULD NOT OPEN: 403", attempts: [{ url: r.url, status: "error", detail: "url_not_accessible", retrievedAt: null, title: null, content: null }], provenance: "unknown", usage, raw: null, requestId: null, servedModel: null };
       const attempts = mode === "good" ? [{ url: r.url, status: "success" as const, detail: null, retrievedAt: "2026-11-17T10:00:00Z", title: "FAQ", content: SNAP_TEXT }] : [];
-      const text = mode === "good" ? 'TITLE: FAQ\nPASSAGE 1: "The renter must provide proof of an active insurance policy"\nPASSAGE 2: "Deliveries are free within Miami-Dade county."' : 'TITLE: FAQ\nPASSAGE 1: "MVP offers free champagne on every rental"\nPASSAGE 2: "Open 24 hours a day."';
+      const text = mode === "good" ? `TITLE: FAQ\nPASSAGE 1: "The renter must provide proof of an active insurance policy"\nPASSAGE 2: "Deliveries are free within Miami-Dade county."\n${factLines}` : 'TITLE: FAQ\nPASSAGE 1: "MVP offers free champagne on every rental"\nPASSAGE 2: "Open 24 hours a day."';
       return { status: "ok", text, attempts, provenance: "unknown", usage, raw: null, requestId: null, servedModel: null };
     },
   };
@@ -164,16 +194,27 @@ describe("find & read stages (fake engines)", () => {
     expect(f.foundAndRead).toEqual([1, 0, 0]);
     expect(f.selectedPageCount).toBe(1);
 
-    // Prices that appear only after scripts run: ChatGPT's read (its tool content lacks them) becomes partly read.
+    expect(f.pages[0]!.results[0]).toMatchObject({ extraction: { got: 0, of: 0 }, note: "The page shows no prices, phone numbers or hours to check." });
+
+    // Prices that appear only after scripts run, and ChatGPT didn't list them: partly read, explained by our check.
     const priced = (await run("ws_render", [snap], { browser: browser("<ul><li>Lamborghini Huracan from $1,495 per day</li><li>Rolls-Royce Cullinan from $1,995 per day</li></ul>") }, store)).input;
     const pc = (priced.output as unknown as JsCheck).pages[0]!;
     expect(pc.verdict).toBe("key_facts_need_js");
     expect(pc.keyFactsOnlyRendered.map((k) => k.text)).toEqual(["$1,495 per day", "$1,995 per day"]);
+    expect(pc.answerKey).toMatchObject({ source: "browser", facts: [{ kind: "price", text: "$1,495 per day", jsOnly: true }, { kind: "price", text: "$1,995 per day", jsOnly: true }] });
     const f2 = (await run("ws_findread", [snap, priced, ...outs], providers, store)).input.output as unknown as FindRead;
-    expect(f2.pages[0]!.results[0]).toMatchObject({ read: "partial", toolRead: "readable", label: "Found; partly read" });
-    expect(f2.pages[0]!.results[0]!.note).toMatch(/key facts load with JavaScript \(e\.g\. \$1,495 per day, \$1,995 per day\) \(our check\)/);
+    expect(f2.pages[0]!.results[0]).toMatchObject({ read: "partial", toolRead: "readable", label: "Found; partly read", extraction: { got: 0, of: 2, missedJsOnly: 2, answerKey: "browser" } });
+    expect(f2.pages[0]!.results[0]!.note).toBe("Got 0 of 2 key facts (prices, phone numbers, hours). Missed e.g. $1,495 per day, $1,995 per day. 2 of the missed facts load only with JavaScript (our check), which this AI's reader didn't get.");
     expect(f2.pages[0]!.js).toEqual({ verdict: "key_facts_need_js", label: "Key facts load with JavaScript: likely invisible to ChatGPT and Claude" });
     expect(f2.foundAndRead).toEqual([0, 0, 0]);
+    expect(f2.keyFacts).toEqual([{ got: 0, of: 2, pages: 1 }, null, null]);
+
+    // An AI whose reader did get them (e.g. one that runs scripts) keeps "read".
+    const lister: Record<EngineIndex, AnswerEngine | null> = { ...engines, 0: fakeEngine(0, "good", "FACT: price | Huracan $1,495 per day\nFACT: price | Cullinan $1,995 per day\nFACT: item | Rolls-Royce Cullinan") };
+    const read2 = (await run("ws_read_chatgpt", [set, snap], { answers: (e) => lister[e] }, store)).input;
+    const f3 = (await run("ws_findread", [snap, priced, ...outs.slice(0, 3), read2, ...outs.slice(4)], providers, store)).input.output as unknown as FindRead;
+    expect(f3.pages[0]!.results[0]).toMatchObject({ read: "readable", label: "Found & read", extraction: { got: 2, of: 2, itemsNamed: 1, itemsOnPage: 1 } });
+    expect(f3.foundAndRead).toEqual([1, 0, 0]);
   });
 
   it("checks passages against our earlier good copy when this run's fetch was refused, and says so", async () => {

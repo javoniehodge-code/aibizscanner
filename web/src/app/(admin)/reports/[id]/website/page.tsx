@@ -181,7 +181,9 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
           <p className="muted">
             Search: a fresh branded question per page to each engine&apos;s own search; found only if the page itself is among its results or citations (not the home page, not
             another site&apos;s copy). Reading: each engine&apos;s own page-reading tool opens the URL; read only if two passages it returns are on the page. No tool activity means
-            unconfirmed, never a failure. API tools, not the consumer apps.
+            unconfirmed, never a failure. Key facts: it also lists the prices, phone numbers, hours and products it can get from the page; we score them against
+            what a visitor sees (our browser copy, section 5). Missing a fact that loads only with JavaScript, or most of them, makes it partly read. API
+            tools, not the consumer apps.
           </p>
           <p className="muted">
             {testRes.map((t, i) => (t.data ? `${["ChatGPT search", "Claude search", "Gemini search", "ChatGPT read", "Claude read", "Gemini read"][i]}: ${t.data.status}` : null)).filter(Boolean).join(" · ")}
@@ -198,6 +200,11 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                       <div className="muted">
                         {fr.data.foundAndRead[i] === null ? "not tested" : `${fr.data.foundAndRead[i]} of ${fr.data.selectedPageCount} found & read`}
                       </div>
+                      {fr.data.keyFacts?.[i] ? (
+                        <div className="muted">
+                          {fr.data.keyFacts[i]!.got} of {fr.data.keyFacts[i]!.of} key facts on {fr.data.keyFacts[i]!.pages} pages read
+                        </div>
+                      ) : null}
                     </th>
                   ))}
                 </tr>
@@ -233,6 +240,17 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                                   {!rd.reference ? <>No copy of the page to check passages against. </> : null}
                                   Tool attempts: {rd.attempts.length ? rd.attempts.map((a) => `${a.url} (${a.status}${a.detail ? `, ${a.detail}` : ""})`).join("; ") : "none"}. Provenance: {rd.provenance}.
                                 </p>
+                                {rd.facts?.length ? (
+                                  <p>
+                                    <em>Facts it listed:</em> {rd.facts.map((f) => `${f.kind}: ${f.text}`).join(" · ")}
+                                  </p>
+                                ) : null}
+                                {r.extraction?.missed.length ? (
+                                  <p>
+                                    <em>Missed (from {r.extraction.answerKey === "browser" ? "what a visitor sees in our browser" : "our plain copy"}):</em>{" "}
+                                    {r.extraction.missed.map((f) => `${f.text}${f.jsOnly ? " (JavaScript only)" : ""}`).join(" · ")}
+                                  </p>
+                                ) : null}
                                 {rd.passages.length ? (
                                   <ul>
                                     {rd.passages.map((x, j) => (
@@ -262,8 +280,7 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
           <p className="muted">
             We load each page in our own headless browser so its scripts run, and compare its text with our plain fetch, which is what a reader that doesn&apos;t
             run scripts gets. ChatGPT&apos;s and Claude&apos;s page readers generally don&apos;t run scripts; Google can. This explains reading results; it is our
-            diagnostic, never an AI&apos;s view. Prices, phone numbers or hours that appear only with scripts make a ChatGPT or Claude read count as partly read
-            in section 4.
+            diagnostic, never an AI&apos;s view. The browser copy is also the answer key for the key facts each AI extracts in section 4.
           </p>
           <p className="muted">
             Status: {jsRes.data.status}
