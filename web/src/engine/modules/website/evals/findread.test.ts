@@ -185,7 +185,7 @@ describe("find & read stages (fake engines)", () => {
     // Our JavaScript check: the same text with scripts on, so the reading results stand as tested.
     const browser = (extra: string): PageRenderer => ({
       async render(url) {
-        return { requestedUrl: url, finalUrl: url, status: 200, html: `<html><body><main><p>${SNAP_TEXT}</p>${extra}</main></body></html>`, truncated: false, error: null, durationMs: 900, userAgent: "HeadlessChrome AIBizScannerBot", requests: { fetched: 3, refused: 0, skipped: 2 } };
+        return { requestedUrl: url, finalUrl: url, status: 200, html: `<html><body><main><p>${SNAP_TEXT}</p>${extra}</main></body></html>`, truncated: false, error: null, durationMs: 900, userAgent: "HeadlessChrome AIBizScannerBot", requests: { fetched: 3, refused: 0, skipped: 2, failed: 0 } };
       },
     });
     const same = (await run("ws_render", [snap], { browser: browser("") }, store)).input;
@@ -219,6 +219,17 @@ describe("find & read stages (fake engines)", () => {
     const f3 = (await run("ws_findread", [snap, priced, ...outs.slice(0, 3), read2, ...outs.slice(4)], providers, store)).input.output as unknown as FindRead;
     expect(f3.pages[0]!.results[0]).toMatchObject({ read: "readable", label: "Found & read", extraction: { got: 2, of: 2, itemsNamed: 1, itemsOnPage: 1 } });
     expect(f3.foundAndRead).toEqual([1, 0, 0]);
+
+    // Later the site refuses our browser: the earlier, fuller browser copy stays the answer key, and the page says so.
+    const refusedBrowser: PageRenderer = {
+      async render(url) {
+        return { requestedUrl: url, finalUrl: url, status: 403, html: "<html><body>Forbidden</body></html>", truncated: false, error: "HTTP 403", durationMs: 700, userAgent: "HeadlessChrome AIBizScannerBot", requests: { fetched: 1, refused: 0, skipped: 0, failed: 0 } };
+      },
+    };
+    const refusedRun = (await run("ws_render", [snap], { browser: refusedBrowser }, store)).input.output as unknown as JsCheck;
+    expect(refusedRun.pages[0]).toMatchObject({ verdict: "key_facts_need_js", browserCopy: { snapshotId: pc.answerKey!.snapshotId, fallback: true, why: expect.stringContaining("refused our browser this run (HTTP 403)") } });
+    expect(refusedRun.pages[0]!.ownerOption).toMatch(/^Optional: your site refused our checker/);
+    expect(refusedRun.pages[0]!.answerKey!.facts).toHaveLength(2);
   });
 
   it("checks passages against our earlier good copy when this run's fetch was refused, and says so", async () => {

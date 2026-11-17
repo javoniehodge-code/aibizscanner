@@ -27,6 +27,7 @@ fetch("/data.json").then(r => r.json()).then(d => {
 });
 fetch("http://169.254.169.254/latest/meta-data/").catch(() => {});
 fetch("/hop").catch(() => {});
+fetch("/api/inventory-locked").catch(() => {});
 </script></main></body></html>`;
 
 beforeAll(async () => {
@@ -36,6 +37,7 @@ beforeAll(async () => {
     if (req.url === "/hop") return res.writeHead(302, { location: "/hop2" }).end();
     if (req.url === "/hop2") return res.writeHead(302, { location: "http://10.0.0.1/secret" }).end();
     if (req.url === "/moved") return res.writeHead(301, { location: "/rentals-new" }).end();
+    if (req.url === "/api/inventory-locked") return res.writeHead(403, { "content-type": "application/json" }).end("{}");
     if (req.url === "/denied") return res.writeHead(403, { "content-type": "text/html" }).end("<html><body><main><p>Access denied</p></main></body></html>");
     res.writeHead(200, { "content-type": "text/html" }).end(PAGE);
   });
@@ -62,6 +64,7 @@ describe.skipIf(!chromiumPath)("headless renderer (the JavaScript check)", () =>
       expect(page.userAgent).toMatch(/HeadlessChrome\/.* AIBizScannerBot\/0\.1/);
       // metadata address and the redirect to 10.0.0.1 were refused, never fetched
       expect(page.requests.refused).toBeGreaterThanOrEqual(2);
+      expect(page.requests.failed).toBe(1); // the page's own data request the site refused
       expect(hits).toEqual(expect.arrayContaining(["/hop", "/hop2"]));
       expect(hits.some((h) => h.includes("secret"))).toBe(false);
 

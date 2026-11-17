@@ -188,6 +188,31 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       }
       return out;
     },
+    async loadFullestRenderedSnapshots(reportId, urls) {
+      const out = new Map<string, { snapshotId: string; text: string; fetchedAt: string; words: number }>();
+      if (!urls.length) return out;
+      const rows = required(
+        await db
+          .from("page_snapshot")
+          .select("id, url, fetched_at, page_snapshot_body (text)")
+          .eq("report_id", reportId)
+          .eq("fetch_mode", "rendered")
+          .gte("http_status", 200)
+          .lt("http_status", 300)
+          .in("url", [...urls])
+          .order("fetched_at", { ascending: false })
+          .limit(200),
+        "load fullest rendered snapshots",
+      );
+      for (const r of rows) {
+        const text = (Array.isArray(r.page_snapshot_body) ? r.page_snapshot_body[0]?.text : (r.page_snapshot_body as { text: string | null } | null)?.text) ?? null;
+        if (!text) continue;
+        const words = text.split(/\s+/).filter(Boolean).length;
+        const prev = out.get(r.url);
+        if (!prev || words > prev.words) out.set(r.url, { snapshotId: r.id, text, fetchedAt: r.fetched_at, words });
+      }
+      return out;
+    },
     async loadSnapshotTexts(ids) {
       const out = new Map<string, string>();
       if (!ids.length) return out;

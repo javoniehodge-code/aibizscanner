@@ -174,6 +174,7 @@ export async function executeRun(
       },
       snapshotTexts: (ids) => store.loadSnapshotTexts(ids),
       latestGoodSnapshots: (urls) => store.loadLatestGoodSnapshots(run.reportId, urls),
+      fullestRenderedSnapshots: (urls) => store.loadFullestRenderedSnapshots(run.reportId, urls),
       recordPageSnapshot: (r) => store.recordPageSnapshot({ ...r, stageRunId: run.id, reportId: run.reportId }),
       cachedSourceClassifications: (keys, version) => store.loadSourceClassifications(keys, version),
       recordSourceClassification: (r) => store.recordSourceClassification({ ...r, stageRunId: run.id }),

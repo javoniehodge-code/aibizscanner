@@ -81,6 +81,11 @@ export type StageContext = {
    * reference for checking passages when the latest fetch failed (e.g. the site started refusing our fetcher).
    */
   latestGoodSnapshots(urls: readonly string[]): Promise<Map<string, GoodSnapshot>>;
+  /**
+   * Our fullest successful browser copy (rendered, HTTP 2xx, most words) of each URL in this report, from earlier runs.
+   * The JavaScript check falls back to it when a site refuses or only partly serves this run's load.
+   */
+  fullestRenderedSnapshots(urls: readonly string[]): Promise<Map<string, FullestSnapshot>>;
   /** Visible text stored with earlier page snapshots, by snapshot id (missing ids are left out). */
   snapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
   /** Stores one page snapshot (append-only evidence) with its bounded body; returns its id. */
@@ -205,11 +210,15 @@ export type RenderedPage = {
   error: string | null;
   durationMs: number;
   userAgent: string;
-  /** Requests the page made: let through our fetcher, refused by the address check, or skipped (images, media, fonts, over the cap). */
-  requests: { fetched: number; refused: number; skipped: number };
+  /**
+   * Requests the page made: let through our fetcher, refused by the address check, or skipped (images, media, fonts,
+   * over the cap); failed = the page's own data requests (not the page itself) that the site answered with an error.
+   */
+  requests: { fetched: number; refused: number; skipped: number; failed: number };
 };
 
 export type GoodSnapshot = { snapshotId: string; text: string; fetchedAt: string };
+export type FullestSnapshot = GoodSnapshot & { words: number };
 
 export type PageSnapshotRecord = {
   reportId: string;
@@ -264,6 +273,7 @@ export interface RunStore {
   recordPageSnapshot(record: PageSnapshotRecord): Promise<string>;
   loadSnapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
   loadLatestGoodSnapshots(reportId: string, urls: readonly string[]): Promise<Map<string, GoodSnapshot>>;
+  loadFullestRenderedSnapshots(reportId: string, urls: readonly string[]): Promise<Map<string, FullestSnapshot>>;
   loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
   recordSourceClassification(record: SourceClassificationRecord): Promise<void>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */

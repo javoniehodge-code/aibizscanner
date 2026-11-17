@@ -1,5 +1,6 @@
 // Website: the JavaScript check (our raw fetch vs the same page after scripts ran). Plain code, no model.
 import { describe, expect, it } from "vitest";
+import { chooseBrowserCopy } from "../js-stage";
 import { allowCheckerOption, compareTexts, keyFacts, recommendationFor, verdictLabel } from "../logic/jscheck";
 
 describe("JavaScript check", () => {
@@ -68,5 +69,19 @@ describe("JavaScript check", () => {
     expect(c.keyFactsOnlyRendered.map((f) => f.text)).toEqual(["Prices Starting at: 1,599", "Prices Starting at: 1,499"]);
     // Years, percentages and counts aren't prices.
     expect(keyFacts(["Year: 2024", "Rates rise 20% in winter", "Price 2024 model year"]).filter((f) => f.kind === "price").map((f) => f.text)).toEqual([]);
+  });
+
+  it("keeps our fuller earlier browser copy when this run's load was refused or came back thin", () => {
+    const earlier = { snapshotId: "old", text: "x", fetchedAt: "2026-11-17T16:30:28Z", words: 1292 };
+    const ok = { status: 200, error: null, requests: { failed: 0 } };
+    // MVP Miami /rentals at 16:43: loaded, but without the inventory (83 words), 3 data requests refused.
+    const thin = chooseBrowserCopy({ snapshotId: "new", text: "y", words: 83 }, earlier, { ...ok, requests: { failed: 3 } }, false)!;
+    expect(thin).toMatchObject({ snapshotId: "old", fallback: true });
+    expect(thin.why).toBe("This run's load had much less content (83 words against 1292), so our fuller earlier browser copy is used. 3 of the page's own data requests were refused or failed this run, so its copy may be missing content.");
+    // Refused this run.
+    expect(chooseBrowserCopy(null, earlier, { status: 403, error: "HTTP 403", requests: {} }, true)).toMatchObject({ snapshotId: "old", fallback: true, why: expect.stringContaining("HTTP 403") });
+    // A similar or fuller load this run is used as it is.
+    expect(chooseBrowserCopy({ snapshotId: "new", text: "y", words: 1250 }, earlier, ok, false)).toMatchObject({ snapshotId: "new", fallback: false, why: null });
+    expect(chooseBrowserCopy(null, null, { status: 403, error: "HTTP 403", requests: {} }, true)).toBeNull();
   });
 });

@@ -312,6 +312,13 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                           <em>Recommendation:</em> {p.recommendation}
                         </p>
                       ) : null}
+                      {p.browserCopy?.fallback ? (
+                        <p className="muted">
+                          Compared with our browser copy from {p.browserCopy.fetchedAt?.slice(0, 16).replace("T", " ")} UTC. {p.browserCopy.why}
+                        </p>
+                      ) : p.browserCopy?.why ? (
+                        <p className="muted">{p.browserCopy.why}</p>
+                      ) : null}
                       {p.ownerOption ? <p className="muted">{p.ownerOption}</p> : null}
                     </td>
                     <td>
@@ -324,7 +331,8 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                         <p>
                           Our browser: {p.rendered.status ?? "no response"}
                           {p.rendered.error ? ` (${p.rendered.error})` : ""} in {(p.rendered.durationMs / 1000).toFixed(1)} s; requests fetched {p.rendered.requests.fetched}, refused{" "}
-                          {p.rendered.requests.refused}, skipped {p.rendered.requests.skipped}.
+                          {p.rendered.requests.refused}, skipped {p.rendered.requests.skipped}
+                          {p.rendered.requests.failed ? `, answered with an error ${p.rendered.requests.failed}` : ""}.
                           {p.rendered.finalUrl && p.rendered.finalUrl !== p.url ? <> Ended at {p.rendered.finalUrl}.</> : null}
                         </p>
                         {p.raw?.fallback ? <p>Compared with our earlier plain copy from {p.raw.fetchedAt?.slice(0, 16).replace("T", " ")} UTC (this run&apos;s plain fetch failed).</p> : null}

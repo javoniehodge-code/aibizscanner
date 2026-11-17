@@ -88,6 +88,12 @@ result for each page.
   page gets a fresh browser, closed afterwards, with a hard 45-second limit (the browser is killed and the page marked
   not loaded); a page that hit a crash is retried once; pages load one at a time; and the run stops starting pages
   after about 200 seconds (the rest say to run it again).
+- **Keeping the best browser copy.** Sites can refuse our checker on one run and not the next, or serve a page but
+  refuse the requests that load its content (MVP Miami's inventory, 17 Nov). So a refused or failed load, or one with
+  much less content than our fullest earlier browser copy of that page (at least 50 more words and a quarter more),
+  doesn't replace it: the earlier copy stays the comparison and the answer key, and the page shows its date and why.
+  The page's own data requests that the site answered with an error are counted and reported, as the copy may be
+  missing content.
 - **Comparison copy.** If this run's plain fetch of a page failed, the browser's text is compared with our most recent
   good plain copy of that page, and the screen says so with its date.
 
