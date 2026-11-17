@@ -307,6 +307,11 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                     <td>
                       <strong className={p.verdict === "key_facts_need_js" || p.verdict === "content_needs_js" ? "error" : undefined}>{p.label}</strong>
                       <div className="muted">{p.reason}</div>
+                      {p.recommendation ? (
+                        <p>
+                          <em>Recommendation:</em> {p.recommendation}
+                        </p>
+                      ) : null}
                     </td>
                     <td>
                       {p.verdict === "not_checked" && !p.renderedWords ? "—" : `${p.rawWords} / ${p.renderedWords}`}

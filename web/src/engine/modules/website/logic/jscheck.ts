@@ -96,6 +96,20 @@ export function compareTexts(raw: string, rendered: string): JsComparison {
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const list = (xs: readonly string[]) => (xs.length <= 1 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
 
+/**
+ * What to tell the business when key facts depend on JavaScript (owner's wording, 17 Nov 2026). Prices also get the
+ * alternative for prices that genuinely need dates, quantities or a quote: publish the basis, never a misleading figure.
+ */
+export function recommendationFor(verdict: JsVerdict, facts: readonly Pick<KeyFact, "kind">[]): string | null {
+  if (verdict === "content_needs_js")
+    return "Much of this page's content depends on JavaScript. Making it available immediately removes one potential barrier to reading it.";
+  if (verdict !== "key_facts_need_js") return null;
+  const kinds = [...new Set(facts.map((f) => ({ price: "prices", phone: "phone numbers", hours: "opening hours" })[f.kind]))];
+  const first = `Your ${list(kinds)} depend on JavaScript. Making them available immediately removes one potential barrier to reading them.`;
+  if (!kinds.includes("prices")) return first;
+  return `${first} For prices that genuinely require dates, quantities, or a custom quote, the improvement might instead be to publish the pricing basis, minimum charge, or quote requirements upfront, without presenting a misleading fixed price.`;
+}
+
 /** Plain-English label for the website pages screen and, later, the report. */
 export function verdictLabel(v: JsVerdict): string {
   return {

@@ -1,6 +1,6 @@
 // Website: the JavaScript check (our raw fetch vs the same page after scripts ran). Plain code, no model.
 import { describe, expect, it } from "vitest";
-import { compareTexts, keyFacts, verdictLabel } from "../logic/jscheck";
+import { compareTexts, keyFacts, recommendationFor, verdictLabel } from "../logic/jscheck";
 
 describe("JavaScript check", () => {
   it("flags the MVP Miami /rentals case: inventory and prices appear only after scripts run", () => {
@@ -21,6 +21,14 @@ describe("JavaScript check", () => {
     expect(c.reason).toBe("Prices appear only after scripts run (3 found, e.g. $1,495/day).");
     expect(c.onlyRendered).toContain("Vehicles Found: 42");
     expect(verdictLabel(c.verdict)).toBe("Key facts load with JavaScript: likely invisible to ChatGPT and Claude");
+  });
+
+  it("recommends making JavaScript-only facts available immediately, or publishing the pricing basis for quoted prices", () => {
+    expect(recommendationFor("key_facts_need_js", [{ kind: "price" }])).toBe(
+      "Your prices depend on JavaScript. Making them available immediately removes one potential barrier to reading them. For prices that genuinely require dates, quantities, or a custom quote, the improvement might instead be to publish the pricing basis, minimum charge, or quote requirements upfront, without presenting a misleading fixed price.",
+    );
+    expect(recommendationFor("key_facts_need_js", [{ kind: "phone" }, { kind: "hours" }])).toBe("Your phone numbers and opening hours depend on JavaScript. Making them available immediately removes one potential barrier to reading them.");
+    expect(recommendationFor("same", [])).toBeNull();
   });
 
   it("doesn't count re-wrapped text, or a price already in the page, as new", () => {

@@ -3,7 +3,7 @@ import { errorMessage } from "../../errors";
 import { sha256Hex } from "../../json";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { extractPage } from "./logic/extract";
-import { compareTexts, JS_CHECK_VERSION, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
+import { compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
 import { snapshots, type Snapshots } from "./schemas";
 
 const MODULE = "website";
@@ -22,6 +22,8 @@ export const jsCheck = z
           verdict,
           label: z.string(),
           reason: z.string(),
+          /** What to tell the business, when scripts hold back key facts or much of the content. */
+          recommendation: z.string().nullable().optional(),
           rendered: z
             .object({
               snapshotId: z.string().nullable(),
@@ -158,6 +160,7 @@ export const wsRender: StageDefinition = {
         verdict: c.verdict,
         label: verdictLabel(c.verdict),
         reason: c.reason,
+        recommendation: recommendationFor(c.verdict, c.keyFactsOnlyRendered),
         rendered,
         raw: rawRef,
         rawWords: c.rawWords,
