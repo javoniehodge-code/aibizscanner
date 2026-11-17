@@ -17,6 +17,8 @@ th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line
 th { font-weight: 600; color: var(--muted); }
 label { display: block; font-size: 14px; font-weight: 600; margin-top: 12px; }
 input, textarea, select { font: inherit; width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid #c8c8d0; border-radius: 6px; }
+/* Tick boxes and radio buttons keep their natural size (full width made them vanish in narrow table columns). */
+input[type="checkbox"], input[type="radio"] { width: auto; padding: 0; margin: 0 4px; }
 button { font: inherit; padding: 6px 14px; border-radius: 6px; border: 1px solid #222; background: #222; color: #fff; cursor: pointer; }
 button.secondary { background: #fff; color: #222; }
 .muted { color: var(--muted); font-size: 13px; }

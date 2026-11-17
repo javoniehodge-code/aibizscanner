@@ -95,6 +95,8 @@ export const readTests = z
           passages: z.array(z.object({ text: z.string(), onPage: z.boolean() }).strict()),
           /** page_snapshot row holding the content the provider's tool returned (engine_tool), when it returned any. */
           evidenceSnapshotId: z.string().nullable(),
+          /** Our snapshot the passages were checked against; fallback = the latest fetch failed, so an earlier good copy was used. */
+          reference: z.object({ snapshotId: z.string(), fetchedAt: z.string(), fallback: z.boolean() }).strict().nullable().optional(),
           replyExcerpt: z.string(),
           servedModel: z.string().nullable(),
         })
@@ -172,7 +174,15 @@ function readStage(engine: EngineIndex): StageDefinition {
       const snap: Snapshots = input(ctx, "ws_snapshot", snapshots);
       const client = ctx.answerEngine(engine);
       const ours = await ctx.snapshotTexts(snap.pages.flatMap((p) => (p.snapshotId ? [p.snapshotId] : [])));
-      const notTested = (url: string, reason: string): ReadTests["pages"][number] => ({ url, status: "not_tested", reason, attempts: [], provenance: "unknown", titleReported: null, passages: [], evidenceSnapshotId: null, replyExcerpt: "", servedModel: null });
+      // When this run's fetch of a page failed (e.g. the site began refusing our fetcher), check passages against our
+      // most recent good copy of that page instead, and say so with its date.
+      const earlier = await ctx.latestGoodSnapshots(snap.pages.filter((p) => !(p.snapshotId && ours.has(p.snapshotId))).map((p) => p.url));
+      const referenceFor = (pg: Snapshots["pages"][number]) => {
+        if (pg.snapshotId && ours.has(pg.snapshotId)) return { snapshotId: pg.snapshotId, text: ours.get(pg.snapshotId)!, fetchedAt: null as string | null, fallback: false };
+        const e = earlier.get(pg.url);
+        return e ? { snapshotId: e.snapshotId, text: e.text, fetchedAt: e.fetchedAt, fallback: true } : null;
+      };
+      const notTested = (url: string, reason: string): ReadTests["pages"][number] => ({ url, status: "not_tested", reason, attempts: [], provenance: "unknown", titleReported: null, passages: [], evidenceSnapshotId: null, reference: null, replyExcerpt: "", servedModel: null });
       let stop: string | null = null;
       const pages = await mapLimit(snap.pages, spec.concurrency, async (pg): Promise<ReadTests["pages"][number]> => {
         if (!client) return notTested(pg.url, `${name} is not configured (its API key is not set)`);
@@ -188,7 +198,8 @@ function readStage(engine: EngineIndex): StageDefinition {
           const mine: ReadAttempt[] = r.attempts.filter((a) => matches(a.url, keys));
           const returned = mine.find((a) => a.content)?.content ?? null;
           const reply = parseReadReply(r.text);
-          const onPage = verifiedPassages(reply.passages, [pg.snapshotId ? (ours.get(pg.snapshotId) ?? null) : null, returned]);
+          const ref = referenceFor(pg);
+          const onPage = verifiedPassages(reply.passages, [ref?.text ?? null, returned]);
           const o = r.status === "refused" ? { status: "unsuccessful" as ReadStatus, reason: `${name} declined to answer` } : readOutcome(r.attempts, reply, onPage, keys);
           // What the provider's tool returned is evidence in its own right (never our fetch relabelled).
           const evidenceSnapshotId = mine.length
@@ -215,6 +226,7 @@ function readStage(engine: EngineIndex): StageDefinition {
             titleReported: reply.title,
             passages: reply.passages.map((text, i) => ({ text, onPage: onPage[i] ?? false })),
             evidenceSnapshotId,
+            reference: ref ? { snapshotId: ref.snapshotId, fetchedAt: ref.fetchedAt ?? new Date().toISOString(), fallback: ref.fallback } : null,
             replyExcerpt: r.text.slice(0, 800),
             servedModel: r.servedModel,
           };

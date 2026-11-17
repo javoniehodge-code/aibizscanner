@@ -70,6 +70,17 @@ export class MemoryStore implements RunStore {
     this.snapshots.push({ ...r, id });
     return id;
   }
+  async loadLatestGoodSnapshots(reportId: string, urls: readonly string[]) {
+    const out = new Map<string, { snapshotId: string; text: string; fetchedAt: string }>();
+    const good = this.snapshots
+      .filter((x) => x.reportId === reportId && x.fetchMode === "raw" && x.httpStatus !== null && x.httpStatus >= 200 && x.httpStatus < 300 && x.text)
+      .sort((a, b) => (a.fetchedAt < b.fetchedAt ? 1 : -1));
+    for (const u of urls) {
+      const hit = good.find((x) => x.url === u);
+      if (hit) out.set(u, { snapshotId: hit.id, text: hit.text!, fetchedAt: hit.fetchedAt });
+    }
+    return out;
+  }
   async loadSnapshotTexts(ids: readonly string[]) {
     return new Map(this.snapshots.filter((x) => ids.includes(x.id) && x.text !== null).map((x) => [x.id, x.text!] as const));
   }

@@ -223,7 +223,9 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                             {rd ? (
                               <>
                                 <p>
-                                  <em>Reading:</em> {rd.reason} Tool attempts: {rd.attempts.length ? rd.attempts.map((a) => `${a.url} (${a.status}${a.detail ? `, ${a.detail}` : ""})`).join("; ") : "none"}. Provenance: {rd.provenance}.
+                                  <em>Reading:</em> {rd.reason} {rd.reference?.fallback ? <>Passages checked against our earlier copy from {rd.reference.fetchedAt.slice(0, 16).replace("T", " ")} UTC (this run&apos;s fetch failed). </> : null}
+                                  {!rd.reference ? <>No copy of the page to check passages against. </> : null}
+                                  Tool attempts: {rd.attempts.length ? rd.attempts.map((a) => `${a.url} (${a.status}${a.detail ? `, ${a.detail}` : ""})`).join("; ") : "none"}. Provenance: {rd.provenance}.
                                 </p>
                                 {rd.passages.length ? (
                                   <ul>

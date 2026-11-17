@@ -71,6 +71,11 @@ export type StageContext = {
    * addresses refused at every redirect, size and time capped). Never bypasses blocks or logins. Not a paid call.
    */
   fetchUrl(url: string, opts: FetchOptions): Promise<FetchedResource>;
+  /**
+   * Our most recent successful raw snapshot (HTTP 2xx, with text) of each URL in this report, any run. Used as the
+   * reference for checking passages when the latest fetch failed (e.g. the site started refusing our fetcher).
+   */
+  latestGoodSnapshots(urls: readonly string[]): Promise<Map<string, GoodSnapshot>>;
   /** Visible text stored with earlier page snapshots, by snapshot id (missing ids are left out). */
   snapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
   /** Stores one page snapshot (append-only evidence) with its bounded body; returns its id. */
@@ -181,6 +186,8 @@ export type FetchedResource = {
   userAgent: string;
 };
 
+export type GoodSnapshot = { snapshotId: string; text: string; fetchedAt: string };
+
 export type PageSnapshotRecord = {
   reportId: string;
   stageRunId: string;
@@ -233,6 +240,7 @@ export interface RunStore {
   loadAnswerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
   recordPageSnapshot(record: PageSnapshotRecord): Promise<string>;
   loadSnapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
+  loadLatestGoodSnapshots(reportId: string, urls: readonly string[]): Promise<Map<string, GoodSnapshot>>;
   loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
   recordSourceClassification(record: SourceClassificationRecord): Promise<void>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */
