@@ -108,6 +108,8 @@ many of the names it gave appear on the page.
 - **Partly read** when the AI read the page but missed a fact that loads only with JavaScript (the brief's rule:
   inventory or prices loaded only by JavaScript must surface as partly read), or missed most of the key facts. The
   reading test's own result is kept alongside, and the note says what was missed and why.
+- **Counted as read** the other way round: when only one of its quoted passages matched word for word but it got every
+  key fact on the page, the read counts as read (its passage result is kept alongside).
 - Each engine's column shows "x of y key facts on n pages read".
 - Reading tests run before 17 Nov 2026 didn't ask for facts; rerun them to get scores.
 - Cost: the same calls with slightly longer answers (a few cents more per report).
