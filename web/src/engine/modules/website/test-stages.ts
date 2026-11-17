@@ -369,6 +369,7 @@ type Extraction = NonNullable<FindRead["pages"][number]["results"][number]["extr
  * Key-fact extraction (the AI's own listing, scored against what a visitor sees). A read counts as partly read when the
  * AI missed a key fact that loads only with JavaScript (internal-testing-app.md: inventory or prices loaded only by
  * JavaScript must surface as "partly read"), or missed most key facts. Our JavaScript check only explains the miss.
+ * The other way round, a partial read (one passage confirmed) that got every key fact counts as read.
  */
 export function scoredRead(
   tool: ReadStatus,
@@ -391,6 +392,10 @@ export function scoredRead(
       extraction,
     };
   if (sc.got * 2 < sc.of) return { read: "partial", note: `${got}${eg}${items}`, extraction };
+  // Every key fact obtained, with one passage confirmed on the page: that is reading the page, even if its second
+  // quote wasn't word for word.
+  if (tool === "partial" && sc.got === sc.of)
+    return { read: "readable", note: `${got}${items} Counted as read: it got every key fact, though only one of its quoted passages matched the page word for word.`, extraction };
   return { read: tool, note: `${got}${eg}${items}`, extraction };
 }
 

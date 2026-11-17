@@ -5,7 +5,7 @@ import { MemoryStore } from "../../../engine.test-support";
 import { executeRun, type PageRenderer, type Providers } from "../../../execute";
 import { registry } from "../../../index";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
-import { combinedLabel } from "../test-stages";
+import { combinedLabel, scoredRead } from "../test-stages";
 import { hoursValue, pagePurpose, parseReadReply, priceValue, scoreExtraction, readInstruction, readOutcome, searchOutcome, searchPrompt, targetKeys, verifiedPassages } from "../logic/findread";
 import { excluded, pageKind, suggestPages } from "../logic/pages";
 import { extractPage } from "../logic/extract";
@@ -219,6 +219,12 @@ describe("find & read stages (fake engines)", () => {
     const f3 = (await run("ws_findread", [snap, priced, ...outs.slice(0, 3), read2, ...outs.slice(4)], providers, store)).input.output as unknown as FindRead;
     expect(f3.pages[0]!.results[0]).toMatchObject({ read: "readable", label: "Found & read", extraction: { got: 2, of: 2, itemsNamed: 1, itemsOnPage: 1 } });
     expect(f3.foundAndRead).toEqual([1, 0, 0]);
+
+    // One passage confirmed, but every key fact obtained (Gemini on MVP Miami's rentals page): counted as read.
+    const gotAll = scoredRead("partial", [{ kind: "price", text: "Cullinan 1,599" }], { ...pc, answerKey: { source: "browser", snapshotId: "x", facts: [{ kind: "price", text: "Prices Starting at: 1,599", jsOnly: true }] } }, null);
+    expect(gotAll).toMatchObject({ read: "readable", note: expect.stringContaining("Counted as read: it got every key fact") });
+    // ...but not when nothing could be checked, or a fact was missed.
+    expect(scoredRead("partial", [], { ...pc, answerKey: { source: "browser", snapshotId: "x", facts: [] } }, null).read).toBe("partial");
 
     // Later the site refuses our browser: the earlier, fuller browser copy stays the answer key, and the page says so.
     const refusedBrowser: PageRenderer = {
