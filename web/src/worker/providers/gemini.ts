@@ -1,6 +1,6 @@
 import "server-only";
 import { GoogleGenAI } from "@google/genai";
-import type { AnswerEngine, AskRequest, AskResult } from "@/engine/answers";
+import type { AnswerEngine, AskRequest, AskResult, ReadAttempt, ReadRequest, ReadResult } from "@/engine/answers";
 import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
@@ -60,6 +60,8 @@ export function geminiEngine(apiKey: string): AnswerEngine {
         text,
         citations: unique(citations),
         searchQueries: unique(queries),
+        // Grounding chunks are the search results Gemini drew on; it reports no separate result list.
+        sources: unique(citations),
         usage: {
           tokensIn: (u?.promptTokenCount ?? 0) + (u?.toolUsePromptTokenCount ?? 0),
           tokensOut: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0),
@@ -67,6 +69,46 @@ export function geminiEngine(apiKey: string): AnswerEngine {
           searchCalls: queries.length,
           requests: 1,
         },
+        raw: trimRaw(res),
+        requestId: res.responseId ?? null,
+        servedModel: res.modelVersion ?? null,
+      };
+    },
+    estimateRead: () => ({ tokensIn: 30_000, tokensOut: 4_000, searchCalls: 0, requests: 1 }),
+    /**
+     * Reading test: URL Context. Each URL comes back with a retrieval status. Google may serve it from its index cache
+     * before fetching live and doesn't say which, so provenance stays "unknown".
+     */
+    async readPage(request: ReadRequest, signal: AbortSignal): Promise<ReadResult> {
+      const res = await ai.models.generateContent({
+        model: SPEC.model,
+        contents: request.instruction,
+        config: { tools: [{ urlContext: {} }], abortSignal: signal },
+      });
+      const candidate = res.candidates?.[0];
+      const attempts: ReadAttempt[] = (candidate?.urlContextMetadata?.urlMetadata ?? []).flatMap((m) =>
+        m.retrievedUrl
+          ? [
+              {
+                url: m.retrievedUrl,
+                status: m.urlRetrievalStatus === "URL_RETRIEVAL_STATUS_SUCCESS" ? ("success" as const) : m.urlRetrievalStatus ? ("error" as const) : ("unknown" as const),
+                detail: m.urlRetrievalStatus ?? null,
+                retrievedAt: null,
+                title: null,
+                content: null,
+              },
+            ]
+          : [],
+      );
+      const u = res.usageMetadata;
+      const blocked = !candidate || (candidate.finishReason ? BLOCKED.has(candidate.finishReason) : false) || !!res.promptFeedback?.blockReason;
+      const text = res.text ?? "";
+      return {
+        status: blocked && !text ? "refused" : "ok",
+        text,
+        attempts,
+        provenance: "unknown",
+        usage: { tokensIn: (u?.promptTokenCount ?? 0) + (u?.toolUsePromptTokenCount ?? 0), tokensOut: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0), searchCalls: 0, requests: 1 },
         raw: trimRaw(res),
         requestId: res.responseId ?? null,
         servedModel: res.modelVersion ?? null,

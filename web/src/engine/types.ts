@@ -71,6 +71,8 @@ export type StageContext = {
    * addresses refused at every redirect, size and time capped). Never bypasses blocks or logins. Not a paid call.
    */
   fetchUrl(url: string, opts: FetchOptions): Promise<FetchedResource>;
+  /** Visible text stored with earlier page snapshots, by snapshot id (missing ids are left out). */
+  snapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
   /** Stores one page snapshot (append-only evidence) with its bounded body; returns its id. */
   recordPageSnapshot(record: Omit<PageSnapshotRecord, "reportId" | "stageRunId">): Promise<string>;
   /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
@@ -184,7 +186,9 @@ export type PageSnapshotRecord = {
   stageRunId: string;
   url: string;
   finalUrl: string | null;
-  fetchMode: "raw" | "rendered";
+  fetchMode: "raw" | "rendered" | "engine_tool";
+  /** Only for engine_tool snapshots: whose page-reading tool returned this content. */
+  engine?: "chatgpt" | "claude" | "gemini";
   userAgent: string;
   httpStatus: number | null;
   contentHash: string | null;
@@ -228,6 +232,7 @@ export interface RunStore {
   loadEngineAnswers(stageRunId: string): Promise<StoredEngineAnswer[]>;
   loadAnswerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
   recordPageSnapshot(record: PageSnapshotRecord): Promise<string>;
+  loadSnapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
   loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
   recordSourceClassification(record: SourceClassificationRecord): Promise<void>;
   /** Returns false if the run is no longer ours (lease lost) or has no attempts left. */

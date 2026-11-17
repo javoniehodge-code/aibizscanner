@@ -70,6 +70,9 @@ export class MemoryStore implements RunStore {
     this.snapshots.push({ ...r, id });
     return id;
   }
+  async loadSnapshotTexts(ids: readonly string[]) {
+    return new Map(this.snapshots.filter((x) => ids.includes(x.id) && x.text !== null).map((x) => [x.id, x.text!] as const));
+  }
   classifications: SourceClassificationRecord[] = [];
   async loadSourceClassifications(keys: readonly string[], version: string) {
     return this.classifications.filter((c) => keys.includes(c.pageKey) && c.classifierVersion === version);

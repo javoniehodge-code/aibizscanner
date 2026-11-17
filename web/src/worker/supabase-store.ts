@@ -150,6 +150,7 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
             url: r.url,
             final_url: r.finalUrl,
             fetch_mode: r.fetchMode,
+            engine: r.engine ?? null,
             user_agent: r.userAgent,
             http_status: r.httpStatus,
             content_hash: r.contentHash,
@@ -165,6 +166,13 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
         check(await db.from("page_snapshot_body").insert({ snapshot_id: row.id, html: r.html, text: r.text }), "record page snapshot body");
       }
       return row.id;
+    },
+    async loadSnapshotTexts(ids) {
+      const out = new Map<string, string>();
+      if (!ids.length) return out;
+      const rows = required(await db.from("page_snapshot_body").select("snapshot_id, text").in("snapshot_id", [...ids]), "load snapshot texts");
+      for (const r of rows) if (r.text !== null) out.set(r.snapshot_id, r.text);
+      return out;
     },
     async loadSourceClassifications(pageKeys, classifierVersion) {
       const out: SourceClassificationRecord[] = [];

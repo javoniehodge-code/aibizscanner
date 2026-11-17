@@ -93,7 +93,10 @@ export async function approvePages(_prev: WebsiteFormState, form: FormData): Pro
     .single();
   if (error) throw new Error(error.message);
   try {
-    await enqueueStage(db, reportId, "ws_page_set", { pageSet: { id: set.id, version: set.version, approvedAt }, website, pages });
+    const { data: rep, error: repError } = await db.from("report").select("business:business_id (name, location)").eq("id", reportId).single();
+    if (repError) throw new Error(repError.message);
+    const business = rep.business ? { name: rep.business.name, location: rep.business.location } : undefined;
+    await enqueueStage(db, reportId, "ws_page_set", { pageSet: { id: set.id, version: set.version, approvedAt }, website, ...(business ? { business } : {}), pages });
   } catch (e) {
     if (e instanceof EnqueueError) return { errors: [`Page set v${set.version} was saved, but the snapshots could not start: ${e.message}`] };
     throw e;

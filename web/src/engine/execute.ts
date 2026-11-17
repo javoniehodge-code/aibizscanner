@@ -166,6 +166,7 @@ export async function executeRun(
         if (!providers.web) throw new NonRetryableError("No web fetcher is configured for this worker");
         return providers.web.fetch(url, opts, controller.signal);
       },
+      snapshotTexts: (ids) => store.loadSnapshotTexts(ids),
       recordPageSnapshot: (r) => store.recordPageSnapshot({ ...r, stageRunId: run.id, reportId: run.reportId }),
       cachedSourceClassifications: (keys, version) => store.loadSourceClassifications(keys, version),
       recordSourceClassification: (r) => store.recordSourceClassification({ ...r, stageRunId: run.id }),

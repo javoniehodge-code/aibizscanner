@@ -28,3 +28,27 @@ What these checks are, and aren't:
 
 Crawler tokens checked (registry 2026-11-17): OpenAI OAI-SearchBot, ChatGPT-User, GPTBot; Anthropic Claude-SearchBot,
 Claude-User, ClaudeBot; Google Googlebot and the Google-Extended control token.
+
+## Part 2: can each AI find and read the pages (stage 6)
+
+Runs on its own after the snapshots: for every approved page and each engine (ChatGPT `gpt-6-luna`, Claude
+`claude-sonnet-5-5`, Gemini `gemini-3.5-flash-lite`), two tests. **This costs money**: two calls per page per engine
+(24 per engine for 12 pages); expect roughly $0.50–1.50 per report, within the spending cap. The run monitor shows the
+real figure.
+
+- **Search test**: a fresh, branded question (e.g. *Find the official MVP Miami (Miami, FL) page about "FAQ's For
+  Renting…"*), with web search on. Never includes the URL or our page text. **Found** only if that page is among the
+  search results or citations. The home page or another site's copy doesn't count. No search observed = unconfirmed.
+- **Reading test**: the engine's own page-reading tool opens the URL (OpenAI web search `open_page`, Anthropic web
+  fetch, Gemini URL Context) and returns the title and two passages copied from the page. **Read** only when the tool
+  opened that URL and two passages are really on the page (checked word for word against our snapshot or the content
+  the tool returned); one = partly read. No tool activity = unconfirmed, never a failure. A failed fetch (e.g.
+  `url_not_accessible`) = could not read. Content the tool returned is stored as its own evidence (`engine_tool`
+  snapshot), separate from our fetch.
+- **Combined** (section 4 of the Website pages screen): Found & read, Read using direct link; not found in search, and
+  so on, with "x of N found & read" per engine; N is always every approved page.
+
+Known limits: Gemini URL Context may answer from Google's cache, and none of the tools says whether content was live,
+so provenance is "unknown". OpenAI's `open_page` reports no success status, so OpenAI reads rest on the passage check.
+These are the providers' API tools, not the consumer apps. Lists approved before 17 Nov 2026 need approving again (the
+search test needs the business name stored with the list).

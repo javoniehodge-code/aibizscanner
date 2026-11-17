@@ -6,7 +6,8 @@ export type PageKind = (typeof PAGE_KINDS)[number];
 
 const KIND_RULES: [PageKind, RegExp][] = [
   ["contact", /(^|[/_-])(contact|contact-us|get-in-touch|reach-us)([/_.-]|$)/i],
-  ["booking", /(^|[/_-])(book|booking|bookings|reserve|reservations?|quote|get-a-quote|request|inquire|inquiry|enquiry)([/_.-]|$)/i],
+  // Whole path segments only: "/reserve-a-bentley-flying-spur-rental" is a car page, not a booking page.
+  ["booking", /\/(book|book-now|booking|bookings|reserve|reserve-now|reservations?|quote|get-a-quote|request-a-quote|inquire|inquiry|enquiry)(\/|\.\w+$|$)/i],
   ["faq", /(^|[/_-])(faqs?|questions|help|how-it-works)([/_.-]|$)/i],
   ["pricing", /(^|[/_-])(pricing|prices?|rates?|costs?|packages|plans|specials|deals)([/_.-]|$)/i],
   ["policy", /(^|[/_-])(terms|tos|policy|policies|privacy|cancellation|refunds?|rental-agreement|agreement|requirements|insurance|disclaimer)([/_.-]|$)/i],
@@ -69,7 +70,9 @@ export function suggestPages(candidates: readonly Candidate[], opts: { services:
   add(ofKind("pricing")[0], "Pricing page");
   for (const s of opts.services) {
     const ws = words(s);
-    add(navFirst(candidates.filter((c) => c.kind !== "blog" && matches(c, ws)))[0] ?? navFirst(candidates.filter((c) => c.kind !== "blog" && ws.some((w) => c.url.toLowerCase().includes(w))))[0], `Service: ${s}`);
+    // Every word of the service, or at least two of them when it has three or more; one shared word ("luxury") isn't enough.
+    const some = (c: Candidate) => ws.length >= 3 && ws.filter((w) => `${c.url} ${c.linkText ?? ""}`.toLowerCase().includes(w)).length >= 2;
+    add(navFirst(candidates.filter((c) => c.kind !== "blog" && matches(c, ws)))[0] ?? navFirst(candidates.filter((c) => c.kind !== "blog" && some(c)))[0], `Service: ${s}`);
   }
   for (const l of opts.locations) add(navFirst(candidates.filter((c) => matches(c, words(l))))[0], `Location: ${l}`);
   for (const c of ofKind("location").slice(0, 2)) add(c, "Location page");

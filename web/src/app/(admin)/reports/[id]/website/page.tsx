@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { CRAWLERS } from "@/engine/modules/website/logic/robots";
 import { discovery, snapshots } from "@/engine/modules/website/schemas";
+import { findRead, readTests, searchTests } from "@/engine/modules/website/test-stages";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_PAGE_CAP } from "@/lib/website-pages";
 import { ApprovePagesForm, FindPagesForm, type PageRow } from "./forms";
@@ -10,7 +11,8 @@ import { ApprovePagesForm, FindPagesForm, type PageRow } from "./forms";
 export const metadata = { title: "Website pages — AIBizScanner internal" };
 export const dynamic = "force-dynamic";
 
-const WS_STAGES = ["ws_discover", "ws_page_set", "ws_snapshot"];
+const WS_STAGES = ["ws_discover", "ws_page_set", "ws_snapshot", "ws_search_chatgpt", "ws_search_claude", "ws_search_gemini", "ws_read_chatgpt", "ws_read_claude", "ws_read_gemini", "ws_findread"];
+const LOWER = ["chatgpt", "claude", "gemini"];
 const ENGINES = ["ChatGPT", "Claude", "Gemini"];
 const VERDICT = { allowed: "Allowed", blocked: "Blocked", unconfirmed: "Unconfirmed" } as const;
 
@@ -20,14 +22,21 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
   const db = await createClient();
   const latest = (stage: string) =>
     db.from("stage_run").select("id, version, status, error, output, finished_at").eq("report_id", id).eq("stage", stage).order("version", { ascending: false }).limit(1).maybeSingle();
-  const [reportRes, busyRes, discRes, snapRes, setRes] = await Promise.all([
+  const [reportRes, busyRes, discRes, snapRes, setRes, frRes, ...testRes] = await Promise.all([
     db.from("report").select("id, version, business:business_id (name, website)").eq("id", id).maybeSingle(),
     db.from("stage_run").select("id", { count: "exact", head: true }).eq("report_id", id).in("stage", WS_STAGES).in("status", ["queued", "running"]),
     latest("ws_discover"),
     latest("ws_snapshot"),
     db.from("website_page_set").select("version, pages, approved_at").eq("report_id", id).order("version", { ascending: false }).limit(1).maybeSingle(),
+    latest("ws_findread"),
+    ...LOWER.map((e) => latest(`ws_search_${e}`)),
+    ...LOWER.map((e) => latest(`ws_read_${e}`)),
   ]);
-  for (const r of [reportRes, busyRes, discRes, snapRes, setRes]) if (r.error) throw new Error(r.error.message);
+  for (const r of [reportRes, busyRes, discRes, snapRes, setRes, frRes, ...testRes]) if (r.error) throw new Error(r.error.message);
+  const fr = frRes.data?.output ? findRead.safeParse(frRes.data.output) : null;
+  const searches = testRes.slice(0, 3).map((t) => (t.data?.output ? searchTests.safeParse(t.data.output) : null));
+  const reads = testRes.slice(3).map((t) => (t.data?.output ? readTests.safeParse(t.data.output) : null));
+  const testsRan = [...testRes].reduce((sum, t) => sum + (t.data ? 1 : 0), 0);
   const report = reportRes.data;
   if (!report) notFound();
   const busy = (busyRes.count ?? 0) > 0;
@@ -151,6 +160,83 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                           ) : (
                             "—"
                           )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : null}
+        </>
+      ) : null}
+
+      {testsRan ? (
+        <>
+          <h2>4. Can each AI find and read these pages?</h2>
+          <p className="muted">
+            Search: a fresh branded question per page to each engine&apos;s own search; found only if the page itself is among its results or citations (not the home page, not
+            another site&apos;s copy). Reading: each engine&apos;s own page-reading tool opens the URL; read only if two passages it returns are on the page. No tool activity means
+            unconfirmed, never a failure. API tools, not the consumer apps.
+          </p>
+          <p className="muted">
+            {testRes.map((t, i) => (t.data ? `${["ChatGPT search", "Claude search", "Gemini search", "ChatGPT read", "Claude read", "Gemini read"][i]}: ${t.data.status}` : null)).filter(Boolean).join(" · ")}
+            {frRes.data ? ` · combined: ${frRes.data.status}` : " · combined: waiting for all six"}
+          </p>
+          {fr?.success ? (
+            <table data-testid="ws-findread">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  {ENGINES.map((e, i) => (
+                    <th key={e}>
+                      {e}
+                      <div className="muted">
+                        {fr.data.foundAndRead[i] === null ? "not tested" : `${fr.data.foundAndRead[i]} of ${fr.data.selectedPageCount} found & read`}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {fr.data.pages.map((p) => (
+                  <tr key={p.url}>
+                    <td style={{ wordBreak: "break-all" }}>
+                      {p.url}
+                      <div className="muted">{p.title ?? p.reason}</div>
+                    </td>
+                    {p.results.map((r, i) => {
+                      const s = searches[i]?.success ? searches[i]!.data.pages.find((x) => x.url === p.url) : undefined;
+                      const rd = reads[i]?.success ? reads[i]!.data.pages.find((x) => x.url === p.url) : undefined;
+                      return (
+                        <td key={i}>
+                          <strong>{r.label}</strong>
+                          <details>
+                            <summary>Evidence</summary>
+                            {s ? (
+                              <p>
+                                <em>Search:</em> {s.reason}
+                                {s.searchQueries.length ? <> Queries: {s.searchQueries.join(" · ")}.</> : null}
+                                {s.matchedUrl ? <> Matched {s.matchedUrl}.</> : null}
+                              </p>
+                            ) : null}
+                            {rd ? (
+                              <>
+                                <p>
+                                  <em>Reading:</em> {rd.reason} Tool attempts: {rd.attempts.length ? rd.attempts.map((a) => `${a.url} (${a.status}${a.detail ? `, ${a.detail}` : ""})`).join("; ") : "none"}. Provenance: {rd.provenance}.
+                                </p>
+                                {rd.passages.length ? (
+                                  <ul>
+                                    {rd.passages.map((x, j) => (
+                                      <li key={j}>
+                                        {x.onPage ? "✓" : "✕"} “{x.text}”
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
+                              </>
+                            ) : null}
+                          </details>
                         </td>
                       );
                     })}
