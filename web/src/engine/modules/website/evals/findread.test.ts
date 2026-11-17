@@ -154,6 +154,24 @@ describe("find & read stages (fake engines)", () => {
     expect(f.selectedPageCount).toBe(1);
   });
 
+  it("checks passages against our earlier good copy when this run's fetch was refused, and says so", async () => {
+    const store = new MemoryStore(5, 0, []);
+    // An earlier, successful snapshot of the page (an older run), and this run's refused one (HTTP 403, no text).
+    store.snapshots.push({ id: "ps-old", reportId: "r1", stageRunId: "old", url: "https://www.mvpmiami.com/faq/", finalUrl: "https://www.mvpmiami.com/faq/", fetchMode: "raw", userAgent: "t", httpStatus: 200, contentHash: null, textHash: null, html: "<html/>", text: SNAP_TEXT, error: null, fetchedAt: "2026-11-17T00:00:02Z" });
+    store.snapshots.push({ id: "ps-new", reportId: "r1", stageRunId: "new", url: "https://www.mvpmiami.com/faq/", finalUrl: "https://www.mvpmiami.com/faq/", fetchMode: "raw", userAgent: "t", httpStatus: 403, contentHash: null, textHash: null, html: null, text: null, error: "HTTP 403", fetchedAt: "2026-11-17T00:21:01Z" });
+    const i = (runId: string, stage: string, output: unknown): StageInput => ({ runId, stage, output: output as JsonValue, outputHash: null });
+    const page = { url: "https://www.mvpmiami.com/faq/", kind: "faq", reason: "FAQ page", snapshotId: "ps-new", finalUrl: "https://www.mvpmiami.com/faq/", status: 403, error: "HTTP 403", truncated: false, title: null, description: null, canonical: null, metaRobots: null, headings: [], wordCount: 0, textExcerpt: "", jsonLdTypes: [], jsonLdErrors: 0, microdataTypes: [], permissions: {} };
+    const snap = i("snap", "ws_snapshot", { robots: { url: "https://www.mvpmiami.com/robots.txt", status: 200, registryVersion: "x" }, pages: [page] });
+    const set = i("set", "ws_page_set", { pageSet: { id: "00000000-0000-4000-8000-000000000009", version: 2, approvedAt: "x" }, website: "https://www.mvpmiami.com/", business: BIZ, pages: [{ url: page.url, kind: "faq", reason: "FAQ page" }] });
+    // An engine whose tool opens the page but returns no content (like OpenAI and Gemini): only our copy can confirm it.
+    const engine = fakeEngine(0, "good");
+    const noContent: AnswerEngine = { ...engine, async readPage(r) { const res = await engine.readPage!(r, new AbortController().signal); return { ...res, attempts: res.attempts.map((a) => ({ ...a, content: null })) }; } };
+    const r = await run("ws_read_chatgpt", [set, snap], { answers: (e) => (e === 0 ? noContent : null) }, store);
+    const out = (r.input.output as { pages: { status: string; reference: { snapshotId: string; fetchedAt: string; fallback: boolean } | null }[] }).pages[0]!;
+    expect(out.status).toBe("readable");
+    expect(out.reference).toEqual({ snapshotId: "ps-old", fetchedAt: "2026-11-17T00:00:02Z", fallback: true });
+  });
+
   it("marks everything not tested when an engine isn't configured, and refuses a page list approved before the tests existed", async () => {
     const store = new MemoryStore(5, 0, []);
     const i = (runId: string, stage: string, output: unknown): StageInput => ({ runId, stage, output: output as JsonValue, outputHash: null });

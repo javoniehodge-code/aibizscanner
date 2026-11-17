@@ -167,6 +167,27 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       }
       return row.id;
     },
+    async loadLatestGoodSnapshots(reportId, urls) {
+      const out = new Map<string, { snapshotId: string; text: string; fetchedAt: string }>();
+      if (!urls.length) return out;
+      const rows = required(
+        await db
+          .from("page_snapshot")
+          .select("id, url, fetched_at, page_snapshot_body (text)")
+          .eq("report_id", reportId)
+          .eq("fetch_mode", "raw")
+          .gte("http_status", 200)
+          .lt("http_status", 300)
+          .in("url", [...urls])
+          .order("fetched_at", { ascending: false }),
+        "load latest good snapshots",
+      );
+      for (const r of rows) {
+        const text = (Array.isArray(r.page_snapshot_body) ? r.page_snapshot_body[0]?.text : (r.page_snapshot_body as { text: string | null } | null)?.text) ?? null;
+        if (text && !out.has(r.url)) out.set(r.url, { snapshotId: r.id, text, fetchedAt: r.fetched_at });
+      }
+      return out;
+    },
     async loadSnapshotTexts(ids) {
       const out = new Map<string, string>();
       if (!ids.length) return out;
