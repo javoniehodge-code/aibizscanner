@@ -1,5 +1,6 @@
 import { COPY_KEYS, SCHEMA_VERSION, SECTIONS, type ReportDocument } from "@/report/schema";
 import type { BuiltSection } from "../../prompt-analysis/logic/section";
+import type { WebsiteSection } from "../../website/section-stage";
 import { PROMPT_SET_EVIDENCE, runEvidenceId } from "../../prompt-analysis/logic/section";
 
 const NOT_BUILT = "Not produced: the pipeline stages for this part of the report haven't been built yet.";
@@ -21,7 +22,7 @@ const missing = (reason: string) => ({ v: null, p: { kind: "missing" as const, r
  * code from the assembled promptAnalysis section. Every section whose stages don't exist yet is null, so the template
  * leaves its slides out; copy for those slides is marked missing. Nothing here is written by a model or invented.
  */
-export function buildReportDocument(pa: BuiltSection): ReportDocument {
+export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | null = null): ReportDocument {
   const s = pa.section;
   const runEvidence = [0, 1, 2].map(runEvidenceId).filter((id) => pa.evidence[id]);
   // The run date is the first day an answer was collected (falls back to the prompt set's approval day).
@@ -47,19 +48,23 @@ export function buildReportDocument(pa: BuiltSection): ReportDocument {
   copy.groupLegend = observed(s.groups.map((g) => `${g.v.name}: ${g.v.description}`).join(" · "), [PROMPT_SET_EVIDENCE]);
   copy.promptReportDetails = observed(promptDetails, [PROMPT_SET_EVIDENCE, ...runEv]);
   copy.reportDetails = observed(
-    `${pa.business.name} · ${promptDetails} · Only the AI Recommendation section has been produced for this report`,
+    `${pa.business.name} · ${promptDetails} · ${website ? "Produced so far: AI Recommendations, and Find & read for your website" : "Only the AI Recommendation section has been produced for this report"}`,
     [PROMPT_SET_EVIDENCE, ...runEv],
   );
 
+  if (website) Object.assign(copy, website.copy);
+
   const doc = {
     schemaVersion: SCHEMA_VERSION,
-    evidence: pa.evidence,
+    evidence: { ...pa.evidence, ...(website?.evidence ?? {}) },
     meta: observed({ runDate, language: "English" }, runEv),
     business: observed(pa.business, [PROMPT_SET_EVIDENCE]),
     engines: pa.engines.map((e, i) => observed(e, pa.evidence[runEvidenceId(i)] ? [runEvidenceId(i)] : [PROMPT_SET_EVIDENCE])),
     copy,
     promptAnalysis: s,
     ...Object.fromEntries(SECTIONS.map((k) => [k, null])),
+    // The website parts built so far; the others stay null until their stages exist.
+    website: website ? { discovery: website.discovery, structuredData: null, clear: null, consistent: null, distinctive: null } : null,
   };
   return doc as unknown as ReportDocument;
 }

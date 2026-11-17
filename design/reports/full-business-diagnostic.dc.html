@@ -1425,6 +1425,8 @@ const BLANK = {
 };
 const HAS = Object.fromEntries(Object.keys(BLANK).map(k => [k, R[k] != null]));
 for (const k of Object.keys(BLANK)) if (R[k] == null) R[k] = BLANK[k];
+// The website parts arrive one by one: each null part keeps its stand-in and its slide is left out (NEEDS below).
+for (const k of Object.keys(BLANK.website)) { HAS['website.' + k] = HAS.website && R.website[k] != null; if (R.website[k] == null) R.website[k] = BLANK.website[k]; }
 const BUSINESS = R.business, META = R.meta, PAR = R.promptAnalysis, RUN = PAR.run;
 const MISSING = { run: RUN == null, xsrc: PAR.uncitedSources == null, js: R.website.discovery.rawVsLoaded == null };
 // Run completeness counts as recorded by the run. When the report has none, counts show as a dash.
@@ -1671,20 +1673,22 @@ class BrandPart extends Sub {
           rules: R.website.clear.rules.map(r => [r.k, r.v]).map(([k, v]) => ({ k, v }))
         }; })()] : [],
       discSlide: show.discovery ? [(() => { const d = slides[0], RAW = MS[0].groups.flatMap(g => g.rows), RD = r => r[4] || r[2].split('').map(c => c === 'r' ? 'f' : 'g').join('');
-        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read' }, RK = { g: 'g', p: 'k', f: 'r' };
+        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read', u: 'Reading unconfirmed' }, RK = { g: 'g', p: 'k', f: 'r', u: 'd' };
+        // Search: g found; r not found; d not tested or unconfirmed (no search observed), never counted as not found.
+        const SL = c => c === 'g' ? 'Found' : c === 'd' ? 'Search unconfirmed' : 'Not found', SK = c => c === 'g' ? 'g' : c === 'd' ? 'd' : 'r';
         const mini = k => ({ ...symStyle(k, true), width: 16, height: 16, fontSize: 10, flex: 'none' });
         const pages = d.groups.flatMap(g => g.rows).map((p, pi) => { const row = RAW[pi], codes = row[2], rd = RD(row);
           const oi = p.open.length ? p.cells.findIndex(c => c.sel) : -1;
-          return { ...p, open: p.open.map(o => ({ ...o, status: (codes[oi] === 'g' ? 'Found in search' : 'Not found in search') + ' \u00b7 ' + RL[rd[oi]] })), cells: p.cells.map((c, i) => { const found = codes[i] === 'g', rk = RK[rd[i]];
-            return { ...c, sLabel: found ? 'Found' : 'Not found', sSym: found ? SYM.g : SYM.r, sSymStyle: mini(found ? 'g' : 'r'), rLabel: RL[rd[i]], rSym: SYM[rk], rSymStyle: mini(rk), title: AIS[i] + ' \u00b7 search: ' + (found ? 'found' : 'not found') + ' \u00b7 ' + RL[rd[i]].toLowerCase(),
+          return { ...p, open: p.open.map(o => ({ ...o, status: (codes[oi] === 'g' ? 'Found in search' : codes[oi] === 'd' ? 'Search unconfirmed' : 'Not found in search') + ' \u00b7 ' + RL[rd[oi]] })), cells: p.cells.map((c, i) => { const rk = RK[rd[i]];
+            return { ...c, sLabel: SL(codes[i]), sSym: SYM[SK(codes[i])], sSymStyle: mini(SK(codes[i])), rLabel: RL[rd[i]], rSym: SYM[rk], rSymStyle: mini(rk), title: AIS[i] + ' \u00b7 search: ' + SL(codes[i]).toLowerCase() + ' \u00b7 ' + RL[rd[i]].toLowerCase(),
               style: { ...c.style, height: 'auto', minHeight: 72, alignItems: 'stretch', justifyContent: 'center', gap: 6, padding: '10px 10px' } }; }) }; });
         const JS = (R.website.discovery.rawVsLoaded || []).map(x => [x.page, x.raw, x.loaded, x.mark, x.result]);
         return {
-          title: MS[0].title, pageCount: RAW.length, hasJs: !MISSING.js, noJs: MISSING.js, jsMissing: missingReason(REPORT_RAW.website.discovery.rawVsLoaded),
+          title: MS[0].title, pageCount: RAW.length, hasJs: !MISSING.js, noJs: MISSING.js, jsMissing: missingReason(REPORT_RAW.website?.discovery?.rawVsLoaded),
           glance: AIS.map((n, i) => { const sc = RAW.map(r => r[2][i]), rd = RAW.map(r => RD(r)[i]), tot = RAW.length, found = sc.filter(c => c === 'g').length, full = rd.filter(c => c === 'g').length, part = rd.filter(c => c === 'p').length, bad = rd.filter(c => c === 'f').length, all = full === tot && found === tot; return { n, mono: MONO[i], ok: full, tot, sym: all ? SYM.g : SYM.r, symStyle: { ...symStyle(all ? 'g' : 'r', true), marginLeft: 'auto' }, cardStyle: { display: 'flex', flexDirection: 'column', gap: 6, padding: '20px 22px', borderRadius: 16, border: '1.5px solid #000', background: '#fff' }, note: 'Found in search: ' + found + ' of ' + tot + (part ? ' · Partly read: ' + part : '') + (bad ? ' · Couldn’t read: ' + bad : ''), hasNote: true }; }),
           perm: R.website.discovery.permissions.map(p => [p.mark, p.label]).map(([k, t], i) => ({ n: AIS[i], t, sym: SYM[k], symStyle: symStyle(k, true) })),
           cols: d.cols, pages,
-          legend: [['g', 'Found in search / Read'], ['k', 'Partly read'], ['r', 'Not found / Couldn\u2019t read']].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
+          legend: [['g', 'Found in search / Read'], ['k', 'Partly read'], ['r', 'Not found / Couldn\u2019t read'], ...(RAW.some(r => r[2].includes('d') || RD(r).includes('u')) ? [['d', 'Not confirmed either way']] : [])].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
           js: JS.map(([n, raw, full, k, res]) => ({ n, raw, full, res, sym: SYM[k], symStyle: symStyle(k, true), grid: { display: 'grid', gridTemplateColumns: 'minmax(120px,0.8fr) minmax(160px,1fr) minmax(160px,1fr) minmax(170px,1fr)', gap: 12, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid oklch(0.92 0.006 265)' } })),
           jsHead: { display: 'grid', gridTemplateColumns: 'minmax(120px,0.8fr) minmax(160px,1fr) minmax(160px,1fr) minmax(170px,1fr)', gap: 12, alignItems: 'end', padding: '12px 0', borderBottom: '2px solid #000', background: 'oklch(0.975 0.004 265)' },
           jsCount: JS.filter(x => x[3] === 'g').length + ' of ' + JS.length + ' pages look the same either way \u00b7 ' + JS.filter(x => x[3] !== 'g').length + ' add content only with JavaScript',
@@ -2189,7 +2193,7 @@ return { C: PromptPart, SECS };
 // Combined section order: [part, index in that part, nav label]
 const ORDER_ALL = [['b', 0], ['x', 0, 'AI Recommendation Analysis'], ['x', 1, 'How to use this section'], ['p', 0, 'Prompt summary'], ['p', 1], ['p', 2], ['x', 9, 'Competitor Comparison'], ['x', 2, 'AI Analysis of Your Website'], ['b', 1], ['b', 2], ['x', 10, 'Structured data'], ['b', 3], ['b', 4], ['b', 6], ['x', 3, 'Web Presence'], ['p', 3], ['x', 7, 'Citation coverage'], ['b', 5], ['x', 4, 'Action Plan'], ['b', 7, 'To Do List'], ['x', 6, 'Best practices'], ['x', 5, 'Appendix'], ['p', 6, 'Prompt method'], ['b', 8]];
 // Report sections each slide needs (see HAS). Slides with no entry need only the prompt analysis, which every report has.
-const NEEDS = { x9: ['competitors'], x2: ['website'], b1: ['summary', 'website'], b2: ['website'], x10: ['website'], b3: ['website'], b4: ['website'], b6: ['website'], x7: ['citationCoverage'], b5: ['credible'], x4: ['actions'], b7: ['actions'], x6: ['actions'], b8: ['methodGroups'] };
+const NEEDS = { x9: ['competitors'], x2: ['website'], b1: ['summary', 'website.discovery', 'website.clear', 'website.consistent', 'website.distinctive'], b2: ['website.discovery'], x10: ['website.structuredData'], b3: ['website.clear'], b4: ['website.consistent'], b6: ['website.distinctive'], x7: ['citationCoverage'], b5: ['credible'], x4: ['actions'], b7: ['actions'], x6: ['actions'], b8: ['methodGroups'] };
 const GROUP_START = { x0: 'AI RECOMMENDATIONS', x2: 'YOUR WEBSITE', x3: 'WEB PRESENCE', x4: 'ACTION PLAN', x5: 'APPENDIX' }, GROUP_OF = {};
 ORDER_ALL.reduce((g, [k, i]) => (GROUP_OF[k + i] = GROUP_START[k + i] || g), 'START');
 const ORDER = ORDER_ALL.filter(([k, i]) => (NEEDS[k + i] || []).every(n => HAS[n]));

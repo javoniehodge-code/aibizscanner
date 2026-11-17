@@ -35,11 +35,11 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
     async loadInputs(runIds) {
       if (runIds.length === 0) return [];
       const rows = required(
-        await db.from("stage_run").select("id, stage, output, output_hash, status").in("id", [...runIds]),
+        await db.from("stage_run").select("id, stage, output, output_hash, status, finished_at").in("id", [...runIds]),
         "load inputs",
       );
       return rows.map(
-        (r): StageInput => ({ runId: r.id, stage: r.stage, output: r.output as JsonValue, outputHash: r.output_hash }),
+        (r): StageInput => ({ runId: r.id, stage: r.stage, output: r.output as JsonValue, outputHash: r.output_hash, finishedAt: r.finished_at }),
       );
     },
     async latestPricing(provider, model): Promise<Pricing | null> {
