@@ -52,6 +52,8 @@ export const pageSetSpec = z
   .object({
     pageSet: z.object({ id: z.string().uuid(), version: z.number().int().positive(), approvedAt: z.string() }).strict(),
     website: z.string(),
+    /** The business the pages belong to (used in the search test prompt). Absent on sets approved before 17 Nov 2026. */
+    business: z.object({ name: z.string(), location: z.string() }).strict().optional(),
     pages: z.array(z.object({ url, kind: pageKind, reason: z.string() }).strict()).min(1).max(20),
   })
   .strict();

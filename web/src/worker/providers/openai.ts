@@ -1,6 +1,6 @@
 import "server-only";
 import OpenAI from "openai";
-import type { AnswerEngine, AskRequest, AskResult } from "@/engine/answers";
+import type { AnswerEngine, AskRequest, AskResult, ReadAttempt, ReadRequest, ReadResult } from "@/engine/answers";
 import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
@@ -40,12 +40,16 @@ export function openAiEngine(apiKey: string): AnswerEngine {
       );
       const citations: string[] = [];
       const queries: string[] = [];
+      const sources: string[] = [];
       let refused = false;
       let searches = 0;
       for (const item of res.output) {
         if (item.type === "web_search_call") {
           searches += 1;
-          if (item.action?.type === "search") queries.push(...(item.action.queries ?? (item.action.query ? [item.action.query] : [])));
+          if (item.action?.type === "search") {
+            queries.push(...(item.action.queries ?? (item.action.query ? [item.action.query] : [])));
+            for (const src of item.action.sources ?? []) if (src.type === "url") sources.push(src.url);
+          }
         }
         if (item.type === "message") {
           for (const c of item.content) {
@@ -60,12 +64,55 @@ export function openAiEngine(apiKey: string): AnswerEngine {
         text,
         citations: unique(citations),
         searchQueries: unique(queries),
+        sources: unique(sources),
         usage: {
           tokensIn: res.usage?.input_tokens ?? 0,
           tokensOut: res.usage?.output_tokens ?? 0,
           searchCalls: res.tool_usage?.web_search?.num_requests ?? searches,
           requests: 1,
         },
+        raw: trimRaw(res),
+        requestId: res._request_id ?? null,
+        servedModel: res.model ?? null,
+      };
+    },
+    estimateRead: () => ({ tokensIn: 30_000, tokensOut: 4_000, searchCalls: 2, requests: 1 }),
+    /**
+     * Reading test: the same web_search tool, asked to open the URL. Evidence is an open_page action on that URL
+     * (reasoning models only); the tool reports no success status, so attempts are "unknown" and the passages the
+     * model returns are checked against our snapshot in plain code.
+     */
+    async readPage(request: ReadRequest, signal: AbortSignal): Promise<ReadResult> {
+      const res = await client.responses.create(
+        {
+          model: SPEC.model,
+          input: request.instruction,
+          tools: [{ type: "web_search", search_context_size: "medium" }],
+          max_tool_calls: 3,
+          include: ["web_search_call.action.sources"],
+          store: false,
+        },
+        { signal },
+      );
+      const attempts: ReadAttempt[] = [];
+      let refused = false;
+      let searches = 0;
+      for (const item of res.output) {
+        if (item.type === "web_search_call") {
+          if (item.action?.type === "search") searches += 1;
+          if (item.action?.type === "open_page" && item.action.url) {
+            attempts.push({ url: item.action.url, status: "unknown", detail: item.status ?? null, retrievedAt: null, title: null, content: null });
+          }
+        }
+        if (item.type === "message") for (const c of item.content) if (c.type === "refusal") refused = true;
+      }
+      const text = res.output_text ?? "";
+      return {
+        status: refused && !text ? "refused" : "ok",
+        text,
+        attempts,
+        provenance: "unknown",
+        usage: { tokensIn: res.usage?.input_tokens ?? 0, tokensOut: res.usage?.output_tokens ?? 0, searchCalls: res.tool_usage?.web_search?.num_requests ?? searches, requests: 1 },
         raw: trimRaw(res),
         requestId: res._request_id ?? null,
         servedModel: res.model ?? null,

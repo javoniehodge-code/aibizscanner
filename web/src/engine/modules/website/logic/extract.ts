@@ -43,7 +43,8 @@ function visibleText(root: HTMLElement): string {
   const html = copy.toString().replace(/<\/(p|div|li|h[1-6]|tr|section|article|br)\s*>/gi, "$&\n").replace(/<br\s*\/?>/gi, "\n");
   return parse(html)
     .textContent.split("\n")
-    .map((l) => l.replace(/\s+/g, " ").trim())
+    // Malformed pages can leave markup in the text (a second "<!DOCTYPE html>" inside the body, stray tags).
+    .map((l) => l.replace(/<!doctype[^>]*>|<\/?[a-z][^>]*>/gi, " ").replace(/\s+/g, " ").trim())
     .filter(Boolean)
     .join("\n")
     .slice(0, MAX_TEXT);

@@ -44,12 +44,13 @@ function fakeEngine(engine: EngineIndex, behave: (r: AskRequest) => "ok" | "fail
       const how = behave(r);
       if (how === "fail") throw new Error("provider exploded");
       const usage = { tokensIn: 900, tokensOut: 300, searchCalls: 1, requests: 1 };
-      if (how === "refuse") return { status: "refused", text: "", citations: [], searchQueries: [], usage, raw: null, requestId: null, servedModel: null };
+      if (how === "refuse") return { status: "refused", text: "", citations: [], searchQueries: [], sources: [], usage, raw: null, requestId: null, servedModel: null };
       return {
         status: "ok",
         text: ANSWER,
         citations: ["https://www.mvpmiami.com/fleet?utm_source=x", "https://www.yelp.com/biz/prestige"],
         searchQueries: ["exotic car rental miami"],
+        sources: [],
         usage,
         raw: { id: "resp" },
         requestId: "req-1",
