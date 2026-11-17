@@ -15,8 +15,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // The JavaScript check's headless browser (src/worker/renderer.ts): loaded at run time by the worker, not bundled.
   serverExternalPackages: ["playwright-core", "@sparticuz/chromium"],
-  // @sparticuz/chromium reads its compressed Chromium from its bin/ folder at run time; make sure the worker ships it.
-  outputFileTracingIncludes: { "/api/worker/tick": ["./node_modules/@sparticuz/chromium/bin/**"] },
+  // Both read files at run time that tracing misses (@sparticuz/chromium its compressed Chromium in bin/,
+  // playwright-core its browsers.json and more): ship both packages whole with the worker.
+  outputFileTracingIncludes: { "/api/worker/tick": ["./node_modules/@sparticuz/chromium/**", "./node_modules/playwright-core/**"] },
   env: {
     APP_GIT_COMMIT: buildCommit(),
   },
