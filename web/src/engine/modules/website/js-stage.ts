@@ -147,7 +147,7 @@ export const wsRender: StageDefinition = {
         fetchedAt: new Date().toISOString(),
       });
       const rendered = { snapshotId, status: r.status, finalUrl: r.finalUrl, error: r.error, title: ex?.title ?? null, durationMs: Math.round(r.durationMs), requests: r.requests };
-      if (!ex) return notChecked(`Our browser couldn't load the page: ${r.error ?? "no content"}`, rendered);
+      if (!ex) return notChecked(r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`, rendered);
       if (!raw)
         return {
           ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount),

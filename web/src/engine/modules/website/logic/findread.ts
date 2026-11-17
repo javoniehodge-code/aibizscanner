@@ -71,7 +71,13 @@ export type FactKind = "price" | "phone" | "hours" | "item";
 export type ReportedFact = { kind: FactKind; text: string };
 export type ParsedReply = { couldNotOpen: string | null; title: string | null; passages: string[]; facts: ReportedFact[] };
 
-export function parseReadReply(text: string): ParsedReply {
+/** Inline citation links some tools append to lines: ` ([mvpmiami.com](https://…))` is dropped, `[text](url)` keeps text. */
+export function stripCitationLinks(text: string): string {
+  return text.replace(/\s*\(\[[^\]\n]*\]\([^)\s]*\)\)/g, "").replace(/\[([^\]\n]*)\]\((?:https?:)?[^)\s]*\)/g, "$1");
+}
+
+export function parseReadReply(raw: string): ParsedReply {
+  const text = stripCitationLinks(raw);
   const cno = /COULD NOT OPEN:\s*(.+)/i.exec(text);
   const title = /TITLE:\s*(.+)/i.exec(text)?.[1]?.trim() ?? null;
   const passages = [...text.matchAll(/PASSAGE\s*\d\s*:\s*["“]?(.+?)["”]?\s*$/gim)].map((m) => m[1]!.trim()).filter(Boolean);

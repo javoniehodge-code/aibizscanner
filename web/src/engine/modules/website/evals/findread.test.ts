@@ -78,6 +78,10 @@ describe("reading outcome", () => {
   it("parses the reply and checks passages word for word against the page (punctuation ignored)", () => {
     expect(reply).toEqual({ couldNotOpen: null, title: "FAQ's | MVP Miami", passages: ["The renter must provide proof of an active insurance policy", "Deliveries are free within Miami-Dade."], facts: [] });
     expect(verifiedPassages(reply.passages, [page])).toEqual([true, true]);
+    // ChatGPT appends citation links after the quote; they're not part of the passage.
+    const cited = parseReadReply('TITLE: FAQ ([mvpmiami.com](https://www.mvpmiami.com/faq/))\nPASSAGE 1: "The renter must provide proof of an active insurance policy." ([mvpmiami.com](https://www.mvpmiami.com/faq/))\nFACT: phone | 786.877.4317 ([mvpmiami.com](https://www.mvpmiami.com/faq/))');
+    expect(cited).toMatchObject({ title: "FAQ", passages: ["The renter must provide proof of an active insurance policy."], facts: [{ kind: "phone", text: "786.877.4317" }] });
+    expect(verifiedPassages(cited.passages, [page])).toEqual([true]);
     expect(verifiedPassages(["We offer free yacht parties"], [page])).toEqual([false]);
     expect(verifiedPassages(["free"], [page])).toEqual([false]); // too short to identify the page
   });
