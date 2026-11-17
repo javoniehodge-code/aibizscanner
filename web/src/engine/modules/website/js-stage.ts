@@ -37,9 +37,14 @@ export const jsCheck = z
               error: z.string().nullable(),
               title: z.string().nullable(),
               durationMs: z.number().int(),
-              requests: z.object({ fetched: z.number().int(), refused: z.number().int(), skipped: z.number().int() }).strict(),
+              requests: z.object({ fetched: z.number().int(), refused: z.number().int(), skipped: z.number().int(), failed: z.number().int().optional() }).strict(),
             })
             .strict(),
+          /**
+           * The browser copy the comparison and answer key use: this run's, or our fuller earlier one when this run's
+           * load was refused, failed or came back with much less content (why says which).
+           */
+          browserCopy: z.object({ snapshotId: z.string(), fetchedAt: z.string().nullable(), fallback: z.boolean(), why: z.string().nullable() }).strict().nullable().optional(),
           /** The plain-fetch text compared against; fallback = this run's fetch failed, so our earlier good copy was used. */
           raw: z.object({ snapshotId: z.string(), fetchedAt: z.string().nullable(), fallback: z.boolean() }).strict().nullable(),
           rawWords: z.number().int(),
@@ -111,6 +116,7 @@ export const wsRender: StageDefinition = {
       return e ? { snapshotId: e.snapshotId, fetchedAt: e.fetchedAt, fallback: true, text: e.text } : null;
     };
 
+    const fullest = await ctx.fullestRenderedSnapshots(snap.pages.map((p) => p.url));
     const started = Date.now();
     const pages = await mapLimit(snap.pages, CONCURRENCY, async (pg): Promise<JsCheck["pages"][number]> => {
       const raw = rawFor(pg);
@@ -132,13 +138,13 @@ export const wsRender: StageDefinition = {
       });
 
       if (Date.now() - started > START_BUDGET_MS)
-        return notChecked("Not checked: this run ran out of time before reaching the page. Run the check again.", { snapshotId: null, status: null, finalUrl: null, error: "out of time", title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0 } });
+        return notChecked("Not checked: this run ran out of time before reaching the page. Run the check again.", { snapshotId: null, status: null, finalUrl: null, error: "out of time", title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0, failed: 0 } });
       let r;
       try {
         r = await ctx.renderUrl(pg.url);
       } catch (e) {
         if (ctx.signal.aborted) throw e;
-        return notChecked(`Our browser couldn't run: ${errorMessage(e)}`, { snapshotId: null, status: null, finalUrl: null, error: errorMessage(e), title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0 } });
+        return notChecked(`Our browser couldn't run: ${errorMessage(e)}`, { snapshotId: null, status: null, finalUrl: null, error: errorMessage(e), title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0, failed: 0 } });
       }
       const ex = r.html && !r.error ? extractPage(r.html) : null;
       const snapshotId = await ctx.recordPageSnapshot({
@@ -155,25 +161,32 @@ export const wsRender: StageDefinition = {
         fetchedAt: new Date().toISOString(),
       });
       const rendered = { snapshotId, status: r.status, finalUrl: r.finalUrl, error: r.error, title: ex?.title ?? null, durationMs: Math.round(r.durationMs), requests: r.requests };
-      if (!ex) {
-        const refused = allowCheckerOption(r.status);
-        const reason = refused ? `The site refused our browser (HTTP ${r.status}).` : r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`;
-        return { ...notChecked(reason, rendered), ownerOption: refused };
+      const refusedOption = ex ? null : allowCheckerOption(r.status);
+      const copy = chooseBrowserCopy(ex ? { snapshotId, text: ex.text, words: ex.wordCount } : null, fullest.get(pg.url) ?? null, r, refusedOption !== null);
+      if (!copy) {
+        const reason = refusedOption ? `The site refused our browser (HTTP ${r.status}).` : r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`;
+        return { ...notChecked(reason, rendered), ownerOption: refusedOption };
       }
+      const browserCopy = { snapshotId: copy.snapshotId, fetchedAt: copy.fetchedAt, fallback: copy.fallback, why: copy.why };
+      const copyWords = copy.text.split(/\s+/).filter(Boolean).length;
       if (!raw)
         return {
-          ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount),
+          ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, copyWords),
+          browserCopy,
+          ownerOption: refusedOption,
           // The browser's copy still shows what a visitor sees; without a plain copy no fact can be marked JavaScript-only.
-          answerKey: { source: "browser", snapshotId, facts: visitorKeyFacts(ex.text, null) },
+          answerKey: { source: "browser", snapshotId: copy.snapshotId, facts: visitorKeyFacts(copy.text, null) },
         };
-      const c = compareTexts(raw.text, ex.text);
+      const c = compareTexts(raw.text, copy.text);
       return {
         url: pg.url,
         verdict: c.verdict,
         label: verdictLabel(c.verdict),
         reason: c.reason,
         recommendation: recommendationFor(c.verdict, c.keyFactsOnlyRendered),
+        ownerOption: refusedOption,
         rendered,
+        browserCopy,
         raw: rawRef,
         rawWords: c.rawWords,
         renderedWords: c.renderedWords,
@@ -181,7 +194,7 @@ export const wsRender: StageDefinition = {
         removedWords: c.removedWords,
         onlyRendered: c.onlyRendered,
         keyFactsOnlyRendered: c.keyFactsOnlyRendered,
-        answerKey: { source: "browser", snapshotId, facts: visitorKeyFacts(ex.text, raw.text) },
+        answerKey: { source: "browser", snapshotId: copy.snapshotId, facts: visitorKeyFacts(copy.text, raw.text) },
       };
     });
 
@@ -190,3 +203,38 @@ export const wsRender: StageDefinition = {
     return { status: counts.not_checked ? "partial" : "done", output: out as unknown as JsonValue };
   },
 };
+
+/** An earlier copy counts as fuller when it has at least 50 more words and a quarter more than this run's. */
+const FULLER_BY_WORDS = 50;
+const FULLER_BY_SHARE = 1.25;
+
+type CopyChoice = { snapshotId: string; text: string; fetchedAt: string | null; fallback: boolean; why: string | null };
+
+/**
+ * Which browser copy to compare with and score against: this run's, unless it was refused or failed, or came back with
+ * much less content than our fullest earlier copy (e.g. the site refused the requests that load its inventory); then
+ * the earlier one, with the reason. A refused load never wipes out a good copy we already have.
+ */
+export function chooseBrowserCopy(
+  current: { snapshotId: string; text: string; words: number } | null,
+  earlier: { snapshotId: string; text: string; fetchedAt: string; words: number } | null,
+  r: { status: number | null; error: string | null; requests: { failed?: number } },
+  refused: boolean,
+): CopyChoice | null {
+  const failed = r.requests.failed ?? 0;
+  const failedNote = failed ? `${failed} of the page's own data requests were refused or failed this run, so its copy may be missing content.` : null;
+  if (!current) {
+    if (!earlier) return null;
+    const why = refused ? `The site refused our browser this run (HTTP ${r.status}), so our earlier browser copy is used.` : `Our browser couldn't load the page this run (${r.error ?? "no content"}), so our earlier browser copy is used.`;
+    return { snapshotId: earlier.snapshotId, text: earlier.text, fetchedAt: earlier.fetchedAt, fallback: true, why };
+  }
+  if (earlier && earlier.words >= current.words + FULLER_BY_WORDS && earlier.words >= current.words * FULLER_BY_SHARE)
+    return {
+      snapshotId: earlier.snapshotId,
+      text: earlier.text,
+      fetchedAt: earlier.fetchedAt,
+      fallback: true,
+      why: `This run's load had much less content (${current.words} words against ${earlier.words}), so our fuller earlier browser copy is used.${failedNote ? ` ${failedNote}` : ""}`,
+    };
+  return { snapshotId: current.snapshotId, text: current.text, fetchedAt: null, fallback: false, why: failedNote };
+}

@@ -32,6 +32,7 @@ const CLOSE_WAIT_MS = 5_000;
 const MAX_REDIRECTS = 5;
 const CRASHED = /has been closed|browser has disconnected|Target crashed|crashed/i;
 const SKIPPED_TYPES = new Set(["image", "media", "font"]);
+const DATA_TYPES = new Set(["xhr", "fetch", "script", "document", "eventsource"]);
 /** Request headers Node's fetch sets itself or refuses. */
 const DROP_REQUEST = new Set(["host", "connection", "content-length", "accept-encoding", "user-agent", "keep-alive", "upgrade", "te", "trailer", "transfer-encoding", "proxy-authorization", "proxy-connection"]);
 /** Response headers that no longer describe the (already decoded) body. */
@@ -114,7 +115,7 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
             error: `The page didn't finish loading within ${Math.round(pageDeadlineMs / 1000)} s`,
             durationMs: Date.now() - started,
             userAgent: USER_AGENT,
-            requests: { fetched: 0, refused: 0, skipped: 0 },
+            requests: { fetched: 0, refused: 0, skipped: 0, failed: 0 },
           }),
         pageDeadlineMs,
       );
@@ -142,7 +143,7 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
 
   async function renderOne(requested: string, signal: AbortSignal, launching: Promise<Browser>): Promise<RenderedPage> {
     const started = Date.now();
-    const requests = { fetched: 0, refused: 0, skipped: 0 };
+    const requests = { fetched: 0, refused: 0, skipped: 0, failed: 0 };
     let userAgent = USER_AGENT;
     let totalBytes = 0;
     const out = (p: Partial<RenderedPage>): RenderedPage => ({ requestedUrl: requested, finalUrl: null, status: null, html: null, truncated: false, error: null, durationMs: Date.now() - started, userAgent, requests, ...p });
@@ -203,7 +204,10 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
             if (method !== "HEAD") method = "GET";
           }
           if (!res) return await route.abort("failed").catch(() => undefined);
-          if (req.isNavigationRequest() && req.frame().parentFrame() === null) documentUrl = url;
+          const isDocument = req.isNavigationRequest() && req.frame().parentFrame() === null;
+          if (isDocument) documentUrl = url;
+          // The page's own data (scripts, API calls) answered with an error: the copy may be missing content.
+          else if (res.status >= 400 && DATA_TYPES.has(req.resourceType())) requests.failed++;
           const { body } = await readCapped(res, Math.min(MAX_RESPONSE_BYTES, MAX_TOTAL_BYTES - totalBytes));
           totalBytes += body.byteLength;
           const resHeaders: Record<string, string> = {};
