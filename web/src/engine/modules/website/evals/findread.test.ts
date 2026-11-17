@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import type { AnswerEngine, AskRequest, EngineIndex, ReadRequest } from "../../../answers";
 import { MemoryStore } from "../../../engine.test-support";
-import { executeRun, type Providers } from "../../../execute";
+import { executeRun, type PageRenderer, type Providers } from "../../../execute";
 import { registry } from "../../../index";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
 import { combinedLabel } from "../test-stages";
@@ -10,6 +10,7 @@ import { pagePurpose, parseReadReply, readInstruction, readOutcome, searchOutcom
 import { excluded, pageKind, suggestPages } from "../logic/pages";
 import { extractPage } from "../logic/extract";
 import type { FindRead } from "../test-stages";
+import type { JsCheck } from "../js-stage";
 
 const BIZ = { name: "MVP Miami", location: "Miami, FL" };
 
@@ -147,11 +148,32 @@ describe("find & read stages (fake engines)", () => {
     expect(tool).toMatchObject({ fetchMode: "engine_tool", engine: "chatgpt", text: SNAP_TEXT });
     expect(reads[2]!.evidenceSnapshotId).toBeNull(); // no tool attempt, nothing to store
 
-    const fr = await run("ws_findread", [snap, ...outs], providers, store);
+    // Our JavaScript check: the same text with scripts on, so the reading results stand as tested.
+    const browser = (extra: string): PageRenderer => ({
+      async render(url) {
+        return { requestedUrl: url, finalUrl: url, status: 200, html: `<html><body><main><p>${SNAP_TEXT}</p>${extra}</main></body></html>`, truncated: false, error: null, durationMs: 900, userAgent: "HeadlessChrome AIBizScannerBot", requests: { fetched: 3, refused: 0, skipped: 2 } };
+      },
+    });
+    const same = (await run("ws_render", [snap], { browser: browser("") }, store)).input;
+    expect((same.output as unknown as JsCheck).pages[0]).toMatchObject({ verdict: "same", raw: { snapshotId: "ps-faq", fallback: false } });
+    expect(store.snapshots.filter((x) => x.fetchMode === "rendered")).toHaveLength(1);
+
+    const fr = await run("ws_findread", [snap, same, ...outs], providers, store);
     const f = fr.input.output as unknown as FindRead;
     expect(f.pages[0]!.results.map((r) => r.label)).toEqual(["Found & read", "Not found or read; reason not confirmed", "Not found in search; reading unconfirmed"]);
     expect(f.foundAndRead).toEqual([1, 0, 0]);
     expect(f.selectedPageCount).toBe(1);
+
+    // Prices that appear only after scripts run: ChatGPT's read (its tool content lacks them) becomes partly read.
+    const priced = (await run("ws_render", [snap], { browser: browser("<ul><li>Lamborghini Huracan from $1,495 per day</li><li>Rolls-Royce Cullinan from $1,995 per day</li></ul>") }, store)).input;
+    const pc = (priced.output as unknown as JsCheck).pages[0]!;
+    expect(pc.verdict).toBe("key_facts_need_js");
+    expect(pc.keyFactsOnlyRendered.map((k) => k.text)).toEqual(["$1,495 per day", "$1,995 per day"]);
+    const f2 = (await run("ws_findread", [snap, priced, ...outs], providers, store)).input.output as unknown as FindRead;
+    expect(f2.pages[0]!.results[0]).toMatchObject({ read: "partial", toolRead: "readable", label: "Found; partly read" });
+    expect(f2.pages[0]!.results[0]!.note).toMatch(/key facts load with JavaScript \(e\.g\. \$1,495 per day, \$1,995 per day\) \(our check\)/);
+    expect(f2.pages[0]!.js).toEqual({ verdict: "key_facts_need_js", label: "Key facts load with JavaScript: likely invisible to ChatGPT and Claude" });
+    expect(f2.foundAndRead).toEqual([0, 0, 0]);
   });
 
   it("checks passages against our earlier good copy when this run's fetch was refused, and says so", async () => {

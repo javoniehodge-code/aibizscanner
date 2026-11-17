@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { CRAWLERS } from "@/engine/modules/website/logic/robots";
+import { jsCheck } from "@/engine/modules/website/js-stage";
 import { discovery, snapshots } from "@/engine/modules/website/schemas";
 import { findRead, readTests, searchTests } from "@/engine/modules/website/test-stages";
 import { createClient } from "@/lib/supabase/server";
@@ -11,9 +12,10 @@ import { ApprovePagesForm, FindPagesForm, type PageRow } from "./forms";
 export const metadata = { title: "Website pages — AIBizScanner internal" };
 export const dynamic = "force-dynamic";
 
-const WS_STAGES = ["ws_discover", "ws_page_set", "ws_snapshot", "ws_search_chatgpt", "ws_search_claude", "ws_search_gemini", "ws_read_chatgpt", "ws_read_claude", "ws_read_gemini", "ws_findread"];
+const WS_STAGES = ["ws_discover", "ws_page_set", "ws_snapshot", "ws_render", "ws_search_chatgpt", "ws_search_claude", "ws_search_gemini", "ws_read_chatgpt", "ws_read_claude", "ws_read_gemini", "ws_findread"];
 const LOWER = ["chatgpt", "claude", "gemini"];
 const ENGINES = ["ChatGPT", "Claude", "Gemini"];
+const JS_SHORT = { key_facts_need_js: "key facts need JavaScript", content_needs_js: "content needs JavaScript", minor: "mostly readable", same: "readable", not_checked: "couldn't check" } as const;
 const VERDICT = { allowed: "Allowed", blocked: "Blocked", unconfirmed: "Unconfirmed" } as const;
 
 export default async function WebsitePage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,18 +24,20 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
   const db = await createClient();
   const latest = (stage: string) =>
     db.from("stage_run").select("id, version, status, error, output, finished_at").eq("report_id", id).eq("stage", stage).order("version", { ascending: false }).limit(1).maybeSingle();
-  const [reportRes, busyRes, discRes, snapRes, setRes, frRes, ...testRes] = await Promise.all([
+  const [reportRes, busyRes, discRes, snapRes, setRes, frRes, jsRes, ...testRes] = await Promise.all([
     db.from("report").select("id, version, business:business_id (name, website)").eq("id", id).maybeSingle(),
     db.from("stage_run").select("id", { count: "exact", head: true }).eq("report_id", id).in("stage", WS_STAGES).in("status", ["queued", "running"]),
     latest("ws_discover"),
     latest("ws_snapshot"),
     db.from("website_page_set").select("version, pages, approved_at").eq("report_id", id).order("version", { ascending: false }).limit(1).maybeSingle(),
     latest("ws_findread"),
+    latest("ws_render"),
     ...LOWER.map((e) => latest(`ws_search_${e}`)),
     ...LOWER.map((e) => latest(`ws_read_${e}`)),
   ]);
-  for (const r of [reportRes, busyRes, discRes, snapRes, setRes, frRes, ...testRes]) if (r.error) throw new Error(r.error.message);
+  for (const r of [reportRes, busyRes, discRes, snapRes, setRes, frRes, jsRes, ...testRes]) if (r.error) throw new Error(r.error.message);
   const fr = frRes.data?.output ? findRead.safeParse(frRes.data.output) : null;
+  const js = jsRes.data?.output ? jsCheck.safeParse(jsRes.data.output) : null;
   const searches = testRes.slice(0, 3).map((t) => (t.data?.output ? searchTests.safeParse(t.data.output) : null));
   const reads = testRes.slice(3).map((t) => (t.data?.output ? readTests.safeParse(t.data.output) : null));
   const testsRan = [...testRes].reduce((sum, t) => sum + (t.data ? 1 : 0), 0);
@@ -204,6 +208,7 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                     <td style={{ wordBreak: "break-all" }}>
                       {p.url}
                       <div className="muted">{p.title ?? p.reason}</div>
+                      {p.js && p.js.verdict !== "same" ? <div className="muted">JavaScript check: {p.js.label}</div> : null}
                     </td>
                     {p.results.map((r, i) => {
                       const s = searches[i]?.success ? searches[i]!.data.pages.find((x) => x.url === p.url) : undefined;
@@ -211,6 +216,7 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                       return (
                         <td key={i}>
                           <strong>{r.label}</strong>
+                          {r.note ? <div className="muted">{r.note}</div> : null}
                           <details>
                             <summary>Evidence</summary>
                             {s ? (
@@ -242,6 +248,91 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                         </td>
                       );
                     })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : null}
+        </>
+      ) : null}
+
+      {jsRes.data ? (
+        <>
+          <h2>5. Does each page need JavaScript? (our check)</h2>
+          <p className="muted">
+            We load each page in our own headless browser so its scripts run, and compare its text with our plain fetch, which is what a reader that doesn&apos;t
+            run scripts gets. ChatGPT&apos;s and Claude&apos;s page readers generally don&apos;t run scripts; Google can. This explains reading results; it is our
+            diagnostic, never an AI&apos;s view. Prices, phone numbers or hours that appear only with scripts make a ChatGPT or Claude read count as partly read
+            in section 4.
+          </p>
+          <p className="muted">
+            Status: {jsRes.data.status}
+            {jsRes.data.error ? <span className="error"> — {jsRes.data.error}</span> : null}
+            {js?.success ? ` · ${Object.entries(js.data.counts).filter(([, n]) => n).map(([v, n]) => `${n} ${JS_SHORT[v as keyof typeof JS_SHORT]}`).join(" · ")}` : null}
+          </p>
+          {js?.success ? (
+            <table data-testid="ws-jscheck">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Result</th>
+                  <th>Words: plain / with scripts</th>
+                  <th>Evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                {js.data.pages.map((p) => (
+                  <tr key={p.url}>
+                    <td style={{ wordBreak: "break-all" }}>
+                      {p.url}
+                      {p.rendered.title ? <div className="muted">{p.rendered.title}</div> : null}
+                    </td>
+                    <td>
+                      <strong className={p.verdict === "key_facts_need_js" || p.verdict === "content_needs_js" ? "error" : undefined}>{p.label}</strong>
+                      <div className="muted">{p.reason}</div>
+                    </td>
+                    <td>
+                      {p.verdict === "not_checked" && !p.renderedWords ? "—" : `${p.rawWords} / ${p.renderedWords}`}
+                      {p.addedWords ? <div className="muted">+{p.addedWords} only with scripts</div> : null}
+                    </td>
+                    <td>
+                      <details>
+                        <summary>Details</summary>
+                        <p>
+                          Our browser: {p.rendered.status ?? "no response"}
+                          {p.rendered.error ? ` (${p.rendered.error})` : ""} in {(p.rendered.durationMs / 1000).toFixed(1)} s; requests fetched {p.rendered.requests.fetched}, refused{" "}
+                          {p.rendered.requests.refused}, skipped {p.rendered.requests.skipped}.
+                          {p.rendered.finalUrl && p.rendered.finalUrl !== p.url ? <> Ended at {p.rendered.finalUrl}.</> : null}
+                        </p>
+                        {p.raw?.fallback ? <p>Compared with our earlier plain copy from {p.raw.fetchedAt?.slice(0, 16).replace("T", " ")} UTC (this run&apos;s plain fetch failed).</p> : null}
+                        {p.keyFactsOnlyRendered.length ? (
+                          <>
+                            <p>
+                              <em>Facts only with scripts:</em>
+                            </p>
+                            <ul>
+                              {p.keyFactsOnlyRendered.map((f, j) => (
+                                <li key={j}>
+                                  {f.kind}: <strong>{f.text}</strong> — “{f.line}”
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : null}
+                        {p.onlyRendered.length ? (
+                          <>
+                            <p>
+                              <em>Text only with scripts (first {p.onlyRendered.length} lines):</em>
+                            </p>
+                            <ul>
+                              {p.onlyRendered.map((l, j) => (
+                                <li key={j}>{l}</li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : null}
+                      </details>
+                    </td>
                   </tr>
                 ))}
               </tbody>

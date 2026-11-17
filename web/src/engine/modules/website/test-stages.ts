@@ -16,6 +16,7 @@ import {
   type ReadStatus,
   type SearchStatus,
 } from "./logic/findread";
+import { jsCheck, type JsCheck } from "./js-stage";
 import { pageSetSpec, snapshots, type PageSetSpec, type Snapshots } from "./schemas";
 
 const MODULE = "website";
@@ -254,7 +255,23 @@ export const findRead = z
           kind: z.string(),
           reason: z.string(),
           title: z.string().nullable(),
-          results: z.array(z.object({ search: searchStatus, read: readStatus, label: z.string() }).strict()).length(3),
+          results: z
+            .array(
+              z
+                .object({
+                  search: searchStatus,
+                  read: readStatus,
+                  label: z.string(),
+                  /** The reading test's own result, when the JavaScript check changed `read` (readable -> partial). */
+                  toolRead: readStatus.optional(),
+                  /** Why, in plain English (our JavaScript diagnostic, labelled as ours). */
+                  note: z.string().nullable().optional(),
+                })
+                .strict(),
+            )
+            .length(3),
+          /** Our JavaScript check for the page (ws_render), when it ran. */
+          js: z.object({ verdict: z.string(), label: z.string() }).strict().nullable().optional(),
         })
         .strict(),
     ),
@@ -284,7 +301,7 @@ export const wsFindRead: StageDefinition = {
   id: "ws_findread",
   module: MODULE,
   label: "Website tests: combine find & read",
-  inputs: ["ws_snapshot", ...SEARCH_STAGES, ...READ_STAGES],
+  inputs: ["ws_snapshot", "ws_render", ...SEARCH_STAGES, ...READ_STAGES],
   timeoutMs: 20_000,
   maxAttempts: 1,
   autoRun: true,
@@ -294,17 +311,25 @@ export const wsFindRead: StageDefinition = {
     const snap = input(ctx, "ws_snapshot", snapshots);
     const search = SEARCH_STAGES.map((s) => input(ctx, s, searchTests));
     const read = READ_STAGES.map((s) => input(ctx, s, readTests));
-    const pages = snap.pages.map((pg) => ({
-      url: pg.url,
-      kind: pg.kind,
-      reason: pg.reason,
-      title: pg.title,
-      results: [0, 1, 2].map((e) => {
-        const s = search[e]!.pages.find((p) => p.url === pg.url)?.status ?? "not_tested";
-        const r = read[e]!.pages.find((p) => p.url === pg.url)?.status ?? "not_tested";
-        return { search: s, read: r, label: combinedLabel(s, r) };
-      }),
-    }));
+    const js = input(ctx, "ws_render", jsCheck);
+    const toolTexts = await ctx.snapshotTexts(read.flatMap((r) => r.pages.flatMap((p) => (p.evidenceSnapshotId ? [p.evidenceSnapshotId] : []))));
+    const pages = snap.pages.map((pg) => {
+      const check = js.pages.find((p) => p.url === pg.url) ?? null;
+      return {
+        url: pg.url,
+        kind: pg.kind,
+        reason: pg.reason,
+        title: pg.title,
+        results: [0, 1, 2].map((e) => {
+          const s = search[e]!.pages.find((p) => p.url === pg.url)?.status ?? "not_tested";
+          const rp = read[e]!.pages.find((p) => p.url === pg.url);
+          const tool = rp?.status ?? "not_tested";
+          const adj = jsAdjustedRead(e as EngineIndex, tool, check, rp?.evidenceSnapshotId ? (toolTexts.get(rp.evidenceSnapshotId) ?? null) : null);
+          return { search: s, read: adj.read, label: combinedLabel(s, adj.read), ...(adj.read !== tool ? { toolRead: tool } : {}), note: adj.note };
+        }),
+        js: check ? { verdict: check.verdict, label: check.label } : null,
+      };
+    });
     const foundAndRead = [0, 1, 2].map((e) => {
       const ran = pages.some((p) => p.results[e]!.search !== "not_tested" || p.results[e]!.read !== "not_tested");
       return ran ? pages.filter((p) => p.results[e]!.search === "found" && p.results[e]!.read === "readable").length : null;
@@ -313,5 +338,27 @@ export const wsFindRead: StageDefinition = {
     return { status: "done", output: out as unknown as JsonValue };
   },
 };
+
+/**
+ * Inventory or prices loaded only by JavaScript surface as "partly read" (internal-testing-app.md acceptance): when our
+ * JavaScript check found prices, phone numbers or hours that appear only after scripts run, a ChatGPT or Claude read is
+ * at most partial, unless the content their tool returned contains those facts. Gemini is left as tested (Google can
+ * run scripts), with a note. The note always says this comes from our check.
+ */
+export function jsAdjustedRead(engine: EngineIndex, tool: ReadStatus, check: JsCheck["pages"][number] | null, toolText: string | null): { read: ReadStatus; note: string | null } {
+  if (!check || (check.verdict !== "key_facts_need_js" && check.verdict !== "content_needs_js")) return { read: tool, note: null };
+  if (tool !== "readable" && tool !== "partial") return { read: tool, note: null };
+  const facts = check.keyFactsOnlyRendered;
+  const example = facts.length ? ` (e.g. ${facts.slice(0, 2).map((f) => f.text).join(", ")})` : "";
+  if (engine === 2) return { read: tool, note: `Our JavaScript check: ${check.verdict === "key_facts_need_js" ? "key facts" : "much of the content"} on this page load with JavaScript${example}. Google can run scripts, so Gemini may still see them.` };
+  const name = ENGINE_NAMES[engine];
+  if (check.verdict === "content_needs_js") return { read: tool, note: `Our JavaScript check: much of this page's content loads with JavaScript, which ${name}'s reader generally doesn't run.` };
+  const n = (x: string) => x.toLowerCase().replace(/[^a-z0-9$]+/g, "");
+  if (toolText && facts.every((f) => n(toolText).includes(n(f.text)))) return { read: tool, note: `Our JavaScript check found facts that load with JavaScript${example}, but the content ${name}'s tool returned includes them.` };
+  return {
+    read: "partial",
+    note: `Read, but key facts load with JavaScript${example} (our check) and ${name}'s reader generally doesn't run scripts${tool === "readable" ? "; counted as partly read" : ""}.`,
+  };
+}
 
 export const TEST_STAGES = [...([0, 1, 2] as const).map(searchStage), ...([0, 1, 2] as const).map(readStage), wsFindRead] as const;

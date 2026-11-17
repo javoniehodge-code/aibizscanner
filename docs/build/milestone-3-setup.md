@@ -52,3 +52,33 @@ Known limits: Gemini URL Context may answer from Google's cache, and none of the
 so provenance is "unknown". OpenAI's `open_page` reports no success status, so OpenAI reads rest on the passage check.
 These are the providers' API tools, not the consumer apps. Lists approved before 17 Nov 2026 need approving again (the
 search test needs the business name stored with the list).
+
+## Part 3: does each page need JavaScript? (our check, stage 6)
+
+Nothing to configure and no running cost: no keys, no vendor. The worker loads each approved page in its own headless
+Chromium (the open-source `@sparticuz/chromium` build on Vercel, driven by `playwright-core`). It runs on its own after
+the snapshots (`ws_render`), alongside the AI tests; for a report whose snapshots were taken before this existed, click
+**Run** on "Website: JavaScript check (our browser)" in the run monitor. Section 5 of the Website pages screen shows the
+result for each page.
+
+- **What it compares.** The visible text of our plain fetch (what a reader that doesn't run scripts gets) with the same
+  page after its scripts ran, using the same text extraction for both. Results: *Key facts load with JavaScript*
+  (prices, phone numbers or opening hours appear only with scripts), *Much of the content loads with JavaScript*
+  (at least 80 words and a quarter of the page only with scripts), *Mostly readable*, *Readable*, or *Couldn't check*.
+  The evidence lists the facts and a sample of the lines that appear only with scripts. The browser's copy is stored as
+  a `rendered` page snapshot, separate from our plain fetch and from the AIs' tool content.
+- **How it changes find & read.** ChatGPT's and Claude's page readers generally don't run scripts. When key facts load
+  only with JavaScript, their reading result for that page is at most **partly read** (the reading test's own result is
+  kept alongside), unless the content the tool returned includes those facts. Gemini's result stays as tested, with a
+  note, because Google can run scripts. Every such note says it comes from our check.
+- **Ours, not an AI's.** This is a diagnostic that explains reading results; it is never shown as what an AI saw.
+- **Safety, as for the plain fetcher.** Chromium never reaches the network itself: every request the page makes is
+  fetched by the worker under the same rules (public addresses only, checked at every redirect, ports 80/443), and
+  Chromium's own network points at a dead proxy. WebSockets are closed, service workers and downloads blocked, images,
+  media and fonts skipped. Each page is capped at 150 requests, 10 MB and about 30 seconds. The user agent is
+  Chromium's own with `AIBizScannerBot/0.1` appended. A site that refuses our plain fetch usually refuses the browser
+  too; that is recorded as *Couldn't check*, never retried or worked around.
+- **Comparison copy.** If this run's plain fetch of a page failed, the browser's text is compared with our most recent
+  good plain copy of that page, and the screen says so with its date.
+
+Running it locally: set `CHROMIUM_PATH` to a Chromium binary (or install a Playwright browser).

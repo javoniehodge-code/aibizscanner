@@ -25,21 +25,29 @@ export async function runTick(db: ServiceClient, budgetMs: number, safetyMarginM
 
   const runs: RunOutcome[] = [];
   const providers = workerProviders();
-  for (;;) {
-    const remaining = budgetMs - (Date.now() - started) - safetyMarginMs;
-    if (remaining < 1_000) return summary("time_budget");
-    const claimed = await db.rpc("claim_stage_runs", { p_limit: 1, p_max_timeout_ms: Math.floor(remaining) });
-    if (claimed.error) throw new Error(`claim: ${claimed.error.message}`);
-    const row = claimed.data[0];
-    if (!row) return summary("queue_empty");
-    const claimedRun = toClaimedRun(row);
-    const outcome = await executeRun(store, registry, claimedRun, undefined, providers);
-    runs.push(outcome);
-    if (outcome.outcome === "done" || outcome.outcome === "partial") {
-      try {
-        await queueReadyDownstream(db, claimedRun.reportId, claimedRun.stage);
-      } catch (e) {
-        console.error("auto-queue after", claimedRun.stage, e);
+  try {
+    return await claimAndRun();
+  } finally {
+    await providers.browser?.close?.();
+  }
+
+  async function claimAndRun(): Promise<TickSummary> {
+    for (;;) {
+      const remaining = budgetMs - (Date.now() - started) - safetyMarginMs;
+      if (remaining < 1_000) return summary("time_budget");
+      const claimed = await db.rpc("claim_stage_runs", { p_limit: 1, p_max_timeout_ms: Math.floor(remaining) });
+      if (claimed.error) throw new Error(`claim: ${claimed.error.message}`);
+      const row = claimed.data[0];
+      if (!row) return summary("queue_empty");
+      const claimedRun = toClaimedRun(row);
+      const outcome = await executeRun(store, registry, claimedRun, undefined, providers);
+      runs.push(outcome);
+      if (outcome.outcome === "done" || outcome.outcome === "partial") {
+        try {
+          await queueReadyDownstream(db, claimedRun.reportId, claimedRun.stage);
+        } catch (e) {
+          console.error("auto-queue after", claimedRun.stage, e);
+        }
       }
     }
   }

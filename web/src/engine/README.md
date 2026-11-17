@@ -24,7 +24,7 @@ modules/<module>/
 A small module can keep everything in `stages.ts` until it grows; the folders are a convention, not a framework.
 Planned modules (brief §4): `prompt-analysis` (stages 2–4), `website-audit` (5–7), `web-presence` (8–9),
 `competitors` (10), `recommendations` (11), `report` (12), plus a small `business-identity` step (1).
-Built so far: `dummy` (pipeline test), `prompt-analysis`, `website` (stage 5: `ws_discover`, `ws_page_set`, `ws_snapshot`; see `docs/build/milestone-3-setup.md`) and `report` (stage 12, assembly):
+Built so far: `dummy` (pipeline test), `prompt-analysis`, `website` (stage 5: `ws_discover`, `ws_page_set`, `ws_snapshot`; stage 6: the AI find & read tests, `ws_render` JavaScript check and `ws_findread`; see `docs/build/milestone-3-setup.md`) and `report` (stage 12, assembly):
 
 | Stage | What it does | Paid? |
 | --- | --- | --- |
