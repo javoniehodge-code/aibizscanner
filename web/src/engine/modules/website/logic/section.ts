@@ -33,19 +33,28 @@ export type SectionInputs = {
 
 /** Groups shown on the slide, in order. */
 const GROUPS: { title: string; description: string; kinds: readonly string[] }[] = [
-  { title: "Main pages", description: "The pages a customer uses to decide and get in touch: home, about, contact, booking and locations.", kinds: ["home", "about", "contact", "booking", "location"] },
-  { title: "Services and prices", description: "Pages for each service you offer, and your prices.", kinds: ["service", "pricing"] },
+  { title: "Main pages", description: "The pages a customer uses to get to know you and get in touch: home, about, contact and locations.", kinds: ["home", "about", "contact", "location"] },
+  { title: "Services, prices and booking", description: "Pages about what you offer, what it costs and how to book, including pages an AI cited.", kinds: ["service", "pricing", "booking", "other", "blog"] },
   { title: "Questions and policies", description: "Answers to common questions and the terms customers agree to.", kinds: ["faq", "policy"] },
-  { title: "Other pages", description: "Other pages chosen for this check.", kinds: ["blog", "other"] },
 ];
 
 const SEARCH: Record<string, "g" | "r" | "d"> = { found: "g", not_found: "r", unconfirmed: "d", not_tested: "d" };
 const READ: Record<string, "g" | "p" | "f" | "u"> = { readable: "g", partial: "p", unsuccessful: "f", unconfirmed: "u", not_tested: "u" };
 
-function pageName(p: { kind: string; title: string | null; reason: string }): string {
+/**
+ * The page's name: its title (from our plain copy, else our browser copy), else a name made from its address
+ * ("/luxury-yacht-rentals-miami/" -> "Luxury yacht rentals miami"). Never the reason it was chosen.
+ */
+export function pageName(p: { kind: string; title: string | null; url: string }, browserTitle: string | null = null): string {
   if (p.kind === "home") return "Home page";
-  const n = pagePurpose(p);
-  return n.charAt(0).toUpperCase() + n.slice(1);
+  const title = p.title ?? browserTitle;
+  if (title) {
+    const n = pagePurpose({ kind: p.kind, title, reason: "" });
+    if (n) return n.charAt(0).toUpperCase() + n.slice(1);
+  }
+  const slug = decodeURIComponent(new URL(p.url).pathname).split("/").filter(Boolean).at(-1) ?? "";
+  const words = slug.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim();
+  return words ? words.charAt(0).toUpperCase() + words.slice(1) : new URL(p.url).hostname;
 }
 
 /** Published robots.txt rules for each AI's search crawler, across the checked pages. */
@@ -67,9 +76,10 @@ export function buildDiscovery(input: SectionInputs) {
   const { set, snap, findRead, js } = input;
   const ev = [PAGE_SET_EVIDENCE, SNAPSHOT_EVIDENCE, FINDREAD_EVIDENCE];
   const byUrl = new Map(findRead.pages.map((p) => [p.url, p]));
+  const browserTitle = (url: string) => js?.pages.find((p) => p.url === url)?.rendered.title ?? null;
   const pages = snap.pages.flatMap((pg) => {
     const fr = byUrl.get(pg.url);
-    return fr ? [{ pg, fr, name: pageName(pg) }] : [];
+    return fr ? [{ pg, fr, name: pageName(pg, browserTitle(pg.url)) }] : [];
   });
 
   const pageGroups = GROUPS.map((g) => ({ g, rows: pages.filter((p) => g.kinds.includes(p.pg.kind)) }))
