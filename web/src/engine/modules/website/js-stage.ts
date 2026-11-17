@@ -3,11 +3,14 @@ import { errorMessage } from "../../errors";
 import { sha256Hex } from "../../json";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { extractPage } from "./logic/extract";
-import { compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
+import { allowCheckerOption, compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
 import { snapshots, type Snapshots } from "./schemas";
 
 const MODULE = "website";
-const CONCURRENCY = 3;
+/** One page at a time: Chromium runs as a single process on Vercel, which is fragile with several pages open. */
+const CONCURRENCY = 1;
+/** Stop starting pages after this long, so the run finishes inside its time limit; the rest are marked not checked. */
+const START_BUDGET_MS = 220_000;
 
 const verdict = z.enum(["key_facts_need_js", "content_needs_js", "minor", "same", "not_checked"]);
 
@@ -24,6 +27,8 @@ export const jsCheck = z
           reason: z.string(),
           /** What to tell the business, when scripts hold back key facts or much of the content. */
           recommendation: z.string().nullable().optional(),
+          /** When the site refused our checker: the optional step of allowing it (completes our answer key only). */
+          ownerOption: z.string().nullable().optional(),
           rendered: z
             .object({
               snapshotId: z.string().nullable(),
@@ -106,6 +111,7 @@ export const wsRender: StageDefinition = {
       return e ? { snapshotId: e.snapshotId, fetchedAt: e.fetchedAt, fallback: true, text: e.text } : null;
     };
 
+    const started = Date.now();
     const pages = await mapLimit(snap.pages, CONCURRENCY, async (pg): Promise<JsCheck["pages"][number]> => {
       const raw = rawFor(pg);
       const rawRef = raw && { snapshotId: raw.snapshotId, fetchedAt: raw.fetchedAt, fallback: raw.fallback };
@@ -125,6 +131,8 @@ export const wsRender: StageDefinition = {
         answerKey: raw ? { source: "plain", snapshotId: raw.snapshotId, facts: visitorKeyFacts(raw.text, null) } : null,
       });
 
+      if (Date.now() - started > START_BUDGET_MS)
+        return notChecked("Not checked: this run ran out of time before reaching the page. Run the check again.", { snapshotId: null, status: null, finalUrl: null, error: "out of time", title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0 } });
       let r;
       try {
         r = await ctx.renderUrl(pg.url);
@@ -147,7 +155,11 @@ export const wsRender: StageDefinition = {
         fetchedAt: new Date().toISOString(),
       });
       const rendered = { snapshotId, status: r.status, finalUrl: r.finalUrl, error: r.error, title: ex?.title ?? null, durationMs: Math.round(r.durationMs), requests: r.requests };
-      if (!ex) return notChecked(r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`, rendered);
+      if (!ex) {
+        const refused = allowCheckerOption(r.status);
+        const reason = refused ? `The site refused our browser (HTTP ${r.status}).` : r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`;
+        return { ...notChecked(reason, rendered), ownerOption: refused };
+      }
       if (!raw)
         return {
           ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount),

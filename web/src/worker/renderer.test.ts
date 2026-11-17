@@ -79,4 +79,20 @@ describe.skipIf(!chromiumPath)("headless renderer (the JavaScript check)", () =>
       await r.close();
     }
   }, 60_000);
+
+  it("starts a new browser when the old one crashed or closed", async () => {
+    const { chromium } = await import("playwright-core");
+    const launched: import("playwright-core").Browser[] = [];
+    const r = headlessRenderer({ guard, launch: async () => { const b = await chromium.launch({ executablePath: chromiumPath! }); launched.push(b); return b; } });
+    try {
+      expect((await r.render(`${base}/rentals`, new AbortController().signal)).error).toBeNull();
+      await launched[0]!.close(); // as if Chromium died between pages
+      const again = await r.render(`${base}/rentals`, new AbortController().signal);
+      expect(again.error).toBeNull();
+      expect(again.html).toContain("Lamborghini Huracan from $1495 per day");
+      expect(launched).toHaveLength(2);
+    } finally {
+      await r.close();
+    }
+  }, 60_000);
 });

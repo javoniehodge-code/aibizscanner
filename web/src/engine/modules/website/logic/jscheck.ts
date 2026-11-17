@@ -107,6 +107,18 @@ export function recommendationFor(verdict: JsVerdict, facts: readonly Pick<KeyFa
   return `Your ${list(kinds)} depend on JavaScript. Making them available immediately removes one potential barrier to reading them.`;
 }
 
+/** HTTP statuses that mean the site refused our checker (not that the page is broken). */
+export const REFUSED_STATUSES = new Set([401, 403, 429]);
+
+/**
+ * Optional step for the owner when their site refused our checker. Allowing it only completes our answer key (what a
+ * visitor sees); what each AI can find and read comes from its own tools and is the same either way.
+ */
+export function allowCheckerOption(status: number | null): string | null {
+  if (status === null || !REFUSED_STATUSES.has(status)) return null;
+  return `Optional: your site refused our checker (HTTP ${status}), so we couldn't see this page as a visitor does. If you allow our checker (user agent "AIBizScannerBot") on your site, we can score which key facts each AI missed and whether JavaScript is the reason. This doesn't change what the AIs can see: their results come from their own tools either way.`;
+}
+
 /** Plain-English label for the website pages screen and, later, the report. */
 export function verdictLabel(v: JsVerdict): string {
   return {

@@ -312,6 +312,7 @@ export default async function WebsitePage({ params }: { params: Promise<{ id: st
                           <em>Recommendation:</em> {p.recommendation}
                         </p>
                       ) : null}
+                      {p.ownerOption ? <p className="muted">{p.ownerOption}</p> : null}
                     </td>
                     <td>
                       {p.verdict === "not_checked" && !p.renderedWords ? "—" : `${p.rawWords} / ${p.renderedWords}`}
