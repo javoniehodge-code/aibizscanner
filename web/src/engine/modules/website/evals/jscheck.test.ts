@@ -1,6 +1,6 @@
 // Website: the JavaScript check (our raw fetch vs the same page after scripts ran). Plain code, no model.
 import { describe, expect, it } from "vitest";
-import { compareTexts, keyFacts, recommendationFor, verdictLabel } from "../logic/jscheck";
+import { allowCheckerOption, compareTexts, keyFacts, recommendationFor, verdictLabel } from "../logic/jscheck";
 
 describe("JavaScript check", () => {
   it("flags the MVP Miami /rentals case: inventory and prices appear only after scripts run", () => {
@@ -51,5 +51,12 @@ describe("JavaScript check", () => {
       ["phone", "+1 (786) 555-0199"],
       ["price", "US$3,500 per hour"],
     ]);
+  });
+
+  it("offers allowing our checker only when the site refused it", () => {
+    expect(allowCheckerOption(403)).toMatch(/^Optional: your site refused our checker \(HTTP 403\).*doesn't change what the AIs can see/);
+    expect(allowCheckerOption(429)).not.toBeNull();
+    expect(allowCheckerOption(404)).toBeNull();
+    expect(allowCheckerOption(null)).toBeNull();
   });
 });

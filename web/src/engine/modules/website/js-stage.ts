@@ -3,7 +3,7 @@ import { errorMessage } from "../../errors";
 import { sha256Hex } from "../../json";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { extractPage } from "./logic/extract";
-import { compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
+import { allowCheckerOption, compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visitorKeyFacts, type JsVerdict } from "./logic/jscheck";
 import { snapshots, type Snapshots } from "./schemas";
 
 const MODULE = "website";
@@ -27,6 +27,8 @@ export const jsCheck = z
           reason: z.string(),
           /** What to tell the business, when scripts hold back key facts or much of the content. */
           recommendation: z.string().nullable().optional(),
+          /** When the site refused our checker: the optional step of allowing it (completes our answer key only). */
+          ownerOption: z.string().nullable().optional(),
           rendered: z
             .object({
               snapshotId: z.string().nullable(),
@@ -153,7 +155,11 @@ export const wsRender: StageDefinition = {
         fetchedAt: new Date().toISOString(),
       });
       const rendered = { snapshotId, status: r.status, finalUrl: r.finalUrl, error: r.error, title: ex?.title ?? null, durationMs: Math.round(r.durationMs), requests: r.requests };
-      if (!ex) return notChecked(r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`, rendered);
+      if (!ex) {
+        const refused = allowCheckerOption(r.status);
+        const reason = refused ? `The site refused our browser (HTTP ${r.status}).` : r.error?.startsWith("The browser couldn't") ? r.error : `Our browser couldn't load the page: ${r.error ?? "no content"}`;
+        return { ...notChecked(reason, rendered), ownerOption: refused };
+      }
       if (!raw)
         return {
           ...notChecked(`Our plain fetch of this page failed (${pg.error ?? "no text"}) and there is no earlier copy to compare with.`, rendered, ex.wordCount),
