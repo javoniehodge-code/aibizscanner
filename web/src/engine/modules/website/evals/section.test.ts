@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { reportDocument, websiteDiscovery } from "@/report/schema";
 import type { JsCheck } from "../js-stage";
-import { buildDiscovery, discoveryCopy, sectionEvidence, type SectionInputs } from "../logic/section";
+import { buildDiscovery, discoveryCopy, pageName, sectionEvidence, type SectionInputs } from "../logic/section";
 import type { PageSetSpec, Snapshots } from "../schemas";
 import type { FindRead } from "../test-stages";
 
@@ -68,7 +68,7 @@ describe("website section: Find & read", () => {
   const d = websiteDiscovery.parse(buildDiscovery(inputs));
 
   it("groups pages and codes each AI's search and reading results, keeping 'unconfirmed' apart from failures", () => {
-    expect(d.pageGroups.map((g) => g.group.v.title)).toEqual(["Main pages", "Services and prices", "Questions and policies"]);
+    expect(d.pageGroups.map((g) => g.group.v.title)).toEqual(["Main pages", "Services, prices and booking", "Questions and policies"]);
     const faq = d.pageGroups[2]!.pages[0]!;
     expect(faq.page.v).toEqual({ name: "FAQ's For Renting", url: FAQ, why: "FAQ page" });
     expect(faq.results.map((x) => x.v)).toEqual([{ search: "g", read: "u" }, { search: "g", read: "f" }, { search: "d", read: "g" }]);
@@ -83,6 +83,13 @@ describe("website section: Find & read", () => {
     ]);
     expect(d.attention.map((a) => a.v.title)).toEqual(["Exotic Vehicle Rentals: key facts load with JavaScript", "Claude couldn't open a page"]);
     expect(d.attention[0]!.v).toMatchObject({ engines: [0, 1], what: expect.stringContaining("ChatGPT and Claude didn't get them."), next: expect.stringMatching(/^Your prices depend on JavaScript/) });
+  });
+
+  it("names pages by title, then our browser copy's title, then the address; never by the reason they were chosen", () => {
+    const pg = { kind: "other", title: null, url: "https://www.mvpmiami.com/luxury-yacht-rentals-miami/" };
+    expect(pageName(pg)).toBe("Luxury yacht rentals miami");
+    expect(pageName(pg, "Luxury Yacht Rentals Miami | MVP Miami")).toBe("Luxury Yacht Rentals Miami");
+    expect(pageName({ ...pg, title: "Yachts | MVP" }, "Other")).toBe("Yachts");
   });
 
   it("says the JavaScript check is missing rather than showing nothing", () => {
