@@ -59,4 +59,14 @@ describe("JavaScript check", () => {
     expect(allowCheckerOption(404)).toBeNull();
     expect(allowCheckerOption(null)).toBeNull();
   });
+
+  it("finds prices labelled without a currency sign, as on MVP Miami's rentals page", () => {
+    const raw = "EXOTIC VEHICLE RENTALS IN MIAMI\nVehicles Found:";
+    const rendered = "EXOTIC VEHICLE RENTALS IN MIAMI\nVehicles Found:\n54\nROLLS ROYCE CULLINAN\nPrices Starting at: 1,599\nYear: 2024\nFERRARI F8\nPrices Starting at: 1,499\nYear: 2023";
+    const c = compareTexts(raw, rendered);
+    expect(c.verdict).toBe("key_facts_need_js");
+    expect(c.keyFactsOnlyRendered.map((f) => f.text)).toEqual(["Prices Starting at: 1,599", "Prices Starting at: 1,499"]);
+    // Years, percentages and counts aren't prices.
+    expect(keyFacts(["Year: 2024", "Rates rise 20% in winter", "Price 2024 model year"]).filter((f) => f.kind === "price").map((f) => f.text)).toEqual([]);
+  });
 });

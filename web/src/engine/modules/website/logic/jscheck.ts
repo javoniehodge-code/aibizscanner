@@ -19,6 +19,9 @@ const words = (s: string) => (s.trim() ? s.trim().split(/\s+/).length : 0);
 
 const PATTERNS: { kind: KeyFact["kind"]; re: RegExp }[] = [
   { kind: "price", re: /(?:US)?\$\s?\d[\d,]*(?:\.\d{2})?(?:\s?(?:\/|per)\s?(?:day|night|hour|hr|week|month|person|guest))?/gi },
+  // Prices shown without a currency sign but labelled as prices, e.g. "Prices Starting at: 1,599" (MVP Miami /rentals).
+  // A bare 19xx/20xx is taken as a year, not a price.
+  { kind: "price", re: /\b(?:prices?|rates?)(?:\s+(?:starting|starts|start|from))?(?:\s+at)?\s*:?\s*(?!\$)(?!(?:19|20)\d\d\b)(?:\d{1,3}(?:,\d{3})+|\d{2,6})(?:\.\d{2})?\b(?!\s*(?:%|years?|miles?))/gi },
   { kind: "phone", re: /(?:\+?1[\s.-]?)?\(?\b\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g },
   { kind: "hours", re: /\b\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)\s?(?:-|–|to)\s?\d{1,2}(?::\d{2})?\s?(?:am|pm|a\.m\.|p\.m\.)/gi },
 ];
