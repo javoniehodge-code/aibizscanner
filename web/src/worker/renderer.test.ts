@@ -96,3 +96,18 @@ describe.skipIf(!chromiumPath)("headless renderer (the JavaScript check)", () =>
     }
   }, 60_000);
 });
+
+describe("headless renderer time limit", () => {
+  it("gives up on a page that gets stuck, kills its browser, and starts a new one for the next page", async () => {
+    let launches = 0;
+    let closed = 0;
+    // A browser that never finishes opening a page (what single-process Chromium did in production).
+    const stuck = { version: () => "153.0", newContext: () => new Promise(() => {}), close: async () => void closed++ } as unknown as import("playwright-core").Browser;
+    const r = headlessRenderer({ guard: async (u) => new URL(u), pageDeadlineMs: 300, launch: async () => (launches++, stuck) });
+    const a = await r.render("https://example.com/a", new AbortController().signal);
+    expect(a.error).toBe("The page didn't finish loading within 0 s");
+    const b = await r.render("https://example.com/b", new AbortController().signal);
+    expect(b.error).toMatch(/didn't finish loading/);
+    expect([launches, closed]).toEqual([2, 2]);
+  });
+});

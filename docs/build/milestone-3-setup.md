@@ -77,15 +77,17 @@ result for each page.
 - **Safety, as for the plain fetcher.** Chromium never reaches the network itself: every request the page makes is
   fetched by the worker under the same rules (public addresses only, checked at every redirect, ports 80/443), and
   Chromium's own network points at a dead proxy. WebSockets are closed, service workers and downloads blocked, images,
-  media and fonts skipped. Each page is capped at 150 requests, 10 MB and about 30 seconds. The user agent is
+  media and fonts skipped. Each page is capped at 150 requests, 10 MB and 45 seconds. The user agent is
   Chromium's own with `AIBizScannerBot/0.1` appended. A site that refuses our plain fetch usually refuses the browser
   too; that is recorded as *Couldn't check*, never retried or worked around.
 - **When a site refuses our checker** (HTTP 401, 403 or 429), the page shows *Couldn't check* with an optional step for
   the owner: allow our checker (`AIBizScannerBot`) so we can score which key facts each AI missed and whether
   JavaScript is the reason. This only completes our answer key; what each AI can find and read comes from its own
   tools and is the same either way. Without it, the facts each AI listed still show the gap as evidence, unscored.
-- **On Vercel** Chromium runs as a single process: pages load one at a time, a crashed browser is replaced and that
-  page retried once, and the run stops starting pages before its time limit (the rest say to run it again).
+- **On Vercel** Chromium runs as a single process, which got stuck opening a second page in the same browser. So each
+  page gets a fresh browser, closed afterwards, with a hard 45-second limit (the browser is killed and the page marked
+  not loaded); a page that hit a crash is retried once; pages load one at a time; and the run stops starting pages
+  after about 200 seconds (the rest say to run it again).
 - **Comparison copy.** If this run's plain fetch of a page failed, the browser's text is compared with our most recent
   good plain copy of that page, and the screen says so with its date.
 

@@ -10,7 +10,7 @@ const MODULE = "website";
 /** One page at a time: Chromium runs as a single process on Vercel, which is fragile with several pages open. */
 const CONCURRENCY = 1;
 /** Stop starting pages after this long, so the run finishes inside its time limit; the rest are marked not checked. */
-const START_BUDGET_MS = 220_000;
+const START_BUDGET_MS = 200_000;
 
 const verdict = z.enum(["key_facts_need_js", "content_needs_js", "minor", "same", "not_checked"]);
 

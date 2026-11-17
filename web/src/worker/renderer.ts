@@ -14,7 +14,7 @@ import { assertPublicUrl } from "./url-guard";
  *   addresses at every redirect hop (we follow redirects ourselves, at most 5). Chromium's own network is pointed at a
  *   dead proxy, so anything that escaped interception would fail rather than go out.
  * - WebSockets are closed, service workers blocked, downloads refused. Images, media and fonts are skipped (not needed
- *   for text). Each page is capped at 150 requests, 10 MB in total, 4 MB per response and about 30 seconds.
+ *   for text). Each page is capped at 150 requests, 10 MB in total, 4 MB per response and 45 seconds (a fresh browser per page).
  * - An honest user agent: Chromium's own, with AIBizScannerBot appended. No logins, no challenge solving, no retries.
  *
  * Chromium comes from @sparticuz/chromium on Vercel; elsewhere set CHROMIUM_PATH (or have a Playwright browser installed).
@@ -26,7 +26,9 @@ const MAX_HTML_CHARS = 2_000_000;
 const NAV_TIMEOUT_MS = 20_000;
 const SETTLE_MS = 6_000;
 const REQUEST_TIMEOUT_MS = 15_000;
-const IDLE_CLOSE_MS = 5_000;
+/** Hard limit per page, launch included; the browser is killed when it is reached. */
+const PAGE_DEADLINE_MS = 45_000;
+const CLOSE_WAIT_MS = 5_000;
 const MAX_REDIRECTS = 5;
 const CRASHED = /has been closed|browser has disconnected|Target crashed|crashed/i;
 const SKIPPED_TYPES = new Set(["image", "media", "font"]);
@@ -40,7 +42,11 @@ export type RendererOptions = {
   /** Address check for every request (default: the protected fetcher's). Tests pass one that allows a local server. */
   guard?: Guard;
   launch?: () => Promise<Browser>;
+  /** Hard limit per page (default 45 s). */
+  pageDeadlineMs?: number;
 };
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 async function defaultLaunch(): Promise<Browser> {
   const { chromium } = await import("playwright-core");
@@ -75,59 +81,66 @@ async function readCapped(res: Response, max: number): Promise<{ body: Buffer; t
 }
 
 /**
- * One browser shared by the pages being loaded, opened on first use and closed a few seconds after the last page
- * finishes; each page gets a fresh context (no shared cookies or storage).
+ * A fresh browser for every page, closed when the page is done (Chromium on Vercel runs as a single process and in
+ * production got stuck opening a second page in the same browser). Each page also has a hard time limit: when it is
+ * reached the browser is killed and the page is recorded as not loaded, so one stuck page can't stall the run.
  */
 export function headlessRenderer(options: RendererOptions = {}): PageRenderer & { close(): Promise<void> } {
   const guard = options.guard ?? ((u: string) => assertPublicUrl(u));
-  let browser: Promise<Browser> | null = null;
-  let active = 0;
-  let idle: ReturnType<typeof setTimeout> | null = null;
-  const close = async () => {
-    const b = browser;
-    browser = null;
-    if (b) await (await b.catch(() => null))?.close().catch(() => undefined);
-  };
-  const open = () => {
-    if (idle) clearTimeout(idle);
-    idle = null;
-    if (!browser) {
-      const launching = (options.launch ?? defaultLaunch)();
-      // A failed launch, or a browser that crashed or closed, isn't kept: the next page starts a new one.
-      launching.then(
-        (b) => b.on("disconnected", () => {
-          if (browser === launching) browser = null;
-        }),
-        () => {
-          if (browser === launching) browser = null;
-        },
-      );
-      browser = launching;
-    }
-    return browser;
-  };
-  const release = () => {
-    if (--active === 0) idle = setTimeout(() => void close(), IDLE_CLOSE_MS);
+  const pageDeadlineMs = options.pageDeadlineMs ?? PAGE_DEADLINE_MS;
+  const live = new Set<Promise<Browser>>();
+
+  const shut = async (launching: Promise<Browser>) => {
+    live.delete(launching);
+    const b = await Promise.race([launching.catch(() => null), sleep(CLOSE_WAIT_MS).then(() => null)]);
+    if (b) await Promise.race([b.close().catch(() => undefined), sleep(CLOSE_WAIT_MS)]);
   };
 
+  async function withBrowser(requested: string, signal: AbortSignal): Promise<RenderedPage> {
+    const started = Date.now();
+    const launching = (options.launch ?? defaultLaunch)();
+    launching.catch(() => undefined);
+    live.add(launching);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<RenderedPage>((resolve) => {
+      timer = setTimeout(
+        () =>
+          resolve({
+            requestedUrl: requested,
+            finalUrl: null,
+            status: null,
+            html: null,
+            truncated: false,
+            error: `The page didn't finish loading within ${Math.round(pageDeadlineMs / 1000)} s`,
+            durationMs: Date.now() - started,
+            userAgent: USER_AGENT,
+            requests: { fetched: 0, refused: 0, skipped: 0 },
+          }),
+        pageDeadlineMs,
+      );
+    });
+    try {
+      return await Promise.race([renderOne(requested, signal, launching), deadline]);
+    } finally {
+      clearTimeout(timer);
+      await shut(launching);
+    }
+  }
+
   return {
-    close,
+    async close() {
+      await Promise.all([...live].map(shut));
+    },
     async render(requested, signal) {
-      active++;
-      try {
-        const first = await renderOne(requested, signal);
-        // Chromium on Vercel runs as a single process, and can crash mid-page: retry once in a new browser.
-        if (!first.error || !CRASHED.test(first.error)) return first;
-        await close();
-        const second = await renderOne(requested, signal);
-        return second.error ? { ...second, error: `${second.error} (after a browser crash and one retry)` } : second;
-      } finally {
-        release();
-      }
+      const first = await withBrowser(requested, signal);
+      // A crash mid-page: retry once in a new browser.
+      if (!first.error || !CRASHED.test(first.error)) return first;
+      const second = await withBrowser(requested, signal);
+      return second.error ? { ...second, error: `${second.error} (after a browser crash and one retry)` } : second;
     },
   };
 
-  async function renderOne(requested: string, signal: AbortSignal): Promise<RenderedPage> {
+  async function renderOne(requested: string, signal: AbortSignal, launching: Promise<Browser>): Promise<RenderedPage> {
     const started = Date.now();
     const requests = { fetched: 0, refused: 0, skipped: 0 };
     let userAgent = USER_AGENT;
@@ -142,7 +155,7 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
 
     let context: BrowserContext | null = null;
     try {
-      const b = await open();
+      const b = await launching;
       userAgent = `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/${b.version()} Safari/537.36 AIBizScannerBot/0.1 (internal report testing)`;
       context = await b.newContext({ userAgent, serviceWorkers: "block", acceptDownloads: false, javaScriptEnabled: true, locale: "en-US", viewport: { width: 1280, height: 900 } });
       await context.routeWebSocket(/.*/, (ws) => ws.close({ code: 1008, reason: "WebSockets are not used by the JavaScript check" }));
