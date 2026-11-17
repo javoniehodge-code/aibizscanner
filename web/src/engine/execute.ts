@@ -4,7 +4,7 @@ import { hashJson } from "./json";
 import type { AnswerEngines } from "./answers";
 import { createStructuredCall, instructionRef, type LlmClient } from "./llm";
 import type { StageRegistry } from "./registry";
-import type { ClaimedRun, FetchedResource, FetchOptions, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
+import type { ClaimedRun, FetchedResource, FetchOptions, RenderedPage, InstructionRef, PaidCallSpec, RunStore, StageContext, StageInput, Usage } from "./types";
 
 export type RunOutcome =
   | { runId: string; stage: string; outcome: "done" | "partial"; costUsd: number }
@@ -18,7 +18,9 @@ export type Clock = { now(): Date };
 /** Paid-API clients the worker hands to stages. Missing ones make ctx.llm throw / ctx.answerEngine return null. */
 /** Fetches public web pages for the engine (implemented by the worker's protected fetcher). */
 export type WebFetcher = { fetch(url: string, opts: FetchOptions, signal: AbortSignal): Promise<FetchedResource> };
-export type Providers = { llm?: LlmClient | null; answers?: AnswerEngines; web?: WebFetcher | null };
+/** Loads pages in a headless browser for the JavaScript check (implemented by the worker's renderer). */
+export type PageRenderer = { render(url: string, signal: AbortSignal): Promise<RenderedPage>; close?(): Promise<void> };
+export type Providers = { llm?: LlmClient | null; answers?: AnswerEngines; web?: WebFetcher | null; browser?: PageRenderer | null };
 
 /** Data that doesn't match its declared schema. Never retried: the same code would produce the same result. */
 export class SchemaError extends NonRetryableError {
@@ -165,6 +167,10 @@ export async function executeRun(
       fetchUrl: (url, opts) => {
         if (!providers.web) throw new NonRetryableError("No web fetcher is configured for this worker");
         return providers.web.fetch(url, opts, controller.signal);
+      },
+      renderUrl: (url) => {
+        if (!providers.browser) throw new NonRetryableError("No headless browser is configured for this worker");
+        return providers.browser.render(url, controller.signal);
       },
       snapshotTexts: (ids) => store.loadSnapshotTexts(ids),
       latestGoodSnapshots: (urls) => store.loadLatestGoodSnapshots(run.reportId, urls),

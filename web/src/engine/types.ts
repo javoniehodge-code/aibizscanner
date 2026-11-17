@@ -72,6 +72,11 @@ export type StageContext = {
    */
   fetchUrl(url: string, opts: FetchOptions): Promise<FetchedResource>;
   /**
+   * Loads a public page in our headless browser so its scripts run; every request it makes goes through the same
+   * protected fetcher rules. Our JavaScript diagnostic only. Not a paid call.
+   */
+  renderUrl(url: string): Promise<RenderedPage>;
+  /**
    * Our most recent successful raw snapshot (HTTP 2xx, with text) of each URL in this report, any run. Used as the
    * reference for checking passages when the latest fetch failed (e.g. the site started refusing our fetcher).
    */
@@ -184,6 +189,24 @@ export type FetchedResource = {
   error: string | null;
   durationMs: number;
   userAgent: string;
+};
+
+/**
+ * One page loaded in our headless browser (the JavaScript check). Our diagnostic only: never an AI's view of the page.
+ * A failed or refused load has `error` set and no html.
+ */
+export type RenderedPage = {
+  requestedUrl: string;
+  finalUrl: string | null;
+  status: number | null;
+  /** The page's HTML after scripts ran (document.documentElement.outerHTML), capped. */
+  html: string | null;
+  truncated: boolean;
+  error: string | null;
+  durationMs: number;
+  userAgent: string;
+  /** Requests the page made: let through our fetcher, refused by the address check, or skipped (images, media, fonts, over the cap). */
+  requests: { fetched: number; refused: number; skipped: number };
 };
 
 export type GoodSnapshot = { snapshotId: string; text: string; fetchedAt: string };

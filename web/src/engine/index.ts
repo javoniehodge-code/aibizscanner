@@ -7,7 +7,7 @@ import { createRegistry } from "./registry";
  */
 export const registry = createRegistry(MODULES.flatMap((m) => m.stages));
 
-export { executeRun, SchemaError, type RunOutcome, type Clock, type Providers, type WebFetcher } from "./execute";
+export { executeRun, SchemaError, type RunOutcome, type Clock, type Providers, type WebFetcher, type PageRenderer } from "./execute";
 export type { AnswerEngine, AnswerEngines, AskRequest, AskResult, EngineIndex } from "./answers";
 export { inputsHash } from "./hash";
 export { estimateCostUsd, backoffMs } from "./cost";

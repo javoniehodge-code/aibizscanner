@@ -13,6 +13,10 @@ function buildCommit(): string {
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The JavaScript check's headless browser (src/worker/renderer.ts): loaded at run time by the worker, not bundled.
+  serverExternalPackages: ["playwright-core", "@sparticuz/chromium"],
+  // @sparticuz/chromium reads its compressed Chromium from its bin/ folder at run time; make sure the worker ships it.
+  outputFileTracingIncludes: { "/api/worker/tick": ["./node_modules/@sparticuz/chromium/bin/**"] },
   env: {
     APP_GIT_COMMIT: buildCommit(),
   },
