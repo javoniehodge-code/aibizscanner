@@ -20,7 +20,7 @@ describe("JavaScript check", () => {
     expect(c.keyFactsOnlyRendered.map((f) => f.text)).toEqual(["$1,495/day", "$1,995 per day", "$2,250/day"]);
     expect(c.reason).toBe("Prices appear only after scripts run (3 found, e.g. $1,495/day).");
     expect(c.onlyRendered).toContain("Vehicles Found: 42");
-    expect(verdictLabel(c.verdict)).toBe("Key facts load with JavaScript: likely invisible to ChatGPT and Claude");
+    expect(verdictLabel(c.verdict)).toBe("Key facts load with JavaScript");
   });
 
   it("recommends making JavaScript-only facts available immediately", () => {

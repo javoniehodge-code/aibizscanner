@@ -205,7 +205,7 @@ describe("find & read stages (fake engines)", () => {
     const f2 = (await run("ws_findread", [snap, priced, ...outs], providers, store)).input.output as unknown as FindRead;
     expect(f2.pages[0]!.results[0]).toMatchObject({ read: "partial", toolRead: "readable", label: "Found; partly read", extraction: { got: 0, of: 2, missedJsOnly: 2, answerKey: "browser" } });
     expect(f2.pages[0]!.results[0]!.note).toBe("Got 0 of 2 key facts (prices, phone numbers, hours). Missed e.g. $1,495 per day, $1,995 per day. 2 of the missed facts load only with JavaScript (our check), which this AI's reader didn't get.");
-    expect(f2.pages[0]!.js).toEqual({ verdict: "key_facts_need_js", label: "Key facts load with JavaScript: likely invisible to ChatGPT and Claude" });
+    expect(f2.pages[0]!.js).toEqual({ verdict: "key_facts_need_js", label: "Key facts load with JavaScript" });
     expect(f2.foundAndRead).toEqual([0, 0, 0]);
     expect(f2.keyFacts).toEqual([{ got: 0, of: 2, pages: 1 }, null, null]);
 

@@ -110,8 +110,8 @@ export function recommendationFor(verdict: JsVerdict, facts: readonly Pick<KeyFa
 /** Plain-English label for the website pages screen and, later, the report. */
 export function verdictLabel(v: JsVerdict): string {
   return {
-    key_facts_need_js: "Key facts load with JavaScript: likely invisible to ChatGPT and Claude",
-    content_needs_js: "Much of the content loads with JavaScript: likely invisible to ChatGPT and Claude",
+    key_facts_need_js: "Key facts load with JavaScript",
+    content_needs_js: "Much of the content loads with JavaScript",
     minor: "Mostly readable without JavaScript",
     same: "Readable without JavaScript",
     not_checked: "Couldn't check",
