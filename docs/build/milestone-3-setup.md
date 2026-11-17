@@ -68,10 +68,8 @@ result for each page.
   The evidence lists the facts and a sample of the lines that appear only with scripts. The browser's copy is stored as
   a `rendered` page snapshot, separate from our plain fetch and from the AIs' tool content.
 - **Recommendation.** When key facts depend on JavaScript: "Your prices depend on JavaScript. Making them available
-  immediately removes one potential barrier to reading them." For prices it adds: "For prices that genuinely require
-  dates, quantities, or a custom quote, the improvement might instead be to publish the pricing basis, minimum charge,
-  or quote requirements upfront, without presenting a misleading fixed price." (Phone numbers and hours get the first
-  sentence with their own names.)
+  immediately removes one potential barrier to reading them." (Phone numbers and hours get the same wording with their
+  own names.)
 - **The answer key for key facts.** The browser's copy is what a visitor sees, so its prices, phone numbers and opening
   hours are the answer key for the key-fact extraction below (our plain copy is used when the browser couldn't load the
   page). Each fact is marked *JavaScript only* when it isn't in the plain copy.

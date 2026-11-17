@@ -23,10 +23,8 @@ describe("JavaScript check", () => {
     expect(verdictLabel(c.verdict)).toBe("Key facts load with JavaScript: likely invisible to ChatGPT and Claude");
   });
 
-  it("recommends making JavaScript-only facts available immediately, or publishing the pricing basis for quoted prices", () => {
-    expect(recommendationFor("key_facts_need_js", [{ kind: "price" }])).toBe(
-      "Your prices depend on JavaScript. Making them available immediately removes one potential barrier to reading them. For prices that genuinely require dates, quantities, or a custom quote, the improvement might instead be to publish the pricing basis, minimum charge, or quote requirements upfront, without presenting a misleading fixed price.",
-    );
+  it("recommends making JavaScript-only facts available immediately", () => {
+    expect(recommendationFor("key_facts_need_js", [{ kind: "price" }])).toBe("Your prices depend on JavaScript. Making them available immediately removes one potential barrier to reading them.");
     expect(recommendationFor("key_facts_need_js", [{ kind: "phone" }, { kind: "hours" }])).toBe("Your phone numbers and opening hours depend on JavaScript. Making them available immediately removes one potential barrier to reading them.");
     expect(recommendationFor("same", [])).toBeNull();
   });
