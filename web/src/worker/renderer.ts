@@ -28,6 +28,7 @@ const SETTLE_MS = 6_000;
 const REQUEST_TIMEOUT_MS = 15_000;
 const IDLE_CLOSE_MS = 5_000;
 const MAX_REDIRECTS = 5;
+const CRASHED = /has been closed|browser has disconnected|Target crashed|crashed/i;
 const SKIPPED_TYPES = new Set(["image", "media", "font"]);
 /** Request headers Node's fetch sets itself or refuses. */
 const DROP_REQUEST = new Set(["host", "connection", "content-length", "accept-encoding", "user-agent", "keep-alive", "upgrade", "te", "trailer", "transfer-encoding", "proxy-authorization", "proxy-connection"]);
@@ -92,10 +93,15 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
     idle = null;
     if (!browser) {
       const launching = (options.launch ?? defaultLaunch)();
-      // A failed launch isn't kept: the next page tries again.
-      launching.catch(() => {
-        if (browser === launching) browser = null;
-      });
+      // A failed launch, or a browser that crashed or closed, isn't kept: the next page starts a new one.
+      launching.then(
+        (b) => b.on("disconnected", () => {
+          if (browser === launching) browser = null;
+        }),
+        () => {
+          if (browser === launching) browser = null;
+        },
+      );
       browser = launching;
     }
     return browser;
@@ -109,7 +115,12 @@ export function headlessRenderer(options: RendererOptions = {}): PageRenderer & 
     async render(requested, signal) {
       active++;
       try {
-        return await renderOne(requested, signal);
+        const first = await renderOne(requested, signal);
+        // Chromium on Vercel runs as a single process, and can crash mid-page: retry once in a new browser.
+        if (!first.error || !CRASHED.test(first.error)) return first;
+        await close();
+        const second = await renderOne(requested, signal);
+        return second.error ? { ...second, error: `${second.error} (after a browser crash and one retry)` } : second;
       } finally {
         release();
       }

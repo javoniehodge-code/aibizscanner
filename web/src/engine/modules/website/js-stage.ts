@@ -7,7 +7,10 @@ import { compareTexts, JS_CHECK_VERSION, recommendationFor, verdictLabel, visito
 import { snapshots, type Snapshots } from "./schemas";
 
 const MODULE = "website";
-const CONCURRENCY = 3;
+/** One page at a time: Chromium runs as a single process on Vercel, which is fragile with several pages open. */
+const CONCURRENCY = 1;
+/** Stop starting pages after this long, so the run finishes inside its time limit; the rest are marked not checked. */
+const START_BUDGET_MS = 220_000;
 
 const verdict = z.enum(["key_facts_need_js", "content_needs_js", "minor", "same", "not_checked"]);
 
@@ -106,6 +109,7 @@ export const wsRender: StageDefinition = {
       return e ? { snapshotId: e.snapshotId, fetchedAt: e.fetchedAt, fallback: true, text: e.text } : null;
     };
 
+    const started = Date.now();
     const pages = await mapLimit(snap.pages, CONCURRENCY, async (pg): Promise<JsCheck["pages"][number]> => {
       const raw = rawFor(pg);
       const rawRef = raw && { snapshotId: raw.snapshotId, fetchedAt: raw.fetchedAt, fallback: raw.fallback };
@@ -125,6 +129,8 @@ export const wsRender: StageDefinition = {
         answerKey: raw ? { source: "plain", snapshotId: raw.snapshotId, facts: visitorKeyFacts(raw.text, null) } : null,
       });
 
+      if (Date.now() - started > START_BUDGET_MS)
+        return notChecked("Not checked: this run ran out of time before reaching the page. Run the check again.", { snapshotId: null, status: null, finalUrl: null, error: "out of time", title: null, durationMs: 0, requests: { fetched: 0, refused: 0, skipped: 0 } });
       let r;
       try {
         r = await ctx.renderUrl(pg.url);
