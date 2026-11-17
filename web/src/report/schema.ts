@@ -238,7 +238,7 @@ const webPresence = z.array(
 // Website section
 // ---------------------------------------------------------------------------------------------------------------
 
-const discovery = z
+export const websiteDiscovery = z
   .object({
     /** Per engine: published site rules (robots.txt) for its crawlers. */
     permissions: three(val(z.object({ mark: z.enum(["g", "d", "r"]), label: nonEmpty, searchAccess: nonEmpty }).strict())),
@@ -252,8 +252,11 @@ const discovery = z
                 z
                   .object({
                     page: val(z.object({ name: nonEmpty, url: nonEmpty, why: nonEmpty }).strict()),
-                    /** Per engine. search: g found, k link only, r not found, d not tested. read: g read, p partly, f failed. */
-                    results: three(val(z.object({ search: z.enum(["g", "k", "r", "d"]), read: z.enum(["g", "p", "f"]) }).strict())),
+                    /**
+                     * Per engine. search: g found, k link only, r not found, d not tested or unconfirmed.
+                     * read: g read, p partly, f couldn't read, u not tested or unconfirmed (no tool evidence either way).
+                     */
+                    results: three(val(z.object({ search: z.enum(["g", "k", "r", "d"]), read: z.enum(["g", "p", "f", "u"]) }).strict())),
                   })
                   .strict(),
               )
@@ -270,7 +273,7 @@ const discovery = z
   })
   .strict();
 
-const structuredData = z
+export const websiteStructuredData = z
   .object({
     stats: z.array(val(z.object({ value: nonEmpty, label: nonEmpty }).strict())),
     problems: z.array(val(z.object({ mark: z.enum(["r", "k"]), tag: nonEmpty, title: nonEmpty, why: nonEmpty, details: z.array(kv) }).strict())),
@@ -435,6 +438,9 @@ export const COPY_KEYS = [
   "promptReportDetails",
 ] as const;
 
+/** One copy entry (a text with provenance, or missing). */
+export const copyEntry = maybe(copyText);
+
 const copy = z.object(Object.fromEntries(COPY_KEYS.map((k) => [k, maybe(copyText)])) as Record<(typeof COPY_KEYS)[number], ReturnType<typeof maybe<typeof copyText>>>).strict();
 
 export const evidenceEntry = z
@@ -466,7 +472,17 @@ const reportShape = z
     competitors: competitors.nullable(),
     citationCoverage: citationCoverage.nullable(),
     webPresence: webPresence.nullable(),
-    website: z.object({ discovery, structuredData, clear, consistent, distinctive }).strict().nullable(),
+    /** Each part is null until the stages that produce it have run; the template leaves its slides out. */
+    website: z
+      .object({
+        discovery: websiteDiscovery.nullable(),
+        structuredData: websiteStructuredData.nullable(),
+        clear: clear.nullable(),
+        consistent: consistent.nullable(),
+        distinctive: distinctive.nullable(),
+      })
+      .strict()
+      .nullable(),
     credible: credible.nullable(),
     actions: z
       .object({
@@ -556,8 +572,8 @@ function checkReferences(doc: Shape, ctx: z.RefinementCtx) {
     if (!webCats.has(s.v.pageCategory)) issue(`Site category ${s.v.pageCategory} has no diagram category`, ["credible", "web", "sites", i]);
     for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["credible", "web", "sites", i]);
   });
-  const nSources = doc.website?.consistent.sources.length ?? 0;
-  doc.website?.consistent.facts.forEach((f, i) => {
+  const nSources = doc.website?.consistent?.sources.length ?? 0;
+  doc.website?.consistent?.facts.forEach((f, i) => {
     if (f.v.sources.length !== nSources) issue(`Fact has ${f.v.sources.length} source cells; expected ${nSources}`, ["website", "consistent", "facts", i]);
   });
   doc.actions?.cases.forEach((c, i) => {

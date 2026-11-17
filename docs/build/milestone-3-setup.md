@@ -115,3 +115,22 @@ many of the names it gave appear on the page.
 - Cost: the same calls with slightly longer answers (a few cents more per report).
 
 Running it locally: set `CHROMIUM_PATH` to a Chromium binary (or install a Playwright browser).
+
+## Part 4a: the website in the report (Find & read)
+
+Nothing to configure, no cost. `ws_section` builds the report's website part from the approved pages, our snapshots,
+the find & read results and our JavaScript check; it runs on its own after find & read, and report assembly then picks
+it up. For a report whose website tests ran before this existed, click **Run** on "Website: build the report's website
+section" in the run monitor; the report reassembles by itself.
+
+- **Find & read slide**: per AI, pages fully read and found in search; the table of pages (grouped: main pages,
+  services and prices, questions and policies) with each AI's search and reading result; "unconfirmed" (no tool
+  evidence either way) is shown as such, never as not found or couldn't read. Notes carry the key-fact scores.
+- **Raw vs fully loaded**: our JavaScript check for the pages it could check, labelled as our comparison.
+- **What needs your attention**, by plain rules: key facts that load only with JavaScript (with the recommendation),
+  pages an AI's reader couldn't open, and pages no AI's search found.
+- The other website slides (Structured data, Clear & complete, Consistent, Distinctive) stay out of the report until
+  their stages exist: each website part can now be absent on its own.
+
+Engine: a stage can declare `optionalInputs`, read when they have a finished run and left out otherwise; report
+assembly reads the website section this way, so a report without website tests still assembles.

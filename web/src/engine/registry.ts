@@ -7,6 +7,9 @@ export type StageRegistry = {
   downstreamOf(id: StageId): StageId[];
 };
 
+/** Every stage a stage reads: required inputs, then optional ones. */
+export const readsOf = (s: StageDefinition): StageId[] => [...s.inputs, ...(s.optionalInputs ?? [])];
+
 /** Builds a registry, refusing duplicate ids, unknown inputs and cycles. */
 export function createRegistry(stages: readonly StageDefinition[]): StageRegistry {
   const byId = new Map<StageId, StageDefinition>();
@@ -15,13 +18,13 @@ export function createRegistry(stages: readonly StageDefinition[]): StageRegistr
     byId.set(s.id, s);
   }
   for (const s of stages) {
-    for (const input of s.inputs) {
+    for (const input of readsOf(s)) {
       if (!byId.has(input)) throw new Error(`Stage ${s.id} reads unknown stage ${input}`);
     }
   }
 
   const children = new Map<StageId, StageId[]>();
-  for (const s of stages) for (const input of s.inputs) children.set(input, [...(children.get(input) ?? []), s.id]);
+  for (const s of stages) for (const input of readsOf(s)) children.set(input, [...(children.get(input) ?? []), s.id]);
 
   // Cycle check (depth-first, three colours).
   const state = new Map<StageId, "visiting" | "done">();

@@ -10,6 +10,7 @@ export const registry = createRegistry(MODULES.flatMap((m) => m.stages));
 export { executeRun, SchemaError, type RunOutcome, type Clock, type Providers, type WebFetcher, type PageRenderer } from "./execute";
 export type { AnswerEngine, AnswerEngines, AskRequest, AskResult, EngineIndex } from "./answers";
 export { inputsHash } from "./hash";
+export { readsOf } from "./registry";
 export { estimateCostUsd, backoffMs } from "./cost";
 export { instructionRef, defineInstruction, type LlmClient, type ModelSpec, type Instruction, type LlmCallRecord } from "./llm";
 export { MODULES } from "./modules";

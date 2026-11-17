@@ -1,5 +1,5 @@
 import "server-only";
-import { inputsHash, instructionRef, registry, type JsonValue, type StageInput } from "@/engine";
+import { inputsHash, instructionRef, readsOf, registry, type JsonValue, type StageInput } from "@/engine";
 import type { Json } from "@/lib/database.types";
 import type { createClient } from "@/lib/supabase/server";
 import type { ServiceClient } from "@/lib/supabase/service";
@@ -25,7 +25,8 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
   }
 
   const inputs: StageInput[] = [];
-  for (const upstream of stage.inputs) {
+  const optional = new Set(stage.optionalInputs ?? []);
+  for (const upstream of readsOf(stage)) {
     const { data, error } = await (db as ServiceClient)
       .from("stage_run")
       .select("id, stage, output, output_hash")
@@ -36,7 +37,10 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
       .limit(1)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    if (!data) throw new EnqueueError(`Run "${upstream}" first: ${stageId} reads its output.`);
+    if (!data) {
+      if (optional.has(upstream)) continue; // read when it has run, left out otherwise
+      throw new EnqueueError(`Run "${upstream}" first: ${stageId} reads its output.`);
+    }
     inputs.push({ runId: data.id, stage: data.stage, output: data.output as JsonValue, outputHash: data.output_hash });
   }
 
@@ -64,8 +68,8 @@ export async function enqueueStage(db: Db, reportId: string, stageId: string, ra
  */
 export async function queueReadyDownstream(db: ServiceClient, reportId: string, finishedStage: string): Promise<string[]> {
   const queued: string[] = [];
-  for (const stage of registry.stages.filter((s) => s.autoRun && s.inputs.includes(finishedStage))) {
-    const names = [...stage.inputs, stage.id];
+  for (const stage of registry.stages.filter((s) => s.autoRun && readsOf(s).includes(finishedStage))) {
+    const names = [...readsOf(stage), stage.id];
     const { data: runs, error } = await db
       .from("stage_run")
       .select("id, stage, version, status, input_run_ids")
@@ -76,9 +80,9 @@ export async function queueReadyDownstream(db: ServiceClient, reportId: string, 
     const latest = (s: string) => runs.find((r) => r.stage === s);
     const busy = (s: string) => runs.some((r) => r.stage === s && (r.status === "queued" || r.status === "running"));
     if (names.some(busy)) continue;
-    const inputs = stage.inputs.map(latestFinished);
-    if (inputs.some((r) => !r)) continue;
-    const ids = inputs.map((r) => r!.id);
+    const required = stage.inputs.map(latestFinished);
+    if (required.some((r) => !r)) continue;
+    const ids = [...required, ...(stage.optionalInputs ?? []).map(latestFinished)].flatMap((r) => (r ? [r.id] : []));
     const { data: stale, error: staleError } = await db.from("stage_run_stale").select("stage_run_id").in("stage_run_id", ids);
     if (staleError) throw new Error(staleError.message);
     if (stale.length) continue;

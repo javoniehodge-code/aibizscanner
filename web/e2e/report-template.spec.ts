@@ -95,6 +95,38 @@ test("a report with only the prompt analysis shows only its slides, numbered in 
   }
 });
 
+test("a report with the website's Find & read part only shows that website slide", async ({ browser }) => {
+  // What stage 12 produces once the website tests have run but before structured data, Clear & complete, Consistent and
+  // Distinctive exist: website has only its discovery part.
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { website: Record<string, unknown> };
+  for (const k of ["summary", "competitors", "citationCoverage", "webPresence", "credible", "actions", "methodGroups"]) doc[k] = null;
+  for (const k of ["structuredData", "clear", "consistent", "distinctive"]) doc.website[k] = null;
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 13; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const heads = slides.map((t) => t.split("\n").slice(0, 2).join(" | ").trim());
+    expect(heads.slice(6, 9)).toEqual(["SECTION 2 | MVP Miami", "07 | FIND & READ", "SECTION 3 | MVP Miami"]);
+    const all = slides.join("\n");
+    for (const absent of ["CLEAR & COMPLETE", "CONSISTENT & CURRENT", "DISTINCTIVE & RELEVANT", "Structured data is code on your pages"]) expect(all).not.toContain(absent);
+  } finally {
+    await srv.close();
+  }
+});
+
 test("the template contains no business data", () => {
   const html = currentTemplate();
   for (const word of ["Brownstone", "Brooklyn", "NYSDOT", "walk-up", "piano", "MVP", "Miami", "29 Oct 2026", "11 Nov 2026"]) {

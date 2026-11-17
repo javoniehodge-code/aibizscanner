@@ -37,7 +37,8 @@ export type PaidCallSpec = {
 };
 
 /** Output of an upstream stage run that this run consumes. */
-export type StageInput = { runId: string; stage: StageId; output: JsonValue; outputHash: string | null };
+/** finishedAt: when the upstream run finished (for evidence dates); absent where the store doesn't know it. */
+export type StageInput = { runId: string; stage: StageId; output: JsonValue; outputHash: string | null; finishedAt?: string | null };
 
 export type StageContext = {
   reportId: string;
@@ -103,6 +104,11 @@ export type StageDefinition = {
   label: string;
   /** Upstream stages whose latest finished output this stage reads. Used for input hashing and stale marking. */
   inputs: readonly StageId[];
+  /**
+   * Upstream stages read when they have a finished run, and left out when they don't (e.g. the website section in the
+   * report). A new finished run of one also queues an autoRun stage. Part of the inputs hash and stale marking.
+   */
+  optionalInputs?: readonly StageId[];
   timeoutMs: number;
   maxAttempts: number;
   /** Validates and defaults params before enqueueing; throws to refuse. */
