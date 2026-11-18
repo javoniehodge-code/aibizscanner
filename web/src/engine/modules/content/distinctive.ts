@@ -5,7 +5,7 @@ import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { ENGINE_MODELS } from "../prompt-analysis/models";
 import { assessDistinctive } from "./instructions/assess-distinctive";
 import { claimHolds, CONTENT_CHECK_VERSION, isNotStated, NOT_STATED, quoteOnPage, type BundlePage } from "./logic";
-import { CONTENT_MODEL, contentBundle, type ContentBundle } from "./stages";
+import { contentBundle, SCORING_MODEL, type ContentBundle } from "./stages";
 import { STANDARDS } from "./standards";
 
 /**
@@ -186,7 +186,7 @@ export const dsScore: StageDefinition = {
     const res = ok.length
       ? await ctx.llm({
           instruction: assessDistinctive,
-          model: CONTENT_MODEL,
+          model: SCORING_MODEL,
           input: {
             business: { ...b.business, noun },
             pages: b.pages.map((p) => ({ ref: p.ref, name: p.name, url: p.url, text: p.text })),
@@ -206,7 +206,7 @@ export const dsScore: StageDefinition = {
       version: CONTENT_CHECK_VERSION,
       business: b.business,
       noun,
-      models: { assessor: CONTENT_MODEL.model, engines: ans.map((a) => (a.status === "ok" ? (a.servedModel ?? a.model) : null)) },
+      models: { assessor: SCORING_MODEL.model, engines: ans.map((a) => (a.status === "ok" ? (a.servedModel ?? a.model) : null)) },
       reasons,
       rejectedReasons: res.reasons.length - kept.length,
       descriptions: ans.map((a) => (a.status === "ok" ? a.description : null)),

@@ -431,7 +431,7 @@ export function clearCopy(sc: Score) {
       `The facts come from our ${sc.standard.label.toLowerCase()} standard (v${sc.standard.version}): the facts that could change whether a customer chooses you. ${applicable(sc)} of its ${sc.facts.length} apply to your business.`,
       ev,
     ),
-    clearFoot: observed(`Our assessment and the scoring: ${sc.models.assessor}. AIs: ${sc.models.engines.map((m, e) => `${ENGINE_NAMES[e]} ${m ?? "not tested"}`).join(", ")}. Website only, web search off.`, ev),
+    clearFoot: observed(`Our assessment: ${sc.models.assessor}. Scoring: ${sc.models.scorer ?? sc.models.assessor}. AIs: ${sc.models.engines.map((m, e) => `${ENGINE_NAMES[e]} ${m ?? "not tested"}`).join(", ")}. Website only, web search off.`, ev),
   };
 }
 

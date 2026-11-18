@@ -28,12 +28,24 @@ import { standardFor, STANDARDS } from "./standards";
 
 const MODULE = "content";
 
-/** The model for our website assessment and for scoring answers (the same one used to classify sources). */
+/** The model for our website assessment (the same one used to classify sources). */
 export const CONTENT_MODEL: ModelSpec = {
   provider: "anthropic",
   model: "claude-haiku-5-5",
   capabilities: { temperature: false, structuredOutput: "json_schema", maxOutputTokens: 8000 },
   settings: { effort: "low" },
+};
+
+/**
+ * The model that scores the AIs' answers (Clear & complete and Distinctive). Owner decision 18 Nov 2026: Haiku held
+ * reworded answers to the pages' exact words (MVP Miami), so scoring uses Sonnet; its "wrong" / "not on your website"
+ * verdicts still need a claim that plain code checks (claimHolds).
+ */
+export const SCORING_MODEL: ModelSpec = {
+  provider: "anthropic",
+  model: "claude-sonnet-5-5",
+  capabilities: { temperature: false, structuredOutput: "json_schema", maxOutputTokens: 8000 },
+  settings: { effort: "medium" },
 };
 
 function input<T>(ctx: StageContext, stage: string, schema: z.ZodType<T>): T {
@@ -131,7 +143,7 @@ export const contentScore = z
     business: z.object({ name: z.string(), location: z.string(), category: z.string() }).strict(),
     pages: z.array(z.object({ ref: z.string(), url: z.string(), name: z.string(), words: z.number().int(), truncated: z.boolean() }).strict()),
     leftOut: z.array(z.string()),
-    models: z.object({ assessor: z.string(), engines: z.array(z.string().nullable()).length(3) }).strict(),
+    models: z.object({ assessor: z.string(), scorer: z.string().optional(), engines: z.array(z.string().nullable()).length(3) }).strict(),
     facts: z.array(
       z
         .object({
@@ -346,7 +358,7 @@ export const ccScore: StageDefinition = {
     if (toJudge.length) {
       const res = await ctx.llm({
         instruction: scoreAnswers,
-        model: CONTENT_MODEL,
+        model: SCORING_MODEL,
         input: {
           facts: b.standard.facts.map((f) => ({ id: f.id, name: f.name, lookFor: f.lookFor, website: { status: site.get(f.id)?.status ?? "unverified", provides: site.get(f.id)?.provides ?? "", missing: site.get(f.id)?.missing ?? null } })),
           pages: b.pages.map((p) => ({ ref: p.ref, name: p.name, url: p.url, text: p.text })),
@@ -375,7 +387,7 @@ export const ccScore: StageDefinition = {
       business: b.business,
       pages: b.pages.map((p) => ({ ref: p.ref, url: p.url, name: p.name, words: p.words, truncated: p.truncated })),
       leftOut: b.leftOut,
-      models: { assessor: base.model, engines: ans.map((a) => (a.status === "ok" ? (a.servedModel ?? a.model) : null)) },
+      models: { assessor: base.model, scorer: SCORING_MODEL.model, engines: ans.map((a) => (a.status === "ok" ? (a.servedModel ?? a.model) : null)) },
       facts: b.standard.facts.map((f) => {
         const w = site.get(f.id)!;
         return {
