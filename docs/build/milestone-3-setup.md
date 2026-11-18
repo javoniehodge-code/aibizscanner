@@ -139,3 +139,20 @@ section" in the run monitor; the report reassembles by itself.
 
 Engine: a stage can declare `optionalInputs`, read when they have a finished run and left out otherwise; report
 assembly reads the website section this way, so a report without website tests still assembles.
+
+## Part 4a (continued): Structured data slide
+
+Nothing to configure, no cost. `ws_structured` runs on its own after the JavaScript check and compares the facts in the
+site's code (JSON-LD) with what its pages show, in plain code. For a report that already has its website tests, click
+**Run** on "Website: structured data check"; the website section and the report then update by themselves.
+
+- **The code** is read from our plain copy of each page (what crawlers read); when this run's fetch was refused, from
+  our latest good plain copy (dated), else our browser copy. **The page facts** come from our browser copy (what a visitor
+  sees), else the plain copy.
+- **Facts compared**: business name (with the approved business name), phone, address (the code's street or postal code
+  on a page), opening hours (both schema.org forms), prices (pages show prices; does the code state any beyond a price
+  range?) and FAQ pages (marked up as questions and answers?). Each is a match, a conflict, or missing from the code; a
+  fact only the code states is not judged. Code that isn't valid JSON is reported as broken.
+- **The slide**: pages with structured data, facts that match, conflicts, facts missing from the code; each problem in
+  plain English with technical details for the website manager (page, where in the code, what each side says, the fix);
+  and every fact compared.

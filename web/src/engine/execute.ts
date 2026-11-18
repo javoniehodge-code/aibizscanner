@@ -173,6 +173,7 @@ export async function executeRun(
         return providers.browser.render(url, controller.signal);
       },
       snapshotTexts: (ids) => store.loadSnapshotTexts(ids),
+      snapshotHtml: (ids) => store.loadSnapshotHtml(ids),
       latestGoodSnapshots: (urls) => store.loadLatestGoodSnapshots(run.reportId, urls),
       fullestRenderedSnapshots: (urls) => store.loadFullestRenderedSnapshots(run.reportId, urls),
       recordPageSnapshot: (r) => store.recordPageSnapshot({ ...r, stageRunId: run.id, reportId: run.reportId }),

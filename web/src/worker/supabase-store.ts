@@ -213,6 +213,13 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
       }
       return out;
     },
+    async loadSnapshotHtml(ids) {
+      const out = new Map<string, string>();
+      if (!ids.length) return out;
+      const rows = required(await db.from("page_snapshot_body").select("snapshot_id, html").in("snapshot_id", [...ids]), "load snapshot html");
+      for (const r of rows) if (r.html !== null) out.set(r.snapshot_id, r.html);
+      return out;
+    },
     async loadSnapshotTexts(ids) {
       const out = new Map<string, string>();
       if (!ids.length) return out;

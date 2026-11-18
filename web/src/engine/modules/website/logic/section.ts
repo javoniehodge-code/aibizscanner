@@ -264,3 +264,62 @@ export function discoveryCopy(input: SectionInputs) {
     ),
   };
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Structured data part (website.structuredData)
+// ---------------------------------------------------------------------------------------------------------------
+
+export const STRUCTURED_EVIDENCE = "ws-structured";
+
+type Structured = import("../structured-stage").StructuredCheck;
+
+export function structuredEvidence(sc: Structured & { runId: string; finishedAt: string }): Record<string, EvidenceEntry> {
+  return { [STRUCTURED_EVIDENCE]: { source: "Our structured data check (the code on your pages vs what they show)", ref: `stage_run ${sc.runId}`, capturedOn: day(sc.finishedAt) } };
+}
+
+/** Stats, the problems in plain English with details for the website manager, and every fact compared. */
+export function buildStructuredData(sc: Structured) {
+  const ev = [STRUCTURED_EVIDENCE];
+  const host = (u: string) => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "") || u;
+  const withData = sc.pages.filter((p) => p.blocks > 0).length;
+  const n = (mark: string) => sc.facts.filter((f) => f.mark === mark).length;
+  const conflicts = n("r");
+  const missing = n("k");
+  const stats = [
+    { value: `${withData} of ${sc.pages.length}`, label: "pages have structured data" },
+    { value: `${n("g")} of ${sc.facts.length}`, label: "facts match your pages" },
+    { value: String(conflicts), label: conflicts === 1 ? "conflict" : "conflicts" },
+    { value: String(missing), label: missing === 1 ? "fact missing from code" : "facts missing from code" },
+  ];
+  const problems = [
+    ...sc.broken.map((b) => ({
+      mark: "r" as const,
+      tag: "Broken",
+      title: `${b.errors === 1 ? "A block" : `${b.errors} blocks`} of code on ${b.name} can't be read.`,
+      why: "Machines skip code they can't read, so the facts in it are lost.",
+      details: [
+        { k: "Page", v: host(b.url) },
+        { k: "Where in the code", v: "JSON-LD block that isn't valid JSON" },
+        { k: "Fix", v: "Correct the JSON (check it with Google's Rich Results Test)." },
+      ],
+    })),
+    ...[...sc.facts.filter((f) => f.mark === "r"), ...sc.facts.filter((f) => f.mark === "k")].map((f) => ({
+      mark: f.mark as "r" | "k",
+      tag: f.mark === "r" ? "Conflict" : "Missing",
+      title: f.title,
+      why: f.why,
+      details: [
+        ...(f.pageUrl ? [{ k: "Page", v: host(f.pageUrl) }] : []),
+        { k: "Where in the code", v: f.where },
+        ...(f.mark === "r" ? [{ k: "Code says", v: f.code }] : []),
+        { k: "Page says", v: f.page },
+        { k: "Fix", v: f.fix },
+      ],
+    })),
+  ];
+  return {
+    stats: stats.map((s) => observed(s, ev)),
+    problems: problems.map((p) => observed(p, ev)),
+    facts: sc.facts.map((f) => observed({ fact: f.fact, page: f.page, code: f.code, mark: f.mark }, ev)),
+  };
+}

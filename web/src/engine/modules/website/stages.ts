@@ -8,6 +8,7 @@ import { excluded, onSite, pageKind, suggestPages, type Candidate } from "./logi
 import { CRAWLERS, permission, ROBOTS_REGISTRY_VERSION, sitemapsIn, type RobotsFile } from "./logic/robots";
 import { wsRender } from "./js-stage";
 import { wsSection } from "./section-stage";
+import { wsStructured } from "./structured-stage";
 import { TEST_STAGES } from "./test-stages";
 import { discoverParams, discovery, pageSetSpec, snapshots, type Discovery, type PageSetSpec, type Snapshots } from "./schemas";
 
@@ -201,4 +202,4 @@ export const wsSnapshot: StageDefinition = {
   },
 };
 
-export const WEBSITE_STAGES = [wsDiscover, wsPageSet, wsSnapshot, wsRender, ...TEST_STAGES, wsSection] as const;
+export const WEBSITE_STAGES = [wsDiscover, wsPageSet, wsSnapshot, wsRender, wsStructured, ...TEST_STAGES, wsSection] as const;

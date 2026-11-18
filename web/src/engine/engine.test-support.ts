@@ -91,6 +91,9 @@ export class MemoryStore implements RunStore {
     }
     return out;
   }
+  async loadSnapshotHtml(ids: readonly string[]) {
+    return new Map(this.snapshots.filter((x) => ids.includes(x.id) && x.html !== null).map((x) => [x.id, x.html!] as const));
+  }
   async loadSnapshotTexts(ids: readonly string[]) {
     return new Map(this.snapshots.filter((x) => ids.includes(x.id) && x.text !== null).map((x) => [x.id, x.text!] as const));
   }

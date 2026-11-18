@@ -1715,7 +1715,7 @@ class BrandPart extends Sub {
             const F = R.website.structuredData.facts.map(x => [x.fact, x.page, x.code, x.mark]);
             const RES = { g: 'Match', r: 'Conflict', k: 'Missing' };
             return {
-              stats: R.website.structuredData.stats.map(s => [s.value, s.label]).map(([v, t], i) => ({ v, t, vStyle: { fontSize: 32, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: i === 2 ? RED : '#000' } })),
+              stats: R.website.structuredData.stats.map(s => [s.value, s.label]).map(([v, t], i) => ({ v, t, vStyle: { fontSize: 32, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: i === 2 && v !== '0' ? RED : '#000' } })),
               problems: P.map(([k, tag, t, why, tech], i) => ({ n: i + 1, tag, t, why, tech: tech.map(([a, b]) => ({ a, b })), sym: SYM[k], symStyle: symStyle(k, true),
                 style: { display: 'grid', gridTemplateColumns: '28px minmax(0,1fr)', gap: 14, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
                 tagStyle: { fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 999, border: '1px solid ' + (k === 'r' ? RED : '#000') } })),
