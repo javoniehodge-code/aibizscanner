@@ -1,6 +1,6 @@
 import "server-only";
 import OpenAI from "openai";
-import type { AnswerEngine, AskRequest, AskResult, ReadAttempt, ReadRequest, ReadResult } from "@/engine/answers";
+import { approxTokens, type AnswerEngine, type AskRequest, type AskResult, type OfflineRequest, type OfflineResult, type ReadAttempt, type ReadRequest, type ReadResult } from "@/engine/answers";
 import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
@@ -71,6 +71,21 @@ export function openAiEngine(apiKey: string): AnswerEngine {
           searchCalls: res.tool_usage?.web_search?.num_requests ?? searches,
           requests: 1,
         },
+        raw: trimRaw(res),
+        requestId: res._request_id ?? null,
+        servedModel: res.model ?? null,
+      };
+    },
+    estimateOffline: (r) => ({ tokensIn: approxTokens(r.instruction + r.material) + 500, tokensOut: 6_000, searchCalls: 0, requests: 1 }),
+    /** Website-only answer: Responses API with no tools. */
+    async answerOffline(request: OfflineRequest, signal: AbortSignal): Promise<OfflineResult> {
+      const res = await client.responses.create({ model: SPEC.model, instructions: request.instruction, input: request.material, store: false }, { signal });
+      const refused = res.output.some((item) => item.type === "message" && item.content.some((c) => c.type === "refusal"));
+      const text = res.output_text ?? "";
+      return {
+        status: refused && !text ? "refused" : "ok",
+        text,
+        usage: { tokensIn: res.usage?.input_tokens ?? 0, tokensOut: res.usage?.output_tokens ?? 0, searchCalls: 0, requests: 1 },
         raw: trimRaw(res),
         requestId: res._request_id ?? null,
         servedModel: res.model ?? null,

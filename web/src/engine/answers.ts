@@ -68,6 +68,13 @@ export type ReadResult = {
 
 export type ReadRequest = { url: string; instruction: string };
 
+/**
+ * A question answered from supplied material only, with no tools (no web search, no page reading): the "website only"
+ * test (multi-model-brand-perception.md, Section 2). The material is our copy of the business's pages.
+ */
+export type OfflineRequest = { instruction: string; material: string };
+export type OfflineResult = { status: "ok" | "refused"; text: string; usage: Usage; raw: JsonValue; requestId: string | null; servedModel: string | null };
+
 export interface AnswerEngine {
   readonly engine: EngineIndex;
   readonly provider: string;
@@ -85,7 +92,14 @@ export interface AnswerEngine {
   readPage?(request: ReadRequest, signal: AbortSignal): Promise<ReadResult>;
   /** Upper-bound usage for one page read, for the spending-cap check. */
   estimateRead?(request: ReadRequest): Usage;
+  /** Answers from the supplied material only, with every tool off. */
+  answerOffline?(request: OfflineRequest, signal: AbortSignal): Promise<OfflineResult>;
+  /** Upper-bound usage for one offline answer, for the spending-cap check. */
+  estimateOffline?(request: OfflineRequest): Usage;
 }
+
+/** Rough token count of a text (about 4 characters a token), for spending-cap estimates. */
+export const approxTokens = (s: string) => Math.ceil(s.length / 4);
 
 /** Returns the configured answer engine, or null when its API key is not set. */
 export type AnswerEngines = (engine: EngineIndex) => AnswerEngine | null;

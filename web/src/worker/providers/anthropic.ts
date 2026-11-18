@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { jsonSchemaOutputFormat } from "@anthropic-ai/sdk/helpers/json-schema";
 import type { JsonValue, LlmClient, Usage } from "@/engine";
-import type { AnswerEngine, AskRequest, AskResult, ReadAttempt, ReadRequest, ReadResult } from "@/engine/answers";
+import { approxTokens, type AnswerEngine, type AskRequest, type AskResult, type OfflineRequest, type OfflineResult, type ReadAttempt, type ReadRequest, type ReadResult } from "@/engine/answers";
 import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
@@ -97,6 +97,17 @@ export function anthropicEngine(apiKey: string): AnswerEngine {
         requestId: (final as { _request_id?: string | null } | null)?._request_id ?? null,
         servedModel: final?.model ?? null,
       };
+    },
+    estimateOffline: (r) => ({ tokensIn: approxTokens(r.instruction + r.material) + 500, tokensOut: 8_000, searchCalls: 0, requests: 1 }),
+    /** Website-only answer: Messages API with no tools. */
+    async answerOffline(request: OfflineRequest, signal: AbortSignal): Promise<OfflineResult> {
+      const msg = await client.messages
+        .stream({ model: SPEC.model, max_tokens: 8000, system: request.instruction, messages: [{ role: "user", content: request.material }] }, { signal })
+        .finalMessage();
+      const usage: Usage = { tokensIn: 0, tokensOut: 0, searchCalls: 0, requests: 1 };
+      addUsage(usage, msg.usage);
+      const text = msg.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("\n");
+      return { status: msg.stop_reason === "refusal" && !text ? "refused" : "ok", text, usage, raw: trimRaw(msg), requestId: (msg as { _request_id?: string | null })._request_id ?? null, servedModel: msg.model ?? null };
     },
     estimateRead: () => ({ tokensIn: 40_000, tokensOut: 4_000, searchCalls: 0, requests: 1 }),
     /**
