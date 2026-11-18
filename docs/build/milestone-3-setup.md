@@ -205,3 +205,8 @@ Claude's answer), within the spending cap. Runs on its own after `cc_bundle` (sa
 
 A competitive advantage is never claimed from the website alone: comparing with named competitors needs their
 evidence, which is a later part. One answer per AI per question, recorded as a single snapshot.
+
+Scorer instructions v2 (18 Nov 2026, after the first MVP Miami run): both scorers (`content/score-answers`,
+`content/assess-distinctive`) count an answer that says the same as the pages in other words as supported, must search
+all pages before flagging, and name only the specific detail that isn't on the pages. Rerun `cc_score` and `ds_score`
+(no new AI answers needed) to apply it to an existing report.
