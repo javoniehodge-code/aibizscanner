@@ -53,7 +53,7 @@ export const contentBundle = z
   .object({
     version: z.string(),
     business: z.object({ name: z.string(), location: z.string(), category: z.string() }).strict(),
-    standard: z.object({ id: z.string(), version: z.string(), label: z.string(), facts: z.array(fact) }).strict(),
+    standard: z.object({ id: z.string(), version: z.string(), label: z.string(), noun: z.string().optional(), facts: z.array(fact) }).strict(),
     pages: z.array(bundlePage),
     leftOut: z.array(z.string()),
   })
@@ -192,7 +192,7 @@ export const ccBundle: StageDefinition = {
     const out: ContentBundle = {
       version: CONTENT_CHECK_VERSION,
       business: { name: set.business?.name ?? target.name, location: set.business?.location ?? target.location, category: target.category },
-      standard: { id: chosen.id, version: chosen.version, label: chosen.label, facts: chosen.facts },
+      standard: { id: chosen.id, version: chosen.version, label: chosen.label, noun: chosen.noun, facts: chosen.facts },
       pages: bundle.pages,
       leftOut: bundle.leftOut,
     };
@@ -255,11 +255,11 @@ function answerStage(engine: EngineIndex): StageDefinition {
     async run(ctx) {
       const b = input(ctx, "cc_bundle", contentBundle);
       const client = ctx.answerEngine(engine);
-      const instruction = answerInstruction(b.business, { ...b.standard, approved: "", match: /x/ });
+      const instruction = answerInstruction(b.business, { ...b.standard, noun: b.standard.noun ?? "business", approved: "", match: /x/ });
       const base = { engine, model: client?.model ?? ENGINE_MODELS[engine]!.model, instruction, answers: {}, replyExcerpt: "", servedModel: null };
       if (!client) return { status: "partial", output: { ...base, configured: false, status: "not_tested", reason: `${name} is not configured (its API key is not set)` } as unknown as JsonValue };
       if (!client.answerOffline) return { status: "partial", output: { ...base, configured: true, status: "not_tested", reason: `${name} has no website-only mode in this configuration` } as unknown as JsonValue };
-      const request = { instruction, material: answerMaterial({ ...b.standard, approved: "", match: /x/ }, b.pages) };
+      const request = { instruction, material: answerMaterial({ ...b.standard, noun: b.standard.noun ?? "business", approved: "", match: /x/ }, b.pages) };
       try {
         const r = await ctx.paidCall({ provider: client.provider, model: client.model, estimate: client.estimateOffline?.(request) ?? client.estimate({ question: request.material, location: null, maxSearches: 0 }) }, async (signal) => {
           const res = await client.answerOffline!(request, signal);

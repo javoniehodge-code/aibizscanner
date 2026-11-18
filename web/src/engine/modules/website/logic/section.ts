@@ -436,3 +436,58 @@ export function clearCopy(sc: Score) {
 }
 
 const applicable = (sc: Score) => sc.facts.filter((f) => f.website.status !== "not_applicable").length;
+
+// ---------------------------------------------------------------------------------------------------------------
+// Distinctive part (website.distinctive)
+// ---------------------------------------------------------------------------------------------------------------
+
+export const DISTINCTIVE_EVIDENCE = "ds-score";
+
+type Dist = import("../../content/distinctive").DistinctiveScore;
+
+export function distinctiveEvidence(ds: Dist & { runId: string; finishedAt: string }): Record<string, EvidenceEntry> {
+  return { [DISTINCTIVE_EVIDENCE]: { source: `Distinctive: each AI's website-only description and answers, assessed by ${ds.models.assessor}`, ref: `stage_run ${ds.runId}`, capturedOn: day(ds.finishedAt) } };
+}
+
+/**
+ * The report's Distinctive part: each AI's one-sentence description and its answers to the five questions with a flag
+ * where an answer is generic, not on the website or not covered; takeaways computed here from the supported reasons and
+ * which AIs picked them up.
+ */
+export function buildDistinctive(ds: Dist) {
+  const ev = [DISTINCTIVE_EVIDENCE];
+  const list = (xs: string[]) => (xs.length <= 2 ? xs.join(" and ") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
+  const tested = [0, 1, 2].filter((e) => ds.models.engines[e]);
+  const ais = (es: number[]) => list(es.map((e) => ENGINE_NAMES[e]!));
+  const FLAG: Record<string, (note: string) => string | null> = {
+    ok: () => null,
+    generic: (n) => `Generic: could describe any ${ds.noun}${n ? ` (${n.replace(/\.$/, "")})` : ""}.`,
+    unsupported: (n) => `Not on your website: ${n || "it adds details your pages don't give"}`.replace(/([^.])$/, "$1."),
+    not_stated: () => null,
+    not_tested: (n) => `Not tested: ${n}`,
+  };
+
+  const takeaways: { k: string; v: string }[] = [];
+  const all = ds.reasons.filter((r) => tested.length && tested.every((e) => r.mentionedBy.includes(e)));
+  const some = ds.reasons.filter((r) => r.mentionedBy.length && !all.includes(r));
+  const none = ds.reasons.filter((r) => !r.mentionedBy.length);
+  if (all.length) takeaways.push({ k: "What comes through", v: `${tested.length === 3 ? "All three" : ais(tested)} pick up ${list(all.map((r) => r.name))} from your site.` });
+  for (const r of some.slice(0, 2)) takeaways.push({ k: `${r.name}: easy to miss`, v: `${ais(r.mentionedBy)} ${r.mentionedBy.length === 1 ? "finds" : "find"} it; ${ais(tested.filter((e) => !r.mentionedBy.includes(e)))} ${tested.filter((e) => !r.mentionedBy.includes(e)).length === 1 ? "doesn't" : "don't"}.` });
+  if (none.length) takeaways.push({ k: "Reasons AI doesn't repeat", v: `Your pages support ${list(none.map((r) => r.name))}, but no AI mentioned ${none.length === 1 ? "it" : "them"}.` });
+  const unsupported = tested.map((e) => ({ e, n: ds.questions.filter((q) => q.answers[e]!.flag === "unsupported").length })).filter((x) => x.n);
+  if (unsupported.length) takeaways.push({ k: "AI added things your site doesn't say", v: unsupported.map((x) => `${ENGINE_NAMES[x.e]}: ${x.n} ${x.n === 1 ? "answer" : "answers"}`).join(" · ") + ". See the flagged answers above." });
+  const alt = ds.questions.find((q) => q.id === "alternative");
+  if (alt && tested.every((e) => ["not_stated", "generic"].includes(alt.answers[e]!.flag)))
+    takeaways.push({ k: "What sets you apart isn't established", v: `From your website alone, no AI could say when another ${ds.noun} would be better. That's a limit of your pages, not proof you have no competitors.` });
+  if (!ds.reasons.length) takeaways.push({ k: "No specific reason to choose you", v: "We found no specific, supported reason to choose you on your pages: only general claims." });
+
+  return {
+    descriptions: [0, 1, 2].map((e) => observed(ds.descriptions[e] ?? (ds.models.engines[e] ? "It gave no description." : "Not tested."), ev)) as [Observed<string>, Observed<string>, Observed<string>],
+    questions: ds.questions.map((q) => ({
+      question: observed(q.question, ev),
+      answers: q.answers.map((a) => observed({ text: a.flag === "not_stated" ? "Said your website doesn't cover this." : (a.text ?? "Not tested."), flag: FLAG[a.flag]!(a.note) }, ev)) as [Observed<{ text: string; flag: string | null }>, Observed<{ text: string; flag: string | null }>, Observed<{ text: string; flag: string | null }>],
+    })),
+    takeaways: takeaways.map((t) => observed(t, ev)),
+    fixes: ds.fixes.map((f) => observed(f, ev)),
+  };
+}

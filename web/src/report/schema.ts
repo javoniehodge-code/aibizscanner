@@ -336,7 +336,7 @@ const consistent = z
   })
   .strict();
 
-const distinctive = z
+export const websiteDistinctive = z
   .object({
     /** One-sentence description of the business from each engine, website only. */
     descriptions: three(val(nonEmpty)),
@@ -494,7 +494,7 @@ const reportShape = z
         structuredData: websiteStructuredData.nullable(),
         clear: websiteClear.nullable(),
         consistent: consistent.nullable(),
-        distinctive: distinctive.nullable(),
+        distinctive: websiteDistinctive.nullable(),
       })
       .strict()
       .nullable(),
