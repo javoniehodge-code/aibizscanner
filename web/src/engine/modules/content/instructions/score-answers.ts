@@ -8,10 +8,13 @@ import { defineInstruction } from "../../../llm";
  * v2 (2026-11-18): paraphrases count as supported, and an "unsupported" or "wrong" reason must name only the detail
  * that isn't on (or contradicts) the pages: the Distinctive scorer, on the same MVP Miami pages, flagged a correct
  * paraphrase and overstated what was missing.
+ * v3 (2026-11-18): v2 still gave "unsupported" while its own reason said everything was supported. A "wrong" or
+ * "unsupported" verdict now needs "claim": the exact words from the answer at fault; plain code keeps the verdict only
+ * when those words are in the answer and on none of the pages (logic.ts, claimHolds).
  */
 export const scoreAnswers = defineInstruction({
   id: "content/score-answers",
-  version: 2,
+  version: 3,
   text: `You check answers that AI assistants gave about a business using only the business's website pages. The input is
 JSON with:
 - "facts": the decision facts, each with "id", "name", "lookFor" (what a complete answer covers) and "website" (our
@@ -32,6 +35,9 @@ other words is supported; only details the pages don't contain anywhere are unsu
 Return JSON with "items": one item per answer, in the input order, with:
 - "engine" and "id": copied exactly.
 - "verdict": one of the values above.
+- "claim": for "wrong" or "unsupported", the exact words copied from the answer (2 to 25 words) that aren't on the
+  pages or contradict them, and nothing else; null for the other verdicts. If you can't point to such words, the
+  verdict isn't "wrong" or "unsupported".
 - "reason": one short sentence (at most 25 words) naming what matched, what was left out, or what contradicts the
   pages. For "unsupported" or "wrong", name only the specific detail that isn't on the pages or contradicts them,
   not the parts that are on the pages.`,

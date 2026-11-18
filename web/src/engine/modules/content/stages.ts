@@ -12,6 +12,7 @@ import { assessWebsite } from "./instructions/assess-website";
 import { scoreAnswers } from "./instructions/score-answers";
 import {
   answerInstruction,
+  claimHolds,
   answerMaterial,
   buildBundle,
   CONTENT_CHECK_VERSION,
@@ -120,7 +121,7 @@ export const contentAnswers = z
 export type ContentAnswers = z.infer<typeof contentAnswers>;
 
 const verdict = z.enum(["supported", "partial", "wrong", "unsupported", "not_answered", "correctly_not_stated", "not_tested"]);
-const judged = z.object({ items: z.array(z.object({ engine: z.number().int(), id: z.string(), verdict: z.enum(["supported", "partial", "wrong", "unsupported"]), reason: z.string() }).strict()) }).strict();
+const judged = z.object({ items: z.array(z.object({ engine: z.number().int(), id: z.string(), verdict: z.enum(["supported", "partial", "wrong", "unsupported"]), claim: z.string().nullable(), reason: z.string() }).strict()) }).strict();
 
 /** cc_score: every fact with the website's status and each AI's answer and verdict. */
 export const contentScore = z
@@ -139,7 +140,21 @@ export const contentScore = z
           name: z.string(),
           lookFor: z.string(),
           website: z.object({ status: websiteStatus, provides: z.string(), missing: z.string().nullable(), quotes: z.array(quote), fix: z.string().nullable() }).strict(),
-          answers: z.array(z.object({ answer: z.string().nullable(), verdict, reason: z.string() }).strict()).length(3),
+          answers: z
+            .array(
+              z
+                .object({
+                  answer: z.string().nullable(),
+                  verdict,
+                  reason: z.string(),
+                  /** For wrong / unsupported: the answer's words at fault, checked against the answer and the pages. */
+                  claim: z.string().nullable().optional(),
+                  /** The scorer's verdict when plain code dropped it for lack of evidence. */
+                  overruled: z.string().optional(),
+                })
+                .strict(),
+            )
+            .length(3),
         })
         .strict(),
     ),
@@ -310,7 +325,7 @@ export const ccScore: StageDefinition = {
     const ans = ANSWER_IDS.map((s) => input(ctx, s, contentAnswers));
     const site = new Map(base.facts.map((f) => [f.id, f]));
 
-    type Cell = { answer: string | null; verdict: Verdict; reason: string };
+    type Cell = { answer: string | null; verdict: Verdict; reason: string; claim?: string | null; overruled?: string };
     const cells = new Map<string, Cell>();
     const toJudge: { engine: number; id: string; answer: string }[] = [];
     for (const a of ans)
@@ -341,7 +356,16 @@ export const ccScore: StageDefinition = {
       });
       for (const j of toJudge) {
         const v = res.items.find((i) => i.engine === j.engine && i.id === j.id);
-        cells.set(`${j.engine}|${j.id}`, v ? { answer: j.answer, verdict: v.verdict, reason: v.reason } : { answer: j.answer, verdict: "not_tested", reason: "The scoring gave no verdict for this answer." });
+        if (!v) {
+          cells.set(`${j.engine}|${j.id}`, { answer: j.answer, verdict: "not_tested", reason: "The scoring gave no verdict for this answer." });
+          continue;
+        }
+        // A "wrong" / "unsupported" verdict stands only when the blamed words are in the answer and on none of the pages.
+        if ((v.verdict === "wrong" || v.verdict === "unsupported") && !claimHolds(v.claim, j.answer, b.pages)) {
+          cells.set(`${j.engine}|${j.id}`, { answer: j.answer, verdict: "supported", reason: "Matches the pages (the scorer's objection couldn't be confirmed against the pages).", claim: v.claim, overruled: v.verdict });
+          continue;
+        }
+        cells.set(`${j.engine}|${j.id}`, { answer: j.answer, verdict: v.verdict, reason: v.verdict === "unsupported" && v.claim ? `Not on your pages: “${v.claim}”.` : v.reason, claim: v.claim });
       }
     }
 

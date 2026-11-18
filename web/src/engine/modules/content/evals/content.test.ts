@@ -10,7 +10,7 @@ import { instructionRef } from "../../../llm";
 import { FakeLlmClient } from "../../../testing/fake-llm";
 import type { ClaimedRun, JsonValue, StageInput } from "../../../types";
 import { buildClear } from "../../website/logic/section";
-import { buildBundle, cutWords, isNotStated, parseAnswers, quoteOnPage, resolveWebsiteStatus } from "../logic";
+import { buildBundle, claimHolds, cutWords, isNotStated, parseAnswers, quoteOnPage, resolveWebsiteStatus } from "../logic";
 import type { ContentScore } from "../stages";
 import { standardFor, STANDARDS } from "../standards";
 
@@ -68,6 +68,16 @@ describe("plain-code checks", () => {
     expect(resolveWebsiteStatus(vehicles!, "enough", 0)).toBe("unverified");
     expect(resolveWebsiteStatus(vehicles!, "not_applicable", 0)).toBe("not_enough");
     expect(resolveWebsiteStatus(chauffeur, "not_applicable", 0)).toBe("not_applicable");
+  });
+
+  it("keeps a 'not on your website' or 'wrong' verdict only when the blamed words are in the answer and on no page", () => {
+    const answer = "Rentals start from roughly $999-$1,599 per day, and early returns get a credit.";
+    const pp = [{ text: "Prices Starting at: 1,599. If you cancel early you will be given a credit for future rentals." }];
+    expect(claimHolds("per day", answer, pp)).toBe(true); // in the answer, on no page
+    expect(claimHolds("a credit", answer, pp)).toBe(false); // on the page: overruled
+    expect(claimHolds("free limo service", answer, pp)).toBe(false); // not in the answer
+    expect(claimHolds(null, answer, pp)).toBe(false); // nothing blamed
+    expect(claimHolds("day", answer, pp)).toBe(false); // one word isn't enough to pin down
   });
 
   it("reads the AI's JSON answers, around code fences, and spots NOT STATED", () => {
@@ -171,12 +181,17 @@ describe("Clear & complete stages (fake models)", () => {
 
     // 4. Scores: NOT STATED handled in plain code; stated answers judged once against the same pages.
     const judge = new FakeLlmClient((req) => {
-      const items = (JSON.parse(req.user.slice(req.user.indexOf("{"))) as { answers: { engine: number; id: string }[] }).answers.map((a) => ({
-        engine: a.engine,
-        id: a.id,
-        verdict: a.engine === 1 && a.id === "requirements" ? "wrong" : a.engine === 1 && a.id === "cancellation" ? "unsupported" : a.engine === 1 && a.id === "vehicles" ? "partial" : "supported",
-        reason: "r",
-      }));
+      const CALLS: Record<string, [string, string | null]> = {
+        "1|requirements": ["wrong", "21 or older"],
+        "1|cancellation": ["unsupported", "Free cancellation up to 48 hours"],
+        "1|vehicles": ["partial", null],
+        // The scorer blames words that ARE on the pages: plain code overrules it.
+        "0|vehicles": ["unsupported", "Rolls-Royce Cullinan"],
+      };
+      const items = (JSON.parse(req.user.slice(req.user.indexOf("{"))) as { answers: { engine: number; id: string }[] }).answers.map((a) => {
+        const [verdict, claim] = CALLS[`${a.engine}|${a.id}`] ?? ["supported", null];
+        return { engine: a.engine, id: a.id, verdict, claim, reason: "r" };
+      });
       return JSON.stringify({ items });
     });
     const score = (await run(store, "cc_score", [bundle, base, ...ans], { llm: judge })).input;
@@ -184,6 +199,8 @@ describe("Clear & complete stages (fake models)", () => {
     const sc = score.output as unknown as ContentScore;
     const verdicts = (id: string) => sc.facts.find((f) => f.id === id)!.answers.map((a) => a.verdict);
     expect(verdicts("vehicles")).toEqual(["supported", "partial", "not_tested"]);
+    expect(sc.facts.find((f) => f.id === "vehicles")!.answers[0]).toMatchObject({ overruled: "unsupported", claim: "Rolls-Royce Cullinan" });
+    expect(sc.facts.find((f) => f.id === "cancellation")!.answers[1]!.reason).toBe("Not on your pages: “Free cancellation up to 48 hours”.");
     expect(verdicts("requirements")).toEqual(["supported", "wrong", "not_tested"]);
     // The website doesn't give the cancellation policy: ChatGPT rightly said so; Claude invented one.
     expect(verdicts("cancellation")).toEqual(["correctly_not_stated", "unsupported", "not_tested"]);

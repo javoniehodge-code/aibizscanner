@@ -4,7 +4,7 @@ import { errorMessage, MissingPricingError, SpendingCapError } from "../../error
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { ENGINE_MODELS } from "../prompt-analysis/models";
 import { assessDistinctive } from "./instructions/assess-distinctive";
-import { CONTENT_CHECK_VERSION, isNotStated, NOT_STATED, quoteOnPage, type BundlePage } from "./logic";
+import { claimHolds, CONTENT_CHECK_VERSION, isNotStated, NOT_STATED, quoteOnPage, type BundlePage } from "./logic";
 import { CONTENT_MODEL, contentBundle, type ContentBundle } from "./stages";
 import { STANDARDS } from "./standards";
 
@@ -124,7 +124,7 @@ const flagKind = z.enum(["ok", "generic", "unsupported", "not_stated"]);
 const assessed = z
   .object({
     reasons: z.array(z.object({ name: z.string(), quotes: z.array(z.object({ ref: z.string(), text: z.string() }).strict()).max(2) }).strict()).max(6),
-    flags: z.array(z.object({ engine: z.number().int(), id: z.string(), flag: flagKind, note: z.string() }).strict()),
+    flags: z.array(z.object({ engine: z.number().int(), id: z.string(), flag: flagKind, claim: z.string().nullable(), note: z.string() }).strict()),
     mentions: z.array(z.object({ engine: z.number().int(), reasons: z.array(z.number().int()) }).strict()),
     fixes: z.array(z.object({ title: z.string(), text: z.string() }).strict()).max(3),
   })
@@ -145,7 +145,19 @@ export const distinctiveScore = z
         .object({
           id: z.string(),
           question: z.string(),
-          answers: z.array(z.object({ text: z.string().nullable(), flag: z.enum(["ok", "generic", "unsupported", "not_stated", "not_tested"]), note: z.string() }).strict()).length(3),
+          answers: z
+            .array(
+              z
+                .object({
+                  text: z.string().nullable(),
+                  flag: z.enum(["ok", "generic", "unsupported", "not_stated", "not_tested"]),
+                  note: z.string(),
+                  /** The scorer's flag when plain code dropped it for lack of evidence. */
+                  overruled: z.string().optional(),
+                })
+                .strict(),
+            )
+            .length(3),
         })
         .strict(),
     ),
@@ -207,6 +219,10 @@ export const dsScore: StageDefinition = {
           // Saying the pages don't cover it is decided here, not by the model.
           if (isNotStated(text ?? undefined)) return { text: text ?? NOT_STATED, flag: "not_stated" as const, note: "" };
           const f = res.flags.find((x) => x.engine === a.engine && x.id === q.id);
+          // "Not on your website" stands only when the blamed words are in the answer and on none of the pages.
+          if (f?.flag === "unsupported") {
+            return claimHolds(f.claim, text ?? "", pages) ? { text, flag: "unsupported" as const, note: f.claim! } : { text, flag: "ok" as const, note: "", overruled: "unsupported" };
+          }
           return { text, flag: f?.flag ?? "ok", note: f?.note ?? "" };
         }),
       })),
