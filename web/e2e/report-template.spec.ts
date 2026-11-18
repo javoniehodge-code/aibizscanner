@@ -8,9 +8,10 @@ test.setTimeout(240_000);
 
 /**
  * Slide indexes changed on purpose since the original: 5 Businesses named (top 15, no first-choice chart, slanted
- * names; 14 Nov 2026); 15 Sources (websites summary, drilldowns by website and provider tab; 16 Nov 2026).
+ * names; 14 Nov 2026); 9 Find & read (one table per question: find, blocked, read; 18 Nov 2026); 15 Sources (websites
+ * summary, drilldowns by website and provider tab; 16 Nov 2026).
  */
-const REDESIGNED = new Set([5, 15]);
+const REDESIGNED = new Set([5, 9, 15]);
 
 test("Brownstone: every slide matches the original hand-filled template, except redesigned ones", async ({ browser }) => {
   const before = await serveDir(templateDir(legacyTemplate()));
@@ -120,6 +121,8 @@ test("a report with the website's Find & read part only shows that website slide
     expect(errors).toEqual([]);
     const heads = slides.map((t) => t.split("\n").slice(0, 2).join(" | ").trim());
     expect(heads.slice(6, 9)).toEqual(["SECTION 2 | MVP Miami", "07 | FIND & READ", "SECTION 3 | MVP Miami"]);
+    // One table per question (owner, 18 Nov 2026).
+    for (const step of ["Can AI find this page?", "Is AI blocked from this page?", "Can AI read this page?"]) expect(slides[7]).toContain(step);
     const all = slides.join("\n");
     for (const absent of ["CLEAR & COMPLETE", "CONSISTENT & CURRENT", "DISTINCTIVE & RELEVANT", "Structured data is code on your pages"]) expect(all).not.toContain(absent);
   } finally {

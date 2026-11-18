@@ -253,10 +253,24 @@ export const websiteDiscovery = z
                   .object({
                     page: val(z.object({ name: nonEmpty, url: nonEmpty, why: nonEmpty }).strict()),
                     /**
-                     * Per engine. search: g found, k link only, r not found, d not tested or unconfirmed.
-                     * read: g read, p partly, f couldn't read, u not tested or unconfirmed (no tool evidence either way).
+                     * Per engine, one step at a time.
+                     * search (can it find the page): g yes, k link only, r no, d not checked.
+                     * access (is it blocked from the page): g not blocked, r blocked, d not confirmed. Absent in older
+                     *   reports: then g when it read the page, else not confirmed.
+                     * read (can it read the page): g yes, p partly, j no: key facts need JavaScript, f no, u not confirmed,
+                     *   n not applicable (blocked at the access step).
                      */
-                    results: three(val(z.object({ search: z.enum(["g", "k", "r", "d"]), read: z.enum(["g", "p", "f", "u"]) }).strict())),
+                    results: three(
+                      val(
+                        z
+                          .object({
+                            search: z.enum(["g", "k", "r", "d"]),
+                            access: z.enum(["g", "r", "d"]).optional(),
+                            read: z.enum(["g", "p", "j", "f", "u", "n"]),
+                          })
+                          .strict(),
+                      ),
+                    ),
                   })
                   .strict(),
               )
@@ -265,7 +279,8 @@ export const websiteDiscovery = z
           .strict(),
       )
       .min(1),
-    notes: z.array(val(z.object({ page: nonEmpty, engine: engineIndex, text: nonEmpty }).strict())),
+    /** Why a page got its result for one AI; step says which table it explains (1 find, 2 blocked, 3 read). */
+    notes: z.array(val(z.object({ page: nonEmpty, engine: engineIndex, text: nonEmpty, step: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional() }).strict())),
     /** Our raw-HTML vs fully-loaded diagnostic (not an AI's own test). */
     rawVsLoaded: maybe(z.array(z.object({ page: nonEmpty, raw: nonEmpty, loaded: nonEmpty, mark: z.enum(["g", "k", "r"]), result: nonEmpty }).strict())),
     attention: z.array(val(z.object({ title: nonEmpty, engines: z.array(engineIndex), what: nonEmpty, next: nonEmpty, technical: nonEmpty }).strict())),

@@ -3085,13 +3085,23 @@
                                                 "d"
                                               ]
                                             },
+                                            "access": {
+                                              "type": "string",
+                                              "enum": [
+                                                "g",
+                                                "r",
+                                                "d"
+                                              ]
+                                            },
                                             "read": {
                                               "type": "string",
                                               "enum": [
                                                 "g",
                                                 "p",
+                                                "j",
                                                 "f",
-                                                "u"
+                                                "u",
+                                                "n"
                                               ]
                                             }
                                           },
@@ -3126,13 +3136,23 @@
                                                 "d"
                                               ]
                                             },
+                                            "access": {
+                                              "type": "string",
+                                              "enum": [
+                                                "g",
+                                                "r",
+                                                "d"
+                                              ]
+                                            },
                                             "read": {
                                               "type": "string",
                                               "enum": [
                                                 "g",
                                                 "p",
+                                                "j",
                                                 "f",
-                                                "u"
+                                                "u",
+                                                "n"
                                               ]
                                             }
                                           },
@@ -3167,13 +3187,23 @@
                                                 "d"
                                               ]
                                             },
+                                            "access": {
+                                              "type": "string",
+                                              "enum": [
+                                                "g",
+                                                "r",
+                                                "d"
+                                              ]
+                                            },
                                             "read": {
                                               "type": "string",
                                               "enum": [
                                                 "g",
                                                 "p",
+                                                "j",
                                                 "f",
-                                                "u"
+                                                "u",
+                                                "n"
                                               ]
                                             }
                                           },
@@ -3234,6 +3264,22 @@
                               "text": {
                                 "type": "string",
                                 "minLength": 1
+                              },
+                              "step": {
+                                "anyOf": [
+                                  {
+                                    "type": "number",
+                                    "const": 1
+                                  },
+                                  {
+                                    "type": "number",
+                                    "const": 2
+                                  },
+                                  {
+                                    "type": "number",
+                                    "const": 3
+                                  }
+                                ]
                               }
                             },
                             "required": [

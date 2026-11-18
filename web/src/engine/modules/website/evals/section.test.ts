@@ -9,7 +9,7 @@ import type { PageSetSpec, Snapshots } from "../schemas";
 import type { FindRead } from "../test-stages";
 
 const allowed = { verdict: "allowed" as const, line: null, reason: "No rule" };
-const perms = { "OAI-SearchBot": allowed, "Claude-SearchBot": allowed, Googlebot: allowed };
+const perms = { "OAI-SearchBot": allowed, "ChatGPT-User": allowed, "Claude-SearchBot": allowed, "Claude-User": allowed, Googlebot: allowed };
 const page = (url: string, kind: Snapshots["pages"][number]["kind"], title: string, reason: string): Snapshots["pages"][number] => ({
   url, kind, reason, snapshotId: `s-${kind}`, finalUrl: url, status: 200, error: null, truncated: false, title, description: null, canonical: null, metaRobots: null,
   headings: [], wordCount: 100, textExcerpt: "", jsonLdTypes: [], jsonLdErrors: 0, microdataTypes: [], permissions: perms,
@@ -67,22 +67,33 @@ const inputs: SectionInputs = { set, snap, findRead, js, snapshotAt: "2026-11-17
 describe("website section: Find & read", () => {
   const d = websiteDiscovery.parse(buildDiscovery(inputs));
 
-  it("groups pages and codes each AI's search and reading results, keeping 'unconfirmed' apart from failures", () => {
+  it("answers the three questions per page and AI: found, blocked, read; unconfirmed is never a failure", () => {
     expect(d.pageGroups.map((g) => g.group.v.title)).toEqual(["Main pages", "Services, prices and booking", "Questions and policies"]);
     const faq = d.pageGroups[2]!.pages[0]!;
     expect(faq.page.v).toEqual({ name: "FAQ's For Renting", url: FAQ, why: "FAQ page" });
-    expect(faq.results.map((x) => x.v)).toEqual([{ search: "g", read: "u" }, { search: "g", read: "f" }, { search: "d", read: "g" }]);
+    // ChatGPT: found, not blocked (your rules allow it), reading not confirmed. Claude: found, but your website turned its
+    // reader away, so blocked and not asked to read. Gemini: search not confirmed, not blocked, read.
+    expect(faq.results.map((x) => x.v)).toEqual([
+      { search: "g", access: "g", read: "u" },
+      { search: "g", access: "r", read: "n" },
+      { search: "d", access: "g", read: "g" },
+    ]);
+    // Rentals: ChatGPT and Claude missed prices that only load with JavaScript.
+    expect(d.pageGroups[1]!.pages[0]!.results.map((x) => x.v.read)).toEqual(["j", "j", "g"]);
     expect(d.permissions.map((p) => p.v.mark)).toEqual(["g", "g", "g"]);
   });
 
   it("carries the key-fact notes, our JavaScript check (checked pages only) and what to fix first", () => {
-    expect(d.notes.map((n) => n.v)).toContainEqual({ page: "Exotic Vehicle Rentals", engine: 0, text: "Found; partly read. Got 2 of 8 key facts." });
+    expect(d.notes.map((n) => n.v)).toContainEqual({ page: "Exotic Vehicle Rentals", engine: 0, text: "Got 2 of 8 key facts.", step: 3 });
+    expect(d.notes.map((n) => n.v)).toContainEqual({ page: "FAQ's For Renting", engine: 1, text: "Your website turned Claude's page reader away.", step: 2 });
     expect(d.rawVsLoaded.v).toEqual([
       { page: "Home page", raw: "410 words", loaded: "410 words", mark: "g", result: "Readable without JavaScript" },
       { page: "Exotic Vehicle Rentals", raw: "72 words", loaded: "1,292 words", mark: "r", result: "Key facts load with JavaScript" },
     ]);
-    expect(d.attention.map((a) => a.v.title)).toEqual(["Exotic Vehicle Rentals: key facts load with JavaScript", "Claude couldn't open a page"]);
-    expect(d.attention[0]!.v).toMatchObject({ engines: [0, 1], what: expect.stringContaining("ChatGPT and Claude didn't get them."), next: expect.stringMatching(/^Your prices depend on JavaScript/) });
+    // Each item names its step and matches that step's table.
+    expect(d.attention.map((a) => a.v.title)).toEqual(["Step 2: Claude is blocked from 1 page", "Step 3: ChatGPT and Claude can't read Exotic Vehicle Rentals: it needs JavaScript"]);
+    expect(d.attention[0]!.v.what).toBe("FAQ's For Renting. Your website's security settings stopped Claude's page reader, so it can't use these pages.");
+    expect(d.attention[1]!.v).toMatchObject({ engines: [0, 1], what: expect.stringContaining("ChatGPT and Claude didn't get them."), next: expect.stringMatching(/^Your prices depend on JavaScript/) });
   });
 
   it("names pages by title, then our browser copy's title, then the address; never by the reason they were chosen", () => {
