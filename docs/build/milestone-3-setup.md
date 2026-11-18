@@ -210,3 +210,9 @@ Scorer instructions v2 (18 Nov 2026, after the first MVP Miami run): both scorer
 `content/assess-distinctive`) count an answer that says the same as the pages in other words as supported, must search
 all pages before flagging, and name only the specific detail that isn't on the pages. Rerun `cc_score` and `ds_score`
 (no new AI answers needed) to apply it to an existing report.
+
+Claim check (v3, 18 Nov 2026): v2 still flagged answers "not on your website" while its own notes said they were
+supported. Now a "wrong" or "not on your website" verdict needs the exact words from the AI's answer that are at fault,
+and plain code (`claimHolds` in `content/logic.ts`) keeps it only when those words are in the answer and on none of the
+pages; otherwise the verdict is dropped and the scorer's original call is kept as `overruled` for review. Rerun
+`cc_score` and `ds_score` to apply it.

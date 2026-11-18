@@ -84,8 +84,12 @@ describe("Distinctive", () => {
           { name: "Lowest prices", quotes: [{ ref: "P1", text: "The lowest prices in all of Florida guaranteed" }] }, // not on the page
         ],
         flags: [
-          { engine: 1, id: "why-choose", flag: "generic", note: "no specific reason" },
-          { engine: 2, id: "offer", flag: "unsupported", note: "free airport limo service" },
+          { engine: 1, id: "why-choose", flag: "generic", claim: null, note: "no specific reason" },
+          { engine: 2, id: "offer", flag: "unsupported", claim: "free airport limo service", note: "" },
+          // Blames words that are on the FAQ page: overruled in plain code.
+          { engine: 0, id: "offer", flag: "unsupported", claim: "yachts and villas", note: "" },
+          // No words to blame: overruled.
+          { engine: 0, id: "why-choose", flag: "unsupported", claim: null, note: "everything here is supported" },
         ],
         mentions: [{ engine: 0, reasons: [0, 1, 2] }, { engine: 1, reasons: [] }, { engine: 2, reasons: [1, 3] }],
         fixes: [{ title: "Lead with your own fleet", text: "Say on your home page that you own every car, so the car booked is the car delivered." }],
@@ -96,6 +100,7 @@ describe("Distinctive", () => {
     expect(sc.rejectedReasons).toBe(1);
     const q = (id: string) => sc.questions.find((x) => x.id === id)!.answers.map((a) => a.flag);
     expect(q("offer")).toEqual(["ok", "ok", "unsupported"]);
+    expect(sc.questions.find((x) => x.id === "offer")!.answers[0]).toMatchObject({ flag: "ok", overruled: "unsupported" });
     expect(q("why-choose")).toEqual(["ok", "generic", "ok"]);
     expect(q("limits")).toEqual(["not_stated", "not_stated", "not_stated"]);
 

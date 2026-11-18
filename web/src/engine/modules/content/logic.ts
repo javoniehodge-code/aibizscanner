@@ -52,6 +52,17 @@ export function quoteOnPage(quote: { ref: string; text: string }, pages: readonl
   return !!page && n.split(" ").length >= 4 && ` ${norm(page.text)} `.includes(` ${n} `);
 }
 
+/**
+ * A scorer's "wrong" / "unsupported" verdict stands only on evidence: the words it blames must be in the answer (letters
+ * and digits, ignoring case and punctuation) and on none of the pages. Otherwise the verdict is dropped.
+ */
+export function claimHolds(claim: string | null | undefined, answer: string, pages: readonly { text: string }[]): boolean {
+  const c = norm(claim ?? "");
+  if (c.split(" ").filter(Boolean).length < 2) return false;
+  if (!` ${norm(answer)} `.includes(` ${c} `)) return false;
+  return !pages.some((p) => ` ${norm(p.text)} `.includes(` ${c} `));
+}
+
 export type WebsiteStatus = "enough" | "partial" | "not_enough" | "not_applicable" | "unverified";
 
 /**
