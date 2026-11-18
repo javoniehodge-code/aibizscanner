@@ -125,17 +125,34 @@ section" in the run monitor; the report reassembles by itself.
 
 - **Find & read slide**, one table per question so an owner can see exactly which step a page fails (owner, 18 Nov 2026):
   1. **Can AI find this page?** Yes / No / Not checked, from each AI's own search test.
-  2. **Is AI blocked from this page?** Blocked when your robots.txt disallows that AI's crawler or page reader for the
-     page, or your website turned its page reader away; Not blocked when its reader got the page or your rules allow it;
-     otherwise Not confirmed.
-  3. **Can AI read this page?** For pages it isn't blocked from: Yes / Partly / No: needs JavaScript (it missed key facts
-     that only load with JavaScript) / No / Not confirmed. Blocked pages show "Blocked (step 2)".
+  2. **Can AI access this page?** No when your robots.txt disallows that AI's crawler or page reader for the page, or
+     your website turned its page reader away; Yes when its reader got the page or your rules allow it; otherwise Not
+     confirmed.
+  3. **Can AI read this page?** For pages it can access: Yes / Partly / No: needs JavaScript (it missed key facts that
+     only load with JavaScript) / No / Not confirmed. Pages it can't access show "No access (step 2)".
   Each table has a count per AI and a "Why these answers?" list (the reader's reason and the key-fact score).
 - **Raw vs fully loaded**: our JavaScript check for the pages it could check, labelled as our comparison.
 - **What needs your attention**, one item per step and matching its table: pages no AI could find (step 1), each AI
-  blocked from pages (step 2), pages an AI can't read because key facts need JavaScript, with the recommendation (step 3).
+  that can't access pages (step 2), pages an AI can't read because key facts need JavaScript, with the recommendation (step 3).
 - The other website slides (Structured data, Clear & complete, Consistent, Distinctive) stay out of the report until
   their stages exist: each website part can now be absent on its own.
 
 Engine: a stage can declare `optionalInputs`, read when they have a finished run and left out otherwise; report
 assembly reads the website section this way, so a report without website tests still assembles.
+
+## Part 4a (continued): Structured data slide
+
+Nothing to configure, no cost. `ws_structured` runs on its own after the JavaScript check and compares the facts in the
+site's code (JSON-LD) with what its pages show, in plain code. For a report that already has its website tests, click
+**Run** on "Website: structured data check"; the website section and the report then update by themselves.
+
+- **The code** is read from our plain copy of each page (what crawlers read); when this run's fetch was refused, from
+  our latest good plain copy (dated), else our browser copy. **The page facts** come from our browser copy (what a visitor
+  sees), else the plain copy.
+- **Facts compared**: business name (with the approved business name), phone, address (the code's street or postal code
+  on a page), opening hours (both schema.org forms), prices (pages show prices; does the code state any beyond a price
+  range?) and FAQ pages (marked up as questions and answers?). Each is a match, a conflict, or missing from the code; a
+  fact only the code states is not judged. Code that isn't valid JSON is reported as broken.
+- **The slide**: pages with structured data, facts that match, conflicts, facts missing from the code; each problem in
+  plain English with technical details for the website manager (page, where in the code, what each side says, the fix);
+  and every fact compared.

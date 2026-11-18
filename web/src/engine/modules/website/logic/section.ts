@@ -81,7 +81,7 @@ const FIND: Record<string, Find> = { found: "g", not_found: "r", unconfirmed: "d
 /**
  * The three questions for one page and one AI, each from its own evidence:
  * 1. Can it find the page? Its own search test (yes / no / not checked).
- * 2. Is it blocked from the page? Blocked when your robots.txt disallows its crawler or page reader for this page, or
+ * 2. Can it access the page? No when your robots.txt disallows its crawler or page reader for this page, or
  *    when the site turned its page reader away; not blocked when its reader got the page or your rules allow it.
  * 3. Can it read the page? Only asked when it isn't blocked: yes; partly; no, because key facts load with JavaScript;
  *    no; not confirmed.
@@ -172,8 +172,8 @@ export function buildDiscovery(input: SectionInputs) {
     attention: attention(pages, js).map((a) => observed(stripJs(a), a.js ? [FINDREAD_EVIDENCE, JSCHECK_EVIDENCE] : [FINDREAD_EVIDENCE])),
     how: [
       { k: "1. Can AI find the page?", v: "A fresh question naming your business and the page, to each AI's own search, without the address. Yes only if that page itself is among its results or citations." },
-      { k: "2. Is AI blocked?", v: "Blocked when your robots.txt disallows that AI's crawler or page reader for the page, or when your website turned its page reader away. Not blocked when its reader got the page, or your rules allow it." },
-      { k: "3. Can AI read the page?", v: "Each AI's own page reader opens the address, quotes two passages and lists the prices, phone numbers, hours and services it can get. Yes when the passages are on the page and it got the key facts; no, needs JavaScript, when it missed key facts that only load with JavaScript." },
+      { k: "2. Can AI access the page?", v: "No when your robots.txt disallows that AI's crawler or page reader for the page, or when your website turned its page reader away. Yes when its reader got the page, or your rules allow it." },
+      { k: "3. Can AI read the page?", v: "For pages it can access, each AI's own page reader opens the address, quotes two passages and lists the prices, phone numbers, hours and services it can get. Yes when the passages are on the page and it got the key facts; no, needs JavaScript, when it missed key facts that only load with JavaScript." },
       { k: "JavaScript check", v: "Our own diagnostic, not an AI's view: we load each page with and without scripts and compare. Most AI page readers don't run scripts." },
       { k: "Scope", v: `${pages.length} pages approved on ${day(set.pageSet.approvedAt)}. These are the AI providers' API tools, not their consumer apps.` },
     ].map((kv) => observed(kv, ev)),
@@ -213,7 +213,7 @@ function attention(pages: PageRow[], js: JsCheck | null): Attention[] {
     if (!blocked.length) continue;
     const byRule = blocked.some((r) => r.steps[e]!.notes.some((n) => n.step === 2 && n.text.startsWith("Your robots.txt")));
     out.push({
-      title: `Step 2: ${ENGINE_NAMES[e]} is blocked from ${count(blocked.length, "page", "pages")}`,
+      title: `Step 2: ${ENGINE_NAMES[e]} can't access ${count(blocked.length, "page", "pages")}`,
       engines: [e],
       what: `${list(blocked.map((r) => r.name))}. ${byRule ? "Your site rules (robots.txt) or your website's security settings" : "Your website's security settings"} stopped ${ENGINE_NAMES[e]}'s page reader, so it can't use these pages.`,
       next: byRule
@@ -255,12 +255,71 @@ export function discoveryCopy(input: SectionInputs) {
   const n = input.snap.pages.length;
   return {
     discoveryIntro: observed(
-      `We checked ${n} pages of your website with each AI's own tools, one step at a time: can the AI find the page, is it blocked from it, and can it read it? Each step has its own table, so you can see exactly where a page falls short.`,
+      `We checked ${n} pages of your website with each AI's own tools, one step at a time: can the AI find the page, can it access it, and can it read it? Each step has its own table, so you can see exactly where a page falls short.`,
       [PAGE_SET_EVIDENCE, FINDREAD_EVIDENCE],
     ),
     discoveryWhyPages: observed(
       `The pages were chosen for the decisions customers make: your home page, the pages AI cited, contact, booking, questions, prices, one page per service, locations and a policy page. Approved ${day(input.set.pageSet.approvedAt)}.`,
       [PAGE_SET_EVIDENCE],
     ),
+  };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Structured data part (website.structuredData)
+// ---------------------------------------------------------------------------------------------------------------
+
+export const STRUCTURED_EVIDENCE = "ws-structured";
+
+type Structured = import("../structured-stage").StructuredCheck;
+
+export function structuredEvidence(sc: Structured & { runId: string; finishedAt: string }): Record<string, EvidenceEntry> {
+  return { [STRUCTURED_EVIDENCE]: { source: "Our structured data check (the code on your pages vs what they show)", ref: `stage_run ${sc.runId}`, capturedOn: day(sc.finishedAt) } };
+}
+
+/** Stats, the problems in plain English with details for the website manager, and every fact compared. */
+export function buildStructuredData(sc: Structured) {
+  const ev = [STRUCTURED_EVIDENCE];
+  const host = (u: string) => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "") || u;
+  const withData = sc.pages.filter((p) => p.blocks > 0).length;
+  const n = (mark: string) => sc.facts.filter((f) => f.mark === mark).length;
+  const conflicts = n("r");
+  const missing = n("k");
+  const stats = [
+    { value: `${withData} of ${sc.pages.length}`, label: "pages have structured data" },
+    { value: `${n("g")} of ${sc.facts.length}`, label: "facts match your pages" },
+    { value: String(conflicts), label: conflicts === 1 ? "conflict" : "conflicts" },
+    { value: String(missing), label: missing === 1 ? "fact missing from code" : "facts missing from code" },
+  ];
+  const problems = [
+    ...sc.broken.map((b) => ({
+      mark: "r" as const,
+      tag: "Broken",
+      title: `${b.errors === 1 ? "A block" : `${b.errors} blocks`} of code on ${b.name} can't be read.`,
+      why: "Machines skip code they can't read, so the facts in it are lost.",
+      details: [
+        { k: "Page", v: host(b.url) },
+        { k: "Where in the code", v: "JSON-LD block that isn't valid JSON" },
+        { k: "Fix", v: "Correct the JSON (check it with Google's Rich Results Test)." },
+      ],
+    })),
+    ...[...sc.facts.filter((f) => f.mark === "r"), ...sc.facts.filter((f) => f.mark === "k")].map((f) => ({
+      mark: f.mark as "r" | "k",
+      tag: f.mark === "r" ? "Conflict" : "Missing",
+      title: f.title,
+      why: f.why,
+      details: [
+        ...(f.pageUrl ? [{ k: "Page", v: host(f.pageUrl) }] : []),
+        { k: "Where in the code", v: f.where },
+        ...(f.mark === "r" ? [{ k: "Code says", v: f.code }] : []),
+        { k: "Page says", v: f.page },
+        { k: "Fix", v: f.fix },
+      ],
+    })),
+  ];
+  return {
+    stats: stats.map((s) => observed(s, ev)),
+    problems: problems.map((p) => observed(p, ev)),
+    facts: sc.facts.map((f) => observed({ fact: f.fact, page: f.page, code: f.code, mark: f.mark }, ev)),
   };
 }

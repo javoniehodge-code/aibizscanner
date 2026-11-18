@@ -122,7 +122,7 @@ test("a report with the website's Find & read part only shows that website slide
     const heads = slides.map((t) => t.split("\n").slice(0, 2).join(" | ").trim());
     expect(heads.slice(6, 9)).toEqual(["SECTION 2 | MVP Miami", "07 | FIND & READ", "SECTION 3 | MVP Miami"]);
     // One table per question (owner, 18 Nov 2026).
-    for (const step of ["Can AI find this page?", "Is AI blocked from this page?", "Can AI read this page?"]) expect(slides[7]).toContain(step);
+    for (const step of ["Can AI find this page?", "Can AI access this page?", "Can AI read this page?"]) expect(slides[7]).toContain(step);
     const all = slides.join("\n");
     for (const absent of ["CLEAR & COMPLETE", "CONSISTENT & CURRENT", "DISTINCTIVE & RELEVANT", "Structured data is code on your pages"]) expect(all).not.toContain(absent);
   } finally {

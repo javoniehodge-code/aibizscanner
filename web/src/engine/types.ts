@@ -89,6 +89,8 @@ export type StageContext = {
   fullestRenderedSnapshots(urls: readonly string[]): Promise<Map<string, FullestSnapshot>>;
   /** Visible text stored with earlier page snapshots, by snapshot id (missing ids are left out). */
   snapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
+  /** The HTML stored with earlier page snapshots, by snapshot id (missing ids are left out). */
+  snapshotHtml(ids: readonly string[]): Promise<Map<string, string>>;
   /** Stores one page snapshot (append-only evidence) with its bounded body; returns its id. */
   recordPageSnapshot(record: Omit<PageSnapshotRecord, "reportId" | "stageRunId">): Promise<string>;
   /** The answer engine for ChatGPT / Claude / Gemini, or null when its API key isn't configured. Calls go via paidCall. */
@@ -278,6 +280,7 @@ export interface RunStore {
   loadAnswerEvidence(answerIds: readonly string[]): Promise<AnswerEvidence[]>;
   recordPageSnapshot(record: PageSnapshotRecord): Promise<string>;
   loadSnapshotTexts(ids: readonly string[]): Promise<Map<string, string>>;
+  loadSnapshotHtml(ids: readonly string[]): Promise<Map<string, string>>;
   loadLatestGoodSnapshots(reportId: string, urls: readonly string[]): Promise<Map<string, GoodSnapshot>>;
   loadFullestRenderedSnapshots(reportId: string, urls: readonly string[]): Promise<Map<string, FullestSnapshot>>;
   loadSourceClassifications(pageKeys: readonly string[], classifierVersion: string): Promise<SourceClassificationRecord[]>;
