@@ -1,6 +1,6 @@
 import "server-only";
 import { GoogleGenAI } from "@google/genai";
-import type { AnswerEngine, AskRequest, AskResult, ReadAttempt, ReadRequest, ReadResult } from "@/engine/answers";
+import { approxTokens, type AnswerEngine, type AskRequest, type AskResult, type OfflineRequest, type OfflineResult, type ReadAttempt, type ReadRequest, type ReadResult } from "@/engine/answers";
 import { ENGINE_MODELS } from "@/engine/modules/prompt-analysis/models";
 import { trimRaw, unique } from "./raw";
 
@@ -69,6 +69,23 @@ export function geminiEngine(apiKey: string): AnswerEngine {
           searchCalls: queries.length,
           requests: 1,
         },
+        raw: trimRaw(res),
+        requestId: res.responseId ?? null,
+        servedModel: res.modelVersion ?? null,
+      };
+    },
+    estimateOffline: (r) => ({ tokensIn: approxTokens(r.instruction + r.material) + 500, tokensOut: 8_000, searchCalls: 0, requests: 1 }),
+    /** Website-only answer: generateContent with no tools. */
+    async answerOffline(request: OfflineRequest, signal: AbortSignal): Promise<OfflineResult> {
+      const res = await ai.models.generateContent({ model: SPEC.model, contents: request.material, config: { systemInstruction: request.instruction, abortSignal: signal } });
+      const candidate = res.candidates?.[0];
+      const blocked = !candidate || (candidate.finishReason ? BLOCKED.has(candidate.finishReason) : false) || !!res.promptFeedback?.blockReason;
+      const text = res.text ?? "";
+      const u = res.usageMetadata;
+      return {
+        status: blocked && !text ? "refused" : "ok",
+        text,
+        usage: { tokensIn: u?.promptTokenCount ?? 0, tokensOut: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0), searchCalls: 0, requests: 1 },
         raw: trimRaw(res),
         requestId: res.responseId ?? null,
         servedModel: res.modelVersion ?? null,

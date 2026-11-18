@@ -64,7 +64,7 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
     promptAnalysis: s,
     ...Object.fromEntries(SECTIONS.map((k) => [k, null])),
     // The website parts built so far; the others stay null until their stages exist.
-    website: website ? { discovery: website.discovery, structuredData: website.structuredData ?? null, clear: null, consistent: null, distinctive: null } : null,
+    website: website ? { discovery: website.discovery, structuredData: website.structuredData ?? null, clear: website.clear ?? null, consistent: null, distinctive: null } : null,
   };
   return doc as unknown as ReportDocument;
 }

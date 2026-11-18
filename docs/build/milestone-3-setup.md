@@ -156,3 +156,32 @@ site's code (JSON-LD) with what its pages show, in plain code. For a report that
 - **The slide**: pages with structured data, facts that match, conflicts, facts missing from the code; each problem in
   plain English with technical details for the website manager (page, where in the code, what each side says, the fix);
   and every fact compared.
+
+## Part 4b: Clear & complete
+
+Does the website give a customer (and AI) enough detail on the facts that decide whether they choose the business?
+**This costs money**: about $0.10–0.25 per report (Claude's answer is most of it), within the spending cap.
+
+Five stages (module `content`), all run on their own after the JavaScript check:
+
+1. `cc_bundle` (plain code): the business's **approved decision-fact list**, chosen from its category
+   (`web/src/engine/modules/content/standards.ts`; car rental v1.0 approved by the owner 18 Nov 2026, plus the boutique
+   hotel and coffee lists from `docs/product/ai-brand-perception/decision-fact-standards.md`), and the page text every
+   assessor sees: our browser copy of each approved page (what a visitor sees), else our latest good plain copy;
+   2,500 words a page, 20,000 in all. A category with no approved list stops with a clear message (run with
+   `{"standard": "<id>"}` to choose one).
+2. `cc_baseline` (one Claude Haiku call): **our assessment of the website**, fact by fact: enough detail, some detail
+   missing, not enough information, or not applicable (When-relevant facts only), with what the pages give, what's
+   missing, the smallest fix, and quotes. A positive finding needs a quote found word for word on the page it names,
+   else it shows as *couldn't verify*.
+3. `cc_answer_chatgpt` / `_claude` / `_gemini`: **each AI answers the fact questions from the website pages only**,
+   with every tool off (no web search, no page reading), told to answer "NOT STATED" when the pages don't say.
+4. `cc_score` (one Claude Haiku call): "NOT STATED" is judged in plain code (right when our assessment says the
+   website doesn't give the fact, else *didn't answer*); every other answer is judged against the same pages:
+   complete and accurate, detail missing, wrong, or not on your website.
+5. `ws_section` builds the **Clear & complete slide**: the verdict and counts from the stored statuses, one row per
+   applicable fact (our website assessment, then ChatGPT, Claude, Gemini), and the fixes (core facts first).
+
+What it is and isn't: a test of what the pages say, answered by the providers' API models with the pages handed to
+them. It doesn't show whether an AI finds or reads the pages on its own (that is Find & read), and an AI's mistake
+despite clear pages isn't counted as a website gap.

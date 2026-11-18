@@ -1,4 +1,5 @@
 import type { Instruction } from "../llm";
+import { contentModule } from "./content";
 import { dummyModule } from "./dummy";
 import { promptAnalysisModule } from "./prompt-analysis";
 import { reportModule } from "./report";
@@ -6,7 +7,7 @@ import { websiteModule } from "./website";
 import type { EngineModule } from "./types";
 
 /** Every module of the report engine, in pipeline order. Add a module here and its stages join the registry. */
-export const MODULES: readonly EngineModule[] = [dummyModule, promptAnalysisModule, websiteModule, reportModule];
+export const MODULES: readonly EngineModule[] = [dummyModule, promptAnalysisModule, websiteModule, contentModule, reportModule];
 
 /** Every instruction any registered stage declares (checked against instructions.lock.json by a unit test). */
 export function allInstructions(modules: readonly EngineModule[] = MODULES): Instruction[] {

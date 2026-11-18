@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { copyEntry, evidenceEntry, websiteDiscovery, websiteStructuredData } from "@/report/schema";
+import { copyEntry, evidenceEntry, websiteClear, websiteDiscovery, websiteStructuredData } from "@/report/schema";
+import { contentScore } from "../content/stages";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { jsCheck } from "./js-stage";
-import { buildDiscovery, buildStructuredData, discoveryCopy, sectionEvidence, structuredEvidence } from "./logic/section";
+import { buildClear, buildDiscovery, buildStructuredData, clearCopy, contentEvidence, discoveryCopy, sectionEvidence, structuredEvidence } from "./logic/section";
 import { structuredCheck } from "./structured-stage";
 import { pageSetSpec, snapshots } from "./schemas";
 import { findRead, readTests } from "./test-stages";
@@ -13,8 +14,12 @@ export const websiteSection = z
     discovery: websiteDiscovery,
     /** Absent until the structured data check has run. */
     structuredData: websiteStructuredData.nullable().optional(),
+    /** Absent until Clear & complete has run. */
+    clear: websiteClear.nullable().optional(),
     evidence: z.record(z.string(), evidenceEntry),
-    copy: z.object({ discoveryIntro: copyEntry, discoveryWhyPages: copyEntry }).strict(),
+    copy: z
+      .object({ discoveryIntro: copyEntry, discoveryWhyPages: copyEntry, clearPagesChecked: copyEntry.optional(), clearStandard: copyEntry.optional(), clearFoot: copyEntry.optional() })
+      .strict(),
   })
   .strict();
 export type WebsiteSection = z.infer<typeof websiteSection>;
@@ -31,7 +36,7 @@ export const wsSection: StageDefinition = {
   label: "Website: build the report's website section",
   inputs: ["ws_page_set", "ws_snapshot", "ws_findread", "ws_render", "ws_read_chatgpt", "ws_read_claude", "ws_read_gemini"],
   /** The structured data check, when it has run. */
-  optionalInputs: ["ws_structured"],
+  optionalInputs: ["ws_structured", "cc_score"],
   timeoutMs: 20_000,
   maxAttempts: 1,
   autoRun: true,
@@ -45,11 +50,13 @@ export const wsSection: StageDefinition = {
     const reads = ["ws_read_chatgpt", "ws_read_claude", "ws_read_gemini"].map((s) => input(ctx, s, readTests));
     const inputs = { set, snap, findRead: fr, js, reads, snapshotAt: snap.finishedAt };
     const sc = input(ctx, "ws_structured", structuredCheck);
+    const cc = input(ctx, "cc_score", contentScore);
     const out: WebsiteSection = {
       discovery: buildDiscovery(inputs),
       structuredData: sc ? buildStructuredData(sc) : null,
-      evidence: { ...sectionEvidence(inputs), ...(sc ? structuredEvidence(sc) : {}) },
-      copy: discoveryCopy(inputs),
+      clear: cc ? buildClear(cc) : null,
+      evidence: { ...sectionEvidence(inputs), ...(sc ? structuredEvidence(sc) : {}), ...(cc ? contentEvidence(cc) : {}) },
+      copy: { ...discoveryCopy(inputs), ...(cc ? clearCopy(cc) : {}) },
     };
     return { status: "done", output: out as unknown as JsonValue };
   },

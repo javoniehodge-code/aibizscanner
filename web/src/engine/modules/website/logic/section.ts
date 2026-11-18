@@ -323,3 +323,116 @@ export function buildStructuredData(sc: Structured) {
     facts: sc.facts.map((f) => observed({ fact: f.fact, page: f.page, code: f.code, mark: f.mark }, ev)),
   };
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Clear & complete part (website.clear)
+// ---------------------------------------------------------------------------------------------------------------
+
+export const CONTENT_EVIDENCE = "cc-score";
+
+type Score = import("../../content/stages").ContentScore;
+
+export function contentEvidence(sc: Score & { runId: string; finishedAt: string }): Record<string, EvidenceEntry> {
+  return {
+    [CONTENT_EVIDENCE]: {
+      source: `Clear & complete: our assessment of your pages (${sc.models.assessor}) and each AI's website-only answers (standard: ${sc.standard.label} v${sc.standard.version})`,
+      ref: `stage_run ${sc.runId}`,
+      capturedOn: day(sc.finishedAt),
+    },
+  };
+}
+
+const clip = (s: string, n = 160) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
+
+/**
+ * The report's Clear & complete part: one row per applicable fact, with our website assessment and each AI's
+ * website-only answer; counts, verdict and fixes are computed here from the stored statuses, never written by a model.
+ */
+export function buildClear(sc: Score) {
+  // Avoid a runtime import cycle: the cell tables are small and fixed.
+  const WEB: Record<string, { mark: "g" | "k" | "r" | "n"; value: string }> = {
+    enough: { mark: "g", value: "Enough detail" },
+    partial: { mark: "k", value: "Some detail missing" },
+    not_enough: { mark: "r", value: "Not enough information" },
+    unverified: { mark: "n", value: "Couldn't verify" },
+    not_applicable: { mark: "n", value: "Not applicable" },
+  };
+  const ANS: Record<string, { mark: "g" | "k" | "r" | "n"; value: string }> = {
+    supported: { mark: "g", value: "Complete and accurate" },
+    partial: { mark: "k", value: "Detail missing" },
+    wrong: { mark: "r", value: "Wrong" },
+    unsupported: { mark: "r", value: "Not on your website" },
+    not_answered: { mark: "n", value: "Didn't answer" },
+    correctly_not_stated: { mark: "n", value: "Said your site doesn't say" },
+    not_tested: { mark: "n", value: "Not tested" },
+  };
+  const ev = [CONTENT_EVIDENCE];
+  const facts = sc.facts.filter((f) => f.website.status !== "not_applicable");
+  const excluded = sc.facts.filter((f) => f.website.status === "not_applicable");
+  const n = facts.length;
+  const count = (s: string) => facts.filter((f) => f.website.status === s).length;
+  const names = (s: string) => facts.filter((f) => f.website.status === s).map((f) => f.name.toLowerCase());
+  const list = (xs: string[]) => (xs.length <= 2 ? xs.join(" and ") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
+  const enough = count("enough");
+  const gaps = [...names("not_enough"), ...names("partial")];
+  const wrong = [0, 1, 2].map((e) => facts.filter((f) => ANS[f.answers[e]!.verdict]!.mark === "r").length);
+
+  return {
+    intro: observed(
+      `We checked whether your website answers the ${n} facts customers need to choose a ${sc.standard.label.toLowerCase().replace(/ \(.*\)$/, "")} business, then asked ChatGPT, Claude and Gemini the same questions with only your website pages to go on (no web search).`,
+      ev,
+    ),
+    verdict: observed(
+      {
+        heading: `Your website gives enough detail on ${enough} of ${n} decision facts.`,
+        text: gaps.length ? `Customers and AI can't get the full answer on ${list(gaps)} from your pages.` : "Your pages answer every decision fact we checked.",
+      },
+      ev,
+    ),
+    summary: observed(
+      {
+        sub: "Answers that were complete and accurate",
+        notes: ["Our assessment of your pages", ...wrong.map((w, e) => (sc.models.engines[e] ? (w ? `${w} wrong or not on your website` : "None wrong") : "Not tested"))] as [string, string, string, string],
+      },
+      ev,
+    ),
+    facts: facts.map((f) =>
+      observed(
+        {
+          name: f.name,
+          sub: f.lookFor,
+          cells: [
+            { ...WEB[f.website.status]!, sub: clip([/^nothing\.?$/i.test(f.website.provides.trim()) ? null : f.website.provides, f.website.missing ? `Missing: ${f.website.missing}` : null].filter(Boolean).join(" ") || f.website.provides, 220) },
+            ...f.answers.map((a) => ({ ...ANS[a.verdict]!, sub: clip(a.answer ? `“${clip(a.answer, 110)}” ${a.reason}` : a.reason, 220) })),
+          ] as [ClearCell, ClearCell, ClearCell, ClearCell],
+        },
+        ev,
+      ),
+    ),
+    fixes: facts
+      .filter((f) => f.website.fix && (f.website.status === "partial" || f.website.status === "not_enough"))
+      .sort((a, b) => (a.bucket === b.bucket ? (a.website.status === "not_enough" ? -1 : 1) : a.bucket === "core" ? -1 : 1))
+      .map((f) => observed({ title: f.website.fix!, text: f.website.missing ? `Missing now: ${f.website.missing}` : `Your pages don't give the ${f.name.toLowerCase()}.`, closes: f.name, example: "" }, ev)),
+    rules: [
+      { k: "Facts checked", v: `${sc.standard.label}, standard v${sc.standard.version}: ${n} facts${excluded.length ? `; not applicable here: ${excluded.map((f) => f.name.toLowerCase()).join(", ")}` : ""}.` },
+      { k: "Our assessment", v: "Enough detail, some detail missing or not enough information, judged from your pages alone. Every positive finding is backed by a passage found word for word on your pages; otherwise it shows as couldn't verify." },
+      { k: "The AIs' answers", v: "Each AI got the same pages and questions with web search off, and was told to say when the pages don't state something. Answers are checked against your pages: complete and accurate, detail missing, wrong, or not on your website." },
+      { k: "Pages used", v: `${sc.pages.length} pages${sc.pages.some((p) => p.truncated) ? ", long pages shortened" : ""}${sc.leftOut.length ? `; ${sc.leftOut.length} left out (no text available)` : ""}. This tests what your pages say, not whether AI finds them (see Find & read).` },
+    ].map((kv) => observed(kv, ev)),
+  };
+}
+type ClearCell = { mark: "g" | "k" | "r" | "n"; value: string; sub: string };
+
+export function clearCopy(sc: Score) {
+  const ev = [CONTENT_EVIDENCE];
+  return {
+    clearPagesChecked: observed(`Pages checked: ${sc.pages.map((p) => p.name).join(" · ")}`, ev),
+    clearStandard: observed(
+      `The facts come from our ${sc.standard.label.toLowerCase()} standard (v${sc.standard.version}): the facts that could change whether a customer chooses you. ${applicable(sc)} of its ${sc.facts.length} apply to your business.`,
+      ev,
+    ),
+    clearFoot: observed(`Our assessment and the scoring: ${sc.models.assessor}. AIs: ${sc.models.engines.map((m, e) => `${ENGINE_NAMES[e]} ${m ?? "not tested"}`).join(", ")}. Website only, web search off.`, ev),
+  };
+}
+
+const applicable = (sc: Score) => sc.facts.filter((f) => f.website.status !== "not_applicable").length;

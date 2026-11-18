@@ -297,7 +297,7 @@ export const websiteStructuredData = z
   .strict();
 
 const clearCell = z.object({ mark: z.enum(["g", "k", "r", "n"]).nullable(), value: nonEmpty, sub: z.string() }).strict();
-const clear = z
+export const websiteClear = z
   .object({
     intro: val(nonEmpty),
     verdict: val(z.object({ heading: nonEmpty, text: nonEmpty }).strict()),
@@ -492,7 +492,7 @@ const reportShape = z
       .object({
         discovery: websiteDiscovery.nullable(),
         structuredData: websiteStructuredData.nullable(),
-        clear: clear.nullable(),
+        clear: websiteClear.nullable(),
         consistent: consistent.nullable(),
         distinctive: distinctive.nullable(),
       })
