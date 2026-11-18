@@ -1661,7 +1661,7 @@ class BrandPart extends Sub {
           rules: R.website.clear.rules.map(r => [r.k, r.v]).map(([k, v]) => ({ k, v }))
         }; })()] : [],
       discSlide: show.discovery ? [(() => { const d = slides[0], RAW = MS[0].groups.flatMap(g => g.rows), RD = r => r[4] || r[2].split('').map(c => c === 'r' ? 'f' : 'g').join('');
-        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read', u: 'Reading unconfirmed', j: 'Couldn\u2019t read: needs JavaScript', n: 'Blocked' }, RK = { g: 'g', p: 'k', f: 'r', u: 'd', j: 'r', n: 'n' };
+        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read', u: 'Reading unconfirmed', j: 'Couldn\u2019t read: needs JavaScript', n: 'No access' }, RK = { g: 'g', p: 'k', f: 'r', u: 'd', j: 'r', n: 'n' };
         // Search: g found; r not found; d not tested or unconfirmed (no search observed), never counted as not found.
         const SL = c => c === 'g' ? 'Found' : c === 'd' ? 'Search unconfirmed' : 'Not found', SK = c => c === 'g' ? 'g' : c === 'd' ? 'd' : 'r';
         const mini = k => ({ ...symStyle(k, true), width: 16, height: 16, fontSize: 10, flex: 'none' });
@@ -1685,7 +1685,7 @@ class BrandPart extends Sub {
             style: { display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: 16, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
             numStyle: { width: 40, height: 40, borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: 16, fontWeight: 700, border: '1.5px solid #000', boxSizing: 'border-box' } })),
           how: R.website.discovery.how.map(x => [x.k, x.v]).map(([k, v]) => ({ k, v })),
-          // One table per question (owner, 18 Nov 2026): can AI find the page, is it blocked, can it read it.
+          // One table per question (owner, 18 Nov 2026): can AI find the page, can it access it, can it read it.
           stepHead: { display: 'grid', gridTemplateColumns: 'minmax(180px,1fr) repeat(3,minmax(110px,150px))', gap: 8, alignItems: 'end', paddingBottom: 10, borderBottom: '2px solid #000' },
           stepRow: { display: 'grid', gridTemplateColumns: 'minmax(180px,1fr) repeat(3,minmax(110px,150px))', gap: 8, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid oklch(0.92 0.006 265)' },
           steps: (() => {
@@ -1694,12 +1694,12 @@ class BrandPart extends Sub {
               { n: 1, title: 'Can AI find this page?', intro: 'We asked each AI\u2019s own search for the page by name. Yes means that exact page came back in its results.', code: r => r[2],
                 cell: { g: ['g', 'Yes'], k: ['g', 'Yes'], r: ['r', 'No'], d: ['d', 'Not checked'] },
                 count: (cs, tot) => ({ n: cs.filter(c => c === 'g' || c === 'k').length + ' of ' + tot, text: 'found' }) },
-              { n: 2, title: 'Is AI blocked from this page?', intro: 'Blocked means your website stops this AI from using the page: your site rules (robots.txt) forbid it, or your website turned its page reader away.', code: ACC,
-                cell: { r: ['r', 'Blocked'], g: ['g', 'Not blocked'], d: ['d', 'Not confirmed'] },
-                count: (cs, tot) => ({ n: cs.filter(c => c === 'r').length + ' of ' + tot, text: 'blocked' }) },
-              { n: 3, title: 'Can AI read this page?', intro: 'For pages it isn\u2019t blocked from, we gave each AI the link and asked it to read the page and list its key facts: prices, phone numbers, hours and services.', code: r => RD(r),
-                cell: { g: ['g', 'Yes'], p: ['k', 'Partly'], j: ['r', 'No: needs JavaScript'], f: ['r', 'No'], u: ['d', 'Not confirmed'], n: ['n', 'Blocked (step 2)'] },
-                count: (cs, tot) => { const open = cs.filter(c => c !== 'n'); const js = cs.filter(c => c === 'j').length; return { n: open.filter(c => c === 'g').length + ' of ' + open.length, text: (open.length < tot ? 'read (pages not blocked)' : 'read') + (js ? ' \u00b7 ' + js + (js === 1 ? ' needs' : ' need') + ' JavaScript' : '') }; } }
+              { n: 2, title: 'Can AI access this page?', intro: 'No means your website stops this AI from using the page: your site rules (robots.txt) forbid it, or your website turned its page reader away.', code: ACC,
+                cell: { g: ['g', 'Yes'], r: ['r', 'No'], d: ['d', 'Not confirmed'] },
+                count: (cs, tot) => ({ n: cs.filter(c => c === 'g').length + ' of ' + tot, text: 'can access' }) },
+              { n: 3, title: 'Can AI read this page?', intro: 'For pages it can access, we gave each AI the link and asked it to read the page and list its key facts: prices, phone numbers, hours and services.', code: r => RD(r),
+                cell: { g: ['g', 'Yes'], p: ['k', 'Partly'], j: ['r', 'No: needs JavaScript'], f: ['r', 'No'], u: ['d', 'Not confirmed'], n: ['n', 'No access (step 2)'] },
+                count: (cs, tot) => { const open = cs.filter(c => c !== 'n'); const js = cs.filter(c => c === 'j').length; return { n: open.filter(c => c === 'g').length + ' of ' + open.length, text: (open.length < tot ? 'read (pages it can access)' : 'read') + (js ? ' \u00b7 ' + js + (js === 1 ? ' needs' : ' need') + ' JavaScript' : '') }; } }
             ];
             const NOTES = R.website.discovery.notes;
             return STEP.map(st => {

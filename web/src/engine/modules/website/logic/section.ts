@@ -81,7 +81,7 @@ const FIND: Record<string, Find> = { found: "g", not_found: "r", unconfirmed: "d
 /**
  * The three questions for one page and one AI, each from its own evidence:
  * 1. Can it find the page? Its own search test (yes / no / not checked).
- * 2. Is it blocked from the page? Blocked when your robots.txt disallows its crawler or page reader for this page, or
+ * 2. Can it access the page? No when your robots.txt disallows its crawler or page reader for this page, or
  *    when the site turned its page reader away; not blocked when its reader got the page or your rules allow it.
  * 3. Can it read the page? Only asked when it isn't blocked: yes; partly; no, because key facts load with JavaScript;
  *    no; not confirmed.
@@ -172,8 +172,8 @@ export function buildDiscovery(input: SectionInputs) {
     attention: attention(pages, js).map((a) => observed(stripJs(a), a.js ? [FINDREAD_EVIDENCE, JSCHECK_EVIDENCE] : [FINDREAD_EVIDENCE])),
     how: [
       { k: "1. Can AI find the page?", v: "A fresh question naming your business and the page, to each AI's own search, without the address. Yes only if that page itself is among its results or citations." },
-      { k: "2. Is AI blocked?", v: "Blocked when your robots.txt disallows that AI's crawler or page reader for the page, or when your website turned its page reader away. Not blocked when its reader got the page, or your rules allow it." },
-      { k: "3. Can AI read the page?", v: "Each AI's own page reader opens the address, quotes two passages and lists the prices, phone numbers, hours and services it can get. Yes when the passages are on the page and it got the key facts; no, needs JavaScript, when it missed key facts that only load with JavaScript." },
+      { k: "2. Can AI access the page?", v: "No when your robots.txt disallows that AI's crawler or page reader for the page, or when your website turned its page reader away. Yes when its reader got the page, or your rules allow it." },
+      { k: "3. Can AI read the page?", v: "For pages it can access, each AI's own page reader opens the address, quotes two passages and lists the prices, phone numbers, hours and services it can get. Yes when the passages are on the page and it got the key facts; no, needs JavaScript, when it missed key facts that only load with JavaScript." },
       { k: "JavaScript check", v: "Our own diagnostic, not an AI's view: we load each page with and without scripts and compare. Most AI page readers don't run scripts." },
       { k: "Scope", v: `${pages.length} pages approved on ${day(set.pageSet.approvedAt)}. These are the AI providers' API tools, not their consumer apps.` },
     ].map((kv) => observed(kv, ev)),
@@ -213,7 +213,7 @@ function attention(pages: PageRow[], js: JsCheck | null): Attention[] {
     if (!blocked.length) continue;
     const byRule = blocked.some((r) => r.steps[e]!.notes.some((n) => n.step === 2 && n.text.startsWith("Your robots.txt")));
     out.push({
-      title: `Step 2: ${ENGINE_NAMES[e]} is blocked from ${count(blocked.length, "page", "pages")}`,
+      title: `Step 2: ${ENGINE_NAMES[e]} can't access ${count(blocked.length, "page", "pages")}`,
       engines: [e],
       what: `${list(blocked.map((r) => r.name))}. ${byRule ? "Your site rules (robots.txt) or your website's security settings" : "Your website's security settings"} stopped ${ENGINE_NAMES[e]}'s page reader, so it can't use these pages.`,
       next: byRule
@@ -255,7 +255,7 @@ export function discoveryCopy(input: SectionInputs) {
   const n = input.snap.pages.length;
   return {
     discoveryIntro: observed(
-      `We checked ${n} pages of your website with each AI's own tools, one step at a time: can the AI find the page, is it blocked from it, and can it read it? Each step has its own table, so you can see exactly where a page falls short.`,
+      `We checked ${n} pages of your website with each AI's own tools, one step at a time: can the AI find the page, can it access it, and can it read it? Each step has its own table, so you can see exactly where a page falls short.`,
       [PAGE_SET_EVIDENCE, FINDREAD_EVIDENCE],
     ),
     discoveryWhyPages: observed(

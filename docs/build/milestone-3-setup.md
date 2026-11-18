@@ -125,15 +125,15 @@ section" in the run monitor; the report reassembles by itself.
 
 - **Find & read slide**, one table per question so an owner can see exactly which step a page fails (owner, 18 Nov 2026):
   1. **Can AI find this page?** Yes / No / Not checked, from each AI's own search test.
-  2. **Is AI blocked from this page?** Blocked when your robots.txt disallows that AI's crawler or page reader for the
-     page, or your website turned its page reader away; Not blocked when its reader got the page or your rules allow it;
-     otherwise Not confirmed.
-  3. **Can AI read this page?** For pages it isn't blocked from: Yes / Partly / No: needs JavaScript (it missed key facts
-     that only load with JavaScript) / No / Not confirmed. Blocked pages show "Blocked (step 2)".
+  2. **Can AI access this page?** No when your robots.txt disallows that AI's crawler or page reader for the page, or
+     your website turned its page reader away; Yes when its reader got the page or your rules allow it; otherwise Not
+     confirmed.
+  3. **Can AI read this page?** For pages it can access: Yes / Partly / No: needs JavaScript (it missed key facts that
+     only load with JavaScript) / No / Not confirmed. Pages it can't access show "No access (step 2)".
   Each table has a count per AI and a "Why these answers?" list (the reader's reason and the key-fact score).
 - **Raw vs fully loaded**: our JavaScript check for the pages it could check, labelled as our comparison.
 - **What needs your attention**, one item per step and matching its table: pages no AI could find (step 1), each AI
-  blocked from pages (step 2), pages an AI can't read because key facts need JavaScript, with the recommendation (step 3).
+  that can't access pages (step 2), pages an AI can't read because key facts need JavaScript, with the recommendation (step 3).
 - The other website slides (Structured data, Clear & complete, Consistent, Distinctive) stay out of the report until
   their stages exist: each website part can now be absent on its own.
 

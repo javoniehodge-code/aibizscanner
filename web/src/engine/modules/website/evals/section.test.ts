@@ -91,7 +91,7 @@ describe("website section: Find & read", () => {
       { page: "Exotic Vehicle Rentals", raw: "72 words", loaded: "1,292 words", mark: "r", result: "Key facts load with JavaScript" },
     ]);
     // Each item names its step and matches that step's table.
-    expect(d.attention.map((a) => a.v.title)).toEqual(["Step 2: Claude is blocked from 1 page", "Step 3: ChatGPT and Claude can't read Exotic Vehicle Rentals: it needs JavaScript"]);
+    expect(d.attention.map((a) => a.v.title)).toEqual(["Step 2: Claude can't access 1 page", "Step 3: ChatGPT and Claude can't read Exotic Vehicle Rentals: it needs JavaScript"]);
     expect(d.attention[0]!.v.what).toBe("FAQ's For Renting. Your website's security settings stopped Claude's page reader, so it can't use these pages.");
     expect(d.attention[1]!.v).toMatchObject({ engines: [0, 1], what: expect.stringContaining("ChatGPT and Claude didn't get them."), next: expect.stringMatching(/^Your prices depend on JavaScript/) });
   });
