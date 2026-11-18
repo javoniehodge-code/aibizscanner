@@ -185,3 +185,23 @@ Five stages (module `content`), all run on their own after the JavaScript check:
 What it is and isn't: a test of what the pages say, answered by the providers' API models with the pages handed to
 them. It doesn't show whether an AI finds or reads the pages on its own (that is Find & read), and an AI's mistake
 despite clear pages isn't counted as a website gap.
+
+## Part 4c: Distinctive
+
+What does the website tell AI about why someone should choose the business? **Costs about $0.10 per report** (mostly
+Claude's answer), within the spending cap. Runs on its own after `cc_bundle` (same pages as Clear & complete).
+
+1. `ds_answer_chatgpt` / `_claude` / `_gemini`: each AI, given only the website pages with every tool off, writes a
+   one-sentence description and answers five neutral questions (docs/engineering/distinctive-relevant.md): what the
+   business offers, who it's best for, why someone would choose it, when another business of its kind would be better,
+   and its limits. Nothing about the expected answers is in the prompt; "NOT STATED" when the pages don't say.
+2. `ds_score` (one Claude Haiku call): the specific reasons to choose the business that the pages support (kept only
+   when a quote is found word for word on its page; generic claims don't count), which AIs mention each one, and a flag
+   per answer: generic, not on your website (with the claim), or fine. "NOT STATED" is handled in plain code. Up to
+   three suggestions for the pages, never invented claims.
+3. `ws_section` builds the **Distinctive slide**: each AI's description and answers with their flags; takeaways
+   computed in plain code (reasons all AIs pick up, reasons only some find, supported reasons no AI repeats, answers
+   that add things the site doesn't say, and when no AI can say what sets the business apart); the suggestions.
+
+A competitive advantage is never claimed from the website alone: comparing with named competitors needs their
+evidence, which is a later part. One answer per AI per question, recorded as a single snapshot.

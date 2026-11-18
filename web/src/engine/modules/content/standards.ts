@@ -14,13 +14,23 @@ export type DecisionFact = {
   /** The customer's question, as put to each AI. */
   question: string;
 };
-export type Standard = { id: string; version: string; label: string; approved: string; match: RegExp; facts: DecisionFact[] };
+export type Standard = {
+  id: string;
+  version: string;
+  label: string;
+  /** What a competitor is called in questions ("When would another rental company be better?"). */
+  noun: string;
+  approved: string;
+  match: RegExp;
+  facts: DecisionFact[];
+};
 
 export const STANDARDS: Standard[] = [
   {
     id: "car-rental",
     version: "1.0",
     label: "Car rental (including exotic and luxury rentals)",
+    noun: "rental company",
     approved: "2026-11-18",
     match: /\b(car|cars|vehicle|vehicles|auto|automotive|limo|limousine|exotic|luxury)\b.*\b(rental|rentals|hire|leasing)\b|\b(rental|rentals|hire)\b.*\b(car|cars|vehicle|vehicles)\b/i,
     facts: [
@@ -39,6 +49,7 @@ export const STANDARDS: Standard[] = [
     id: "boutique-hotel",
     version: "1.0",
     label: "Boutique hotel",
+    noun: "hotel",
     approved: "2026-10-23",
     match: /\b(hotel|inn|boutique hotel|lodging|guesthouse|guest house)\b/i,
     facts: [
@@ -58,6 +69,7 @@ export const STANDARDS: Standard[] = [
     id: "coffee",
     version: "1.0",
     label: "Coffee",
+    noun: "coffee brand",
     approved: "2026-10-23",
     match: /\bcoffee\b/i,
     facts: [

@@ -614,7 +614,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
         </sc-for>
       </div>
     </div>
-    <span style="display:flex;gap:8px;align-items:center;font-size:14px"><span style="{{ m.legendSym }}">!</span>Something you offer that your website doesn’t say</span>
+    <span style="display:flex;gap:8px;align-items:center;font-size:14px"><span style="{{ m.legendSym }}">!</span>{{ m.legendText }}</span>
   </div>
 
   <div style="display:flex;flex-direction:column;gap:12px">
@@ -1605,6 +1605,8 @@ class BrandPart extends Sub {
         const Q = R.website.distinctive.questions.map(q => [q.question, q.answers.map(a => [a.text, a.flag || ''])]);
         const x = { width: 18, height: 18, borderRadius: '50%', flex: 'none', display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 700, marginTop: 1, background: 'oklch(0.82 0.15 85)', color: '#000' };
         return { title: m.title, qCount: Q.length, intro: 'We gave each AI only your website, with web search off, so these answers reflect what your own pages say. Reviews and other outside sources are covered in Section 3.', cols: AIS.map((n, i) => ({ n, mono: MONO[i] })), legendSym: x,
+          // Sample reports flag offerings missing from the site; pipeline reports flag generic, unsupported or uncovered answers.
+          legendText: Q.every(([, ans]) => ans.every(([, f]) => !f || /^Missing from your website/.test(f))) ? 'Something you offer that your website doesn\u2019t say' : 'An answer we flagged: generic, not on your website, or not covered by your pages',
           headGrid: { display: 'grid', gridTemplateColumns: cols, gap: 0, alignItems: 'end', padding: '12px 0', borderBottom: '2px solid #000', background: 'oklch(0.975 0.004 265)', borderRadius: '10px 10px 0 0' },
           rows: Q.map(([q, ans], i) => ({ n: i + 1, q, answers: ans.map(([t, flag]) => ({ t, flag, hasFlag: !!flag, symStyle: x })), grid: { display: 'grid', gridTemplateColumns: cols, gap: 0, alignItems: 'stretch', padding: '20px 0', borderBottom: '1.5px solid oklch(0.82 0.01 265)' } })),
           take: R.website.distinctive.takeaways.map(t => [t.k, t.v]).map(([k, v]) => ({ k, v })),
