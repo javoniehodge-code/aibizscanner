@@ -160,7 +160,7 @@ site's code (JSON-LD) with what its pages show, in plain code. For a report that
 ## Part 4b: Clear & complete
 
 Does the website give a customer (and AI) enough detail on the facts that decide whether they choose the business?
-**This costs money**: about $0.10–0.25 per report (Claude's answer is most of it), within the spending cap.
+**This costs money**: about $0.15–0.30 per report (Claude's answer and the Sonnet scoring are most of it), within the spending cap.
 
 Five stages (module `content`), all run on their own after the JavaScript check:
 
@@ -216,3 +216,7 @@ supported. Now a "wrong" or "not on your website" verdict needs the exact words 
 and plain code (`claimHolds` in `content/logic.ts`) keeps it only when those words are in the answer and on none of the
 pages; otherwise the verdict is dropped and the scorer's original call is kept as `overruled` for review. Rerun
 `cc_score` and `ds_score` to apply it.
+
+Scoring model (owner decision 18 Nov 2026): `cc_score` and `ds_score` use Claude Sonnet (`SCORING_MODEL`) instead of
+Haiku, which held reworded answers to the pages' exact words; the claim check still applies. Our website assessment
+(`cc_baseline`) stays on Haiku. Adds roughly $0.05–0.08 per report.
