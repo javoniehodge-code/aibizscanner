@@ -165,61 +165,49 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     <p style="margin:0;font-size:18px;line-height:1.55;max-width:65ch;text-wrap:pretty">{{ copy.discoveryIntro }}</p>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:20px">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
-      <sc-for list="{{ m.glance }}" as="c" hint-placeholder-count="3">
-        <div style="{{ c.cardStyle }}">
-          <span style="display:flex;gap:10px;align-items:center"><span style="width:32px;height:32px;border-radius:8px;background:oklch(0.22 0.03 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;flex:none">{{ c.mono }}</span><span style="font-size:18px;font-weight:700">{{ c.n }}</span><span style="{{ c.symStyle }}">{{ c.sym }}</span></span>
-          <span style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="font-size:48px;font-weight:700;letter-spacing:-0.03em;line-height:1">{{ c.ok }}</span><span style="font-size:18px;font-weight:600">of {{ c.tot }} pages fully read</span></span>
-          <sc-if value="{{ c.hasNote }}" hint-placeholder-val="{{ true }}"><span style="font-size:16px;line-height:1.5">{{ c.note }}</span></sc-if>
-        </div>
-      </sc-for>
-    </div>
-    <details style="padding:16px 20px;border-radius:14px;background:oklch(0.965 0.006 265)"><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Why these {{ m.pageCount }} pages?</summary><p style="margin:10px 0 0;font-size:14px;line-height:1.55;max-width:75ch">{{ copy.discoveryWhyPages }}</p></details>
-  </div>
+  <details style="padding:16px 20px;border-radius:14px;background:oklch(0.965 0.006 265)"><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Why these {{ m.pageCount }} pages?</summary><p style="margin:10px 0 0;font-size:14px;line-height:1.55;max-width:75ch">{{ copy.discoveryWhyPages }}</p></details>
 
-  <div style="display:flex;flex-direction:column;gap:12px">
-    <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">Exactly which pages were checked?</h3>
+  <sc-for list="{{ m.steps }}" as="st" hint-placeholder-count="3">
+  <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:2px solid #000">
+    <span style="font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">STEP {{ st.n }}</span>
+    <h3 style="font-size:22px;font-weight:700;line-height:1.3;margin:0">{{ st.title }}</h3>
+    <p style="margin:0;font-size:16px;line-height:1.55;max-width:72ch">{{ st.intro }}</p>
+    <div style="display:flex;gap:8px 28px;flex-wrap:wrap;align-items:center">
+      <sc-for list="{{ st.counts }}" as="c" hint-placeholder-count="3"><span style="display:flex;gap:8px;align-items:center;font-size:16px"><span style="width:24px;height:24px;border-radius:6px;background:oklch(0.22 0.03 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;flex:none">{{ c.mono }}</span><span><strong style="font-weight:700">{{ c.n }}</strong> {{ c.text }}</span></span></sc-for>
+    </div>
     <div data-scrollx style="overflow-x:auto">
-      <div style="min-width:640px;display:flex;flex-direction:column">
-        <div style="{{ m.headRow }}">
-          <span style="font-size:14px;color:oklch(0.42 0.01 265)">Page checked</span>
-          <sc-for list="{{ m.cols }}" as="c" hint-placeholder-count="3"><span style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:28px;height:28px;border-radius:7px;background:oklch(0.22 0.03 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;flex:none">{{ c.mono }}</span><span style="font-size:14px;font-weight:700">{{ c.n }}</span></span></sc-for>
+      <div style="min-width:600px;display:flex;flex-direction:column">
+        <div style="{{ m.stepHead }}">
+          <span style="font-size:14px;color:oklch(0.42 0.01 265)">Page</span>
+          <sc-for list="{{ m.cols }}" as="c" hint-placeholder-count="3"><span style="display:flex;gap:6px;align-items:center;justify-content:center"><span style="width:24px;height:24px;border-radius:6px;background:oklch(0.22 0.03 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;flex:none">{{ c.mono }}</span><span style="font-size:14px;font-weight:700">{{ c.n }}</span></span></sc-for>
         </div>
-        <sc-for list="{{ m.pages }}" as="r" hint-placeholder-count="6">
-          <div style="{{ r.grid }}">
-            <span style="display:flex;flex-direction:column;gap:2px;padding-right:8px;min-width:0">
-              <a href="{{ r.href }}" target="_blank" rel="noopener noreferrer" style="font-size:16px;font-weight:700;color:#000">{{ r.name }} ↗</a>
-              <span style="font-family:'Geist Mono',monospace;font-size:12px;word-break:break-all">{{ r.sub }}</span>
-              <details style="margin-top:4px"><summary style="font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Why it matters</summary><span style="display:block;font-size:14px;line-height:1.5;margin-top:4px">{{ r.why }}</span></details>
-            </span>
-            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.toggle }}" aria-expanded="{{ c.sel }}" title="{{ c.title }}" style="{{ c.style }}"><span style="display:flex;gap:6px;align-items:center;font-size:12px;line-height:1.2"><span style="{{ c.sSymStyle }}">{{ c.sSym }}</span><span><span style="color:oklch(0.42 0.01 265)">Search</span><br>{{ c.sLabel }}</span></span><span style="display:flex;gap:6px;align-items:center;font-size:12px;line-height:1.2"><span style="{{ c.rSymStyle }}">{{ c.rSym }}</span><span><span style="color:oklch(0.42 0.01 265)">Read</span><br>{{ c.rLabel }}</span></span></button></sc-for>
+        <sc-for list="{{ st.rows }}" as="r" hint-placeholder-count="6">
+          <div style="{{ m.stepRow }}">
+            <span style="display:flex;flex-direction:column;gap:2px;padding-right:8px;min-width:0"><a href="{{ r.href }}" target="_blank" rel="noopener noreferrer" style="font-size:15px;font-weight:700;color:#000">{{ r.name }} ↗</a><span style="font-family:'Geist Mono',monospace;font-size:11px;word-break:break-all">{{ r.sub }}</span></span>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="3"><span title="{{ c.title }}" style="display:flex;gap:8px;align-items:center;justify-content:center;font-size:14px;font-weight:600;line-height:1.25;text-align:left"><span style="{{ c.symStyle }}">{{ c.sym }}</span><span>{{ c.label }}</span></span></sc-for>
           </div>
-          <sc-for list="{{ r.open }}" as="d" hint-placeholder-count="0">
-            <div data-keep style="margin:4px 0 12px;padding:16px 18px;border:1.5px solid #000;border-radius:14px;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:start">
-              <span style="{{ d.badge }}">{{ d.mono }}</span>
-              <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:700">{{ d.who }} · {{ d.status }}</span><span style="font-size:16px;line-height:1.5;text-wrap:pretty">{{ d.text }}</span></span>
-              <button data-noprint onClick="{{ d.close }}" aria-label="Close" style="font:inherit;font-size:14px;width:32px;height:32px;border-radius:8px;border:1px solid oklch(0.85 0.01 265);background:#fff;cursor:pointer">✕</button>
-            </div>
-          </sc-for>
         </sc-for>
       </div>
     </div>
-    <div style="display:flex;gap:8px 20px;flex-wrap:wrap;align-items:center;font-size:14px">
-      <sc-for list="{{ m.legend }}" as="l" hint-placeholder-count="4"><span style="display:flex;gap:8px;align-items:center"><span style="{{ l.symStyle }}">{{ l.sym }}</span>{{ l.t }}</span></sc-for>
-    </div>
-    <details><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">What do “Search” and “Read” mean?</summary><p style="margin:8px 0 0;font-size:14px;line-height:1.5;max-width:70ch">“Search” is whether the page came back when the AI searched for it. “Read” is whether the AI’s own reading tool could get the page’s content from the exact link. “Partly read” means it got the page but missed key content, usually because that content only loads with JavaScript. We record the two separately: a page can be readable but hard to find, or found but not fully readable.</p></details>
+    <sc-if value="{{ st.hasNotes }}" hint-placeholder-val="{{ true }}">
+    <details><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Why these answers? ({{ st.noteCount }})</summary>
+      <div style="display:flex;flex-direction:column;margin-top:8px">
+        <sc-for list="{{ st.notes }}" as="x" hint-placeholder-count="2"><span style="font-size:14px;line-height:1.5;padding:8px 0;border-bottom:1px solid oklch(0.92 0.006 265);max-width:80ch"><strong style="font-weight:700">{{ x.who }} · {{ x.page }}:</strong> {{ x.text }}</span></sc-for>
+      </div>
+    </details>
+    </sc-if>
   </div>
+  </sc-for>
 
   <sc-if value="{{ m.hasJs }}" hint-placeholder-val="{{ true }}">
   <div style="display:flex;flex-direction:column;gap:12px">
     <span style="font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">RAW VS FULLY LOADED</span>
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">What AI sees before and after your pages finish loading</h3>
-    <p style="margin:0;font-size:16px;line-height:1.55;max-width:72ch">ChatGPT, Claude and Perplexity read a page’s raw code and don’t wait for content that loads afterward with JavaScript. Google, and so Gemini, loads the full page. Anything that only appears after loading is invisible to most AI.</p>
+    <p style="margin:0;font-size:16px;line-height:1.55;max-width:72ch">ChatGPT’s and Claude’s page readers read a page’s raw code and don’t wait for content that loads afterward with JavaScript. Google, and so Gemini, can load the full page. Anything that only appears after loading may be missed.</p>
     <span style="font-size:16px;font-weight:700">{{ m.jsCount }}</span>
     <div data-scrollx style="overflow-x:auto">
       <div style="min-width:680px;display:flex;flex-direction:column">
-        <div style="{{ m.jsHead }}"><span style="font-size:14px;font-weight:700;padding-left:12px">Page</span><span style="font-size:14px;font-weight:700;line-height:1.3">In the raw page<br><span style="font-weight:500;font-size:12px">What ChatGPT, Claude, Perplexity read</span></span><span style="font-size:14px;font-weight:700;line-height:1.3">After it fully loads<br><span style="font-weight:500;font-size:12px">What Google and Gemini can see</span></span><span style="font-size:14px;font-weight:700">Result</span></div>
+        <div style="{{ m.jsHead }}"><span style="font-size:14px;font-weight:700;padding-left:12px">Page</span><span style="font-size:14px;font-weight:700;line-height:1.3">In the raw page<br><span style="font-weight:500;font-size:12px">What ChatGPT and Claude read</span></span><span style="font-size:14px;font-weight:700;line-height:1.3">After it fully loads<br><span style="font-weight:500;font-size:12px">What Google and Gemini can see</span></span><span style="font-size:14px;font-weight:700">Result</span></div>
         <sc-for list="{{ m.js }}" as="x" hint-placeholder-count="6"><div style="{{ x.grid }}"><span style="font-size:15px;font-weight:700;padding-left:12px">{{ x.n }}</span><span style="font-size:14px;line-height:1.45">{{ x.raw }}</span><span style="font-size:14px;line-height:1.45">{{ x.full }}</span><span style="display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600;line-height:1.35"><span style="{{ x.symStyle }}">{{ x.sym }}</span>{{ x.res }}</span></div></sc-for>
       </div>
     </div>
@@ -1441,7 +1429,7 @@ const MS = [
     colSub: R.website.discovery.permissions.map(p => p.searchAccess),
     L: { g: 'Found & read', k: 'Link only', r: 'Not found', d: 'Not tested' },
     // rows: [page, url, search codes per AI, why it matters, read codes per AI]
-    groups: R.website.discovery.pageGroups.map(g => ({ t: g.group.title, d: g.group.description, rows: g.pages.map(p => [p.page.name, p.page.url, p.results.map(r => r.search).join(''), p.page.why, p.results.map(r => r.read).join('')]) })),
+    groups: R.website.discovery.pageGroups.map(g => ({ t: g.group.title, d: g.group.description, rows: g.pages.map(p => [p.page.name, p.page.url, p.results.map(r => r.search).join(''), p.page.why, p.results.map(r => r.read).join(''), p.results.map(r => r.access || (r.read === 'g' || r.read === 'p' ? 'g' : 'd')).join('')]) })),
     notes: Object.fromEntries(R.website.discovery.notes.map(n => [n.page + '|' + n.engine, n.text])) },
   { id: 'clear', nav: 'Complete', kicker: 'CLEAR & COMPLETE', title: 'Does your website give AI enough detail to recommend you?', intro: R.website.clear.intro, rowHead: 'Decision fact', hasBase: true, baseHead: 'Our website assessment', unit: 'facts answered', scoreHead: 'Fully supported', bigLabel: 'Fully supported answers',
     BL: { g: 'Enough detail', k: 'Some missing', r: 'Not enough' }, L: { g: 'Supported', k: 'Partial', r: 'Wrong', n: 'No answer' }, groups: [], notes: {} },
@@ -1673,7 +1661,7 @@ class BrandPart extends Sub {
           rules: R.website.clear.rules.map(r => [r.k, r.v]).map(([k, v]) => ({ k, v }))
         }; })()] : [],
       discSlide: show.discovery ? [(() => { const d = slides[0], RAW = MS[0].groups.flatMap(g => g.rows), RD = r => r[4] || r[2].split('').map(c => c === 'r' ? 'f' : 'g').join('');
-        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read', u: 'Reading unconfirmed' }, RK = { g: 'g', p: 'k', f: 'r', u: 'd' };
+        const RL = { g: 'Read', p: 'Partly read', f: 'Couldn\u2019t read', u: 'Reading unconfirmed', j: 'Couldn\u2019t read: needs JavaScript', n: 'Blocked' }, RK = { g: 'g', p: 'k', f: 'r', u: 'd', j: 'r', n: 'n' };
         // Search: g found; r not found; d not tested or unconfirmed (no search observed), never counted as not found.
         const SL = c => c === 'g' ? 'Found' : c === 'd' ? 'Search unconfirmed' : 'Not found', SK = c => c === 'g' ? 'g' : c === 'd' ? 'd' : 'r';
         const mini = k => ({ ...symStyle(k, true), width: 16, height: 16, fontSize: 10, flex: 'none' });
@@ -1696,7 +1684,31 @@ class BrandPart extends Sub {
           attention: R.website.discovery.attention.map(a => [a.title, a.engines, a.what, a.next, a.technical]).map(([t, ais, what, next, tech], i) => ({ n: i + 1, t, what, next, tech, ais: ais.map(a => ({ n: AIS[a], mono: MONO[a] })),
             style: { display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: 16, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
             numStyle: { width: 40, height: 40, borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: 16, fontWeight: 700, border: '1.5px solid #000', boxSizing: 'border-box' } })),
-          how: R.website.discovery.how.map(x => [x.k, x.v]).map(([k, v]) => ({ k, v }))
+          how: R.website.discovery.how.map(x => [x.k, x.v]).map(([k, v]) => ({ k, v })),
+          // One table per question (owner, 18 Nov 2026): can AI find the page, is it blocked, can it read it.
+          stepHead: { display: 'grid', gridTemplateColumns: 'minmax(180px,1fr) repeat(3,minmax(110px,150px))', gap: 8, alignItems: 'end', paddingBottom: 10, borderBottom: '2px solid #000' },
+          stepRow: { display: 'grid', gridTemplateColumns: 'minmax(180px,1fr) repeat(3,minmax(110px,150px))', gap: 8, alignItems: 'center', padding: '12px 0', borderBottom: '1px solid oklch(0.92 0.006 265)' },
+          steps: (() => {
+            const ACC = r => r[5] || RD(r).split('').map(c => c === 'g' || c === 'p' ? 'g' : 'd').join('');
+            const STEP = [
+              { n: 1, title: 'Can AI find this page?', intro: 'We asked each AI\u2019s own search for the page by name. Yes means that exact page came back in its results.', code: r => r[2],
+                cell: { g: ['g', 'Yes'], k: ['g', 'Yes'], r: ['r', 'No'], d: ['d', 'Not checked'] },
+                count: (cs, tot) => ({ n: cs.filter(c => c === 'g' || c === 'k').length + ' of ' + tot, text: 'found' }) },
+              { n: 2, title: 'Is AI blocked from this page?', intro: 'Blocked means your website stops this AI from using the page: your site rules (robots.txt) forbid it, or your website turned its page reader away.', code: ACC,
+                cell: { r: ['r', 'Blocked'], g: ['g', 'Not blocked'], d: ['d', 'Not confirmed'] },
+                count: (cs, tot) => ({ n: cs.filter(c => c === 'r').length + ' of ' + tot, text: 'blocked' }) },
+              { n: 3, title: 'Can AI read this page?', intro: 'For pages it isn\u2019t blocked from, we gave each AI the link and asked it to read the page and list its key facts: prices, phone numbers, hours and services.', code: r => RD(r),
+                cell: { g: ['g', 'Yes'], p: ['k', 'Partly'], j: ['r', 'No: needs JavaScript'], f: ['r', 'No'], u: ['d', 'Not confirmed'], n: ['n', 'Blocked (step 2)'] },
+                count: (cs, tot) => { const open = cs.filter(c => c !== 'n'); const js = cs.filter(c => c === 'j').length; return { n: open.filter(c => c === 'g').length + ' of ' + open.length, text: (open.length < tot ? 'read (pages not blocked)' : 'read') + (js ? ' \u00b7 ' + js + (js === 1 ? ' needs' : ' need') + ' JavaScript' : '') }; } }
+            ];
+            const NOTES = R.website.discovery.notes;
+            return STEP.map(st => {
+              const rows = RAW.map(r => ({ name: r[0], href: r[1], sub: r[1].replace(/^https?:\/\/(www\.)?/, ''), cells: st.code(r).split('').map((c, i) => { const [k, label] = st.cell[c] || ['d', 'Not confirmed']; return { label, sym: SYM[k], symStyle: { ...symStyle(k, true), flex: 'none' }, title: AIS[i] + ': ' + label }; }) }));
+              const notes = NOTES.filter(x => (x.step || 3) === st.n).map(x => ({ who: AIS[x.engine], page: x.page, text: x.text }));
+              return { n: st.n, title: st.title, intro: st.intro, rows, notes, hasNotes: notes.length > 0, noteCount: notes.length,
+                counts: AIS.map((n, i) => ({ mono: MONO[i], ...st.count(RAW.map(r => st.code(r)[i]), RAW.length) })).map(c => ({ ...c, n: c.n })) };
+            });
+          })()
         }; })()] : [],
       sd: (() => {
             const P = R.website.structuredData.problems.map(p => [p.mark, p.tag, p.title, p.why, p.details.map(d => [d.k, d.v])]);
