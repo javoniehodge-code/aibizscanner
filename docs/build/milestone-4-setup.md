@@ -5,7 +5,8 @@ Consistent & current). This page grows as each part lands.
 
 ## Owner decisions (19 Nov 2026)
 
-- **Cited pages:** we fetch at most **20** of the outside pages AI cited per report, the most-cited first.
+- **Cited pages:** we fetch at most **20** of the outside pages AI cited per report, the most-cited first. With service
+  lines saved, **20 per shown line** (decision of 19 Nov 2026, below).
 - **Google Places:** approved, **with reviews**. Key `GOOGLE_PLACES_API_KEY` in Vercel (type Secret; never
   `NEXT_PUBLIC_`), restricted to Places API (New), with daily quotas of 100 for SearchTextRequest and GetPlaceRequest.
 - **Google storage (19 Nov 2026):** "store as long as we can". Within Google's terms that means: the **place ID**
@@ -86,3 +87,36 @@ response only. The stored report document is unchanged; nothing from Google is s
 - **Cost:** one call each time the report is opened. $0.025 a call after 1,000 free a month; the 100-a-day quota caps it.
   These calls aren't recorded in a report's spend (they happen when viewing, not in a stage run).
 - Example reports (fixtures) are shown as they are.
+
+## Service lines: one citation map per line (19 Nov 2026)
+
+Owner decisions: a business with very different services (MVP Miami: car rental, villas, yachts) is treated almost as
+separate businesses, because each service has its own cited sites and competitors.
+
+- **Lines:** on the prompts page, *Service lines* takes one line per service, `Name | P1, P2, P5`. A question can be in
+  several lines (MVP Miami's car + villa + yacht package question counts in all three). Saving queues `pa_lines`; no
+  question is asked again. `pa_lines` reads no other stage, so approving a new prompt set doesn't hold anything up; ids
+  not in the current set are ignored.
+- **Shown lines:** a line with fewer than **3** questions gets no map (hidden until the question set grows).
+- **Pages:** `wp_pages` reruns on its own after a save. It ranks each shown line's cited outside pages by that line's
+  questions and checks up to **20 per line** (a page chosen for two lines is checked once). About $0.40 to read a
+  line's pages in `wp_assess`. Without saved lines, nothing changes: the 20 most-cited pages of the whole report.
+- **Competitors' own websites:** a cited page the classifier left unclassified whose site name is a business's name
+  written together (exoticmiamirental.com for Exotic Miami Car Rental; one word may be left out of a 3+ word name) is
+  that business's own website, not an outside site, and isn't checked.
+- **Map per line (`wp_section`):** columns are the business and the line's **top 15** competitors, ranked by the number
+  of the line's usable answers naming them (as on the Businesses named slide), ties by name. Rows are the websites of
+  pages we read that the line's answers cite and that name at least one of those businesses. Sites naming only other
+  businesses or none (AI cited them for facts such as prices), and pages we couldn't read, are counted in the scope line
+  instead of shown as rows of blanks.
+- **Slides:** one *Citation coverage* slide per line, labelled with the line. The business and competitors 1–7 are the
+  first table; competitors 8–15 a second table below against the same sites. The cited-pages table stays on the first
+  coverage slide. Example reports (one map) are unchanged.
+- **Not yet split by line:** Credible & corroborated, the web presence map and the competitor slides still use every
+  question and page.
+
+Why the rows changed: in MVP Miami's report, 6 of the 10 rows were blank. Three sites named only businesses that didn't
+make the 7 columns (ranked 57th–72nd of 99), one was a competitor's own site, and three named no business at all. A
+follow-up test (19 Nov 2026, ChatGPT only; P1, P2, P4 asked again, then "which sites helped you pick companies, not
+learn facts?") found ChatGPT picks mostly from companies' own websites and cites what it used: one helpful site in
+three questions wasn't cited (kayak.com, a rating cross-check), out of 23–33 sites its searches returned.

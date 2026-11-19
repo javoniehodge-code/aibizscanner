@@ -20,6 +20,7 @@ import {
   type Extractions,
   type PromptSetSpec,
 } from "./schemas";
+import { paLines } from "./lines-stage";
 
 const MODULE = "prompt-analysis";
 /** How many questions are in flight at once per engine, and per-answer time limit. Fits the 300 s worker tick. */
@@ -345,4 +346,4 @@ export const paAssemble: StageDefinition = {
   },
 };
 
-export const PROMPT_ANALYSIS_STAGES = [paPromptSet, paAnswersChatGpt, paAnswersClaude, paAnswersGemini, paExtract, paSources, paAssemble] as const;
+export const PROMPT_ANALYSIS_STAGES = [paPromptSet, paAnswersChatGpt, paAnswersClaude, paAnswersGemini, paExtract, paSources, paAssemble, paLines] as const;

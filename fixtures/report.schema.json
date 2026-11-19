@@ -2579,103 +2579,280 @@
     "citationCoverage": {
       "anyOf": [
         {
-          "type": "object",
-          "properties": {
-            "sites": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "line": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "questions": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^P\\d+$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "questions"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "sites": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "type": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pageKeys": {
+                            "minItems": 1,
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[a-z]{2}\\d*$"
+                            }
+                          },
+                          "presentBusinesses": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                            }
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "type",
+                          "pageKeys",
+                          "presentBusinesses"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "businesses": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "minItems": 1,
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                      }
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                },
+                "scope": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "p": {
+                      "$ref": "#/$defs/PresentProvenance"
+                    }
+                  },
+                  "required": [
+                    "v",
+                    "p"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "sites",
+                "businesses"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "minItems": 1,
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
-                  "v": {
+                  "line": {
                     "type": "object",
                     "properties": {
-                      "name": {
-                        "type": "string",
-                        "minLength": 1
+                      "v": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "questions": {
+                            "minItems": 1,
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^P\\d+$"
+                            }
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "questions"
+                        ],
+                        "additionalProperties": false
                       },
-                      "type": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "pageKeys": {
-                        "minItems": 1,
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "pattern": "^[a-z]{2}\\d*$"
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "sites": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "v": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "type": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "pageKeys": {
+                              "minItems": 1,
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^[a-z]{2}\\d*$"
+                              }
+                            },
+                            "presentBusinesses": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^[A-Z][A-Z0-9]{1,5}$"
+                              }
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "type",
+                            "pageKeys",
+                            "presentBusinesses"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "p": {
+                          "$ref": "#/$defs/PresentProvenance"
                         }
                       },
-                      "presentBusinesses": {
+                      "required": [
+                        "v",
+                        "p"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "businesses": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "minItems": 1,
                         "type": "array",
                         "items": {
                           "type": "string",
                           "pattern": "^[A-Z][A-Z0-9]{1,5}$"
                         }
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
                       }
                     },
                     "required": [
-                      "name",
-                      "type",
-                      "pageKeys",
-                      "presentBusinesses"
+                      "v",
+                      "p"
                     ],
                     "additionalProperties": false
                   },
-                  "p": {
-                    "$ref": "#/$defs/PresentProvenance"
+                  "scope": {
+                    "type": "object",
+                    "properties": {
+                      "v": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "p": {
+                        "$ref": "#/$defs/PresentProvenance"
+                      }
+                    },
+                    "required": [
+                      "v",
+                      "p"
+                    ],
+                    "additionalProperties": false
                   }
                 },
                 "required": [
-                  "v",
-                  "p"
+                  "sites",
+                  "businesses"
                 ],
                 "additionalProperties": false
               }
-            },
-            "businesses": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "minItems": 1,
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "pattern": "^[A-Z][A-Z0-9]{1,5}$"
-                  }
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
-            },
-            "scope": {
-              "type": "object",
-              "properties": {
-                "v": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "p": {
-                  "$ref": "#/$defs/PresentProvenance"
-                }
-              },
-              "required": [
-                "v",
-                "p"
-              ],
-              "additionalProperties": false
             }
-          },
-          "required": [
-            "sites",
-            "businesses"
-          ],
-          "additionalProperties": false
+          ]
         },
         {
           "type": "null"

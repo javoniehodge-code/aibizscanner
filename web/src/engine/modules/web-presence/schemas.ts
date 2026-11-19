@@ -10,6 +10,10 @@ export const citedPages = z
     outsidePages: z.number().int().min(0),
     /** The target first, then every other business the prompt analysis names. */
     businesses: z.array(z.object({ key: z.string(), name: z.string(), target: z.boolean() }).strict()),
+    /** Service lines with a citation map (pa_lines, at least MIN_LINE_QUESTIONS questions); absent: one map for all questions. */
+    lines: z.array(z.object({ name: z.string(), questions: z.array(z.string()) }).strict()).optional(),
+    /** Unclassified cited pages left out because they are another business's own website. */
+    ownSites: z.number().int().min(0).optional(),
     pages: z.array(
       z
         .object({
@@ -21,6 +25,8 @@ export const citedPages = z
           prompts: z.number().int().min(0),
           answers: z.number().int().min(0),
           engines: z.array(z.number().int().min(0).max(2)),
+          /** The service lines this page was chosen for (absent or empty without lines). */
+          lines: z.array(z.string()).optional(),
           /** checked: we read the page. unchecked: we couldn't (see reason); never read as the business being absent. */
           state: z.enum(["checked", "unchecked"]),
           reason: z.string().nullable(),

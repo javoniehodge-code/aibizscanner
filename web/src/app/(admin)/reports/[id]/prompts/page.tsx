@@ -5,6 +5,9 @@ import { examplePromptSet, formatGroups, formatPrompts, storedPromptSet, type Pr
 import { createClient } from "@/lib/supabase/server";
 import { formatUsd } from "@/lib/format";
 import { PromptSetForm } from "./prompt-set-form";
+import { ServiceLinesForm } from "./service-lines-form";
+import { MIN_LINE_QUESTIONS, serviceLines } from "@/engine/modules/prompt-analysis/lines-stage";
+import { formatServiceLines } from "@/lib/service-lines";
 
 export const metadata = { title: "Prompt set — AIBizScanner internal" };
 
@@ -14,12 +17,13 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
   if (!z.uuid().safeParse(id).success) notFound();
   const db = await createClient();
-  const [reportRes, setRes, busyRes] = await Promise.all([
+  const [reportRes, setRes, busyRes, linesRes] = await Promise.all([
     db.from("report").select("id, version, spending_cap_usd, business:business_id (name, location)").eq("id", id).maybeSingle(),
     db.from("prompt_set").select("id, version, groups, prompts, customer_location, approved_at").eq("report_id", id).order("version", { ascending: false }).limit(1).maybeSingle(),
     db.from("stage_run").select("id", { count: "exact", head: true }).eq("report_id", id).in("stage", PA_STAGES).in("status", ["queued", "running"]),
+    db.from("stage_run").select("params").eq("report_id", id).eq("stage", "pa_lines").order("created_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
-  for (const r of [reportRes, setRes, busyRes]) if (r.error) throw new Error(r.error.message);
+  for (const r of [reportRes, setRes, busyRes, linesRes]) if (r.error) throw new Error(r.error.message);
   const report = reportRes.data;
   if (!report) notFound();
 
@@ -27,6 +31,7 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
   const draft: PromptSetDraft = stored?.success
     ? { groups: stored.data.groups, prompts: stored.data.prompts, location: stored.data.customer_location }
     : examplePromptSet();
+  const savedLines = linesRes.data ? serviceLines.safeParse(linesRes.data.params) : null;
   const loc = draft.location ?? { city: "", region: "", country: "", timezone: "" };
 
   return (
@@ -63,6 +68,18 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
         cap={Number(report.spending_cap_usd)}
         busy={(busyRes.count ?? 0) > 0}
       />
+      <h2>Service lines</h2>
+      {stored?.success ? (
+        <ServiceLinesForm
+          reportId={id}
+          lines={formatServiceLines(savedLines?.success ? savedLines.data : null)}
+          questions={stored.data.prompts.map((p) => ({ id: p.id, text: p.text }))}
+          minQuestions={MIN_LINE_QUESTIONS}
+          disabled={(busyRes.count ?? 0) > 0}
+        />
+      ) : (
+        <p className="muted">Approve a prompt set first; then tag its questions with service lines here.</p>
+      )}
     </main>
   );
 }

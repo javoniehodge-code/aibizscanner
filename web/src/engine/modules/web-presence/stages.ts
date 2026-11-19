@@ -6,7 +6,8 @@ import { promptSetSpec } from "../prompt-analysis/schemas";
 import { assembledSection } from "../prompt-analysis/stages";
 import { extractPage } from "../website/logic/extract";
 import { permission, type RobotsFile } from "../website/logic/robots";
-import { CITED_PAGES_VERSION, PAGE_CAP, namesOnPage, rankCitedPages, wordCount, type NamedBusiness } from "./logic/pages";
+import { CITED_PAGES_VERSION, PAGE_CAP, choosePages, namesOnPage, wordCount, type NamedBusiness } from "./logic/pages";
+import { serviceLines, shownLines } from "../prompt-analysis/lines-stage";
 import { citedPages, type CitedPages } from "./schemas";
 import { wpAssess } from "./assess-stage";
 import { wpSection } from "./section-stage";
@@ -58,6 +59,8 @@ export const wpPages: StageDefinition = {
   module: MODULE,
   label: "Web presence 1/3: check the outside pages AI cited",
   inputs: ["pa_prompt_set", "pa_assemble"],
+  /** Service lines: when saved, pages are chosen per line (a new save reruns this stage). */
+  optionalInputs: ["pa_lines"],
   timeoutMs: 270_000,
   maxAttempts: 2,
   autoRun: true,
@@ -69,12 +72,14 @@ export const wpPages: StageDefinition = {
   async run(ctx) {
     const set = input(ctx, "pa_prompt_set", promptSetSpec);
     const pa = input(ctx, "pa_assemble", assembledSection);
-    const ranked = rankCitedPages(pa.section);
-    const chosen = ranked.slice(0, PAGE_CAP);
-
     const targetKey = pa.business.key;
     const businesses: NamedBusiness[] = pa.section.businesses.map(({ v: b }) => (b.key === targetKey ? { key: b.key, name: b.name, aliases: set.target.aliases } : { key: b.key, name: b.name }));
     businesses.sort((a, b) => (a.key === targetKey ? -1 : b.key === targetKey ? 1 : 0));
+
+    // Lines may have been saved for an earlier prompt set: only this set's questions count towards a line.
+    const linesIn = ctx.inputs.pa_lines;
+    const lines = linesIn ? shownLines({ lines: serviceLines.parse(linesIn.output).lines.map((l) => ({ name: l.name, questions: l.questions.filter((q) => set.prompts.some((p) => p.id === q)) })) }) : null;
+    const { chosen, outside, ownSites } = choosePages(pa.section, businesses.filter((b) => b.key !== targetKey), lines);
 
     // robots.txt once per host; a missing or unreadable file is no restriction (it is never read as a block).
     const robots = new Map<string, Promise<RobotsFile>>();
@@ -93,7 +98,7 @@ export const wpPages: StageDefinition = {
     // Step 1: robots.txt and the plain copy, a few pages at a time.
     type Draft = Omit<Page, "state" | "reason" | "source" | "names" | "excerpt"> & { blocked: string | null; plain: { snapshotId: string; text: string; title: string | null; words: number; status: number | null; finalUrl: string | null; fetchedAt: string } | null; plainError: string | null };
     const drafts = await mapLimit(chosen, PLAIN_CONCURRENCY, async (p): Promise<Draft> => {
-      const base = { key: p.key, url: p.url, site: p.site, category: p.category, title: p.title, prompts: p.prompts, answers: p.answers, engines: p.engines, attempts: [] as Page["attempts"] };
+      const base = { key: p.key, url: p.url, site: p.site, category: p.category, title: p.title, prompts: p.prompts, answers: p.answers, engines: p.engines, ...(lines ? { lines: p.lines } : {}), attempts: [] as Page["attempts"] };
       const rule = permission(await robotsFor(p.url), p.url, OUR_ROBOTS_TOKEN);
       if (rule.verdict === "blocked") return { ...base, blocked: `The site's robots.txt asks checkers like ours not to fetch this page (${rule.reason.toLowerCase()}).`, plain: null, plainError: null };
       const res = await ctx.fetchUrl(p.url, { accept: "html" });
@@ -212,8 +217,10 @@ export const wpPages: StageDefinition = {
     const out: CitedPages = {
       version: CITED_PAGES_VERSION,
       cap: PAGE_CAP,
-      outsidePages: ranked.length,
+      outsidePages: outside,
       businesses: businesses.map((b) => ({ key: b.key, name: b.name, target: b.key === targetKey })),
+      ...(lines ? { lines } : {}),
+      ownSites,
       pages,
     };
     return { status: pages.some((p) => p.state === "unchecked" && /ran out of time/.test(p.reason ?? "")) ? "partial" : "done", output: out as unknown as JsonValue };

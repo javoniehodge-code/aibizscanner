@@ -3,8 +3,6 @@ import type { CitedPages } from "../schemas";
 
 /** Report parts from the cited outside pages we checked (plain code; nothing here is written by a model). */
 export const CITED_PAGES_EVIDENCE = "cited-pages";
-/** Columns besides the target: the businesses on the most checked sites. */
-const MAX_OTHER_BUSINESSES = 7;
 
 type Observed<T> = { v: T; p: { kind: "observed"; evidence: string[] } };
 const observed = <T>(v: T, evidence: string[] = [CITED_PAGES_EVIDENCE]): Observed<T> => ({ v, p: { kind: "observed", evidence } });
@@ -33,42 +31,71 @@ function uncheckedSummary(pages: CitedPages["pages"]): string {
     .join(", ");
 }
 
+/** Columns besides the target in a map: the competitors AI names most in the map's answers (owner decision, 19 Nov 2026). */
+export const MAX_COMPETITORS = 15;
+
+/** What a map needs from the prompt analysis: each question's answers, the businesses each names and the pages it cites. */
+export type CoverageAnswers = {
+  businesses: readonly { v: { key: string; name: string } }[];
+  questions: readonly { question: { v: { id: string } }; answers: readonly { v: { status: string; named?: readonly { business: string }[]; citations?: readonly string[] } }[] }[];
+};
+
 /**
- * Citation coverage: one row per website with at least one checked page, and which businesses those pages name. Sites
- * we couldn't read are left out rather than shown as blanks, and the scope line says so.
+ * Citation coverage, one map per service line (or one map for every question when no lines are saved). Each map:
+ * columns are the target and the competitors named in the most of the line's usable answers (up to 15; ties by name);
+ * rows are the websites of the pages we read that the line's answers cite and that name at least one of those
+ * businesses. Sites we couldn't read, and sites naming only other businesses (or none), are counted in the scope line
+ * rather than shown as rows of blanks.
  */
-export function buildCitationCoverage(cp: CitedPagesInput) {
-  const checked = cp.pages.filter((p) => p.state === "checked");
-  const bySite = new Map<string, CitedPages["pages"]>();
-  for (const p of checked) bySite.set(p.site, [...(bySite.get(p.site) ?? []), p]);
-  const sites = [...bySite.entries()].map(([site, pages]) => ({
-    name: site,
-    type: CATEGORY_LABEL[pages[0]!.category],
-    pageKeys: pages.map((p) => p.key),
-    present: [...new Set(pages.flatMap((p) => p.names.map((n) => n.business)))],
-  }));
-
+export function buildCitationCoverage(cp: CitedPagesInput, pa: CoverageAnswers) {
   const target = cp.businesses.find((b) => b.target)!;
-  const onSites = (key: string) => sites.filter((s) => s.present.includes(key)).length;
-  const others = cp.businesses
-    .filter((b) => !b.target && onSites(b.key) > 0)
-    .sort((a, b) => onSites(b.key) - onSites(a.key) || a.name.localeCompare(b.name))
-    .slice(0, MAX_OTHER_BUSINESSES);
-  const shown = [target.key, ...others.map((b) => b.key)];
+  const nameOf = new Map(pa.businesses.map(({ v }) => [v.key, v.name] as const));
+  const lines = cp.lines ?? [null];
+  return lines.map((line) => {
+    const qs = pa.questions.filter((q) => !line || line.questions.includes(q.question.v.id));
+    const usable = qs.flatMap((q) => q.answers.filter((a) => a.v.status === "ok"));
+    const cited = new Set(usable.flatMap((a) => a.v.citations ?? []));
+    const count = new Map<string, number>();
+    for (const a of usable) for (const k of new Set((a.v.named ?? []).map((n) => n.business))) count.set(k, (count.get(k) ?? 0) + 1);
+    const competitors = [...count.entries()]
+      .filter(([k]) => k !== target.key)
+      .sort((a, b) => b[1] - a[1] || (nameOf.get(a[0]) ?? a[0]).localeCompare(nameOf.get(b[0]) ?? b[0]))
+      .slice(0, MAX_COMPETITORS)
+      .map(([k]) => k);
+    const shown = [target.key, ...competitors];
 
-  const unchecked = cp.pages.length - checked.length;
-  const scope = [
-    `We read the ${plural(checked.length, "outside page")} AI cited most (we check up to ${cp.cap} per report; ${plural(cp.outsidePages, "outside page was", "outside pages were")} cited in all).`,
-    "A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site.",
-    unchecked ? `${plural(unchecked, "more page")} couldn't be read and ${unchecked === 1 ? "isn't" : "aren't"} shown: ${uncheckedSummary(cp.pages)}.` : "",
-    cp.businesses.length - 1 > others.length ? `Columns show you and the other businesses found on the most sites.` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    // The pages chosen for this line (or, without lines, every page we chose), plus any other chosen page its answers cite.
+    const mine = cp.pages.filter((p) => cited.has(p.key) && (!line || (p.lines ?? []).includes(line.name) || p.state === "checked"));
+    const checked = mine.filter((p) => p.state === "checked");
+    const bySite = new Map<string, CitedPages["pages"]>();
+    for (const p of checked) bySite.set(p.site, [...(bySite.get(p.site) ?? []), p]);
+    const allSites = [...bySite.entries()].map(([site, pages]) => ({
+      name: site,
+      type: CATEGORY_LABEL[pages[0]!.category],
+      pageKeys: pages.map((p) => p.key),
+      present: shown.filter((k) => pages.some((p) => p.names.some((n) => n.business === k))),
+    }));
+    const sites = allSites.filter((s) => s.present.length);
+    const nameless = allSites.length - sites.length;
+    const unchecked = mine.filter((p) => p.state === "unchecked");
 
-  return {
-    sites: sites.map((s) => observed({ name: s.name, type: s.type, pageKeys: s.pageKeys, presentBusinesses: s.present.filter((k) => shown.includes(k)) })),
-    businesses: observed(shown),
-    scope: observed(scope),
-  };
+    const chosenCount = line ? cp.pages.filter((p) => (p.lines ?? []).includes(line.name)).length : cp.pages.length;
+    const scope = [
+      `We read ${plural(checked.length, "outside page")} that ${line ? `the ${line.name} answers` : "AI"} cited (we check up to ${cp.cap} ${line ? "per service line" : "per report"}${line ? `; ${plural(chosenCount, "page was", "pages were")} chosen for this line` : `; ${plural(cp.outsidePages, "outside page was", "outside pages were")} cited in all`}).`,
+      `Columns show you and the ${plural(competitors.length, "business", "businesses")} AI named most in ${line ? `the ${plural(qs.length, "question")} of this line` : "these answers"}${competitors.length > 7 ? " (the second table continues the first)" : ""}.`,
+      "A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site.",
+      nameless ? `${plural(nameless, "more site")} named none of these businesses and ${nameless === 1 ? "isn't" : "aren't"} shown (AI cited ${nameless === 1 ? "it" : "them"} for facts such as prices, or for businesses outside the top ${MAX_COMPETITORS}).` : "",
+      unchecked.length ? `${plural(unchecked.length, "more page")} couldn't be read and ${unchecked.length === 1 ? "isn't" : "aren't"} shown: ${uncheckedSummary(unchecked)}.` : "",
+      cp.ownSites ? `${plural(cp.ownSites, "cited page")} on other businesses' own websites ${cp.ownSites === 1 ? "isn't" : "aren't"} counted as outside sites.` : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return {
+      ...(line ? { line: observed({ name: line.name, questions: line.questions }) } : {}),
+      sites: sites.map((s) => observed({ name: s.name, type: s.type, pageKeys: s.pageKeys, presentBusinesses: s.present })),
+      businesses: observed(shown),
+      scope: observed(scope),
+    };
+  });
 }

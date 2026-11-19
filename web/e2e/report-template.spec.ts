@@ -161,6 +161,64 @@ test("a report with Citation coverage from the cited-page check shows that slide
   }
 });
 
+test("service lines: one Citation coverage slide per line, you and 7 competitors, then the rest in a second table", async ({ browser }) => {
+  // What wp_section produces with service lines saved: a list of maps, each with its line, questions and up to 15
+  // competitors in rank order (you first).
+  type Env<T> = { v: T; p: unknown };
+  const doc = fixture("mvp-miami") as Record<string, unknown> & {
+    citationCoverage: { sites: Env<{ name: string; presentBusinesses: string[] }>[]; businesses: Env<string[]> };
+    promptAnalysis: { businesses: Env<{ key: string; name: string }>[]; questions: { question: Env<{ id: string }> }[] };
+  };
+  for (const k of ["summary", "competitors", "webPresence", "website", "credible", "actions", "methodGroups"]) doc[k] = null;
+  const obs = <T>(v: T) => ({ v, p: { kind: "observed", evidence: [] } });
+  const one = doc.citationCoverage;
+  const keys = doc.promptAnalysis.businesses.map((b) => b.v.key);
+  const target = one.businesses.v[0]!;
+  const ranked = [target, ...keys.filter((k) => k !== target)].slice(0, 12);
+  const ids = doc.promptAnalysis.questions.map((q) => q.question.v.id);
+  doc.citationCoverage = [
+    { ...one, line: obs({ name: "Car rental", questions: ids.slice(0, 4) }), businesses: obs(ranked), scope: obs("Car rental scope line.") },
+    { ...one, line: obs({ name: "Yachts", questions: ids.slice(4, 7) }), businesses: obs(ranked.slice(0, 3)), scope: obs("Yachts scope line.") },
+  ] as unknown as typeof one;
+  const name = (k: string) => doc.promptAnalysis.businesses.find((b) => b.v.key === k)!.v.name;
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 14; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const cov = slides.filter((t) => t.includes("CITATION COVERAGE MAP"));
+    expect(cov).toHaveLength(2);
+    expect(cov[0]).toContain("Car rental");
+    expect(cov[0]).toContain("Car rental scope line.");
+    expect(cov[0]).toContain("Competitors 8\u201311 on the same sites");
+    // Columns keep the rank order: you and competitors 1-7 in the first table, 8-11 in the second.
+    const heads = (t: string, n: number) => t.trim().split("\n").filter((l) => l !== "YOU").slice(0, n);
+    const [, first, second] = cov[0]!.split("Cited site");
+    expect(heads(first!, 8)).toEqual(ranked.slice(0, 8).map(name));
+    expect(heads(second!, 4)).toEqual(ranked.slice(8).map(name));
+    expect(cov[1]).toContain("Yachts");
+    expect(cov[1]).toContain("Yachts scope line.");
+    expect(cov[1]).not.toContain("Competitors 8");
+    // Each line's slide has its own number, following on.
+    const nums = cov.map((t) => Number(t.match(/^\s*(\d+)/)?.[1]));
+    expect(nums[1]).toBe(nums[0]! + 1);
+  } finally {
+    await srv.close();
+  }
+});
+
 test("Credible: a page we couldn't read shows as couldn't check, and no reviews means no reviews block", async ({ browser }) => {
   // What stage 12 produces once wp_assess has run: credible and webPresence from the cited pages we read.
   const doc = fixture("mvp-miami") as Record<string, unknown> & { credible: { pages: { v: { presence: string } }[]; reviews: unknown[] } };

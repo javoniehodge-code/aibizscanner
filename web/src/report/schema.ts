@@ -205,16 +205,30 @@ const competitors = z
   })
   .strict();
 
-const citationCoverage = z
+const coverageMap = z
   .object({
+    /**
+     * Pipeline reports with service lines: the line this map is for and its questions (prompt ids). Each line has its
+     * own sites and competitors; the template shows one slide per map. Absent: one map for every question.
+     */
+    line: val(z.object({ name: nonEmpty, questions: z.array(z.string().regex(/^P\d+$/)).min(1) }).strict()).optional(),
     sites: z.array(val(z.object({ name: nonEmpty, type: nonEmpty, pageKeys: z.array(pageKey).min(1), presentBusinesses: z.array(businessKey) }).strict())),
-    /** Businesses shown as columns (target first is enforced by the template). */
+    /**
+     * Businesses shown as columns (target first is enforced by the template). Maps with a line list the target, then
+     * the line's competitors by answers naming them (up to 15); the template shows the first 8 columns in one table
+     * and the rest in a second table below, in this order.
+     */
     businesses: val(z.array(businessKey).min(1)),
     /** Pipeline reports: which pages were checked and what a blank means (absent in fixtures). */
     scope: val(nonEmpty).optional(),
   })
   .strict();
+export type CoverageMap = z.infer<typeof coverageMap>;
+/** One map (fixtures, reports without service lines) or one map per service line. */
+const citationCoverage = z.union([coverageMap, z.array(coverageMap).min(1)]);
 export const citationCoverageSection = citationCoverage;
+/** The maps of a citationCoverage section, as a list. */
+export const coverageMaps = (c: z.infer<typeof citationCoverage> | null | undefined): CoverageMap[] => (!c ? [] : Array.isArray(c) ? c : [c]);
 
 const wpmMark = z.enum(["P", "L", "C", "N", "U", "A"]);
 const wpmDetail = z.object({ says: nonEmpty, excerpt: z.string(), url: z.string(), issue: z.string(), action: z.string() }).strict();
@@ -586,10 +600,13 @@ function checkReferences(doc: Shape, ctx: z.RefinementCtx) {
     }
   }
   if (doc.competitors) for (const k of doc.competitors.compared.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["competitors", "compared"]);
-  if (doc.citationCoverage) for (const k of doc.citationCoverage.businesses.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["citationCoverage", "businesses"]);
-  doc.citationCoverage?.sites.forEach((s, i) => {
-    for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["citationCoverage", "sites", i]);
-    for (const k of s.v.presentBusinesses) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, ["citationCoverage", "sites", i]);
+  coverageMaps(doc.citationCoverage).forEach((m, j) => {
+    const at = Array.isArray(doc.citationCoverage) ? ["citationCoverage", j] : ["citationCoverage"];
+    for (const k of m.businesses.v) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, [...at, "businesses"]);
+    m.sites.forEach((s, i) => {
+      for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, [...at, "sites", i]);
+      for (const k of s.v.presentBusinesses) if (!bizKeys.has(k)) issue(`Unknown business ${k}`, [...at, "sites", i]);
+    });
   });
   doc.webPresence?.forEach((w, i) => {
     for (const k of w.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["webPresence", i]);
