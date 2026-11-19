@@ -228,8 +228,8 @@ describe("wp_pages and Citation coverage", () => {
     ]);
     expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["brooklynmag.com", true, "good"]);
     expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["angi.com", false, null]);
-    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto angi.com", "Get onto thumbtack.com", "Give google.com a reason to recommend you", "Check reddit.com yourself"]);
-    expect(cr.fixes[1]!.v.text).toBe('"Thumbtack" is cited for 2 prompts and features Red Hook Moving Co. and Two Bridges Movers, but not you.');
+    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto thumbtack.com", "Give google.com a reason to recommend you", "Check reddit.com yourself"]); // angi.com names others but recommends no one
+    expect(cr.fixes[0]!.v.text).toBe('"Thumbtack" is cited for 2 prompts and features Red Hook Moving Co. and Two Bridges Movers, but not you.');
     expect(cr.reviews).toEqual([]);
     const wpm = p2.data!.webPresence!;
     const site = (n: string) => wpm.find((w) => w.v.name === n)!.v;
@@ -247,6 +247,20 @@ describe("first MVP Miami run (19 Nov 2026)", () => {
     const html = '<html><body><main><p>LUXX Miami</p></main><div><a href="/x"><span>MVP Miami</span><span>103 vehicles</span></a></div></body></html>';
     expect(extractPage(html, { wholeBody: true }).text).toContain("MVP Miami 103 vehicles");
     expect(extractPage(html).text).toBe("LUXX Miami"); // the website checks keep reading only the main area
+  });
+
+  it("suggests getting onto a page only when it recommends others, and lists long name lists plainly", async () => {
+    const { buildCredible } = await import("../logic/credible");
+    const cols = { status: "N", says: "", quote: null, issue: null, action: null };
+    const page = (key: string, names: string[]) => ({ key, url: `https://${key}.com/x`, site: `${key}.com`, category: "dir", title: key, prompts: 1, answers: 1, engines: [0], state: "checked", reason: null,
+      source: { mode: "plain", snapshotId: key, status: 200, finalUrl: null, fetchedAt: "x", words: 900 }, excerpt: null, attempts: [], names: names.map((b) => ({ business: b, excerpt: "e" })) });
+    const rd = (inst: string[]) => ({ presence: "none", detail: "d", supports: "s", reasons: [], concerns: [], recommendedInstead: inst, review: null, overruled: [], columns: { details: cols, services: cols, fit: cols, reviews: cols, recommendations: cols, locations: cols } });
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "MM", name: "MVP Miami", target: true }, { key: "GIG", name: "Giggster", target: false }], pages: [page("giggster", ["GIG"]), page("lists", [])] };
+    const as = { version: "x", model: "m", fromRun: "r", pages: [{ key: "giggster", cutAt: null, error: null, reading: rd([]) }, { key: "lists", cutAt: null, error: null, reading: rd(["A Cars", "B Cars", "C Cars", "D Cars", "E Cars"]) }] };
+    const pa = { pages: [{ v: { key: "giggster", category: "dir" } }, { v: { key: "lists", category: "dir" } }], questions: [{ question: { v: { id: "P1", text: "q" } }, answers: [{ v: { status: "ok", citations: ["giggster", "lists"] } }] }] };
+    const cr = buildCredible(cp as never, as as never, pa, "MVP Miami");
+    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto lists.com"]);
+    expect(cr.fixes[0]!.v.text).toBe('"lists" is cited for 1 prompt and features A Cars, B Cars, C Cars and 2 others, but not you.');
   });
 
   it("suggests getting onto listing, review and editorial sites only, and doesn't say on and not on for one site", async () => {
@@ -270,6 +284,7 @@ describe("first MVP Miami run (19 Nov 2026)", () => {
       questions: [{ question: { v: { id: "P1", text: "Best exotic rentals" } }, answers: [{ v: { status: "ok", citations: ["ed1", "ed2"] } }, { v: { status: "ok", citations: ["ed1"] } }, { v: { status: "ok", citations: ["un1"] } }] }] };
     const cr = buildCredible(cp as never, as as never, pa, "MVP Miami");
     expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto more rmr.com pages"]); // not the competitor's own site
+    expect(cr.fixes[0]!.v.text).toBe('"T ed1" is cited for 1 prompt and features mph club, but not you.');
     expect(cr.categories.find((c) => c.v.name === "Editorial & publications")!.v.note).toBe("On rmr.com");
     expect(cr.takeaway.v).toContain("You don't appear on any other or unclassified sites we read.");
   });
