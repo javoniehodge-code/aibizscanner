@@ -9,7 +9,8 @@ import { assessedPages, citedPages } from "./schemas";
 /** wp_section: the report's web presence parts built so far, with their evidence and copy (read by report_assemble). */
 export const webPresenceSection = z
   .object({
-    citationCoverage: citationCoverageSection,
+    /** Null when service lines are saved but none has enough questions for a map. */
+    citationCoverage: citationCoverageSection.nullable(),
     /** Absent until the cited pages have been read (wp_assess). */
     credible: credibleSection.nullable().optional(),
     webPresence: webPresenceRows.nullable().optional(),
@@ -45,8 +46,9 @@ export const wpSection: StageDefinition = {
     // Credible and the map need at least one page we could read; without one they're left out (Citation coverage
     // still says which pages couldn't be read).
     const as = read && read.fromRun === cp.runId && read.pages.some((p) => p.reading) ? read : null;
+    const maps = buildCitationCoverage(cp, pa.section);
     const out: WebPresenceSection = {
-      citationCoverage: buildCitationCoverage(cp),
+      citationCoverage: maps.length ? maps : null,
       credible: as ? buildCredible(cp, as, pa.section, pa.business.name) : null,
       webPresence: as ? buildWebPresence(cp, as) : null,
       evidence: { ...citedPagesEvidence(cp), ...(as ? assessedEvidence(as) : {}) },

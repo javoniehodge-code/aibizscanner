@@ -51,3 +51,9 @@ website: answers citing it (a website counts once per answer, from the answers' 
 cited; a row expands to its pages, their source groups and links that open the citing answers. Both follow the
 selected provider tab. Answers show their original citation URLs (`citationUrls`). A report that lists pages but
 links none to an answer shows the website answer count as unavailable.
+
+**Citation coverage per service line (19 Nov 2026):** `citationCoverage` may be a list of maps, one per service line
+(pipeline reports; each map has `line` with its name and questions). Each map is its own slide, labelled with the line,
+counting only that line's answers. Columns keep the map's order (the business, then competitors by answers naming
+them); with more than 8 columns, the first 8 are one table and the rest a second table below with the same rows and
+column widths. The cited-pages table stays on the first coverage slide. A single map (both fixtures) renders as before.

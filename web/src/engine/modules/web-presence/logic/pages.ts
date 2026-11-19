@@ -119,3 +119,49 @@ export function namesOnPage(page: { title: string | null; text: string }, busine
 
 /** Words of visible text (as the website checks count them). */
 export const wordCount = (text: string) => text.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+
+/** The site's name without its top-level domain, letters and digits only ("exoticmiamirental.com" -> "exoticmiamirental"). */
+const siteLabel = (site: string) => site.toLowerCase().replace(/^www\./, "").replace(/\.[a-z]{2,}(\.[a-z]{2})?$/, "").replace(/[^a-z0-9]/g, "");
+
+/**
+ * The business whose own website this is, judged from the site's name alone: the site's name is the business's name
+ * written together ("exoticmiamirental.com" for Exotic Miami Car Rental), allowing one word left out of a name of three
+ * or more words. Used only for pages the classifier left unclassified, so a directory or review site keeps its group.
+ */
+export function ownSiteOf(site: string, businesses: readonly NamedBusiness[]): string | null {
+  const label = siteLabel(site);
+  if (label.length < 6) return null;
+  for (const b of businesses) {
+    const words = normalizeName(b.name).split(" ").filter(Boolean);
+    const forms = [words.join("")];
+    if (words.length >= 3) words.forEach((_, i) => forms.push(words.filter((__, j) => j !== i).join("")));
+    if (forms.includes(label)) return b.key;
+  }
+  return null;
+}
+
+export type Line = { name: string; questions: readonly string[] };
+export type ChosenPage = RankedPage & { lines: string[] };
+
+/**
+ * The pages to check. Without service lines: the PAGE_CAP most-cited outside pages, as before. With lines: up to
+ * PAGE_CAP pages per line, ranked by that line's questions only, merged (a page chosen for two lines is checked once).
+ * Unclassified pages that are another business's own website are left out either way.
+ */
+export function choosePages(section: SectionPages, businesses: readonly NamedBusiness[], lines: readonly Line[] | null): { chosen: ChosenPage[]; outside: number; ownSites: number } {
+  const keep = (p: RankedPage) => !(p.category === "unc" && ownSiteOf(p.site, businesses));
+  const all = rankCitedPages(section);
+  const ownSites = all.filter((p) => !keep(p)).length;
+  if (!lines) return { chosen: all.filter(keep).slice(0, PAGE_CAP).map((p) => ({ ...p, lines: [] })), outside: all.length - ownSites, ownSites };
+  const byKey = new Map<string, ChosenPage>();
+  for (const line of lines) {
+    const qs = new Set(line.questions);
+    const ranked = rankCitedPages({ pages: section.pages, questions: section.questions.filter((q) => qs.has(q.question.v.id)) }).filter(keep).slice(0, PAGE_CAP);
+    for (const p of ranked) {
+      const seen = byKey.get(p.key);
+      if (seen) seen.lines.push(line.name);
+      else byKey.set(p.key, { ...all.find((a) => a.key === p.key)!, lines: [line.name] });
+    }
+  }
+  return { chosen: [...byKey.values()], outside: all.length - ownSites, ownSites };
+}

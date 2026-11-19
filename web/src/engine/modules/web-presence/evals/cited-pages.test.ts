@@ -1,7 +1,7 @@
 // Stage 8: the outside pages AI cited. Ranking, finding business names on a page, and the stage with a fake web and
 // browser (robots.txt followed, refused pages left unchecked, thin pages read in our browser), into Citation coverage.
 import { describe, expect, it } from "vitest";
-import { reportDocument } from "@/report/schema";
+import { coverageMaps, reportDocument } from "@/report/schema";
 import { FIXTURES } from "@/report/generated/fixtures";
 import { MemoryStore } from "../../../engine.test-support";
 import { executeRun, type PageRenderer, type Providers, type WebFetcher } from "../../../execute";
@@ -151,25 +151,29 @@ describe("wp_pages and Citation coverage", () => {
 
     const sec = await run(store, "wp_section", [wp.input, asm], {});
     expect(sec.outcome.outcome).toBe("done");
-    const cov = (sec.input.output as { citationCoverage: { sites: { v: { name: string; pageKeys: string[]; presentBusinesses: string[] } }[]; businesses: { v: string[] }; scope: { v: string } } }).citationCoverage;
+    const maps = (sec.input.output as { citationCoverage: { line?: unknown; sites: { v: { name: string; pageKeys: string[]; presentBusinesses: string[] } }[]; businesses: { v: string[] }; scope: { v: string } }[] }).citationCoverage;
+    expect(maps).toHaveLength(1); // no service lines saved: one map for every question
+    const cov = maps[0]!;
+    expect(cov.line).toBeUndefined();
     expect(cov.sites.map((s) => [s.v.name, s.v.pageKeys, s.v.presentBusinesses])).toEqual([
       ["angi.com", ["dr2"], ["RH", "BX"]],
       ["thumbtack.com", ["dr1"], ["RH", "TB"]],
       ["brooklynmag.com", ["ed1"], ["BM"]],
       ["timeout.com", ["ed2"], ["GM"]],
-      ["google.com", ["mp2", "mp1"], ["RH", "BM"]],
+      ["google.com", ["mp2", "mp1"], ["BM", "RH"]],
       ["dot.ny.gov", ["of1"], ["BM", "RH"]],
     ]);
-    expect(cov.businesses.v).toEqual(["BM", "RH", "BX", "GM", "TB"]);
+    // You, then the businesses named in the most usable answers (ties by name), whether or not a site names them.
+    expect(cov.businesses.v).toEqual(["BM", "RH", "GM", "TB", "AA", "FV", "PS", "BX", "GS", "HS"]);
     expect(cov.scope.v).toBe(
-      "We read the 7 outside pages AI cited most (we check up to 20 per report; 12 outside pages were cited in all). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 5 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read, 2 showed us only a page shared across the site. Columns show you and the other businesses found on the most sites.",
+      "We read 7 outside pages that AI cited (we check up to 20 per report; 12 outside pages were cited in all). Columns show you and the 9 businesses AI named most in these answers (the second table continues the first). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 5 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read, 2 showed us only a page shared across the site.",
     );
 
     const doc = await run(store, "report_assemble", [asm, sec.input], {});
     expect(doc.outcome.outcome).toBe("done");
     const parsed = reportDocument.safeParse(doc.input.output);
     expect(parsed.success, JSON.stringify(parsed.error?.issues.slice(0, 3))).toBe(true);
-    expect(parsed.data!.citationCoverage!.sites).toHaveLength(6);
+    expect(coverageMaps(parsed.data!.citationCoverage)[0]!.sites).toHaveLength(cov.sites.length);
     expect(parsed.data!.evidence["cited-pages"]).toMatchObject({ capturedOn: "2026-11-19" });
     expect(parsed.data!.copy.reportDetails.v).toContain("Produced so far: AI Recommendations and Citation coverage");
     expect(parsed.data!.credible).toBeNull();
@@ -339,10 +343,10 @@ describe("review fixes (PR 45)", () => {
     const asm: StageInput = { runId: "asm", stage: "pa_assemble", output: ASSEMBLED as unknown as JsonValue, outputHash: null };
     const sec = await run(store, "wp_section", [wpIn, asm, asIn], {});
     expect(sec.outcome.outcome).toBe("done");
-    const out = sec.input.output as { citationCoverage: { scope: { v: string } }; credible: unknown; webPresence: unknown };
+    const out = sec.input.output as { citationCoverage: { scope: { v: string } }[]; credible: unknown; webPresence: unknown };
     expect(out.credible).toBeNull();
     expect(out.webPresence).toBeNull();
-    expect(out.citationCoverage.scope.v).toContain("1 more page couldn't be read");
+    expect(out.citationCoverage[0]!.scope.v).toContain("1 more page couldn't be read");
     const doc = await run(store, "report_assemble", [asm, sec.input], {});
     expect(reportDocument.safeParse(doc.input.output).success).toBe(true);
   });

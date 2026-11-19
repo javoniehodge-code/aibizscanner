@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { parsePromptSetForm } from "@/lib/prompt-sets";
+import { parseServiceLines } from "@/lib/service-lines";
 import { EnqueueError, enqueueStage } from "@/lib/stage-runs";
 import { createClient } from "@/lib/supabase/server";
 
@@ -87,4 +88,30 @@ export async function approveAndRun(_prev: ApproveState, form: FormData): Promis
   }
   revalidatePath(`/reports/${reportId}`, "layout");
   redirect(`/reports/${reportId}/prompt-analysis`);
+}
+
+export type LinesState = { errors: string[]; saved?: boolean };
+
+/**
+ * Saves the business's service lines (which questions belong to each) by queueing pa_lines. No question is asked
+ * again; its new run queues wp_pages (an optional input), which rebuilds the citation maps per line.
+ */
+export async function saveServiceLines(_prev: LinesState, form: FormData): Promise<LinesState> {
+  await requireAdmin();
+  const reportId = z.uuid().parse(form.get("reportId"));
+  const db = await createClient();
+  const { data: set, error } = await db.from("prompt_set").select("prompts").eq("report_id", reportId).order("version", { ascending: false }).limit(1).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!set) return { errors: ["Approve a prompt set first."] };
+  const ids = z.array(z.object({ id: z.string() }).loose()).parse(set.prompts).map((p) => p.id);
+  const parsed = parseServiceLines(text(form, "lines"), ids);
+  if (!parsed.ok) return { errors: parsed.errors };
+  try {
+    await enqueueStage(db, reportId, "pa_lines", parsed.value);
+  } catch (e) {
+    if (e instanceof EnqueueError) return { errors: [e.message] };
+    throw e;
+  }
+  revalidatePath(`/reports/${reportId}`, "layout");
+  return { errors: [], saved: true };
 }

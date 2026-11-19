@@ -1297,9 +1297,9 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
 </section>
 </sc-if>
 
-<sc-if value="{{ showCov }}" hint-placeholder-val="{{ true }}">
-<section id="s-coverage" data-screen-label="16 Citation coverage map" style="display:flex;flex-direction:column;gap:28px;margin:32px max(calc(clamp(36px,5vw,56px) + 20px),calc((100% - 1160px) / 2)) 56px;padding:clamp(24px,4vw,48px);background:#fff;border:1px solid oklch(0.9 0.008 265);border-bottom-color:oklch(0.82 0.012 265);border-radius:24px;box-shadow:inset 0 1px 0 #fff,0 1px 1px oklch(0.2 0.03 265 / 0.08),0 3px 6px oklch(0.2 0.03 265 / 0.08),0 10px 20px oklch(0.2 0.03 265 / 0.10),0 24px 48px oklch(0.2 0.04 265 / 0.14),0 48px 96px oklch(0.2 0.04 265 / 0.12)">
-  <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="width:36px;height:36px;border-radius:8px;background:oklch(0.45 0.22 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:14px;font-weight:600">{{ slideNo.x7 }}</span><span style="font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">CITATION COVERAGE MAP</span><span style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.3;text-align:right"><strong style="font-size:16px;font-weight:700">{{ biz.name }}</strong><span style="font-size:14px">{{ biz.location }}</span></span></span>
+<sc-for list="{{ covSlides }}" as="cv" hint-placeholder-count="1"><sc-if value="{{ cv.show }}" hint-placeholder-val="{{ true }}">
+<section id="{{ cv.id }}" data-screen-label="16 Citation coverage map" style="display:flex;flex-direction:column;gap:28px;margin:32px max(calc(clamp(36px,5vw,56px) + 20px),calc((100% - 1160px) / 2)) 56px;padding:clamp(24px,4vw,48px);background:#fff;border:1px solid oklch(0.9 0.008 265);border-bottom-color:oklch(0.82 0.012 265);border-radius:24px;box-shadow:inset 0 1px 0 #fff,0 1px 1px oklch(0.2 0.03 265 / 0.08),0 3px 6px oklch(0.2 0.03 265 / 0.08),0 10px 20px oklch(0.2 0.03 265 / 0.10),0 24px 48px oklch(0.2 0.04 265 / 0.14),0 48px 96px oklch(0.2 0.04 265 / 0.12)">
+  <span style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span style="width:36px;height:36px;border-radius:8px;background:oklch(0.45 0.22 265);color:#fff;display:grid;place-items:center;font-family:'Geist Mono',monospace;font-size:14px;font-weight:600">{{ cv.no }}</span><span style="font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;letter-spacing:0.08em;color:oklch(0.45 0.22 265)">CITATION COVERAGE MAP</span><sc-if value="{{ cv.cov.hasLine }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #000">{{ cv.cov.line }}</span></sc-if><span style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.3;text-align:right"><strong style="font-size:16px;font-weight:700">{{ biz.name }}</strong><span style="font-size:14px">{{ biz.location }}</span></span></span>
   <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap">
     <div style="display:flex;flex-direction:column;gap:10px;max-width:780px">
       <h2 style="margin:0;font-size:clamp(28px,3.2vw,32px);font-weight:700;letter-spacing:-0.02em;line-height:1.2;text-wrap:balance">Who shows up on the sites AI cites?</h2>
@@ -1307,30 +1307,33 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     <div role="tablist" aria-label="AI" style="display:flex;gap:4px;padding:4px;border-radius:12px;border:1.5px solid #000;flex-wrap:wrap"><sc-for list="{{ pa.hmTabs }}" as="t" hint-placeholder-count="4"><button role="tab" aria-selected="{{ t.on }}" onClick="{{ t.go }}" style="{{ t.style }}">{{ t.n }}</button></sc-for></div>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px;padding-top:0">
-    <sc-for list="{{ pa.cov.noneAll }}" as="X" hint-placeholder-count="0"><div data-keep style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;border-radius:16px;background:oklch(0.97 0.03 85);border:1.5px solid oklch(0.8 0.15 85)"><span style="width:24px;height:24px;border-radius:50%;background:oklch(0.8 0.15 85);color:#000;display:grid;place-items:center;font-size:14px;font-weight:700;flex:none">!</span><span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700;line-height:1.35">{{ X.h }}</span><span style="font-size:16px;line-height:1.5;max-width:72ch">{{ X.v }}</span></span></div></sc-for>
-    <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch"><strong style="font-weight:700">Showing: {{ pa.cov.scope }}.</strong> Use the AI selector to switch. Each row is an outside site cited in this scan, ordered by how many answers cited it. A check means the business has a listing, profile or mention on that site. More checks means a wider web presence for AI to draw on.</p>
-    <sc-if value="{{ pa.cov.hasNote }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14px;line-height:1.5;max-width:75ch" >{{ pa.cov.note }}</p></sc-if>
+    <sc-for list="{{ cv.cov.noneAll }}" as="X" hint-placeholder-count="0"><div data-keep style="display:flex;gap:14px;align-items:flex-start;padding:18px 22px;border-radius:16px;background:oklch(0.97 0.03 85);border:1.5px solid oklch(0.8 0.15 85)"><span style="width:24px;height:24px;border-radius:50%;background:oklch(0.8 0.15 85);color:#000;display:grid;place-items:center;font-size:14px;font-weight:700;flex:none">!</span><span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700;line-height:1.35">{{ X.h }}</span><span style="font-size:16px;line-height:1.5;max-width:72ch">{{ X.v }}</span></span></div></sc-for>
+    <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch"><strong style="font-weight:700">Showing: {{ cv.cov.scope }}.</strong> Use the AI selector to switch. Each row is an outside site cited in this scan, ordered by how many answers cited it. A check means the business has a listing, profile or mention on that site. More checks means a wider web presence for AI to draw on.</p>
+    <sc-if value="{{ cv.cov.hasNote }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14px;line-height:1.5;max-width:75ch" >{{ cv.cov.note }}</p></sc-if>
+    <sc-for list="{{ cv.cov.tables }}" as="tb" hint-placeholder-count="1"><div style="display:flex;flex-direction:column;gap:8px">
+    <sc-if value="{{ tb.second }}" hint-placeholder-val="{{ false }}"><h3 style="font-size:18px;font-weight:700;line-height:1.3;margin:12px 0 0">{{ tb.label }}</h3></sc-if>
     <div data-scrollx style="overflow-x:auto">
       <div style="min-width:900px;display:flex;flex-direction:column">
-        <div style="{{ pa.cov.grid }};align-items:end;padding-bottom:10px;border-bottom:2px solid #000">
+        <div style="{{ tb.grid }};align-items:end;padding-bottom:10px;border-bottom:2px solid #000">
           <span style="font-size:14px;font-weight:700">Cited site</span>
-          <sc-for list="{{ pa.cov.cols }}" as="c" hint-placeholder-count="8"><span style="{{ c.head }}"><span style="font-size:13px;font-weight:700;line-height:1.25">{{ c.n }}</span><sc-if value="{{ c.you }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;padding:2px 5px;border-radius:4px;background:oklch(0.62 0.18 150);color:#fff">YOU</span></sc-if></span></sc-for>
+          <sc-for list="{{ tb.cols }}" as="c" hint-placeholder-count="8"><span style="{{ c.head }}"><span style="font-size:13px;font-weight:700;line-height:1.25">{{ c.n }}</span><sc-if value="{{ c.you }}"><span style="font-size:10px;font-weight:700;letter-spacing:0.04em;padding:2px 5px;border-radius:4px;background:oklch(0.62 0.18 150);color:#fff">YOU</span></sc-if></span></sc-for>
         </div>
-        <sc-for list="{{ pa.cov.rows }}" as="r" hint-placeholder-count="8">
-          <div style="{{ pa.cov.grid }};align-items:stretch;border-bottom:1px solid oklch(0.9 0.008 265)">
+        <sc-for list="{{ tb.rows }}" as="r" hint-placeholder-count="8">
+          <div style="{{ tb.grid }};align-items:stretch;border-bottom:1px solid oklch(0.9 0.008 265)">
             <span style="display:flex;flex-direction:column;gap:2px;padding:10px 0"><span style="font-size:15px;font-weight:700">{{ r.n }}</span><span style="font-size:13px">{{ r.type }} · cited in {{ r.cited }}</span></span>
             <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="8"><span title="{{ c.tip }}" style="{{ c.box }}"><span style="{{ c.mark }}">{{ c.t }}</span></span></sc-for>
           </div>
         </sc-for>
-        <div style="{{ pa.cov.grid }};align-items:center;padding:12px 0;border-top:2px solid #000">
+        <div style="{{ tb.grid }};align-items:center;padding:12px 0;border-top:2px solid #000">
           <span style="font-size:14px;font-weight:700">Sites covered</span>
-          <sc-for list="{{ pa.cov.cols }}" as="c" hint-placeholder-count="8"><span style="{{ c.foot }}">{{ c.total }}</span></sc-for>
+          <sc-for list="{{ tb.cols }}" as="c" hint-placeholder-count="8"><span style="{{ c.foot }}">{{ c.total }}</span></sc-for>
         </div>
       </div>
     </div>
-    <p style="margin:0;font-size:15px;line-height:1.5;max-width:75ch"><strong style="font-weight:700">Takeaway:</strong> {{ pa.cov.take }}</p>
+    </div></sc-for>
+    <p style="margin:0;font-size:15px;line-height:1.5;max-width:75ch"><strong style="font-weight:700">Takeaway:</strong> {{ cv.cov.take }}</p>
   </div>
-  <sc-for list="{{ credAll }}" as="m" hint-placeholder-count="1">
+  <sc-if value="{{ cv.first }}" hint-placeholder-val="{{ true }}"><sc-for list="{{ credAll }}" as="m" hint-placeholder-count="1">
   <div style="display:flex;flex-direction:column;gap:12px">
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">{{ copy.citedPagesTitle }}</h3>
     <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch">{{ copy.citedPagesIntro }}</p>
@@ -1357,9 +1360,9 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     </div>
   </div>
 
-  </sc-for>
+  </sc-for></sc-if>
 </section>
-</sc-if>
+</sc-if></sc-for>
 
       </div>
     </sc-for>
@@ -1427,6 +1430,9 @@ for (const k of Object.keys(BLANK)) if (R[k] == null) R[k] = BLANK[k];
 // The website parts arrive one by one: each null part keeps its stand-in and its slide is left out (NEEDS below).
 for (const k of Object.keys(BLANK.website)) { HAS['website.' + k] = HAS.website && R.website[k] != null; if (R.website[k] == null) R.website[k] = BLANK.website[k]; }
 const BUSINESS = R.business, META = R.meta, PAR = R.promptAnalysis, RUN = PAR.run;
+// Citation coverage: pipeline reports give a list of maps, one per service line (each with its own sites, questions and
+// up to 15 competitors, in rank order); fixtures and older reports give one map. Each map is its own slide.
+const COV_LIST = Array.isArray(R.citationCoverage), COVS = COV_LIST ? R.citationCoverage : [R.citationCoverage];
 const MISSING = { run: RUN == null, xsrc: PAR.uncitedSources == null, js: R.website.discovery.rawVsLoaded == null };
 // Run completeness counts as recorded by the run. When the report has none, counts show as a dash.
 const PA_N = RUN ? { ...RUN } : { prompts: '\u2014', expected: '\u2014', usable: '\u2014', unavailable: 0, gaps: '' };
@@ -2074,29 +2080,34 @@ class PromptPart extends Sub {
           siteMoreLabel: s.sitesAll ? 'Show the top ' + SITE_TOP + ' only' : 'Show all ' + allSites.length + ' websites', siteMoreGo: () => this.setState({ sitesAll: !s.sitesAll }),
           siteLinksMissing: !CITE_LINKS, siteLinksNote: 'This report lists the pages cited but doesn\u2019t link them to individual answers, so the number of answers citing each website is unavailable.',
           citeGaps: 'Citation data \u00b7 ' + tabName + ': ' + noCite + ' of ' + answersIn.length + ' usable answers returned no citations' + (unread ? ' \u00b7 ' + unread + ' citation link' + (unread === 1 ? '' : 's') + ' couldn\u2019t be read' : '') + (unav ? ' \u00b7 ' + unav + ' answer' + (unav === 1 ? '' : 's') + ' unavailable, not counted' : '') + '.',
-      cov: (() => {
-        const covSel = s.hmAi ?? -1;
-        const SITES0 = R.citationCoverage.sites.map(s => [s.name, s.type, s.pageKeys.join(' '), s.presentBusinesses.join(' ')]);
-        const covObs = OBS.filter(o => covSel < 0 || o.i === covSel);
+      covs: COVS.map(MAP => {
+        const covSel = s.hmAi ?? -1, QS = MAP.line ? MAP.line.questions : null;
+        const SITES0 = MAP.sites.map(s => [s.name, s.type, s.pageKeys.join(' '), s.presentBusinesses.join(' ')]);
+        const covObs = OBS.filter(o => (covSel < 0 || o.i === covSel) && (!QS || QS.includes(o.p.id)));
         const covUs = covObs.filter(o => o.usable), XS = n => XSRC.find(x => x.site === n), extra = n => { const x = XS(n); if (!x) return [0, 0]; return [covUs.filter(o => o.ns.some(z => z[0] === x.id)).length, x.assumed >= 0 ? covUs.filter(o => o.i === x.assumed).length : 0]; };
         const SITES = SITES0.map(([n, type, keys, has]) => [n, type, covObs.filter(o => o.cites.some(c => keys.split(' ').includes(c))).length, has, ...extra(n)]).filter(x => x[2] + x[4] + x[5] > 0).sort((a, b) => b[2] - a[2] || a[0].localeCompare(b[0]));
-        const BIZ = R.citationCoverage.businesses;
+        const BIZ = MAP.businesses;
         const tot = k => SITES.filter(x => x[3].split(' ').includes(k)).length;
-        const cols = BIZ.slice().sort((a, b) => (a === TARGET ? -1 : b === TARGET ? 1 : tot(b) - tot(a) || B[a].localeCompare(B[b])));
+        const cols = COV_LIST ? [TARGET, ...BIZ.filter(k => k !== TARGET)] : BIZ.slice().sort((a, b) => (a === TARGET ? -1 : b === TARGET ? 1 : tot(b) - tot(a) || B[a].localeCompare(B[b])));
+        // You and the first 7 competitors in one table; the rest in a second table below, against the same sites.
+        const TABLE_COLS = 8, colSets = COV_LIST && cols.length > TABLE_COLS ? [cols.slice(0, TABLE_COLS), cols.slice(TABLE_COLS)] : [cols];
         const tint = k => k === TARGET ? 'oklch(0.97 0.03 150)' : 'transparent';
-        const grid = 'display:grid;grid-template-columns:minmax(200px,1.6fr) repeat(' + cols.length + ',minmax(78px,1fr));gap:0';
+        const gridOf = n => 'display:grid;grid-template-columns:minmax(200px,1.6fr) repeat(' + n + ',minmax(78px,1fr));gap:0';
         return {
-          grid,
-          cols: cols.map(k => ({ n: B[k], you: k === TARGET, total: tot(k) + ' of ' + SITES.length, head: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textAlign: 'center', padding: '6px 4px', background: tint(k), borderRadius: '8px 8px 0 0' }, foot: { textAlign: 'center', fontSize: 15, fontWeight: 700, background: tint(k), padding: '6px 0' } })),
-          rows: SITES.map(([n, type, cited, has, nm, as]) => ({ n, type, cited: cited + (cited === 1 ? ' answer' : ' answers') + (nm ? ' \u00b7 named in ' + nm + ' more' : '') + (as ? ' \u00b7 assumed in ' + as + ' Gemini' : ''), cells: cols.map(k => { const on = has.split(' ').includes(k); return { t: on ? '\u2713' : '', tip: B[k] + (on ? ' is on ' : ' isn\u2019t on ') + n,
+          tables: colSets.map((cs, t) => ({
+            grid: gridOf(colSets[0].length), second: t > 0, label: t ? 'Competitors 8\u2013' + (7 + cs.length) + ' on the same sites' : '',
+            cols: cs.map(k => ({ n: B[k], you: k === TARGET, total: tot(k) + ' of ' + SITES.length, head: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textAlign: 'center', padding: '6px 4px', background: tint(k), borderRadius: '8px 8px 0 0' }, foot: { textAlign: 'center', fontSize: 15, fontWeight: 700, background: tint(k), padding: '6px 0' } })),
+            rows: SITES.map(([n, type, cited, has, nm, as]) => ({ n, type, cited: cited + (cited === 1 ? ' answer' : ' answers') + (nm ? ' \u00b7 named in ' + nm + ' more' : '') + (as ? ' \u00b7 assumed in ' + as + ' Gemini' : ''), cells: cs.map(k => { const on = has.split(' ').includes(k); return { t: on ? '\u2713' : '', tip: B[k] + (on ? ' is on ' : ' isn\u2019t on ') + n,
             box: { display: 'grid', placeItems: 'center', background: tint(k), borderLeft: '1px solid oklch(0.93 0.006 265)' },
-            mark: on ? { width: 26, height: 26, borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'oklch(0.5 0.2 262)', color: '#fff', fontSize: 15, fontWeight: 700 } : { width: 26, height: 26 } }; }) })),
+            mark: on ? { width: 26, height: 26, borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'oklch(0.5 0.2 262)', color: '#fff', fontSize: 15, fontWeight: 700 } : { width: 26, height: 26 } }; }) }))
+          })),
+          line: MAP.line ? MAP.line.name : '', hasLine: !!MAP.line,
           scope: covSel < 0 ? 'All AIs' : AIS[covSel],
-          note: R.citationCoverage.scope || '', hasNote: !!R.citationCoverage.scope,
+          note: MAP.scope || '', hasNote: !!MAP.scope,
           noneAll: SITES.length && !SITES.some(x => x[3].split(' ').includes(TARGET)) ? [{ h: 'You aren\u2019t on any of the ' + SITES.length + ' sites ' + (covSel < 0 ? 'AI' : AIS[covSel]) + ' cited.', v: 'Your column is empty. The other columns show which businesses these sites feature instead, and which sites to target first.' }] : [],
           take: (() => { const lead = BIZ.slice().sort((a, b) => tot(b) - tot(a) || B[a].localeCompare(B[b]))[0], miss = SITES.filter(x => !x[3].split(' ').includes(TARGET)).map(x => x[0]); return (lead === TARGET ? 'You have the widest presence here: on ' : B[lead] + ' has the widest presence: on ') + tot(lead) + ' of the ' + SITES.length + ' sites ' + (covSel < 0 ? 'AI' : AIS[covSel]) + ' cited. ' + (lead === TARGET ? '' : 'You\u2019re on ' + tot(TARGET) + '. ') + (miss.length ? 'You\u2019re missing from ' + miss.join(' and ') + '.' : 'You\u2019re on every site cited.'); })()
         };
-      })(),
+      }),
       n: PA_N,
       xsrc: (() => {
         const sel = s.hmAi ?? -1, us = OBS.filter(o => o.usable && (sel < 0 || o.i === sel));
@@ -2220,7 +2231,7 @@ return { C: PromptPart, SECS };
 
 
 // Combined section order: [part, index in that part, nav label]
-const ORDER_ALL = [['b', 0], ['x', 0, 'AI Recommendation Analysis'], ['x', 1, 'How to use this section'], ['p', 0, 'Prompt summary'], ['p', 1], ['p', 2], ['x', 9, 'Competitor Comparison'], ['x', 2, 'AI Analysis of Your Website'], ['b', 1], ['b', 2], ['x', 10, 'Structured data'], ['b', 3], ['b', 4], ['b', 6], ['x', 3, 'Web Presence'], ['p', 3], ['x', 7, 'Citation coverage'], ['b', 5], ['x', 4, 'Action Plan'], ['b', 7, 'To Do List'], ['x', 6, 'Best practices'], ['x', 5, 'Appendix'], ['p', 6, 'Prompt method'], ['b', 8]];
+const ORDER_ALL = [['b', 0], ['x', 0, 'AI Recommendation Analysis'], ['x', 1, 'How to use this section'], ['p', 0, 'Prompt summary'], ['p', 1], ['p', 2], ['x', 9, 'Competitor Comparison'], ['x', 2, 'AI Analysis of Your Website'], ['b', 1], ['b', 2], ['x', 10, 'Structured data'], ['b', 3], ['b', 4], ['b', 6], ['x', 3, 'Web Presence'], ['p', 3], ...COVS.map((m, j) => ['x', 7, 'Citation coverage' + (COVS.length > 1 && m.line ? ' \u00b7 ' + m.line.name : ''), j]), ['b', 5], ['x', 4, 'Action Plan'], ['b', 7, 'To Do List'], ['x', 6, 'Best practices'], ['x', 5, 'Appendix'], ['p', 6, 'Prompt method'], ['b', 8]];
 // Report sections each slide needs (see HAS). Slides with no entry need only the prompt analysis, which every report has.
 const NEEDS = { x9: ['competitors'], x2: ['website'], b1: ['summary', 'website.discovery', 'website.clear', 'website.consistent', 'website.distinctive'], b2: ['website.discovery'], x10: ['website.structuredData'], b3: ['website.clear'], b4: ['website.consistent'], b6: ['website.distinctive'], x7: ['citationCoverage'], b5: ['credible'], x4: ['actions'], b7: ['actions'], x6: ['actions'], b8: ['methodGroups'] };
 const GROUP_START = { x0: 'AI RECOMMENDATIONS', x2: 'YOUR WEBSITE', x3: 'WEB PRESENCE', x4: 'ACTION PLAN', x5: 'APPENDIX' }, GROUP_OF = {};
@@ -2229,7 +2240,7 @@ const ORDER = ORDER_ALL.filter(([k, i]) => (NEEDS[k + i] || []).every(n => HAS[n
 const INC = new Set(ORDER.map(([k, i]) => k + i));
 const SECTION_NO = {};
 ORDER.filter(([k, i]) => k === 'x' && GROUP_START[k + i]).forEach(([k, i], j) => { SECTION_NO[k + i] = String(j + 1); });
-ORDER.forEach(([k, i], j) => { SECNUM[k + i] = String(j).padStart(2, '0'); });
+ORDER.forEach(([k, i, , n], j) => { const id = k + i + (n ? '.' + n : ''); if (!(id in SECNUM)) SECNUM[id] = String(j).padStart(2, '0'); });
 const IX = (k, i) => ORDER.findIndex(o => o[0] === k && o[1] === i);
 const IDS = { x: ['s-recs', 's-recs-guide', 's-site-cover', 's-web-cover', 's-plan-cover', 's-appendix', 's-best', 's-coverage', 's-wpm', 's-compete', 's-sd'], b: BRAND_PART.SECS.map(([k]) => 's-' + k), p: PROMPT_PART.SECS.map(([k]) => ['summary', 'actions', 'method'].includes(k) ? 's-pa-' + k : 's-' + k) };
 const LABELS = ORDER.map(([k, i, l]) => l || (k === 'b' ? BRAND_PART : PROMPT_PART).SECS[i][1]);
@@ -2267,10 +2278,10 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state, last = ORDER.length - 1;
     const bv = this.parts.b.renderVals(), pv = this.parts.p.renderVals();
-    const on = (k, i) => (s.all && INC.has(k + i)) || (ORDER[s.sec][0] === k && ORDER[s.sec][1] === i);
+    const on = (k, i, n = 0) => (s.all && INC.has(k + i)) || (ORDER[s.sec][0] === k && ORDER[s.sec][1] === i && (ORDER[s.sec][3] || 0) === n);
     const seg = on => ({ font: 'inherit', fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', minHeight: 40, padding: '0 14px 0 12px', borderRadius: 11, border: 0, cursor: 'pointer', background: on ? 'oklch(0.45 0.22 265)' : 'transparent', color: on ? '#fff' : '#000', transition: 'background .2s' });
     return {
-      ...bv, pa: pv, slideNo: SECNUM, sectionNo: SECTION_NO, biz: BUSINESS, copy: COPY, meta: META, sampleWebPresence: SAMPLE.webPresence, showRecs: on('x', 0), showGuide: on('x', 1), showSite: on('x', 2), showWeb: on('x', 3), showPlan: on('x', 4), showApx: on('x', 5), showBest: on('x', 6), showCov: on('x', 7), showWpm: on('x', 8), showComp: on('x', 9), showSd: on('x', 10),
+      ...bv, pa: pv, slideNo: SECNUM, sectionNo: SECTION_NO, biz: BUSINESS, copy: COPY, meta: META, sampleWebPresence: SAMPLE.webPresence, showRecs: on('x', 0), showGuide: on('x', 1), showSite: on('x', 2), showWeb: on('x', 3), showPlan: on('x', 4), showApx: on('x', 5), showBest: on('x', 6), showCov: on('x', 7), covSlides: pv.covs.map((cov, j) => ({ cov, show: on('x', 7, j), no: SECNUM['x7' + (j ? '.' + j : '')], id: 's-coverage' + (j ? '-' + (j + 1) : ''), first: j === 0 })), showWpm: on('x', 8), showComp: on('x', 9), showSd: on('x', 10),
       introSteps: [
         ['Check when you are recommended.', 'Test questions relevant to your services, location, and the needs of potential customers.', IX('p', 1)],
         ['See who else appears.', 'Identify businesses recommended alongside or instead of yours, and the questions where they appear more consistently.', IX('p', 2)],
