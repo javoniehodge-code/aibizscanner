@@ -8,7 +8,9 @@ import { executeRun, type PageRenderer, type Providers, type WebFetcher } from "
 import { registry } from "../../../index";
 import type { ClaimedRun, FetchedResource, JsonValue, RenderedPage, StageInput } from "../../../types";
 import { namesOnPage, rankCitedPages, type SectionPages } from "../logic/pages";
-import type { CitedPages } from "../schemas";
+import type { AssessedPages, CitedPages } from "../schemas";
+import { FakeLlmClient } from "../../../testing/fake-llm";
+import { instructionRef } from "../../../llm";
 
 const strip = (x: unknown): unknown =>
   Array.isArray(x) ? x.map(strip) : x && typeof x === "object" ? ("v" in x && "p" in x && Object.keys(x).length === 2 ? strip((x as { v: unknown }).v) : Object.fromEntries(Object.entries(x).map(([k, v]) => [k, strip(v)]))) : x;
@@ -108,7 +110,7 @@ async function run(store: MemoryStore, stage: string, inputs: StageInput[], prov
   const def = registry.get(stage)!;
   store.inputs = inputs;
   store.finished = null;
-  const claimed: ClaimedRun = { id: `${stage}-${++seq}`, reportId: "r1", stage, version: 1, attempt: 1, maxAttempts: def.maxAttempts, timeoutMs: def.timeoutMs, params: {}, inputRunIds: inputs.map((i) => i.runId), instructions: [] };
+  const claimed: ClaimedRun = { id: `${stage}-${++seq}`, reportId: "r1", stage, version: 1, attempt: 1, maxAttempts: def.maxAttempts, timeoutMs: def.timeoutMs, params: {}, inputRunIds: inputs.map((i) => i.runId), instructions: await Promise.all((def.instructions ?? []).map(instructionRef)) };
   const outcome = await executeRun(store, registry, claimed, undefined, providers);
   return { outcome, input: { runId: claimed.id, stage, output: (store.finished as { output: JsonValue } | null)?.output ?? null, outputHash: null, finishedAt: "2026-11-19T12:00:00Z" } as StageInput };
 }
@@ -145,7 +147,7 @@ describe("wp_pages and Citation coverage", () => {
     expect(rendered.sort()).toEqual(["https://angi.com/companylist/brooklyn/movers", "https://google.com/maps/place/brownstone-movers", "https://google.com/maps/place/red-hook-moving-co", "https://reddit.com/r/Brooklyn/comments/movers_2021", "https://timeout.com/newyork/movers-2", "https://timeout.com/newyork/movers-3"]);
     expect(store.snapshots.filter((s) => s.fetchMode === "rendered")).toHaveLength(6);
 
-    const sec = await run(store, "wp_section", [wp.input], {});
+    const sec = await run(store, "wp_section", [wp.input, asm], {});
     expect(sec.outcome.outcome).toBe("done");
     const cov = (sec.input.output as { citationCoverage: { sites: { v: { name: string; pageKeys: string[]; presentBusinesses: string[] } }[]; businesses: { v: string[] }; scope: { v: string } } }).citationCoverage;
     expect(cov.sites.map((s) => [s.v.name, s.v.pageKeys, s.v.presentBusinesses])).toEqual([
@@ -168,5 +170,111 @@ describe("wp_pages and Citation coverage", () => {
     expect(parsed.data!.citationCoverage!.sites).toHaveLength(6);
     expect(parsed.data!.evidence["cited-pages"]).toMatchObject({ capturedOn: "2026-11-19" });
     expect(parsed.data!.copy.reportDetails.v).toContain("Produced so far: AI Recommendations and Citation coverage");
+    expect(parsed.data!.credible).toBeNull();
+
+    // wp_assess: one reading per page we read; plain code checks each against the page and the name check.
+    const cols = (over: Record<string, { status: string; quote?: string; says?: string }> = {}) =>
+      ["details", "services", "fit", "reviews", "recommendations", "locations"].map((column) => ({ column, status: "N", says: "Not on the page.", quote: null, issue: null, action: null, ...(over[column] ?? {}) }));
+    const reading = (o: Record<string, unknown>) => JSON.stringify({ presence: "none", detail: "A page about movers.", supports: "No reason to choose you.", reasons: [], concerns: [], recommendedInstead: [], columns: cols(), review: null, ...o });
+    const READ: Record<string, string> = {
+      "https://brooklynmag.com/best-movers-2026": reading({
+        presence: "rec",
+        detail: "Brooklyn Magazine names Brownstone Movers its pick for walk-up moves.",
+        supports: "Best for walk-up moves.",
+        reasons: [{ reason: "Its pick for walk-up moves", quote: "Brownstone Movers is our pick for walk-ups" }],
+        columns: cols({ recommendations: { status: "P", quote: "Brownstone Movers is our pick for walk-ups", says: "Recommended for walk-ups." }, fit: { status: "P", quote: "our pick for walk-ups", says: "Walk-up moves." }, details: { status: "A" } }),
+      }),
+      // Recommends with a reason that isn't on the page, and a details quote too short to check.
+      "https://dot.ny.gov/household-goods-movers": reading({ presence: "rec", reasons: [{ reason: "Licensed", quote: "Brownstone Movers is fully licensed and insured" }], columns: cols({ details: { status: "P", quote: "Registered: Brownstone Movers" } }) }),
+      // Says none, but our name check found the business (via its alias): listed. Its rating isn't on the page.
+      "https://google.com/maps/place/brownstone-movers": reading({ review: { rating: "4.8", scale: 5, count: "120", recent: null, themes: "Careful crews", quote: "4.8 stars from 120 reviews" } }),
+      // Says rec, but the business isn't on the page.
+      "https://thumbtack.com/ny/brooklyn/movers": reading({ presence: "rec", reasons: [{ reason: "x", quote: "Top movers: Red Hook Moving Co." }], recommendedInstead: ["Red Hook Moving Co.", "Two Bridges Movers"] }),
+    };
+    const llm = new FakeLlmClient((r) => READ[(JSON.parse(r.user.slice(r.user.indexOf("{"))) as { page: { url: string } }).page.url] ?? reading({}));
+    const asd = await run(store, "wp_assess", [set, wp.input], { llm });
+    expect(asd.outcome.outcome).toBe("done");
+    expect(llm.requests).toHaveLength(7); // the 7 pages we read
+    const got = (asd.input.output as unknown as AssessedPages).pages;
+    const rd = (key: string) => got.find((p) => p.key === key)!.reading!;
+    expect(rd("ed1")).toMatchObject({ presence: "rec", columns: { recommendations: { status: "P" }, fit: { status: "P" }, details: { status: "A" } } });
+    expect(rd("of1")).toMatchObject({ presence: "list", columns: { details: { status: "U" } } });
+    expect(rd("of1").overruled).toEqual(["1 reason(s) dropped: quote not on the page", "presence rec -> list: no reason quoted from the page", "details: P -> U, quote not on the page"]);
+    expect(rd("mp1")).toMatchObject({ presence: "list", review: null });
+    expect(rd("dr1")).toMatchObject({ presence: "none", reasons: [] });
+
+    const sec2 = await run(store, "wp_section", [wp.input, asm, asd.input], {});
+    const doc2 = await run(store, "report_assemble", [asm, sec2.input], {});
+    const p2 = reportDocument.safeParse(doc2.input.output);
+    expect(p2.success, JSON.stringify(p2.error?.issues.slice(0, 3))).toBe(true);
+    const cr = p2.data!.credible!;
+    expect(cr.standout.v).toBe("brooklynmag.com recommends you: Its pick for walk-up moves. The page AI cites most that we could read, on angi.com, names Red Hook Moving Co. and Bushwick Box & Truck instead.");
+    expect(cr.pages.map((p) => [p.v.url, p.v.presence])).toEqual([
+      ["angi.com/companylist/brooklyn/movers", "none"],
+      ["reddit.com/r/Brooklyn/comments/movers_2021", "unchecked"],
+      ["thumbtack.com/ny/brooklyn/movers", "none"],
+      ["brooklynmag.com/best-movers-2026", "rec"],
+      ["yelp.com/biz/red-hook-moving-co-brooklyn", "unchecked"],
+      ["yelp.com/biz/brownstone-movers-brooklyn", "unchecked"],
+      ["timeout.com/newyork/moving-guide", "none"],
+      ["google.com/maps/place/red-hook-moving-co", "none"],
+      ["timeout.com/newyork/movers-2", "unchecked"],
+      ["timeout.com/newyork/movers-3", "unchecked"],
+      ["google.com/maps/place/brownstone-movers", "list"],
+      ["dot.ny.gov/household-goods-movers", "list"],
+    ]);
+    expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["brooklynmag.com", true, "good"]);
+    expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["angi.com", false, null]);
+    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto angi.com", "Get onto thumbtack.com", "Give google.com a reason to recommend you", "Check reddit.com yourself"]);
+    expect(cr.fixes[1]!.v.text).toBe('"Thumbtack" is cited for 2 prompts and features Red Hook Moving Co. and Two Bridges Movers, but not you.');
+    expect(cr.reviews).toEqual([]);
+    const wpm = p2.data!.webPresence!;
+    const site = (n: string) => wpm.find((w) => w.v.name === n)!.v;
+    expect(site("brooklynmag.com")).toMatchObject({ marks: ["A", "N", "P", "N", "P", "N"], pagesChecked: 1, pagesFailed: 0 });
+    expect(site("brooklynmag.com").details["4"]).toMatchObject({ excerpt: "Brownstone Movers is our pick for walk-ups", url: "brooklynmag.com/best-movers-2026" });
+    expect(site("reddit.com")).toMatchObject({ marks: ["U", "U", "U", "U", "U", "U"], pagesChecked: 0, pagesFailed: 1 });
+    expect(site("timeout.com")).toMatchObject({ pagesChecked: 1, pagesFailed: 2 });
+    expect(p2.data!.copy.reportDetails.v).toContain("Citation coverage and Credible & corroborated");
+  });
+});
+
+describe("review fixes (PR 45)", () => {
+  const page = (key: string, site: string, state: "checked" | "unchecked") => ({
+    key, url: `https://${site}/${key}`, site, category: "dir" as const, title: key, prompts: 1, answers: 1, engines: [0], state,
+    reason: state === "unchecked" ? "We couldn't read this page: HTTP 403." : null,
+    source: state === "checked" ? { mode: "plain" as const, snapshotId: `s-${key}`, status: 200, finalUrl: null, fetchedAt: "2026-11-19T00:00:00Z", words: 500 } : null,
+    excerpt: null, attempts: [], names: [],
+  });
+  const cell = (status: "P" | "L" | "N" | "A" | "U") => ({ status, says: status === "P" ? "Shown." : "", quote: status === "P" ? "the words on the page here" : null, issue: null, action: null });
+  const reading = (marks: ("P" | "L" | "N" | "A" | "U")[]) => ({
+    presence: "list" as const, detail: "d", supports: "s", reasons: [], concerns: [], recommendedInstead: [], review: null, overruled: [],
+    columns: { details: cell(marks[0]!), services: cell(marks[1]!), fit: cell(marks[2]!), reviews: cell(marks[3]!), recommendations: cell(marks[4]!), locations: cell(marks[5]!) },
+  });
+
+  it("combines a site's pages without claiming an absence nobody established", async () => {
+    const { buildWebPresence } = await import("../logic/credible");
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "BM", name: "B", target: true }], pages: [page("a", "x.com", "checked"), page("b", "x.com", "checked")] };
+    const as = { version: "x", model: "m", fromRun: "r", pages: [
+      { key: "a", cutAt: null, error: null, reading: reading(["A", "N", "A", "A", "P", "U"]) },
+      { key: "b", cutAt: null, error: null, reading: reading(["U", "U", "A", "N", "N", "N"]) },
+    ] };
+    // details A+U -> U (not "not found"); services N+U -> U; fit A+A -> A; reviews A+N -> N; P wins; locations U+N -> U.
+    expect(buildWebPresence(cp, as)[0]!.v.marks).toEqual(["U", "U", "A", "N", "P", "U"]);
+  });
+
+  it("leaves Credible and the map out when no page could be read, and still builds Citation coverage", async () => {
+    const store = new MemoryStore(5, 0, []);
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "BM", name: "Brownstone Movers", target: true }], pages: [page("dr2", "angi.com", "unchecked"), page("rv1", "yelp.com", "checked")] };
+    const wpIn: StageInput = { runId: "wp-1", stage: "wp_pages", output: cp as unknown as JsonValue, outputHash: null, finishedAt: "2026-11-19T00:00:00Z" };
+    const asIn: StageInput = { runId: "as-1", stage: "wp_assess", output: { version: "x", model: "m", fromRun: "wp-1", pages: [{ key: "rv1", cutAt: null, reading: null, error: "provider exploded" }] } as unknown as JsonValue, outputHash: null };
+    const asm: StageInput = { runId: "asm", stage: "pa_assemble", output: ASSEMBLED as unknown as JsonValue, outputHash: null };
+    const sec = await run(store, "wp_section", [wpIn, asm, asIn], {});
+    expect(sec.outcome.outcome).toBe("done");
+    const out = sec.input.output as { citationCoverage: { scope: { v: string } }; credible: unknown; webPresence: unknown };
+    expect(out.credible).toBeNull();
+    expect(out.webPresence).toBeNull();
+    expect(out.citationCoverage.scope.v).toContain("1 more page couldn't be read");
+    const doc = await run(store, "report_assemble", [asm, sec.input], {});
+    expect(reportDocument.safeParse(doc.input.output).success).toBe(true);
   });
 });

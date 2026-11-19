@@ -8,6 +8,7 @@ import { extractPage } from "../website/logic/extract";
 import { permission, type RobotsFile } from "../website/logic/robots";
 import { CITED_PAGES_VERSION, PAGE_CAP, namesOnPage, rankCitedPages, wordCount, type NamedBusiness } from "./logic/pages";
 import { citedPages, type CitedPages } from "./schemas";
+import { wpAssess } from "./assess-stage";
 import { wpSection } from "./section-stage";
 
 export const MODULE = "web-presence";
@@ -55,7 +56,7 @@ type Page = CitedPages["pages"][number];
 export const wpPages: StageDefinition = {
   id: "wp_pages",
   module: MODULE,
-  label: "Web presence 1/2: check the outside pages AI cited",
+  label: "Web presence 1/3: check the outside pages AI cited",
   inputs: ["pa_prompt_set", "pa_assemble"],
   timeoutMs: 270_000,
   maxAttempts: 2,
@@ -219,4 +220,4 @@ export const wpPages: StageDefinition = {
   },
 };
 
-export const WEB_PRESENCE_STAGES = [wpPages, wpSection] as const;
+export const WEB_PRESENCE_STAGES = [wpPages, wpAssess, wpSection] as const;

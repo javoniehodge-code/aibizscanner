@@ -161,6 +161,70 @@ test("a report with Citation coverage from the cited-page check shows that slide
   }
 });
 
+test("Credible: a page we couldn't read shows as couldn't check, and no reviews means no reviews block", async ({ browser }) => {
+  // What stage 12 produces once wp_assess has run: credible and webPresence from the cited pages we read.
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { credible: { pages: { v: { presence: string } }[]; reviews: unknown[] } };
+  for (const k of ["summary", "competitors", "website", "actions", "methodGroups"]) doc[k] = null;
+  doc.credible.pages[0]!.v.presence = "unchecked";
+  doc.credible.reviews = [];
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 14; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const cred = slides.find((t) => t.includes("CREDIBLE & CORROBORATED"));
+    expect(cred).toBeDefined();
+    expect(cred).not.toContain("What customers say");
+    const all = slides.join("\n");
+    expect(all).toContain("Couldn\u2019t check the page");
+  } finally {
+    await srv.close();
+  }
+});
+
+test("Credible: the absence banner counts only pages we could read", async ({ browser }) => {
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { credible: { pages: { v: { presence: string } }[]; web: { sites: { v: Record<string, unknown> }[] } } };
+  for (const k of ["summary", "competitors", "website", "actions", "methodGroups"]) doc[k] = null;
+  doc.credible.pages.forEach((p, i) => (p.v.presence = i === 0 ? "unchecked" : "none"));
+  const read = doc.credible.pages.length - 1;
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 14; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const all = slides.join("\n");
+    expect(all).toContain(`You don\u2019t appear on any of the ${read} outside pages we could read.`);
+    expect(all).toContain("We couldn\u2019t read 1 more page, so we can\u2019t say whether you\u2019re on it.");
+    expect(all).not.toContain("Every page AI relied on names other businesses instead");
+  } finally {
+    await srv.close();
+  }
+});
+
 test("the template contains no business data", () => {
   const html = currentTemplate();
   for (const word of ["Brownstone", "Brooklyn", "NYSDOT", "walk-up", "piano", "MVP", "Miami", "29 Oct 2026", "11 Nov 2026"]) {

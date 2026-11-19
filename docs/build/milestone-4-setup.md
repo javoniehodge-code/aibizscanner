@@ -39,3 +39,22 @@ What it does:
    a row of blanks.
 
 What it isn't: a check of a whole website (only the exact pages AI cited), or proof that a page influenced an answer.
+
+## Part 4a-2: how each cited page presents the business (stage 8, interpretation)
+
+Stages: `wp_pages`, then `wp_assess` (one reading per page we read), then `wp_section` builds Citation coverage,
+Credible & corroborated and the web presence map. `wp_assess` runs on its own after `wp_pages`; no keys to add.
+
+- **Who reads:** Claude Sonnet (the scoring model), instruction `web-presence/assess-page` v1. Each page is cut to
+  3,000 words. About $0.02 a page, so $0.15–0.30 a report at 20 pages.
+- **Plain code decides what counts:** a reason, concern, rating or column mark stands only with a quote found on the
+  page (at least four words; two for a rating). Our name check has the last word on whether the business is on the
+  page: the model can't put it on a page where we didn't find its name, or take it off one where we did. A
+  "recommended" without a quoted reason becomes "named". Every change is kept on the reading as `overruled`.
+- **Credible & corroborated:** every count, summary sentence and fix is plain code. The bars count usable answers;
+  answers citing only pages we couldn't read are left out, never counted as absent. Pages we couldn't read show as
+  "Couldn't check". "What customers say" appears only when a page shows a rating of the business (Google reviews join
+  in part 4b).
+- **Web presence map:** one row per website among the selected pages; a site with no page we could read shows
+  "Couldn't check" in every column.
+- **Not yet:** "Conflict" in the map (needs the website baseline, part 4c) and separately checked profiles (4b).

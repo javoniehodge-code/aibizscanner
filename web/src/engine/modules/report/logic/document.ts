@@ -23,6 +23,7 @@ function producedSoFar(website: WebsiteSection | null, web: WebPresenceSection |
     website?.clear && "Clear & complete",
     website?.distinctive && "Distinctive",
     web && "Citation coverage",
+    web?.credible && "Credible & corroborated",
   ].filter(Boolean) as string[];
   return parts.length === 1 ? "Only the AI Recommendation section has been produced for this report" : `Produced so far: ${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}`;
 }
@@ -67,6 +68,7 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
   );
 
   if (website) Object.assign(copy, website.copy);
+  if (web?.copy) Object.assign(copy, web.copy);
 
   const doc = {
     schemaVersion: SCHEMA_VERSION,
@@ -78,6 +80,8 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
     promptAnalysis: s,
     ...Object.fromEntries(SECTIONS.map((k) => [k, null])),
     citationCoverage: web?.citationCoverage ?? null,
+    credible: web?.credible ?? null,
+    webPresence: web?.webPresence ?? null,
     // The website parts built so far; the others stay null until their stages exist.
     website: website ? { discovery: website.discovery, structuredData: website.structuredData ?? null, clear: website.clear ?? null, consistent: null, distinctive: website.distinctive ?? null } : null,
   };

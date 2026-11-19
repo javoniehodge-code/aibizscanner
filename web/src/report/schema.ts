@@ -237,6 +237,8 @@ const webPresence = z.array(
   ),
 );
 
+export const webPresenceRows = webPresence;
+
 // ---------------------------------------------------------------------------------------------------------------
 // Website section
 // ---------------------------------------------------------------------------------------------------------------
@@ -360,7 +362,7 @@ export const websiteDistinctive = z
 // Credible & corroborated (web presence)
 // ---------------------------------------------------------------------------------------------------------------
 
-const credible = z
+export const credibleSection = z
   .object({
     intro: val(nonEmpty),
     standout: val(nonEmpty),
@@ -399,7 +401,8 @@ const credible = z
             url: nonEmpty,
             prompts: z.number().int().min(0),
             engines: z.array(engineIndex),
-            presence: z.enum(["rec", "rev", "list", "mixed", "none"]),
+            /** unchecked: we couldn't read the page (pipeline reports); never read as the business being absent. */
+            presence: z.enum(["rec", "rev", "list", "mixed", "none", "unchecked"]),
             detail: nonEmpty,
             supports: nonEmpty,
             prompt: nonEmpty,
@@ -501,7 +504,7 @@ const reportShape = z
       })
       .strict()
       .nullable(),
-    credible: credible.nullable(),
+    credible: credibleSection.nullable(),
     actions: z
       .object({
         tasks: z.array(

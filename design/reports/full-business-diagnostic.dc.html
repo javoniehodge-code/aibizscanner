@@ -550,6 +550,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
   <sc-if value="{{ pa.wpm.noDetail }}" hint-placeholder-val="{{ true }}"><span data-noprint style="font-size:14px;color:oklch(0.42 0.01 265)">Select a cell to see what the page says, the evidence, any issue and the suggested action.</span></sc-if>
   <p style="margin:0;font-size:14px;line-height:1.5;max-width:80ch;color:oklch(0.42 0.01 265)">Findings cover only the pages we checked, not whole websites. “Present” means the information is there, not that it’s favorable or verified. Sources are judged by their purpose: a magazine isn’t expected to list your hours. The provider filter changes which sources count as cited, not what the pages say.<sc-if value="{{ sampleWebPresence }}"> Sample data for illustration.</sc-if></p>
 
+  <sc-if value="{{ m.hasReviews }}" hint-placeholder-val="{{ true }}">
   <div style="display:flex;flex-direction:column;gap:16px">
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">What customers say</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px">
@@ -564,6 +565,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
       </sc-for>
     </div>
   </div>
+  </sc-if>
 
   <div style="display:flex;flex-direction:column">
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0;padding-bottom:12px">What to work on first</h3>
@@ -1560,7 +1562,7 @@ class BrandPart extends Sub {
     const last = SECS.length - 1;
     const _cred = (() => {
         const cols = 'minmax(180px,1.1fr) minmax(140px,0.75fr) minmax(180px,1fr) minmax(220px,1.3fr)';
-        const PR = { rec: ['g', 'Recommended with a reason'], rev: ['g', 'Reviewed by customers'], list: ['q', 'Listed by name'], mixed: ['y', 'Mentioned, with a concern'], none: ['r', 'Not found on this page'] };
+        const PR = { rec: ['g', 'Recommended with a reason'], rev: ['g', 'Reviewed by customers'], list: ['q', 'Listed by name'], mixed: ['y', 'Mentioned, with a concern'], none: ['r', 'Not found on this page'], unchecked: ['d', 'Couldn\u2019t check'] };
         const pages = R.credible.pages.map(p => [p.title, p.type, p.url, p.prompts, p.engines, p.presence, p.detail, p.supports, p.prompt]);
         return {
           ...(() => { const wv = this.state.webView || 'p'; const pill = on => ({ font: 'inherit', fontSize: 14, fontWeight: 600, minHeight: 34, padding: '0 14px', borderRadius: 999, border: 0, cursor: 'pointer', background: on ? 'oklch(0.45 0.22 265)' : 'transparent', color: on ? '#fff' : '#000' }); return { webP: wv === 'p', webQ: wv === 'q', webOpts: [['p', 'Where you appear'], ['q', 'Mention quality']].map(([k, n]) => ({ n, on: wv === k, go: () => this.setState({ webView: k }), style: pill(wv === k) })) }; })(),
@@ -1578,10 +1580,11 @@ class BrandPart extends Sub {
                 off: { display: off ? 'block' : 'none', flex: off, background: 'oklch(0.82 0.012 265)', borderRadius: on ? '0 4px 4px 0' : 4 } }; }); })(),
           catTake: R.credible.takeaway,
           headGrid: { display: 'grid', gridTemplateColumns: cols, gap: 16, alignItems: 'end', paddingBottom: 12, borderBottom: '2px solid #000' },
-          noneAll: pages.length > 0 && pages.every(x => x[5] === 'none') ? [{ h: 'You don\u2019t appear on any of the ' + pages.length + ' outside sites AI cited.', v: 'This is the main finding for this section. Every page AI relied on names other businesses instead. The sites below are where to start: they\u2019re the ones AI already trusts for your category.' }] : [],
+          noneAll: (() => { const read = pages.filter(x => x[5] !== 'unchecked'), un = pages.length - read.length; return read.length && read.every(x => x[5] === 'none') ? [{ h: 'You don\u2019t appear on any of the ' + read.length + ' outside ' + (read.length === 1 ? 'page' : 'pages') + ' we could read.', v: 'This is the main finding for this section. The pages below are where to start: they\u2019re the ones AI already uses for your category.' + (un ? ' We couldn\u2019t read ' + un + ' more ' + (un === 1 ? 'page' : 'pages') + ', so we can\u2019t say whether you\u2019re on ' + (un === 1 ? 'it' : 'them') + '.' : '') }] : []; })(),
           pages: pages.map(([t, type, url, n, ais, pr, detail, supports, prompt]) => { const [k, presence] = PR[pr]; return { t, type, url, count: n + ' of ' + PA_N.prompts + ' prompts', ais: ais.map(i => ({ n: AIS[i], mono: MONO[i] })), aiNames: ais.map(i => AIS[i]).join(', '), presence, detail, supports, prompt, sym: SYM[k], symStyle: symStyle(k, true),
             grid: { display: 'grid', gridTemplateColumns: cols, gap: 16, alignItems: 'start', padding: '18px 0', borderBottom: '1px solid oklch(0.92 0.006 265)' } }; }),
-          legend: [['g', 'Gives a reason to choose you'], ['q', 'Only named or inconclusive'], ['y', 'Raises a concern'], ['r', 'Not found on this page']].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
+          legend: [['g', 'Gives a reason to choose you'], ['q', 'Only named or inconclusive'], ['y', 'Raises a concern'], ['r', 'Not found on this page'], ...(pages.some(x => x[5] === 'unchecked') ? [['d', 'Couldn\u2019t check the page']] : [])].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
+          hasReviews: R.credible.reviews.length > 0,
           reviews: R.credible.reviews.map(r => [r.label, r.title, r.rating, r.count, r.recent, r.themes, r.cited, r.scale]).map(([prov, t, rating, count, recent, themes, cited, scale]) => ({ prov, t, rating, count, recent, themes, scaleLine: (scale === undefined || scale === 5 ? '/ 5' : scale ? '/ ' + scale : 'score \u00b7 scale not shown') + (count && count !== '\u2014' ? ' \u00b7 ' + count + ' reviews' : ' \u00b7 review count not shown'), kickColor: cited ? 'oklch(0.45 0.22 265)' : GRAY })),
           fixes: R.credible.fixes.map(f => [f.title, f.text]).map(([t, v], i) => ({ n: String(i + 1).padStart(2, '0'), t, v,
             style: { display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: 16, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
