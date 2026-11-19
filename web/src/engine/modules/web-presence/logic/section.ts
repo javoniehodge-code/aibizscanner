@@ -21,10 +21,12 @@ function uncheckedSummary(pages: CitedPages["pages"]): string {
   const un = pages.filter((p) => p.state === "unchecked");
   const robots = un.filter((p) => /robots\.txt/.test(p.reason ?? "")).length;
   const time = un.filter((p) => /ran out of time/.test(p.reason ?? "")).length;
-  const other = un.length - robots - time;
+  const shell = un.filter((p) => /gave us the same/.test(p.reason ?? "")).length;
+  const other = un.length - robots - time - shell;
   return [
     robots && `${robots} ask${robots === 1 ? "s" : ""} checkers like ours not to fetch ${robots === 1 ? "it" : "them"} (robots.txt)`,
     other && `${other} refused us or couldn't be read`,
+    shell && `${shell} showed us only a page shared across the site`,
     time && `${time} weren't reached in time (run the check again)`,
   ]
     .filter(Boolean)

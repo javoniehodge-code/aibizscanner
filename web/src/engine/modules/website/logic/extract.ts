@@ -35,8 +35,8 @@ function typesOf(v: unknown): string[] {
   return [...out];
 }
 
-function visibleText(root: HTMLElement): string {
-  const main = root.querySelector("main") ?? root.querySelector("article") ?? root.querySelector("body") ?? root;
+function visibleText(root: HTMLElement, whole = false): string {
+  const main = (whole ? null : (root.querySelector("main") ?? root.querySelector("article"))) ?? root.querySelector("body") ?? root;
   const copy = parse(main.toString());
   for (const sel of ["script", "style", "noscript", "template", "svg", "iframe", "nav", "header", "footer", "form"]) copy.querySelectorAll(sel).forEach((n) => n.remove());
   // Block elements become line breaks so words from different blocks don't run together.
@@ -50,7 +50,11 @@ function visibleText(root: HTMLElement): string {
     .slice(0, MAX_TEXT);
 }
 
-export function extractPage(html: string): PageExtract {
+/**
+ * `wholeBody`: read the whole body (still without navigation, header, footer, forms and scripts) instead of only
+ * <main>/<article>. The cited-page check uses it: a listing or article can name businesses outside the main element.
+ */
+export function extractPage(html: string, opts: { wholeBody?: boolean } = {}): PageExtract {
   const root = parse(html, { comment: false, blockTextElements: { script: true, style: true, noscript: true, pre: true } });
   const meta = (name: string) => clean(root.querySelector(`meta[name="${name}"]`)?.getAttribute("content")) || null;
   const jsonLd = root.querySelectorAll('script[type="application/ld+json"]').map((s) => {
@@ -62,7 +66,7 @@ export function extractPage(html: string): PageExtract {
       return { types: [], value: null, error: e instanceof Error ? e.message : String(e) };
     }
   });
-  const text = visibleText(root);
+  const text = visibleText(root, opts.wholeBody);
   return {
     title: clean(root.querySelector("title")?.textContent) || null,
     description: meta("description") ?? (clean(root.querySelector('meta[property="og:description"]')?.getAttribute("content")) || null),
