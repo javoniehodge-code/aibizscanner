@@ -9,6 +9,18 @@ import { CITED_PAGES_EVIDENCE } from "./section";
  * per-page descriptions, each backed by a quote found on the page.
  */
 export const ASSESSED_EVIDENCE = "cited-pages-read";
+/** Kinds of site, as bar and summary names. */
+const KIND_PLURAL: Record<OutsideCategory, string> = {
+  maps: "Maps & places",
+  review: "Review platforms",
+  dir: "Directories & marketplaces",
+  ed: "Editorial & publications",
+  comm: "Communities & social",
+  off: "Official & professional sources",
+  unc: "Other or unclassified sites",
+};
+/** Kinds of site a "Get onto" fix may point to. */
+const GET_ONTO = ["dir", "review", "ed", "maps", "comm"] as const;
 
 type Observed<T> = { v: T; p: { kind: "observed"; evidence: string[] } };
 const EV = [CITED_PAGES_EVIDENCE, ASSESSED_EVIDENCE];
@@ -66,7 +78,8 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
     }
     if (present + absent === 0) return [];
     const on = [...new Set(mine.filter((r) => r.category === c).map((r) => r.site))];
-    const off = [...new Set(read.filter((r) => r.category === c && !onPage(r)).map((r) => r.site))];
+    // A site with a page naming you counts as "on"; "not on" lists only sites where no page we read names you.
+    const off = [...new Set(read.filter((r) => r.category === c && !onPage(r)).map((r) => r.site))].filter((x) => !on.includes(x));
     const note = [on.length ? `On ${list(on.slice(0, 2))}` : "", off.length ? `not on ${list(off.slice(0, 2))}` : "", unknown ? `${plural(unknown, "answer")} cite only pages we couldn't read` : ""].filter(Boolean).join(" · ");
     return [{ c, present, absent, note: nonEmpty(note.charAt(0).toUpperCase() + note.slice(1), "Pages we read") }];
   });
@@ -108,22 +121,27 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
   // Summary sentences.
   const recs = mine.filter((r) => r.reading!.presence === "rec");
   const top = read[0];
-  const topLine = top && !onPage(top) && others(top).length ? ` The page AI cites most that we could read, on ${top.site}, names ${list(others(top).slice(0, 3))} instead.` : "";
+  const insteadOf = (r: Row) => (r.reading!.recommendedInstead.length ? r.reading!.recommendedInstead : others(r));
+  const topLine = top && !onPage(top) && insteadOf(top).length ? ` The page AI cites most that we could read, "${nonEmpty(top.title, top.site)}" (${top.site}), features ${list(insteadOf(top).slice(0, 3))} instead.` : "";
   const standout = recs.length
-    ? `${recs[0]!.site} recommends you: ${recs[0]!.reading!.reasons[0]!.reason}.${recs.length > 1 ? ` ${plural(recs.length - 1, "more page")} also recommend${recs.length === 2 ? "s" : ""} you.` : ""}${topLine}`
+    ? `"${nonEmpty(recs[0]!.title, recs[0]!.site)}" (${recs[0]!.site}) recommends you: ${recs[0]!.reading!.reasons[0]!.reason}.${recs.length > 1 ? ` ${plural(recs.length - 1, "more page")} also recommend${recs.length === 2 ? "s" : ""} you.` : ""}${topLine}`
     : mine.length
       ? `You're named on ${plural(mine.length, "page")} of the ${read.length} we read, but none gives customers a reason to choose you.${topLine}`
       : `You aren't named on any of the ${plural(read.length, "outside page")} we read.${topLine}`;
   const biggest = [...categories].sort((a, b) => b.present + b.absent - (a.present + a.absent))[0];
   const takeaway = biggest
-    ? `${CATEGORY_LABEL[biggest.c]} are the kind of site AI cites most among the pages we read (${plural(biggest.present + biggest.absent, "answer")}). You appear in ${biggest.present ? `${biggest.present} of them` : "none of them"}.${categories.some((c) => c.present === 0) ? ` You don't appear on any ${list(categories.filter((c) => c.present === 0).map((c) => CATEGORY_LABEL[c.c].toLowerCase()))} we read.` : ""}`
+    ? `${KIND_PLURAL[biggest.c]} are the kind of site AI cites most among the pages we read (${plural(biggest.present + biggest.absent, "answer")}). You appear in ${biggest.present ? `${biggest.present} of them` : "none of them"}.${categories.some((c) => c.present === 0) ? ` You don't appear on any ${list(categories.filter((c) => c.present === 0).map((c) => KIND_PLURAL[c.c].toLowerCase()))} we read.` : ""}`
     : "We couldn't read enough cited pages to compare kinds of site.";
 
   // What to work on: data-driven, most-cited first.
   const fixes: { title: string; text: string }[] = [];
-  for (const r of read.filter((r) => !onPage(r) && (r.reading!.recommendedInstead.length || others(r).length)).slice(0, 2)) {
-    const names = r.reading!.recommendedInstead.length ? r.reading!.recommendedInstead : others(r);
-    fixes.push({ title: `Get onto ${r.site}`, text: `"${nonEmpty(r.title, r.site)}" is cited for ${plural(r.prompts, "prompt")} and features ${list(names.slice(0, 3))}${names.length > 3 ? ` and ${plural(names.length - 3, "other")}` : ""}, but not you.` });
+  // Only sites whose purpose is to list, review or recommend businesses: never another business's own website, and
+  // not unclassified or official pages.
+  const listing = (r: Row) => (GET_ONTO as readonly string[]).includes(r.category);
+  for (const r of read.filter((r) => listing(r) && !onPage(r) && insteadOf(r).length).slice(0, 2)) {
+    const names = insteadOf(r);
+    const already = mine.some((m) => m.site === r.site);
+    fixes.push({ title: already ? `Get onto more ${r.site} pages` : `Get onto ${r.site}`, text: `"${nonEmpty(r.title, r.site)}" is cited for ${plural(r.prompts, "prompt")} and features ${list(names.slice(0, 3))}${names.length > 3 ? ` and ${plural(names.length - 3, "other")}` : ""}, but not you.` });
   }
   for (const r of mine.filter((r) => r.reading!.presence === "list").slice(0, 1)) {
     fixes.push({ title: `Give ${r.site} a reason to recommend you`, text: `"${nonEmpty(r.title, r.site)}" names you but gives no reason to choose you. Ask for your listing or mention to say what sets you apart.` });
@@ -138,7 +156,7 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
       `We read the outside pages AI cited most in your Prompt Analysis (${plural(read.length, "page")}) and checked how each presents you: as a recommendation with a reason, with reviews, by name only, or not at all.${unread ? ` ${plural(unread, "more page")} couldn't be read.` : ""}`,
     ),
     standout: observed(standout),
-    categories: categories.map((c) => observed({ name: CATEGORY_LABEL[c.c], note: c.note, present: c.present, absent: c.absent })),
+    categories: categories.map((c) => observed({ name: KIND_PLURAL[c.c], note: c.note, present: c.present, absent: c.absent })),
     takeaway: observed(takeaway),
     web: {
       categories: webCats.map((c) => observed(c)),

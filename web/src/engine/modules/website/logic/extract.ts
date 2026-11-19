@@ -40,7 +40,10 @@ function visibleText(root: HTMLElement, whole = false): string {
   const copy = parse(main.toString());
   for (const sel of ["script", "style", "noscript", "template", "svg", "iframe", "nav", "header", "footer", "form"]) copy.querySelectorAll(sel).forEach((n) => n.remove());
   // Block elements become line breaks so words from different blocks don't run together.
-  const html = copy.toString().replace(/<\/(p|div|li|h[1-6]|tr|section|article|br)\s*>/gi, "$&\n").replace(/<br\s*\/?>/gi, "\n");
+  let html = copy.toString().replace(/<\/(p|div|li|h[1-6]|tr|section|article|br)\s*>/gi, "$&\n").replace(/<br\s*\/?>/gi, "\n");
+  // Whole-body reading (cited pages): inline elements next to each other ("<span>MVP Miami</span><span>103 vehicles</span>")
+  // are separated, so a name doesn't run into the next word. The website checks keep their existing text.
+  if (whole) html = html.replace(/<\/(a|span|strong|em|b|i|small|label|button|td|th|dt|dd)\s*>/gi, "$& ");
   return parse(html)
     .textContent.split("\n")
     // Malformed pages can leave markup in the text (a second "<!DOCTYPE html>" inside the body, stray tags).

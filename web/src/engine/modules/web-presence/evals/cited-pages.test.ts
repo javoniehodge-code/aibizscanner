@@ -52,6 +52,8 @@ describe("finding business names on a page", () => {
     expect(found[0]!.excerpt).toContain("mvp  miami".replace("  ", " "));
     expect(namesOnPage({ title: "Enterprise Rent-A-Car Miami", text: "" }, BIZ).map((f) => f.business)).toEqual(["EN"]);
     expect(namesOnPage({ title: null, text: "MVP Miamians and turo-style hosts" }, BIZ)).toEqual([]);
+    // Page elements joined together in our copy: "MVP Miami" runs straight into "103 vehicles".
+    expect(namesOnPage({ title: null, text: "Other rentals: LUXX Miami94 vehicles MVP Miami103 vehicles" }, BIZ).map((f) => f.business)).toEqual(["MM"]);
   });
 });
 
@@ -208,7 +210,8 @@ describe("wp_pages and Citation coverage", () => {
     const p2 = reportDocument.safeParse(doc2.input.output);
     expect(p2.success, JSON.stringify(p2.error?.issues.slice(0, 3))).toBe(true);
     const cr = p2.data!.credible!;
-    expect(cr.standout.v).toBe("brooklynmag.com recommends you: Its pick for walk-up moves. The page AI cites most that we could read, on angi.com, names Red Hook Moving Co. and Bushwick Box & Truck instead.");
+    expect(cr.standout.v).toBe('"Best movers" (brooklynmag.com) recommends you: Its pick for walk-up moves. The page AI cites most that we could read, "Angi" (angi.com), features Red Hook Moving Co. and Bushwick Box & Truck instead.');
+    expect(cr.categories.map((c) => c.v.name)).toContain("Editorial & publications");
     expect(cr.pages.map((p) => [p.v.url, p.v.presence])).toEqual([
       ["angi.com/companylist/brooklyn/movers", "none"],
       ["reddit.com/r/Brooklyn/comments/movers_2021", "unchecked"],
@@ -235,6 +238,40 @@ describe("wp_pages and Citation coverage", () => {
     expect(site("reddit.com")).toMatchObject({ marks: ["U", "U", "U", "U", "U", "U"], pagesChecked: 0, pagesFailed: 1 });
     expect(site("timeout.com")).toMatchObject({ pagesChecked: 1, pagesFailed: 2 });
     expect(p2.data!.copy.reportDetails.v).toContain("Citation coverage and Credible & corroborated");
+  });
+});
+
+describe("first MVP Miami run (19 Nov 2026)", () => {
+  it("whole-body reading separates inline elements, so a business name doesn't run into the next word", async () => {
+    const { extractPage } = await import("../../website/logic/extract");
+    const html = '<html><body><main><p>LUXX Miami</p></main><div><a href="/x"><span>MVP Miami</span><span>103 vehicles</span></a></div></body></html>';
+    expect(extractPage(html, { wholeBody: true }).text).toContain("MVP Miami 103 vehicles");
+    expect(extractPage(html).text).toBe("LUXX Miami"); // the website checks keep reading only the main area
+  });
+
+  it("suggests getting onto listing, review and editorial sites only, and doesn't say on and not on for one site", async () => {
+    const { buildCredible } = await import("../logic/credible");
+    const pg = (key: string, site: string, category: string, names: string[]) => ({
+      key, url: `https://${site}/${key}`, site, category, title: `T ${key}`, prompts: 1, answers: 1, engines: [0], state: "checked",
+      reason: null, source: { mode: "plain", snapshotId: key, status: 200, finalUrl: null, fetchedAt: "x", words: 900 }, excerpt: null, attempts: [],
+      names: names.map((b) => ({ business: b, excerpt: "e" })),
+    });
+    const cp = { version: "x", cap: 20, outsidePages: 3, businesses: [{ key: "MM", name: "MVP Miami", target: true }, { key: "EX", name: "Exotic Miami", target: false }, { key: "MC", name: "mph club", target: false }],
+      pages: [pg("ed1", "rmr.com", "ed", ["MC"]), pg("ed2", "rmr.com", "ed", ["MM", "MC"]), pg("un1", "exoticmiami.com", "unc", ["EX"])] };
+    const cols = { status: "N", says: "", quote: null, issue: null, action: null };
+    const rd = (presence: string, inst: string[]) => ({ presence, detail: "d", supports: "s", reasons: presence === "rec" ? [{ reason: "Reliable", quote: "q q q q" }] : [], concerns: [], recommendedInstead: inst, review: null, overruled: [],
+      columns: { details: cols, services: cols, fit: cols, reviews: cols, recommendations: cols, locations: cols } });
+    const as = { version: "x", model: "m", fromRun: "r", pages: [
+      { key: "ed1", cutAt: null, error: null, reading: rd("none", ["mph club"]) },
+      { key: "ed2", cutAt: null, error: null, reading: rd("rec", []) },
+      { key: "un1", cutAt: null, error: null, reading: rd("none", ["Exotic Miami"]) },
+    ] };
+    const pa = { pages: [{ v: { key: "ed1", category: "ed" } }, { v: { key: "ed2", category: "ed" } }, { v: { key: "un1", category: "unc" } }],
+      questions: [{ question: { v: { id: "P1", text: "Best exotic rentals" } }, answers: [{ v: { status: "ok", citations: ["ed1", "ed2"] } }, { v: { status: "ok", citations: ["ed1"] } }, { v: { status: "ok", citations: ["un1"] } }] }] };
+    const cr = buildCredible(cp as never, as as never, pa, "MVP Miami");
+    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto more rmr.com pages"]); // not the competitor's own site
+    expect(cr.categories.find((c) => c.v.name === "Editorial & publications")!.v.note).toBe("On rmr.com");
+    expect(cr.takeaway.v).toContain("You don't appear on any other or unclassified sites we read.");
   });
 });
 
