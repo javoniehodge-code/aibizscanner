@@ -130,6 +130,37 @@ test("a report with the website's Find & read part only shows that website slide
   }
 });
 
+test("a report with Citation coverage from the cited-page check shows that slide with its scope line", async ({ browser }) => {
+  // What stage 12 produces once wp_section has run: prompt analysis plus citationCoverage, with the scope line.
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { citationCoverage: Record<string, unknown> };
+  for (const k of ["summary", "competitors", "webPresence", "website", "credible", "actions", "methodGroups"]) doc[k] = null;
+  doc.citationCoverage.scope = { v: "We read the 12 outside pages AI cited most (we check up to 20 per report).", p: { kind: "observed", evidence: [] } };
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    const slides: string[] = [];
+    for (let i = 0; i < 12; i++) {
+      await page.waitForTimeout(120);
+      slides.push(await slide.innerText());
+      await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    const cov = slides.find((t) => t.includes("CITATION COVERAGE MAP"));
+    expect(cov).toBeDefined();
+    expect(cov).toContain("We read the 12 outside pages AI cited most (we check up to 20 per report).");
+    expect(slides.join("\n")).not.toContain("CREDIBLE & CORROBORATED");
+  } finally {
+    await srv.close();
+  }
+});
+
 test("the template contains no business data", () => {
   const html = currentTemplate();
   for (const word of ["Brownstone", "Brooklyn", "NYSDOT", "walk-up", "piano", "MVP", "Miami", "29 Oct 2026", "11 Nov 2026"]) {
