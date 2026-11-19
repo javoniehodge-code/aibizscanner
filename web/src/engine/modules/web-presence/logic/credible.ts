@@ -138,16 +138,15 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
   // Only sites whose purpose is to list, review or recommend businesses: never another business's own website, and
   // not unclassified or official pages.
   const listing = (r: Row) => (GET_ONTO as readonly string[]).includes(r.category);
-  for (const r of read.filter((r) => listing(r) && !onPage(r) && insteadOf(r).length).slice(0, 2)) {
-    const names = insteadOf(r);
+  // Only pages the reading says recommend or rank other businesses: a page that merely mentions names (a party-venue
+  // directory naming "Giggster") isn't a place customers choose a business from.
+  for (const r of read.filter((r) => listing(r) && !onPage(r) && r.reading!.recommendedInstead.length).slice(0, 2)) {
+    const names = r.reading!.recommendedInstead;
     const already = mine.some((m) => m.site === r.site);
-    fixes.push({ title: already ? `Get onto more ${r.site} pages` : `Get onto ${r.site}`, text: `"${nonEmpty(r.title, r.site)}" is cited for ${plural(r.prompts, "prompt")} and features ${list(names.slice(0, 3))}${names.length > 3 ? ` and ${plural(names.length - 3, "other")}` : ""}, but not you.` });
+    fixes.push({ title: already ? `Get onto more ${r.site} pages` : `Get onto ${r.site}`, text: `"${nonEmpty(r.title, r.site)}" is cited for ${plural(r.prompts, "prompt")} and features ${list(names.length > 3 ? [...names.slice(0, 3), plural(names.length - 3, "other")] : names)}, but not you.` });
   }
   for (const r of mine.filter((r) => r.reading!.presence === "list").slice(0, 1)) {
     fixes.push({ title: `Give ${r.site} a reason to recommend you`, text: `"${nonEmpty(r.title, r.site)}" names you but gives no reason to choose you. Ask for your listing or mention to say what sets you apart.` });
-  }
-  for (const r of rows.filter((r) => r.state !== "checked").slice(0, 1)) {
-    fixes.push({ title: `Check ${r.site} yourself`, text: `AI cites "${nonEmpty(r.title, r.site)}" for ${plural(r.prompts, "prompt")}, but we couldn't read it. See whether you're listed there and what it says.` });
   }
 
   const unread = rows.length - read.length;
