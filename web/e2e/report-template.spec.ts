@@ -225,6 +225,41 @@ test("Credible: the absence banner counts only pages we could read", async ({ br
   }
 });
 
+test("Credible: a Google review card shows each review's author and the Google Maps attribution", async ({ browser }) => {
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { credible: { reviews: unknown[] } };
+  for (const k of ["summary", "competitors", "website", "actions", "methodGroups"]) doc[k] = null;
+  doc.credible.reviews = [{ v: { label: "Google", title: "MVP Miami", rating: "4.9", count: "412", recent: "Latest review shown: 2 weeks ago", themes: "The 1 reviews Google shows, as Google shows them:", cited: false, scale: 5,
+    items: [{ author: "Ana R.", authorUrl: "https://www.google.com/maps/contrib/1", rating: 5, when: "2 weeks ago", text: "Great cars and service.", url: "https://www.google.com/maps/reviews/1" }],
+    attribution: { text: "Google Maps", url: "https://maps.google.com/?cid=9" } }, p: { kind: "observed", evidence: [] } }];
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    let cred = "";
+    for (let i = 0; i < 14 && !cred; i++) {
+      await page.waitForTimeout(120);
+      const t = await slide.innerText();
+      if (t.includes("CREDIBLE & CORROBORATED")) cred = t;
+      else await page.keyboard.press("ArrowRight");
+    }
+    expect(errors).toEqual([]);
+    expect(cred).toContain("What customers say");
+    expect(cred).toContain("Ana R.");
+    expect(cred).toContain("Great cars and service.");
+    expect(cred).toContain("Read on Google");
+    expect(cred).toContain("Source: Google Maps");
+    await expect(slide.getByRole("link", { name: "Ana R." })).toHaveAttribute("href", "https://www.google.com/maps/contrib/1");
+  } finally {
+    await srv.close();
+  }
+});
+
 test("the template contains no business data", () => {
   const html = currentTemplate();
   for (const word of ["Brownstone", "Brooklyn", "NYSDOT", "walk-up", "piano", "MVP", "Miami", "29 Oct 2026", "11 Nov 2026"]) {

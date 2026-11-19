@@ -39,3 +39,37 @@ describe("Google Places search", () => {
     expect(placeIdSchema.safeParse("ChIJ<script>").success).toBe(false);
   });
 });
+
+describe("Google Place Details", () => {
+  it("reads the listing with only the fields the report shows, keeping each review's author", async () => {
+    const { DETAILS_FIELDS, placeDetails } = await import("./places");
+    let seen: { url: string; init: RequestInit } | null = null;
+    const fetcher = async (url: string, init: RequestInit) => {
+      seen = { url, init };
+      return new Response(
+        JSON.stringify({
+          id: "ChIJ19s3fbi72YgR0SQuauvlGg0",
+          displayName: { text: "MVP Miami" },
+          formattedAddress: "2500 NW 39th St, Miami, FL 33142, USA",
+          nationalPhoneNumber: "(786) 877-4317",
+          regularOpeningHours: { weekdayDescriptions: ["Monday: 9:30 AM – 9:30 PM"] },
+          businessStatus: "OPERATIONAL",
+          rating: 4.9,
+          userRatingCount: 412,
+          googleMapsUri: "https://maps.google.com/?cid=9",
+          reviews: [
+            { rating: 5, text: { text: "Great cars and service." }, relativePublishTimeDescription: "2 weeks ago", authorAttribution: { displayName: "Ana R.", uri: "https://www.google.com/maps/contrib/1" }, googleMapsUri: "https://www.google.com/maps/reviews/1" },
+            { rating: 4, text: { text: "" } },
+          ],
+        }),
+        { status: 200 },
+      );
+    };
+    const d = await placeDetails("ChIJ19s3fbi72YgR0SQuauvlGg0", "k", fetcher);
+    expect(seen!.url).toBe("https://places.googleapis.com/v1/places/ChIJ19s3fbi72YgR0SQuauvlGg0?languageCode=en");
+    expect((seen!.init.headers as Record<string, string>)["x-goog-fieldmask"]).toBe(DETAILS_FIELDS.join(","));
+    expect(d).toMatchObject({ name: "MVP Miami", phone: "(786) 877-4317", hours: ["Monday: 9:30 AM – 9:30 PM"], rating: 4.9, ratingCount: 412 });
+    expect(d.reviews).toEqual([{ author: "Ana R.", authorUrl: "https://www.google.com/maps/contrib/1", rating: 5, when: "2 weeks ago", publishedAt: null, text: "Great cars and service.", url: "https://www.google.com/maps/reviews/1" }]);
+    await expect(placeDetails("not a place id!", "k", fetcher)).rejects.toThrow("That isn't a Google place ID.");
+  });
+});

@@ -561,6 +561,14 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
           <span style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="font-size:32px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ v.rating }}</span><span style="font-size:16px;font-weight:600">{{ v.scaleLine }}</span></span>
           <span style="font-size:14px;color:oklch(0.42 0.01 265)">{{ v.recent }}</span>
           <span style="font-size:16px;line-height:1.5">{{ v.themes }}</span>
+          <sc-for list="{{ v.items }}" as="x" hint-placeholder-count="0">
+            <div style="display:flex;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid oklch(0.92 0.006 265)">
+              <span style="font-size:14px"><sc-if value="{{ x.hasAuthorUrl }}"><a href="{{ x.authorUrl }}" target="_blank" rel="noreferrer" style="font-weight:600;color:#000">{{ x.author }}</a></sc-if><sc-if value="{{ x.noAuthorUrl }}"><strong>{{ x.author }}</strong></sc-if><span style="color:oklch(0.42 0.01 265)">{{ x.meta }}</span></span>
+              <span style="font-size:15px;line-height:1.5">{{ x.text }}</span>
+              <sc-if value="{{ x.hasUrl }}"><a href="{{ x.url }}" target="_blank" rel="noreferrer" style="font-size:13px;color:oklch(0.45 0.2 265)">Read on Google</a></sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ v.hasAttribution }}"><span style="font-size:13px;color:oklch(0.42 0.01 265)">Source: <sc-if value="{{ v.hasAttributionUrl }}"><a href="{{ v.attributionUrl }}" target="_blank" rel="noreferrer" style="color:oklch(0.42 0.01 265)">{{ v.attribution }}</a></sc-if><sc-if value="{{ v.noAttributionUrl }}">{{ v.attribution }}</sc-if></span></sc-if>
         </div>
       </sc-for>
     </div>
@@ -1585,7 +1593,9 @@ class BrandPart extends Sub {
             grid: { display: 'grid', gridTemplateColumns: cols, gap: 16, alignItems: 'start', padding: '18px 0', borderBottom: '1px solid oklch(0.92 0.006 265)' } }; }),
           legend: [['g', 'Gives a reason to choose you'], ['q', 'Only named or inconclusive'], ['y', 'Raises a concern'], ['r', 'Not found on this page'], ...(pages.some(x => x[5] === 'unchecked') ? [['d', 'Couldn\u2019t check the page']] : [])].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
           hasReviews: R.credible.reviews.length > 0,
-          reviews: R.credible.reviews.map(r => [r.label, r.title, r.rating, r.count, r.recent, r.themes, r.cited, r.scale]).map(([prov, t, rating, count, recent, themes, cited, scale]) => ({ prov, t, rating, count, recent, themes, scaleLine: (scale === undefined || scale === 5 ? '/ 5' : scale ? '/ ' + scale : 'score \u00b7 scale not shown') + (count && count !== '\u2014' ? ' \u00b7 ' + count + ' reviews' : ' \u00b7 review count not shown'), kickColor: cited ? 'oklch(0.45 0.22 265)' : GRAY })),
+          reviews: R.credible.reviews.map(r => [r.label, r.title, r.rating, r.count, r.recent, r.themes, r.cited, r.scale, r.items || [], r.attribution || null]).map(([prov, t, rating, count, recent, themes, cited, scale, items, attr]) => ({ prov, t, rating, count, recent, themes,
+            items: items.map(x => ({ author: x.author, authorUrl: x.authorUrl || '', hasAuthorUrl: !!x.authorUrl, noAuthorUrl: !x.authorUrl, meta: [x.rating != null ? ' \u00b7 ' + x.rating + '/5' : '', x.when ? ' \u00b7 ' + x.when : ''].join(''), text: x.text, url: x.url || '', hasUrl: !!x.url })),
+            hasAttribution: !!attr, attribution: attr ? attr.text : '', attributionUrl: attr && attr.url ? attr.url : '', hasAttributionUrl: !!(attr && attr.url), noAttributionUrl: !!attr && !attr.url, scaleLine: (scale === undefined || scale === 5 ? '/ 5' : scale ? '/ ' + scale : 'score \u00b7 scale not shown') + (count && count !== '\u2014' ? ' \u00b7 ' + count + ' reviews' : ' \u00b7 review count not shown'), kickColor: cited ? 'oklch(0.45 0.22 265)' : GRAY })),
           fixes: R.credible.fixes.map(f => [f.title, f.text]).map(([t, v], i) => ({ n: String(i + 1).padStart(2, '0'), t, v,
             style: { display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: 16, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
             numStyle: { fontFamily: "'Geist Mono',monospace", fontSize: 16, fontWeight: 700, paddingTop: 2 } })),

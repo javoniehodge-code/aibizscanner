@@ -4980,6 +4980,75 @@
                             "type": "null"
                           }
                         ]
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "author": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "authorUrl": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "rating": {
+                              "type": [
+                                "number",
+                                "null"
+                              ]
+                            },
+                            "when": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "text": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "url": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "author",
+                            "authorUrl",
+                            "rating",
+                            "when",
+                            "text",
+                            "url"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "attribution": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "url": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "url"
+                        ],
+                        "additionalProperties": false
                       }
                     },
                     "required": [

@@ -70,3 +70,19 @@ up to five listings (name, type, address, a Google Maps link). **This is the bus
 date; **Clear** removes it. The search results are shown, not stored. Fields asked for (billed by field, Text Search
 Pro): id, display name, formatted address, primary type, Google Maps link. A search is needed once per business, and
 again after a year to refresh the ID.
+
+## Part 4b-2: Google in the report, read live
+
+When a pipeline report with a Credible part is opened (`/reports/[id]/document`), and its business has a confirmed
+listing, the server reads Google's listing (Place Details, Enterprise + Atmosphere for reviews) and adds it to that
+response only. The stored report document is unchanged; nothing from Google is stored.
+
+- **What customers say:** a Google card first: rating out of 5, review count, the reviews Google shows with each
+  author's name and profile link, "Read on Google" links, and "Source: Google Maps" linking to the listing. Google's
+  reviews are shown as Google gives them; no AI summary.
+- **Web presence map:** a "Google Business Profile" row (additional source): business details P/L/N by whether phone,
+  address and hours are shown; services "couldn't check" (not read from Google yet); customer fit and recommendations
+  not applicable; reviews and locations from the listing. If Google can't be read, every cell is "Couldn't check".
+- **Cost:** one call each time the report is opened. $0.025 a call after 1,000 free a month; the 100-a-day quota caps it.
+  These calls aren't recorded in a report's spend (they happen when viewing, not in a stage run).
+- Example reports (fixtures) are shown as they are.
