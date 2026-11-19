@@ -148,9 +148,6 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
   for (const r of mine.filter((r) => r.reading!.presence === "list").slice(0, 1)) {
     fixes.push({ title: `Give ${r.site} a reason to recommend you`, text: `"${nonEmpty(r.title, r.site)}" names you but gives no reason to choose you. Ask for your listing or mention to say what sets you apart.` });
   }
-  for (const r of rows.filter((r) => r.state !== "checked").slice(0, 1)) {
-    fixes.push({ title: `Check ${r.site} yourself`, text: `AI cites "${nonEmpty(r.title, r.site)}" for ${plural(r.prompts, "prompt")}, but we couldn't read it. See whether you're listed there and what it says.` });
-  }
 
   const unread = rows.length - read.length;
   const credible = {

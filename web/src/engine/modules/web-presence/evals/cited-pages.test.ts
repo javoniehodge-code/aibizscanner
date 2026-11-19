@@ -228,7 +228,7 @@ describe("wp_pages and Citation coverage", () => {
     ]);
     expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["brooklynmag.com", true, "good"]);
     expect(cr.web.sites.map((s) => [s.v.name, s.v.present, s.v.quality])).toContainEqual(["angi.com", false, null]);
-    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto thumbtack.com", "Give google.com a reason to recommend you", "Check reddit.com yourself"]); // angi.com names others but recommends no one
+    expect(cr.fixes.map((f) => f.v.title)).toEqual(["Get onto thumbtack.com", "Give google.com a reason to recommend you"]); // angi.com names others but recommends no one
     expect(cr.fixes[0]!.v.text).toBe('"Thumbtack" is cited for 2 prompts and features Red Hook Moving Co. and Two Bridges Movers, but not you.');
     expect(cr.reviews).toEqual([]);
     const wpm = p2.data!.webPresence!;
