@@ -163,16 +163,16 @@ export function buildWebPresence(cp: CitedPages, as: AssessedPages) {
   const readings = new Map(as.pages.map((p) => [p.key, p.reading] as const));
   const bySite = new Map<string, Page[]>();
   for (const p of cp.pages) bySite.set(p.site, [...(bySite.get(p.site) ?? []), p]);
-  const ORDER = ["P", "L", "N", "A", "U"] as const;
+  // Combining a site's pages: information shown on any page wins; then a page we couldn't confirm (it may show the
+  // information, so we don't claim it's missing); then "not found"; "not applicable" only when every page says so.
+  const ORDER = ["P", "L", "U", "N", "A"] as const;
   return [...bySite.entries()].map(([site, ps]) => {
     const got = ps.filter((p) => p.state === "checked" && readings.get(p.key));
     const marks = COLUMNS.map((c) => {
       const cells = got.map((p) => ({ p, cell: readings.get(p.key)!.columns[c] as CheckedCell }));
       if (!cells.length) return { mark: "U" as const, from: null };
       const best = [...cells].sort((a, b) => ORDER.indexOf(a.cell.status) - ORDER.indexOf(b.cell.status))[0]!;
-      // "Not applicable" only when every page we read says so.
-      const mark = best.cell.status === "A" && cells.some((x) => x.cell.status !== "A") ? "N" : best.cell.status;
-      return { mark, from: best };
+      return { mark: best.cell.status, from: best };
     });
     const details = Object.fromEntries(
       marks.flatMap((m, i) =>

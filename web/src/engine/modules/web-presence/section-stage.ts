@@ -42,7 +42,9 @@ export const wpSection: StageDefinition = {
     const pa = input(ctx, "pa_assemble", assembledSection)!;
     // Readings of an earlier wp_pages run don't describe these pages: wait for wp_assess to read this run.
     const read = input(ctx, "wp_assess", assessedPages);
-    const as = read && read.fromRun === cp.runId ? read : null;
+    // Credible and the map need at least one page we could read; without one they're left out (Citation coverage
+    // still says which pages couldn't be read).
+    const as = read && read.fromRun === cp.runId && read.pages.some((p) => p.reading) ? read : null;
     const out: WebPresenceSection = {
       citationCoverage: buildCitationCoverage(cp),
       credible: as ? buildCredible(cp, as, pa.section, pa.business.name) : null,

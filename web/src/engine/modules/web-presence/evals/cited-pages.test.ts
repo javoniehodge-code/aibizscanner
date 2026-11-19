@@ -237,3 +237,44 @@ describe("wp_pages and Citation coverage", () => {
     expect(p2.data!.copy.reportDetails.v).toContain("Citation coverage and Credible & corroborated");
   });
 });
+
+describe("review fixes (PR 45)", () => {
+  const page = (key: string, site: string, state: "checked" | "unchecked") => ({
+    key, url: `https://${site}/${key}`, site, category: "dir" as const, title: key, prompts: 1, answers: 1, engines: [0], state,
+    reason: state === "unchecked" ? "We couldn't read this page: HTTP 403." : null,
+    source: state === "checked" ? { mode: "plain" as const, snapshotId: `s-${key}`, status: 200, finalUrl: null, fetchedAt: "2026-11-19T00:00:00Z", words: 500 } : null,
+    excerpt: null, attempts: [], names: [],
+  });
+  const cell = (status: "P" | "L" | "N" | "A" | "U") => ({ status, says: status === "P" ? "Shown." : "", quote: status === "P" ? "the words on the page here" : null, issue: null, action: null });
+  const reading = (marks: ("P" | "L" | "N" | "A" | "U")[]) => ({
+    presence: "list" as const, detail: "d", supports: "s", reasons: [], concerns: [], recommendedInstead: [], review: null, overruled: [],
+    columns: { details: cell(marks[0]!), services: cell(marks[1]!), fit: cell(marks[2]!), reviews: cell(marks[3]!), recommendations: cell(marks[4]!), locations: cell(marks[5]!) },
+  });
+
+  it("combines a site's pages without claiming an absence nobody established", async () => {
+    const { buildWebPresence } = await import("../logic/credible");
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "BM", name: "B", target: true }], pages: [page("a", "x.com", "checked"), page("b", "x.com", "checked")] };
+    const as = { version: "x", model: "m", fromRun: "r", pages: [
+      { key: "a", cutAt: null, error: null, reading: reading(["A", "N", "A", "A", "P", "U"]) },
+      { key: "b", cutAt: null, error: null, reading: reading(["U", "U", "A", "N", "N", "N"]) },
+    ] };
+    // details A+U -> U (not "not found"); services N+U -> U; fit A+A -> A; reviews A+N -> N; P wins; locations U+N -> U.
+    expect(buildWebPresence(cp, as)[0]!.v.marks).toEqual(["U", "U", "A", "N", "P", "U"]);
+  });
+
+  it("leaves Credible and the map out when no page could be read, and still builds Citation coverage", async () => {
+    const store = new MemoryStore(5, 0, []);
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "BM", name: "Brownstone Movers", target: true }], pages: [page("dr2", "angi.com", "unchecked"), page("rv1", "yelp.com", "checked")] };
+    const wpIn: StageInput = { runId: "wp-1", stage: "wp_pages", output: cp as unknown as JsonValue, outputHash: null, finishedAt: "2026-11-19T00:00:00Z" };
+    const asIn: StageInput = { runId: "as-1", stage: "wp_assess", output: { version: "x", model: "m", fromRun: "wp-1", pages: [{ key: "rv1", cutAt: null, reading: null, error: "provider exploded" }] } as unknown as JsonValue, outputHash: null };
+    const asm: StageInput = { runId: "asm", stage: "pa_assemble", output: ASSEMBLED as unknown as JsonValue, outputHash: null };
+    const sec = await run(store, "wp_section", [wpIn, asm, asIn], {});
+    expect(sec.outcome.outcome).toBe("done");
+    const out = sec.input.output as { citationCoverage: { scope: { v: string } }; credible: unknown; webPresence: unknown };
+    expect(out.credible).toBeNull();
+    expect(out.webPresence).toBeNull();
+    expect(out.citationCoverage.scope.v).toContain("1 more page couldn't be read");
+    const doc = await run(store, "report_assemble", [asm, sec.input], {});
+    expect(reportDocument.safeParse(doc.input.output).success).toBe(true);
+  });
+});
