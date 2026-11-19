@@ -5,7 +5,12 @@
       "mcp__Supabase__list_migrations",
       "mcp__Supabase__list_tables",
       "mcp__Supabase__list_projects",
-      "mcp__Supabase__get_advisors"
+      "mcp__Supabase__get_advisors",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__list_migrations",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__get_advisors"
     ]
   }
 }
