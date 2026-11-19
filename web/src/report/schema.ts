@@ -424,6 +424,12 @@ export const credibleSection = z
             cited: z.boolean(),
             /** Top of the rating scale; null when the profile doesn't show one (e.g. a bare "9.5"). */
             scale: z.number().positive().nullable(),
+            /** Reviews shown as the source gives them, each with its author (Google requires author names and links). */
+            items: z
+              .array(z.object({ author: nonEmpty, authorUrl: z.string().nullable(), rating: z.number().nullable(), when: z.string().nullable(), text: nonEmpty, url: z.string().nullable() }).strict())
+              .optional(),
+            /** Required attribution for the source's content (e.g. "Google Maps"), with a link to the listing. */
+            attribution: z.object({ text: nonEmpty, url: z.string().nullable() }).strict().optional(),
           })
           .strict(),
       ),

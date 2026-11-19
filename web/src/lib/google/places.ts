@@ -62,3 +62,102 @@ export async function searchPlaces(query: string, key: string, fetcher: Fetcher 
 
 /** Place IDs from Google look like "ChIJ…": letters, digits, "-" and "_". Anything else is refused before saving. */
 export const placeIdSchema = z.string().regex(/^[A-Za-z0-9_-]{10,300}$/, "Not a Google place ID");
+
+// ---------------------------------------------------------------------------------------------------------------
+// Place Details: read live when a report is shown, never stored (Places API policies).
+// ---------------------------------------------------------------------------------------------------------------
+
+/** Place Details fields (Enterprise + Atmosphere, for reviews). Only what the report shows. */
+export const DETAILS_FIELDS = [
+  "id",
+  "displayName",
+  "formattedAddress",
+  "nationalPhoneNumber",
+  "websiteUri",
+  "regularOpeningHours.weekdayDescriptions",
+  "businessStatus",
+  "rating",
+  "userRatingCount",
+  "reviews",
+  "googleMapsUri",
+] as const;
+
+const detailsResponse = z.object({
+  id: z.string(),
+  displayName: z.object({ text: z.string() }).partial().optional(),
+  formattedAddress: z.string().optional(),
+  nationalPhoneNumber: z.string().optional(),
+  websiteUri: z.string().optional(),
+  regularOpeningHours: z.object({ weekdayDescriptions: z.array(z.string()).optional() }).optional(),
+  businessStatus: z.string().optional(),
+  rating: z.number().optional(),
+  userRatingCount: z.number().optional(),
+  googleMapsUri: z.string().optional(),
+  reviews: z
+    .array(
+      z.object({
+        rating: z.number().optional(),
+        text: z.object({ text: z.string() }).partial().optional(),
+        originalText: z.object({ text: z.string() }).partial().optional(),
+        relativePublishTimeDescription: z.string().optional(),
+        publishTime: z.string().optional(),
+        googleMapsUri: z.string().optional(),
+        authorAttribution: z.object({ displayName: z.string().optional(), uri: z.string().optional() }).optional(),
+      }),
+    )
+    .optional(),
+});
+
+export type PlaceReview = { author: string; authorUrl: string | null; rating: number | null; when: string | null; publishedAt: string | null; text: string; url: string | null };
+export type PlaceDetails = {
+  id: string;
+  name: string | null;
+  address: string | null;
+  phone: string | null;
+  website: string | null;
+  hours: string[];
+  status: string | null;
+  rating: number | null;
+  ratingCount: number | null;
+  mapsUrl: string | null;
+  reviews: PlaceReview[];
+};
+
+/** The listing as Google shows it now. */
+export async function placeDetails(placeId: string, key: string, fetcher: Fetcher = fetch): Promise<PlaceDetails> {
+  if (!placeIdSchema.safeParse(placeId).success) throw new PlacesError("That isn't a Google place ID.");
+  const res = await fetcher(`${PLACES_ENDPOINT}/places/${encodeURIComponent(placeId)}?languageCode=en`, {
+    method: "GET",
+    headers: { "x-goog-api-key": key, "x-goog-fieldmask": DETAILS_FIELDS.join(",") },
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    const message = /"message":\s*"([^"]+)"/.exec(detail)?.[1];
+    throw new PlacesError(`Google Places refused the listing (HTTP ${res.status}${message ? `: ${message}` : ""}).`);
+  }
+  const p = detailsResponse.parse(await res.json());
+  return {
+    id: p.id,
+    name: p.displayName?.text ?? null,
+    address: p.formattedAddress ?? null,
+    phone: p.nationalPhoneNumber ?? null,
+    website: p.websiteUri ?? null,
+    hours: p.regularOpeningHours?.weekdayDescriptions ?? [],
+    status: p.businessStatus ?? null,
+    rating: p.rating ?? null,
+    ratingCount: p.userRatingCount ?? null,
+    mapsUrl: p.googleMapsUri ?? null,
+    reviews: (p.reviews ?? [])
+      .map((r) => ({
+        author: r.authorAttribution?.displayName ?? "A Google user",
+        authorUrl: r.authorAttribution?.uri ?? null,
+        rating: r.rating ?? null,
+        when: r.relativePublishTimeDescription ?? null,
+        publishedAt: r.publishTime ?? null,
+        text: (r.text?.text ?? r.originalText?.text ?? "").trim(),
+        url: r.googleMapsUri ?? null,
+      }))
+      .filter((r) => r.text),
+  };
+}
