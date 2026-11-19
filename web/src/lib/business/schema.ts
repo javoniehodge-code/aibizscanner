@@ -80,7 +80,7 @@ const list = (label: string, maxItems = 50, maxLen = 120) =>
 
 /**
  * Business form input (brief §3.1). Raw FormData strings in, database-ready values out.
- * The Google Places identity check (place_id) is Milestone 2 and is not part of this form.
+ * The Google listing (place_id) is confirmed separately on the edit page (google-listing.tsx), not in this form.
  */
 export const businessInput = z
   .object({
