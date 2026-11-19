@@ -56,7 +56,10 @@ describe("finding business names on a page", () => {
 // The fixture report's cited outside pages: angi (thin plain copy), reddit (refuses us), thumbtack, brooklynmag,
 // two yelp pages (robots.txt disallows our checker), timeout, two Google Maps pages (browser fails), dot.ny.gov.
 const FIX = FIXTURES.brownstone as Record<string, unknown> & { promptAnalysis: unknown; evidence: Record<string, unknown>; engines: unknown[]; business: { v: unknown } };
-const ASSEMBLED = { section: FIX.promptAnalysis, evidence: { "prompt-set": { source: "Approved prompt set v1", ref: "stage_run set", capturedOn: "2026-11-13" } }, engines: strip(FIX.engines), business: FIX.business.v };
+const PA = structuredClone(FIX.promptAnalysis) as { pages: unknown[]; questions: { answers: { v: { status: string; citations: string[] } }[] }[] };
+PA.pages.push({ v: { key: "ed3", url: "timeout.com/newyork/movers-2", category: "ed" }, p: { kind: "sample" } }, { v: { key: "ed4", url: "timeout.com/newyork/movers-3", category: "ed" }, p: { kind: "sample" } });
+PA.questions[0]!.answers.find((a) => a.v.status === "ok")!.v.citations.push("ed3", "ed4");
+const ASSEMBLED = { section: PA, evidence: { "prompt-set": { source: "Approved prompt set v1", ref: "stage_run set", capturedOn: "2026-11-13" } }, engines: strip(FIX.engines), business: FIX.business.v };
 const SET = {
   promptSet: { id: "00000000-0000-4000-8000-000000000001", version: 1, approvedAt: "2026-11-13T10:00:00Z" },
   target: { name: "Brownstone Movers", aliases: ["Brownstone Moving"], domains: ["brownstonemovers.com"], location: "Brooklyn, NY", category: "Movers" },
@@ -71,9 +74,11 @@ const PAGES: Record<string, string> = {
   "https://thumbtack.com/ny/brooklyn/movers": html("Thumbtack", `Top movers: Red Hook Moving Co. and Two Bridges Movers. ${words(200)}`),
   "https://brooklynmag.com/best-movers-2026": html("Best movers", `Brownstone Movers is our pick for walk-ups. ${words(300)}`),
   "https://timeout.com/newyork/moving-guide": html("Moving guide", `Try Gowanus Movers. ${words(300)}`),
-  "https://google.com/maps/place/red-hook-moving-co": html("Red Hook Moving Co. - Google Maps", words(40)),
+  "https://timeout.com/newyork/movers-2": html("Please accept cookies", words(60)),
+  "https://timeout.com/newyork/movers-3": html("Please accept cookies", words(60)),
+  "https://google.com/maps/place/red-hook-moving-co": html("Red Hook Moving Co. - Google Maps", `Red Hook ${words(40)}`),
   "https://google.com/maps/place/brownstone-movers": html("Brownstone Moving - Google Maps", words(40)),
-  "https://dot.ny.gov/household-goods-movers": html("Registered movers", `Registered: Brownstone Movers, Red Hook Moving Co. ${words(200)}`),
+  "https://dot.ny.gov/household-goods-movers": `<html><head><title>Registered movers</title></head><body><main><p>${words(200)}</p></main><aside>Registered: Brownstone Movers, Red Hook Moving Co.</aside></body></html>`,
 };
 const ok = (url: string, body: string): FetchedResource => ({ requestedUrl: url, finalUrl: url, status: 200, contentType: "text/html", body, truncated: false, redirects: [], error: null, durationMs: 5, userAgent: "test" });
 const no = (url: string, status: number): FetchedResource => ({ requestedUrl: url, finalUrl: url, status, contentType: null, body: null, truncated: false, redirects: [], error: `HTTP ${status}`, durationMs: 5, userAgent: "test" });
@@ -116,7 +121,7 @@ describe("wp_pages and Citation coverage", () => {
     const wp = await run(store, "wp_pages", [set, asm], { web, browser });
     expect(wp.outcome.outcome).toBe("done");
     const out = wp.input.output as unknown as CitedPages;
-    expect(out.outsidePages).toBe(10);
+    expect(out.outsidePages).toBe(12);
     const row = (key: string) => out.pages.find((p) => p.key === key)!;
 
     expect(row("rv2")).toMatchObject({ state: "unchecked", source: null, names: [] });
@@ -128,10 +133,17 @@ describe("wp_pages and Citation coverage", () => {
     expect(row("dr2")).toMatchObject({ state: "checked", source: { mode: "browser" } });
     expect(row("dr2").names.map((n) => n.business)).toEqual(["RH", "BX"]);
     expect(row("ed1").names.map((n) => n.business)).toEqual(["BM"]);
+    expect(row("ed1").excerpt).toMatch(/^Brownstone Movers is our pick for walk-ups\. word0 word1/);
+    // Two different timeout.com pages gave the same cookie text: a shared shell, not the pages.
+    expect(row("ed3")).toMatchObject({ state: "unchecked", names: [] });
+    expect(row("ed3").reason).toBe("We couldn't read this page: 2 different pages on timeout.com gave us the same 60 words, so we got a page shared across the site (often a consent, block or loading page), not this one.");
+    expect(row("ed2").state).toBe("checked");
+    // Names outside <main> count: we read the whole page body.
+    expect(row("of1").names.map((n) => n.business)).toEqual(["BM", "RH"]);
     expect(row("mp1")).toMatchObject({ state: "checked", source: { mode: "plain", words: 40 } }); // browser failed; the plain copy is enough
     expect(row("mp1").names.map((n) => n.business)).toEqual(["BM"]); // via the alias in the page title
-    expect(rendered.sort()).toEqual(["https://angi.com/companylist/brooklyn/movers", "https://google.com/maps/place/brownstone-movers", "https://google.com/maps/place/red-hook-moving-co", "https://reddit.com/r/Brooklyn/comments/movers_2021"]);
-    expect(store.snapshots.filter((s) => s.fetchMode === "rendered")).toHaveLength(4);
+    expect(rendered.sort()).toEqual(["https://angi.com/companylist/brooklyn/movers", "https://google.com/maps/place/brownstone-movers", "https://google.com/maps/place/red-hook-moving-co", "https://reddit.com/r/Brooklyn/comments/movers_2021", "https://timeout.com/newyork/movers-2", "https://timeout.com/newyork/movers-3"]);
+    expect(store.snapshots.filter((s) => s.fetchMode === "rendered")).toHaveLength(6);
 
     const sec = await run(store, "wp_section", [wp.input], {});
     expect(sec.outcome.outcome).toBe("done");
@@ -146,7 +158,7 @@ describe("wp_pages and Citation coverage", () => {
     ]);
     expect(cov.businesses.v).toEqual(["BM", "RH", "BX", "GM", "TB"]);
     expect(cov.scope.v).toBe(
-      "We read the 7 outside pages AI cited most (we check up to 20 per report; 10 outside pages were cited in all). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 3 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read. Columns show you and the other businesses found on the most sites.",
+      "We read the 7 outside pages AI cited most (we check up to 20 per report; 12 outside pages were cited in all). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 5 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read, 2 showed us only a page shared across the site. Columns show you and the other businesses found on the most sites.",
     );
 
     const doc = await run(store, "report_assemble", [asm, sec.input], {});

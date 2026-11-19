@@ -29,6 +29,8 @@ export const citedPages = z
             .object({ mode: z.enum(["plain", "browser", "earlier_browser"]), snapshotId: z.string(), status: z.number().int().nullable(), finalUrl: z.string().nullable(), fetchedAt: z.string(), words: z.number().int().min(0) })
             .strict()
             .nullable(),
+          /** The start of the text we read (checked pages), for review. */
+          excerpt: z.string().nullable(),
           /** Every fetch attempt this run (plain, browser), for review. */
           attempts: z.array(z.object({ mode: z.enum(["plain", "browser"]), snapshotId: z.string(), status: z.number().int().nullable(), error: z.string().nullable(), words: z.number().int().min(0) }).strict()),
           names: z.array(z.object({ business: z.string(), excerpt: z.string() }).strict()),

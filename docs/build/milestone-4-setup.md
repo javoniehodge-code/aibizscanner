@@ -28,7 +28,10 @@ What it does:
 2. **Follows each site's robots.txt** for our own checker (`AIBizScannerBot`). A page it disallows isn't fetched.
 3. **Reads the page:** a plain fetch first; if that is refused or has fewer than 150 words, our headless browser (or an
    earlier browser copy from this report). Browser loads start within a 200-second budget; pages not reached are
-   marked "not reached in time" and a rerun picks them up. Every copy is stored as a page snapshot.
+   marked "not reached in time" and a rerun picks them up. Every copy is stored as a page snapshot. We read the whole
+   page body (without navigation, header, footer and forms), since listings can name businesses outside the main area.
+   When different pages of one site give us exactly the same text, we got a shared shell (a consent, block or loading
+   page), so those pages count as unread.
 4. **Finds business names** in plain code: the target (with its aliases) and every business the prompt analysis names.
    Multi-word names match in any letter case; a one-word name must be written with its capitals ("Turo", not "turo").
 5. **Citation coverage:** one row per website with a page we read, ticking each business its pages name, with a scope

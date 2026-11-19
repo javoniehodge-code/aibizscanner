@@ -18,6 +18,8 @@ const THIN_WORDS = 150;
 /** A page with fewer words than this, in every copy we have, counts as unreadable. */
 const MIN_WORDS = 30;
 const PLAIN_CONCURRENCY = 4;
+/** The start of the text we read, kept for review. */
+const excerptOf = (text: string) => (text.length > 300 ? `${text.slice(0, 300).replace(/\s+\S*$/, "")}…` : text).replace(/\s+/g, " ").trim();
 /** Browser loads start only within this budget (the stage times out at 270 s); later pages wait for a rerun. */
 const BROWSER_BUDGET_MS = 200_000;
 
@@ -88,13 +90,13 @@ export const wpPages: StageDefinition = {
     };
 
     // Step 1: robots.txt and the plain copy, a few pages at a time.
-    type Draft = Omit<Page, "state" | "reason" | "source" | "names"> & { blocked: string | null; plain: { snapshotId: string; text: string; title: string | null; words: number; status: number | null; finalUrl: string | null; fetchedAt: string } | null; plainError: string | null };
+    type Draft = Omit<Page, "state" | "reason" | "source" | "names" | "excerpt"> & { blocked: string | null; plain: { snapshotId: string; text: string; title: string | null; words: number; status: number | null; finalUrl: string | null; fetchedAt: string } | null; plainError: string | null };
     const drafts = await mapLimit(chosen, PLAIN_CONCURRENCY, async (p): Promise<Draft> => {
       const base = { key: p.key, url: p.url, site: p.site, category: p.category, title: p.title, prompts: p.prompts, answers: p.answers, engines: p.engines, attempts: [] as Page["attempts"] };
       const rule = permission(await robotsFor(p.url), p.url, OUR_ROBOTS_TOKEN);
       if (rule.verdict === "blocked") return { ...base, blocked: `The site's robots.txt asks checkers like ours not to fetch this page (${rule.reason.toLowerCase()}).`, plain: null, plainError: null };
       const res = await ctx.fetchUrl(p.url, { accept: "html" });
-      const ex = res.body && !res.error ? extractPage(res.body) : null;
+      const ex = res.body && !res.error ? extractPage(res.body, { wholeBody: true }) : null;
       const fetchedAt = new Date().toISOString();
       const snapshotId = await ctx.recordPageSnapshot({
         url: p.url,
@@ -124,16 +126,21 @@ export const wpPages: StageDefinition = {
     const earlier = await ctx.fullestRenderedSnapshots(drafts.filter((d) => !d.blocked && (!d.plain || d.plain.words < THIN_WORDS)).map((d) => d.url));
     const started = Date.now();
     const pages: Page[] = [];
+    const texts = new Map<string, string>();
     for (const d of drafts) {
       const { blocked, plain, plainError, ...rest } = d;
-      const done = (state: Page["state"], reason: string | null, source: Page["source"], text: string, title: string | null): Page => ({
-        ...rest,
-        title: title ?? rest.title,
-        state,
-        reason,
-        source,
-        names: state === "checked" ? namesOnPage({ title, text }, businesses) : [],
-      });
+      const done = (state: Page["state"], reason: string | null, source: Page["source"], text: string, title: string | null): Page => {
+        if (state === "checked") texts.set(d.key, text);
+        return {
+          ...rest,
+          title: title ?? rest.title,
+          state,
+          reason,
+          source,
+          excerpt: state === "checked" ? excerptOf(text) : null,
+          names: state === "checked" ? namesOnPage({ title, text }, businesses) : [],
+        };
+      };
       if (blocked) {
         pages.push(done("unchecked", blocked, null, "", null));
         continue;
@@ -153,7 +160,7 @@ export const wpPages: StageDefinition = {
       } else {
         try {
           const r = await ctx.renderUrl(d.url);
-          const ex = r.html && !r.error ? extractPage(r.html) : null;
+          const ex = r.html && !r.error ? extractPage(r.html, { wholeBody: true }) : null;
           const fetchedAt = new Date().toISOString();
           const snapshotId = await ctx.recordPageSnapshot({
             url: d.url,
@@ -185,6 +192,20 @@ export const wpPages: StageDefinition = {
       }
       const why = [plainError ? `our plain fetch failed (${plainError})` : plain ? `our plain copy had only ${plain.words} words` : null, browserError ? `our browser: ${browserError}` : browser ? `our browser copy had only ${browser.words} words` : null].filter(Boolean).join("; ");
       pages.push(done("unchecked", `We couldn't read this page: ${why}.`, null, "", null));
+    }
+
+    // Different pages of one site that gave us exactly the same text: we read a shared shell (a consent, block or
+    // loading page), not the pages themselves.
+    for (const p of pages) {
+      const t = texts.get(p.key);
+      if (p.state !== "checked" || t === undefined) continue;
+      const same = pages.filter((o) => o.site === p.site && o.url !== p.url && texts.get(o.key) === t);
+      if (!same.length) continue;
+      Object.assign(p, {
+        state: "unchecked",
+        reason: `We couldn't read this page: ${same.length + 1} different pages on ${p.site} gave us the same ${p.source?.words ?? 0} words, so we got a page shared across the site (often a consent, block or loading page), not this one.`,
+        names: [],
+      });
     }
 
     const out: CitedPages = {
