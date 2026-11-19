@@ -87,7 +87,9 @@ function namePattern(name: string): RegExp | null {
     return new RegExp(`(?<![\\p{L}\\p{N}])${esc(original)}(?![\\p{L}\\p{N}])`, "u");
   }
   const parts = words.map((w) => (w === "and" ? "(?:and|&)" : w.endsWith("s") && w.length > 2 ? `${esc(w.slice(0, -1))}['’]?s` : esc(w)));
-  return new RegExp(`(?<![\\p{L}\\p{N}])${parts.join("[^\\p{L}\\p{N}]+")}(?![\\p{L}\\p{N}])`, "iu");
+  // A name ending in a letter may run straight into a number when page elements join ("MVP Miami103 vehicles").
+  const end = /\p{L}$/u.test(words.at(-1)!) ? "(?!\\p{L})" : "(?![\\p{L}\\p{N}])";
+  return new RegExp(`(?<![\\p{L}\\p{N}])${parts.join("[^\\p{L}\\p{N}]+")}${end}`, "iu");
 }
 
 /** A short excerpt around a match, cut at word boundaries. */
