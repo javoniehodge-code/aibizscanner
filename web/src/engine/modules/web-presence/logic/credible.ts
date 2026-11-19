@@ -140,11 +140,23 @@ export function buildCredible(cp: CitedPages, as: AssessedPages, pa: PromptPages
   const listing = (r: Row) => (GET_ONTO as readonly string[]).includes(r.category);
   // Only pages the reading says recommend or rank other businesses: a page that merely mentions names (a party-venue
   // directory naming "Giggster") isn't a place customers choose a business from.
-  for (const r of read.filter((r) => listing(r) && !onPage(r) && r.reading!.recommendedInstead.length).slice(0, 2)) {
-    const names = r.reading!.recommendedInstead;
-    const already = mine.some((m) => m.site === r.site);
-    fixes.push({ title: already ? `Get onto more ${r.site} pages` : `Get onto ${r.site}`, text: `"${nonEmpty(r.title, r.site)}" is cited for ${plural(r.prompts, "prompt")} and features ${list(names.length > 3 ? [...names.slice(0, 3), plural(names.length - 3, "other")] : names)}, but not you.` });
+  // One fix per site, most-cited site first: its pages that feature others but not you, together.
+  const featuring = read.filter((r) => listing(r) && !onPage(r) && r.reading!.recommendedInstead.length);
+  for (const site of [...new Set(featuring.map((r) => r.site))].slice(0, 2)) {
+    const ps = featuring.filter((r) => r.site === site);
+    const counts = new Map<string, number>();
+    for (const r of ps) for (const n of new Set(r.reading!.recommendedInstead)) counts.set(n, (counts.get(n) ?? 0) + 1);
+    const names = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([n]) => n); // most-featured first, then page order
+    const shown = list(names.length > 3 ? [...names.slice(0, 3), plural(names.length - 3, "other")] : names);
+    const prompts = new Set(usable.filter((a) => ps.some((r) => a.cites.has(r.key))).map((a) => a.prompt)).size;
+    const title = mine.some((m) => m.site === site) ? `Get onto more ${site} pages` : `Get onto ${site}`;
+    const text =
+      ps.length === 1
+        ? `"${nonEmpty(ps[0]!.title, site)}" is cited for ${plural(prompts, "prompt")} and features ${shown}, but not you.`
+        : `${ps.length} of its pages, cited for ${plural(prompts, "prompt")}, feature ${shown}, but not you: ${list(ps.map((r) => `"${nonEmpty(r.title, site)}"`))}.`;
+    fixes.push({ title, text });
   }
+
   for (const r of mine.filter((r) => r.reading!.presence === "list").slice(0, 1)) {
     fixes.push({ title: `Give ${r.site} a reason to recommend you`, text: `"${nonEmpty(r.title, r.site)}" names you but gives no reason to choose you. Ask for your listing or mention to say what sets you apart.` });
   }
