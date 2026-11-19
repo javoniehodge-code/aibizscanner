@@ -6,7 +6,7 @@ test("admin adds a business, sees validation errors, then edits it", async ({ pa
   const name = `E2E Movers ${Date.now()}`;
   await signIn(page, ADMIN.email, ADMIN.password, "/login?next=/businesses/new");
   await expect(page.getByRole("heading", { name: "Add business" })).toBeVisible();
-  await expect(page.getByTestId("identity-check-placeholder")).toContainText("Milestone 2");
+  await expect(page.getByText("After saving, open the business to find and confirm its Google listing.")).toBeVisible();
 
   // Server-side validation: required fields and a bad website; entered values are kept.
   await page.getByLabel("Business name *").fill(name);
@@ -32,6 +32,9 @@ test("admin adds a business, sees validation errors, then edits it", async ({ pa
 
   await row.getByRole("link", { name: "Edit" }).click();
   await expect(page.getByLabel("Other domains")).toHaveValue("e2e-movers.example.com\ne2e-storage.example.com");
+  // No Google key in CI: the listing panel says so and makes no call.
+  await expect(page.getByTestId("google-listing")).toContainText("Not confirmed yet");
+  await expect(page.getByTestId("google-listing")).toContainText("The Google Places key isn't set");
   await page.getByLabel("Service area").fill("New York City");
   await page.getByRole("button", { name: "Save changes" }).click();
   await expect(page).toHaveURL(/\/businesses\?saved=/);

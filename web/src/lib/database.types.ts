@@ -21,14 +21,14 @@ export type Database = {
                   ]
                 },"business": {
                   Row: {
-                    "aliases": (string)[],"category": string,"created_at": string,"created_by": string | null,"customer_types": (string)[],"domains": (string)[],"id": string,"location": string,"name": string,"place_id": string | null,"service_area": string | null,"services": (string)[],"updated_at": string,"website": string | null
+                    "aliases": (string)[],"category": string,"created_at": string,"created_by": string | null,"customer_types": (string)[],"domains": (string)[],"id": string,"location": string,"name": string,"place_id": string | null,"place_id_confirmed_at": string | null,"service_area": string | null,"services": (string)[],"updated_at": string,"website": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "aliases"?: (string)[],"category": string,"created_at"?: string,"created_by"?: string | null,"customer_types"?: (string)[],"domains"?: (string)[],"id"?: string,"location": string,"name": string,"place_id"?: string | null,"service_area"?: string | null,"services"?: (string)[],"updated_at"?: string,"website"?: string | null
+                    "aliases"?: (string)[],"category": string,"created_at"?: string,"created_by"?: string | null,"customer_types"?: (string)[],"domains"?: (string)[],"id"?: string,"location": string,"name": string,"place_id"?: string | null,"place_id_confirmed_at"?: string | null,"service_area"?: string | null,"services"?: (string)[],"updated_at"?: string,"website"?: string | null
                   }
                   Update: {
-                    "aliases"?: (string)[],"category"?: string,"created_at"?: string,"created_by"?: string | null,"customer_types"?: (string)[],"domains"?: (string)[],"id"?: string,"location"?: string,"name"?: string,"place_id"?: string | null,"service_area"?: string | null,"services"?: (string)[],"updated_at"?: string,"website"?: string | null
+                    "aliases"?: (string)[],"category"?: string,"created_at"?: string,"created_by"?: string | null,"customer_types"?: (string)[],"domains"?: (string)[],"id"?: string,"location"?: string,"name"?: string,"place_id"?: string | null,"place_id_confirmed_at"?: string | null,"service_area"?: string | null,"services"?: (string)[],"updated_at"?: string,"website"?: string | null
                   }
                   Relationships: [
                     
