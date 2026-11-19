@@ -40,3 +40,41 @@ export const citedPages = z
   })
   .strict();
 export type CitedPages = z.infer<typeof citedPages>;
+
+const cell = z.object({ status: z.enum(["P", "L", "N", "A", "U"]), says: z.string(), quote: z.string().nullable(), issue: z.string().nullable(), action: z.string().nullable() }).strict();
+
+/** wp_assess: the model's reading of each checked page, after the plain-code checks (logic/assess.ts). */
+export const assessedPages = z
+  .object({
+    version: z.string(),
+    model: z.string(),
+    /** The wp_pages run these readings belong to (the report part uses them only with that run). */
+    fromRun: z.string(),
+    pages: z.array(
+      z
+        .object({
+          key: z.string(),
+          /** Our copy was cut to this many words for the reading (null: the whole copy). */
+          cutAt: z.number().int().nullable(),
+          reading: z
+            .object({
+              presence: z.enum(["rec", "rev", "list", "mixed", "none"]),
+              detail: z.string(),
+              supports: z.string(),
+              reasons: z.array(z.object({ reason: z.string(), quote: z.string() }).strict()),
+              concerns: z.array(z.object({ concern: z.string(), quote: z.string() }).strict()),
+              recommendedInstead: z.array(z.string()),
+              columns: z.object({ details: cell, services: cell, fit: cell, reviews: cell, recommendations: cell, locations: cell }).strict(),
+              review: z.object({ rating: z.string(), scale: z.number().positive().nullable(), count: z.string().nullable(), recent: z.string().nullable(), themes: z.string(), quote: z.string() }).strict().nullable(),
+              overruled: z.array(z.string()),
+            })
+            .strict()
+            .nullable(),
+          /** Why there is no reading (the model call failed, or the spending cap was reached). */
+          error: z.string().nullable(),
+        })
+        .strict(),
+    ),
+  })
+  .strict();
+export type AssessedPages = z.infer<typeof assessedPages>;

@@ -1,37 +1,55 @@
 import { z } from "zod";
-import { citationCoverageSection, evidenceEntry } from "@/report/schema";
+import { citationCoverageSection, copyEntry, credibleSection, evidenceEntry, webPresenceRows } from "@/report/schema";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
+import { assembledSection } from "../prompt-analysis/stages";
+import { assessedEvidence, buildCredible, buildWebPresence, credibleCopy } from "./logic/credible";
 import { buildCitationCoverage, citedPagesEvidence } from "./logic/section";
-import { citedPages } from "./schemas";
+import { assessedPages, citedPages } from "./schemas";
 
-/** wp_section: the report's web presence parts built so far, with their evidence (read by report_assemble). */
+/** wp_section: the report's web presence parts built so far, with their evidence and copy (read by report_assemble). */
 export const webPresenceSection = z
   .object({
     citationCoverage: citationCoverageSection,
+    /** Absent until the cited pages have been read (wp_assess). */
+    credible: credibleSection.nullable().optional(),
+    webPresence: webPresenceRows.nullable().optional(),
     evidence: z.record(z.string(), evidenceEntry),
+    copy: z.object({ credibleFoot: copyEntry, citedPagesTitle: copyEntry, citedPagesIntro: copyEntry }).strict().optional(),
   })
   .strict();
 export type WebPresenceSection = z.infer<typeof webPresenceSection>;
 
 function input<T>(ctx: StageContext, stage: string, schema: z.ZodType<T>) {
   const i = ctx.inputs[stage];
-  if (!i) throw new Error(`Missing input ${stage}`);
+  if (!i) return null;
   return { ...schema.parse(i.output), runId: i.runId, finishedAt: i.finishedAt ?? new Date().toISOString() };
 }
 
 export const wpSection: StageDefinition = {
   id: "wp_section",
   module: "web-presence",
-  label: "Web presence 2/2: build the report's web presence parts",
-  inputs: ["wp_pages"],
+  label: "Web presence 3/3: build the report's web presence parts",
+  inputs: ["wp_pages", "pa_assemble"],
+  /** The page readings, when they have run. */
+  optionalInputs: ["wp_assess"],
   timeoutMs: 20_000,
   maxAttempts: 1,
   autoRun: true,
   parseParams: () => ({}),
   output: webPresenceSection,
   async run(ctx) {
-    const cp = input(ctx, "wp_pages", citedPages);
-    const out: WebPresenceSection = { citationCoverage: buildCitationCoverage(cp), evidence: citedPagesEvidence(cp) };
+    const cp = input(ctx, "wp_pages", citedPages)!;
+    const pa = input(ctx, "pa_assemble", assembledSection)!;
+    // Readings of an earlier wp_pages run don't describe these pages: wait for wp_assess to read this run.
+    const read = input(ctx, "wp_assess", assessedPages);
+    const as = read && read.fromRun === cp.runId ? read : null;
+    const out: WebPresenceSection = {
+      citationCoverage: buildCitationCoverage(cp),
+      credible: as ? buildCredible(cp, as, pa.section, pa.business.name) : null,
+      webPresence: as ? buildWebPresence(cp, as) : null,
+      evidence: { ...citedPagesEvidence(cp), ...(as ? assessedEvidence(as) : {}) },
+      ...(as ? { copy: credibleCopy(cp, as) } : {}),
+    };
     return { status: "done", output: out as unknown as JsonValue };
   },
 };

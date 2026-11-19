@@ -4892,7 +4892,8 @@
                           "rev",
                           "list",
                           "mixed",
-                          "none"
+                          "none",
+                          "unchecked"
                         ]
                       },
                       "detail": {
