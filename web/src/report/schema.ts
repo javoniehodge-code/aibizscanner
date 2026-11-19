@@ -210,8 +210,11 @@ const citationCoverage = z
     sites: z.array(val(z.object({ name: nonEmpty, type: nonEmpty, pageKeys: z.array(pageKey).min(1), presentBusinesses: z.array(businessKey) }).strict())),
     /** Businesses shown as columns (target first is enforced by the template). */
     businesses: val(z.array(businessKey).min(1)),
+    /** Pipeline reports: which pages were checked and what a blank means (absent in fixtures). */
+    scope: val(nonEmpty).optional(),
   })
   .strict();
+export const citationCoverageSection = citationCoverage;
 
 const wpmMark = z.enum(["P", "L", "C", "N", "U", "A"]);
 const wpmDetail = z.object({ says: nonEmpty, excerpt: z.string(), url: z.string(), issue: z.string(), action: z.string() }).strict();

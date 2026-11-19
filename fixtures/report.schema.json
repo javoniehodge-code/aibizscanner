@@ -2652,6 +2652,23 @@
                 "p"
               ],
               "additionalProperties": false
+            },
+            "scope": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
