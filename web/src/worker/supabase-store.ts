@@ -2,6 +2,7 @@ import "server-only";
 import type { Json, Tables } from "@/lib/database.types";
 import type { ServiceClient } from "@/lib/supabase/service";
 import type { AnswerEvidence, ClaimedRun, InstructionRef, JsonObject, JsonValue, Pricing, RunStore, SourceClassificationRecord, StageInput } from "@/engine";
+import { withoutNul } from "@/engine/modules/website/logic/extract";
 
 function check<T>(res: { data: T; error: { message: string } | null }, what: string): T {
   if (res.error) throw new Error(`${what}: ${res.error.message}`);
@@ -163,7 +164,9 @@ export function supabaseRunStore(db: ServiceClient): RunStore {
         "record page snapshot",
       );
       if (r.html !== null || r.text !== null) {
-        check(await db.from("page_snapshot_body").insert({ snapshot_id: row.id, html: r.html, text: r.text }), "record page snapshot body");
+        // Postgres text refuses null characters; some pages contain them (the hashes are of what we received).
+        const clean = (x: string | null) => (x === null ? null : withoutNul(x));
+        check(await db.from("page_snapshot_body").insert({ snapshot_id: row.id, html: clean(r.html), text: clean(r.text) }), "record page snapshot body");
       }
       return row.id;
     },

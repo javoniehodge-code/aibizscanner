@@ -58,6 +58,8 @@ function visibleText(root: HTMLElement, whole = false): string {
  * <main>/<article>. The cited-page check uses it: a listing or article can name businesses outside the main element.
  */
 export function extractPage(html: string, opts: { wholeBody?: boolean } = {}): PageExtract {
+  // A null character can't be stored in Postgres text or jsonb, and is never visible text: drop it before reading.
+  html = withoutNul(html);
   const root = parse(html, { comment: false, blockTextElements: { script: true, style: true, noscript: true, pre: true } });
   const meta = (name: string) => clean(root.querySelector(`meta[name="${name}"]`)?.getAttribute("content")) || null;
   const jsonLd = root.querySelectorAll('script[type="application/ld+json"]').map((s) => {
@@ -86,6 +88,9 @@ export function extractPage(html: string, opts: { wholeBody?: boolean } = {}): P
     microdataTypes: [...new Set(root.querySelectorAll("[itemtype]").map((n) => clean(n.getAttribute("itemtype"))).filter(Boolean))],
   };
 }
+
+/** The text without null characters (Postgres text and jsonb refuse them; some pages contain them). */
+export const withoutNul = (s: string) => (s.includes("\u0000") ? s.replace(/\u0000/g, "") : s);
 
 /** Links on a page: absolute http(s) URLs without fragments, and whether each sits in navigation (nav/header/footer). */
 export function extractLinks(html: string, baseUrl: string): { url: string; text: string; inNav: boolean }[] {

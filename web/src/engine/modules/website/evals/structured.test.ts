@@ -94,3 +94,12 @@ describe("ws_structured stage", () => {
     expect(sc.facts.map((f) => [f.fact, f.mark])).toEqual([["Business name", "g"], ["Phone", "g"], ["Hours", "g"]]);
   });
 });
+
+describe("pages with null characters", () => {
+  it("drops them before reading, so the text and title can be stored (Postgres refuses them)", () => {
+    const ex = extractPage('<html><head><title>Miami\u0000 Yachts</title></head><body><main><p>Charter\u0000 a yacht today.</p><script type="application/ld+json">{"name":"A\u0000B"}</script></main></body></html>');
+    expect(ex.title).toBe("Miami Yachts");
+    expect(ex.text).toContain("Charter a yacht today.");
+    expect(JSON.stringify(ex)).not.toContain("\\u0000");
+  });
+});
