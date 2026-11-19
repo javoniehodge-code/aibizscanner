@@ -263,6 +263,23 @@ describe("first MVP Miami run (19 Nov 2026)", () => {
     expect(cr.fixes[0]!.v.text).toBe('"lists" is cited for 1 prompt and features A Cars, B Cars, C Cars and 2 others, but not you.');
   });
 
+  it("gives one fix per site, with all its pages that feature others", async () => {
+    const { buildCredible } = await import("../logic/credible");
+    const cols = { status: "N", says: "", quote: null, issue: null, action: null };
+    const page = (key: string, title: string) => ({ key, url: `https://rmr.com/${key}`, site: "rmr.com", category: "ed", title, prompts: 1, answers: 1, engines: [0], state: "checked", reason: null,
+      source: { mode: "plain", snapshotId: key, status: 200, finalUrl: null, fetchedAt: "x", words: 900 }, excerpt: null, attempts: [], names: [] });
+    const rd = (inst: string[]) => ({ presence: "none", detail: "d", supports: "s", reasons: [], concerns: [], recommendedInstead: inst, review: null, overruled: [], columns: { details: cols, services: cols, fit: cols, reviews: cols, recommendations: cols, locations: cols } });
+    const cp = { version: "x", cap: 20, outsidePages: 2, businesses: [{ key: "MM", name: "MVP Miami", target: true }], pages: [page("a", "Best 2023"), page("b", "Best 2025")] };
+    const as = { version: "x", model: "m", fromRun: "r", pages: [{ key: "a", cutAt: null, error: null, reading: rd(["RealCar", "Prestige", "mph club", "Lou La Vie"]) }, { key: "b", cutAt: null, error: null, reading: rd(["Prestige", "mph club", "BluStreet"]) }] };
+    const pa = { pages: [{ v: { key: "a", category: "ed" } }, { v: { key: "b", category: "ed" } }], questions: [
+      { question: { v: { id: "P1", text: "q1" } }, answers: [{ v: { status: "ok", citations: ["a", "b"] } }, { v: { status: "ok", citations: ["a"] } }] },
+      { question: { v: { id: "P2", text: "q2" } }, answers: [{ v: { status: "ok", citations: ["b"] } }] },
+    ] };
+    const cr = buildCredible(cp as never, as as never, pa, "MVP Miami");
+    // Two prompts in all (q1 cites both pages but counts once); names most-featured first.
+    expect(cr.fixes.map((f) => [f.v.title, f.v.text])).toEqual([["Get onto rmr.com", '2 of its pages, cited for 2 prompts, feature Prestige, mph club, RealCar and 2 others, but not you: "Best 2023" and "Best 2025".']]);
+  });
+
   it("suggests getting onto listing, review and editorial sites only, and doesn't say on and not on for one site", async () => {
     const { buildCredible } = await import("../logic/credible");
     const pg = (key: string, site: string, category: string, names: string[]) => ({
