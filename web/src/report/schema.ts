@@ -202,8 +202,14 @@ const competitors = z
     reasons: three(val(z.array(z.object({ title: nonEmpty, detail: nonEmpty }).strict()))),
     concerns: three(val(z.array(z.object({ title: nonEmpty, detail: nonEmpty }).strict()))),
     cards: z.array(val(z.object({ kind: nonEmpty, heading: nonEmpty, text: nonEmpty, link: nonEmpty, target: slideTarget, dark: z.boolean() }).strict())),
+    /**
+     * Pipeline reports with service lines: the compared line's questions. The template's "Recommended by AI" row then
+     * counts only those answers, like the rest of the comparison. Absent: every answer (fixtures).
+     */
+    questions: val(z.array(z.string().regex(/^P\d+$/)).min(1)).optional(),
   })
   .strict();
+export const competitorsPart = competitors;
 
 const coverageMap = z
   .object({

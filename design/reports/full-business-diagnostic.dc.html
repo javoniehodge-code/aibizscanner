@@ -2139,7 +2139,8 @@ class PromptPart extends Sub {
         return { rows, has: rows.length > 0, missing: MISSING.xsrc, missingReason: missingReason(REPORT_RAW.promptAnalysis.uncitedSources), assumeNote: gem ? 'Assumption: for local businesses we treat every Gemini answer as drawing on Google Maps and Business Profile data, even when Gemini doesn\u2019t cite it. Google doesn\u2019t show this per answer, and leaving it out would understate Google\u2019s influence.' : '', hasNote: gem };
       })(),
       comp: (() => {
-        const us = OBS.filter(o => o.usable), N = us.length, rc = id => us.filter(o => o.names.some(x => x.id === id && x.st === 'R')).length;
+        // Pipeline reports compare one service line: count only its answers (competitors.questions).
+        const QC = R.competitors.questions, us = OBS.filter(o => o.usable && (!QC || QC.includes(o.p.id))), N = us.length, rc = id => us.filter(o => o.names.some(x => x.id === id && x.st === 'R')).length;
         const others = Object.keys(B).filter(k => k !== TARGET).sort((a, b) => rc(b) - rc(a));
         const IDS = [TARGET, ...R.competitors.compared], REC = IDS.map(rc), best = Math.max(...REC);
         const ACC = 'oklch(0.45 0.22 265)', TINT = 'oklch(0.97 0.012 265)', GRN = 'oklch(0.55 0.15 150)', RD = 'oklch(0.55 0.19 25)';
@@ -2147,7 +2148,7 @@ class PromptPart extends Sub {
         const ss = k => { const b = { width: 20, height: 20, borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, lineHeight: 1, boxSizing: 'border-box', flex: 'none', marginTop: 1 };
           return k === 'g' ? { ...b, background: GRN, color: '#fff' } : k === 'r' ? { ...b, background: '#fff', color: '#000', border: '2px solid ' + RD } : { ...b, background: '#fff', color: '#000', border: '2px solid #000' }; };
         const ROWS = [
-          ['Recommended by AI', 'Across all ' + N + ' AI answers', REC.map(v => v + ' of ' + N + '|' + Math.round(v / N * 100) + '% of answers|' + (v === best ? 'g' : '')), true],
+          ['Recommended by AI', QC ? 'Across the ' + N + ' AI answers compared' : 'Across all ' + N + ' AI answers', REC.map(v => v + ' of ' + N + '|' + Math.round(v / N * 100) + '% of answers|' + (v === best ? 'g' : '')), true],
           ...R.competitors.rows.map(r => [r.name, r.sub, r.cells.map(c => c.value + '|' + c.sub + '|' + (c.mark || ''))])
         ];
         const cols = 'minmax(150px,0.8fr) repeat(3,minmax(170px,1fr))', grid = { display: 'grid', gridTemplateColumns: cols, gap: 8, alignItems: 'stretch', borderBottom: '1px solid oklch(0.92 0.006 265)' };

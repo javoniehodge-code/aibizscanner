@@ -115,3 +115,26 @@ export async function saveServiceLines(_prev: LinesState, form: FormData): Promi
   revalidatePath(`/reports/${reportId}`, "layout");
   return { errors: [], saved: true };
 }
+
+/**
+ * Chooses the two competitors to compare (or, left empty, goes back to the two AI recommends most) by queueing
+ * cp_choice; its new run queues the comparison again (cp_pages reads it).
+ */
+export async function saveCompetitors(_prev: LinesState, form: FormData): Promise<LinesState> {
+  await requireAdmin();
+  const reportId = z.uuid().parse(form.get("reportId"));
+  const names = text(form, "competitors")
+    .split(/\n|,/)
+    .map((n) => n.trim())
+    .filter(Boolean);
+  if (names.length !== 0 && names.length !== 2) return { errors: ["Give two names separated by a comma, or leave it empty for the automatic choice."] };
+  const db = await createClient();
+  try {
+    await enqueueStage(db, reportId, "cp_choice", { names });
+  } catch (e) {
+    if (e instanceof EnqueueError) return { errors: [e.message] };
+    throw e;
+  }
+  revalidatePath(`/reports/${reportId}`, "layout");
+  return { errors: [], saved: true };
+}

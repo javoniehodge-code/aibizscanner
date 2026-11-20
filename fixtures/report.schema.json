@@ -2559,6 +2559,27 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            "questions": {
+              "type": "object",
+              "properties": {
+                "v": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^P\\d+$"
+                  }
+                },
+                "p": {
+                  "$ref": "#/$defs/PresentProvenance"
+                }
+              },
+              "required": [
+                "v",
+                "p"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [

@@ -60,7 +60,7 @@ function keyOf(kind: Kind, v: CheckedValue): string {
   }
 }
 /** Distinct values, as shown: up to three, then "and N more". */
-function listed(kind: Kind, vs: readonly CheckedValue[]): string {
+export function listed(kind: Kind, vs: readonly CheckedValue[]): string {
   const seen = new Map<string, string>();
   for (const v of vs) if (!seen.has(keyOf(kind, v))) seen.set(keyOf(kind, v), shown(kind, v));
   // One range read as two amounts ("$1,000 – $7,000") is shown once.

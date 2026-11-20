@@ -130,14 +130,16 @@ const siteLabel = (site: string) => site.toLowerCase().replace(/^www\./, "").rep
  */
 export function ownSiteOf(site: string, businesses: readonly NamedBusiness[]): string | null {
   const label = siteLabel(site);
-  if (label.length < 6) return null;
+  // Some names run into the domain ending: octane.rent for Octane Rent, luxx.miami for Luxx Miami.
+  const whole = site.toLowerCase().replace(/^www\./, "").replace(/[^a-z0-9]/g, "");
+  if (label.length < 6 && whole.length < 8) return null;
   for (const b of businesses) {
     // The name as normalised ("Red Hook Moving Co." -> red hook moving) and as written (red hook moving co).
     const spellings = [normalizeName(b.name), fold(b.name).toLowerCase().replace(/&/g, " and ").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, " ")].map((n) => n.split(" ").filter(Boolean));
     for (const words of spellings) {
       const forms = [words.join("")];
       if (words.length >= 3) words.forEach((_, i) => forms.push(words.filter((__, j) => j !== i).join("")));
-      if (forms.includes(label)) return b.key;
+      if ((label.length >= 6 && forms.includes(label)) || forms.includes(whole)) return b.key;
     }
   }
   return null;

@@ -1,3 +1,4 @@
+import type { CompetitorSection } from "../../competitors/stages";
 import { COPY_KEYS, SCHEMA_VERSION, SECTIONS, type ReportDocument } from "@/report/schema";
 import type { BuiltSection } from "../../prompt-analysis/logic/section";
 import type { WebPresenceSection } from "../../web-presence/section-stage";
@@ -15,7 +16,7 @@ export function formatDay(iso: string): string {
 }
 
 /** The parts of the report built so far, in report order. */
-function producedSoFar(website: WebsiteSection | null, web: WebPresenceSection | null): string {
+function producedSoFar(website: WebsiteSection | null, web: WebPresenceSection | null, comp: CompetitorSection | null = null): string {
   const parts = [
     "AI Recommendations",
     website && "Find & read",
@@ -24,6 +25,8 @@ function producedSoFar(website: WebsiteSection | null, web: WebPresenceSection |
     website?.distinctive && "Distinctive",
     web && "Citation coverage",
     web?.credible && "Credible & corroborated",
+    web?.consistent && "Consistent & current",
+    comp?.competitors && "Competitor comparison",
   ].filter(Boolean) as string[];
   return parts.length === 1 ? "Only the AI Recommendation section has been produced for this report" : `Produced so far: ${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}`;
 }
@@ -37,7 +40,7 @@ const missing = (reason: string) => ({ v: null, p: { kind: "missing" as const, r
  * code from the assembled promptAnalysis section. Every section whose stages don't exist yet is null, so the template
  * leaves its slides out; copy for those slides is marked missing. Nothing here is written by a model or invented.
  */
-export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | null = null, web: WebPresenceSection | null = null): ReportDocument {
+export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | null = null, web: WebPresenceSection | null = null, comp: CompetitorSection | null = null): ReportDocument {
   const s = pa.section;
   const runEvidence = [0, 1, 2].map(runEvidenceId).filter((id) => pa.evidence[id]);
   // The run date is the first day an answer was collected (falls back to the prompt set's approval day).
@@ -63,16 +66,17 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
   copy.groupLegend = observed(s.groups.map((g) => `${g.v.name}: ${g.v.description}`).join(" · "), [PROMPT_SET_EVIDENCE]);
   copy.promptReportDetails = observed(promptDetails, [PROMPT_SET_EVIDENCE, ...runEv]);
   copy.reportDetails = observed(
-    `${pa.business.name} · ${promptDetails} · ${producedSoFar(website, web)}`,
+    `${pa.business.name} · ${promptDetails} · ${producedSoFar(website, web, comp)}`,
     [PROMPT_SET_EVIDENCE, ...runEv],
   );
 
   if (website) Object.assign(copy, website.copy);
   if (web?.copy) Object.assign(copy, web.copy);
+  if (comp?.competitors) Object.assign(copy, comp.copy);
 
   const doc = {
     schemaVersion: SCHEMA_VERSION,
-    evidence: { ...pa.evidence, ...(website?.evidence ?? {}), ...(web?.evidence ?? {}) },
+    evidence: { ...pa.evidence, ...(website?.evidence ?? {}), ...(web?.evidence ?? {}), ...(comp?.competitors ? comp.evidence : {}) },
     meta: observed({ runDate, language: "English" }, runEv),
     business: observed(pa.business, [PROMPT_SET_EVIDENCE]),
     engines: pa.engines.map((e, i) => observed(e, pa.evidence[runEvidenceId(i)] ? [runEvidenceId(i)] : [PROMPT_SET_EVIDENCE])),
@@ -80,6 +84,7 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
     promptAnalysis: s,
     ...Object.fromEntries(SECTIONS.map((k) => [k, null])),
     citationCoverage: web?.citationCoverage ?? null,
+    competitors: comp?.competitors ?? null,
     credible: web?.credible ?? null,
     webPresence: web?.webPresence ?? null,
     // The website parts built so far; the others stay null until their stages exist.
