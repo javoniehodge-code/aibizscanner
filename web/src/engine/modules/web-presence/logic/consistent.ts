@@ -110,11 +110,44 @@ export function websiteValuesEvidence(w: ConsistentInput["website"]) {
   return { [WEBSITE_VALUES_EVIDENCE]: { source: `Our reading of your website's facts (${w.model ?? "no model call"}), every value found on the page`, ref: `stage_run ${w.runId}`, capturedOn: w.finishedAt.slice(0, 10) } };
 }
 
+const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
+/** Shared wording (also used when Google's listing is added as the report is opened, report/google-live.ts). */
+export const meansOf = (status: "a" | "c", agreeing: number, factName: string) =>
+  status === "a" ? `${plural(agreeing, "other source says", "other sources say")} the same as your website, so AI finds one consistent answer.` : `Sources disagree, so AI may repeat the wrong ${lower(factName)}.`;
+export function verdictOf(compared: number, differ: number, against: string) {
+  const n = compared;
+  if (!n) return { heading: "No fact could be compared yet", text: `We compared your website with ${against}. None of them gives the facts your website gives, so there's nothing to compare yet.` };
+  return differ
+    ? { heading: `${differ} of ${plural(n, "fact")} we could compare ${differ === 1 ? "doesn't" : "don't"} agree`, text: `We compared your website with ${against}. Where sources disagree, AI may repeat the wrong detail; the fixes below say where to correct it.` }
+    : { heading: n === 1 ? "The one fact we could compare agrees" : n === 2 ? "Both facts we could compare agree" : `All ${n} facts we could compare agree`, text: `We compared your website with ${against}. Nothing they say contradicts your website.` };
+}
+export const sitesPhrase = (n: number) => (n ? `${plural(n, "outside site")} AI cited that name you` : "the outside sites AI cited");
+export const fixOf = (factName: string, where: string, says: string, website: string) => ({
+  title: `Correct the ${lower(factName)} on ${where}`,
+  where: `${where} says ${says}; your website says ${website}. If your website is out of date, correct it first.`,
+  why: "AI can repeat whichever version it finds. One matching answer everywhere makes the detail safe to repeat.",
+});
+/** Which column of the web presence map a fact belongs to (Business details, Services, …, Locations). */
+export const MAP_COLUMN: Record<string, number> = { "booking-contact": 0, requirements: 0, "deposit-payment": 0, cancellation: 0, vehicles: 1, prices: 1, chauffeur: 1, "other-services": 1, "delivery-locations": 5, location: 5 };
+
+/** Sites whose values differ from the website, per fact (for "Conflict" marks in the web presence map). */
+export type SiteConflict = { site: string; fact: string; factName: string; says: string; website: string };
+
 /**
- * The Consistent & current part, or null when no outside site we read gives any compared fact about the business
- * (the slide is then left out).
+ * The Consistent & current part, or null when no outside site we read gives a compared fact about the business and
+ * the website gives no phone or address to compare with Google's listing (the slide is then left out).
+ * `conflicts` lists each site and fact that doesn't agree, for the web presence map.
  */
 export function buildConsistent(input: ConsistentInput, evidence: string[]) {
+  return compareAll(input, evidence)?.section ?? null;
+}
+
+/** The sites and facts that don't agree with the website (for the web presence map). */
+export function consistentConflicts(input: ConsistentInput): SiteConflict[] {
+  return compareAll(input, [])?.conflicts ?? [];
+}
+
+function compareAll(input: ConsistentInput, evidence: string[]) {
   const comparable = COMPARABLE[input.standard.id] ?? {};
   const facts = input.standard.facts.filter((f) => comparable[f.id]);
   const ob = <T>(v: T) => observed(v, evidence);
@@ -129,7 +162,13 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
     bySite.set(p.site, s);
   }
   const sites = [...bySite.entries()].filter(([, s]) => s.values.length).sort((a, b) => b[1].values.length - a[1].values.length || a[0].localeCompare(b[0])).slice(0, MAX_SOURCES);
-  if (!sites.length) return null;
+  // The website's phone numbers and address, kept so Google's listing can be compared when the report is opened.
+  const liveCompare = facts.flatMap((f) => {
+    const kind = comparable[f.id]!.kind;
+    const web = input.website.values.filter((v) => v.fact === f.id);
+    return (kind === "phone" || kind === "address") && web.length ? [ob({ name: f.name, kind, website: [...new Set(web.map((v) => v.value))] })] : [];
+  });
+  if (!sites.length && !liveCompare.length) return null;
 
   const pageName = new Map(input.website.pages.map((p) => [p.ref, p.name] as const));
   const rows: { fact: (typeof facts)[number]; web: CheckedValue[]; cells: Cell[] }[] = facts.map((f) => {
@@ -145,7 +184,6 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
   const webText = (r: (typeof rows)[number]) => listed(comparable[r.fact.id]!.kind, r.web);
   const differences = (r: (typeof rows)[number]) =>
     r.cells.flatMap((c, i) => (c.mark === "r" ? [{ site: sites[i]![0], says: listed(comparable[r.fact.id]!.kind, c.differs) }] : []));
-  const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
   const factRows = compared.map((r) => {
     const st = statusOf(r.cells)!;
@@ -156,10 +194,7 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
       website: { value: webText(r), pages: [...new Set(r.web.map((v) => pageName.get(v.ref ?? "") ?? v.ref ?? ""))].filter(Boolean).join(", ") || null, issue: null },
       sources: r.cells.map((c) => ({ text: c.text, mark: c.mark })),
       status: st,
-      means:
-        st === "a"
-          ? `${plural(agreeing, "other source says", "other sources say")} the same as your website, so AI finds one consistent answer.`
-          : `Sources disagree, so AI may repeat the wrong ${lower(r.fact.name)}.`,
+      means: meansOf(st, agreeing, r.fact.name),
       note: diffs.length ? diffs.map((d) => `${d.site} says ${d.says}; your website says ${webText(r)}.`).join(" ") : null,
     });
   });
@@ -181,25 +216,16 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
     .sort((a, b) => (a.fact.bucket === b.fact.bucket ? 0 : a.fact.bucket === "core" ? -1 : 1))
     .flatMap((r) => differences(r).map((d) => ({ r, d })))
     .slice(0, MAX_FIXES)
-    .map(({ r, d }) =>
-      ob({
-        title: `Correct the ${lower(r.fact.name)} on ${d.site}`,
-        where: `${d.site} says ${d.says}; your website says ${webText(r)}. If your website is out of date, correct it first.`,
-        why: "AI can repeat whichever version it finds. One matching answer everywhere makes the detail safe to repeat.",
-      }),
-    );
+    .map(({ r, d }) => ob(fixOf(r.fact.name, d.site, d.says, webText(r))));
 
-  const n = compared.length;
-  return {
+  const conflicts: SiteConflict[] = compared.flatMap((r) => differences(r).map((d) => ({ site: d.site, fact: r.fact.id, factName: r.fact.name, says: d.says, website: webText(r) })));
+  const section = {
     intro: ob("We compare the facts on your website with what the outside pages AI cited say about you. Each fact either agrees or doesn't."),
-    verdict: ob(
-      differ
-        ? { heading: `${differ} of ${plural(n, "fact")} we could compare ${differ === 1 ? "doesn't" : "don't"} agree`, text: `We compared your website with ${plural(sites.length, "outside site")} AI cited that name you. Where sources disagree, AI may repeat the wrong detail; the fixes below say where to correct it.` }
-        : { heading: n === 1 ? "The one fact we could compare agrees" : n === 2 ? "Both facts we could compare agree" : `All ${n} facts we could compare agree`, text: `We compared your website with ${plural(sites.length, "outside site")} AI cited that name you. Nothing they say contradicts your website.` },
-    ),
+    verdict: ob(verdictOf(compared.length, differ, sitesPhrase(sites.length))),
     sources: sites.map(([name, s]) => ob({ name, sub: s.type })),
     facts: factRows,
     notMentioned,
+    liveCompare,
     fixes,
     rules: [
       { k: "Agree", v: "At least one other source says the same as your website, and none says something different." },
@@ -209,4 +235,32 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
       { k: "How values are read", v: "A model reads each value off the page; we keep it only when its exact words are on the page and contain the value. Every comparison and count is plain code." },
     ].map(ob),
   };
+  return { section, conflicts };
+}
+
+type MapRow = { v: { domain: string; marks: string[]; details: Record<string, { says: string; excerpt: string; url: string; issue: string; action: string }> } };
+/**
+ * "Conflict" (C) in the web presence map where a site's value doesn't agree with the website, in the fact's column
+ * (contact and terms under Business details, vehicles and prices under Services, the address under Locations).
+ */
+export function markConflicts<R extends MapRow>(rows: readonly R[], conflicts: readonly SiteConflict[]): R[] {
+  return rows.map((row) => {
+    const mine = conflicts.filter((c) => c.site === row.v.domain && MAP_COLUMN[c.fact] !== undefined);
+    if (!mine.length) return row;
+    const marks = [...row.v.marks];
+    const details = { ...row.v.details };
+    for (const c of mine) {
+      const col = MAP_COLUMN[c.fact]!;
+      const before = marks[col] === "C" ? details[String(col)]?.says ?? "" : "";
+      marks[col] = "C";
+      details[String(col)] = {
+        says: `${before ? `${before} ` : ""}Its ${lower(c.factName)} differs from your website: it says ${c.says}; your website says ${c.website}.`,
+        excerpt: "",
+        url: row.v.domain,
+        issue: "Different from your website.",
+        action: "Ask the site to correct it, or correct your website first if it's out of date.",
+      };
+    }
+    return { ...row, v: { ...row.v, marks, details } };
+  });
 }

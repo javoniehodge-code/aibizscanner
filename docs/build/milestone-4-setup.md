@@ -156,3 +156,17 @@ sources". About $0.15 more per report for the extra Sonnet reading is approved.
 
 After deploying: run `cc_values` once in the run monitor (it runs on its own after later `cc_bundle` runs), then rerun
 `wp_assess` so the page readings include values; `wp_section` and `report_assemble` follow.
+
+## Part 4c-2: Google's listing on Consistent & current, and Conflict in the map (20 Nov 2026)
+
+- **Stored:** `website.consistent.liveCompare` holds the website's own phone numbers and address as written. Nothing
+  from Google is stored. A Consistent & current part is now kept even with no outside site giving values, when the
+  website gives a phone or address (Google can be compared); otherwise the slide is left out as before.
+- **When the report is opened** (`report/google-live.ts`, the same Place Details call as the review card): Google's
+  phone and address are compared with the website's in plain code (the same rules as the stored part). The slide gets a
+  "Google Business Profile" column; a fact only Google gives moves from "Not mentioned by other sources" into the
+  table; statuses, the verdict and the fixes are recomputed; Google's row in the web presence map shows "Conflict"
+  where its phone or address differs. If Google can't be read, its column says so and no status changes.
+- **Conflict in the web presence map (stored):** an outside site whose value doesn't agree with the website gets
+  "Conflict" in the fact's column (contact and terms under Business details, vehicles and prices under Services, the
+  address under Locations).

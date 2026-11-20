@@ -8,7 +8,7 @@ import { assessedPages, citedPages } from "./schemas";
 import { websiteValuesOutput } from "../content/stages";
 import { STANDARDS } from "../content/standards";
 import { ASSESSED_EVIDENCE } from "./logic/credible";
-import { buildConsistent, websiteValuesEvidence, WEBSITE_VALUES_EVIDENCE } from "./logic/consistent";
+import { buildConsistent, consistentConflicts, markConflicts, websiteValuesEvidence, WEBSITE_VALUES_EVIDENCE } from "./logic/consistent";
 
 /** wp_section: the report's web presence parts built so far, with their evidence and copy (read by report_assemble). */
 export const webPresenceSection = z
@@ -56,13 +56,16 @@ export const wpSection: StageDefinition = {
     // Consistent & current: the website's values against the values read off the cited pages (both checked; plain code).
     const wv = input(ctx, "cc_values", websiteValuesOutput);
     const standard = wv && STANDARDS.find((s) => s.id === wv.standard.id);
-    const consistent = as && wv && standard && (!as.standard || as.standard === standard.id)
-      ? buildConsistent({ standard, website: { values: wv.values, pages: wv.pages, runId: wv.runId, finishedAt: wv.finishedAt, model: wv.model }, cited: cp, readings: as.pages }, [WEBSITE_VALUES_EVIDENCE, ASSESSED_EVIDENCE])
+    const cin = as && wv && standard && (!as.standard || as.standard === standard.id)
+      ? { standard, website: { values: wv.values, pages: wv.pages, runId: wv.runId, finishedAt: wv.finishedAt, model: wv.model }, cited: cp, readings: as.pages }
       : null;
+    const consistent = cin ? buildConsistent(cin, [WEBSITE_VALUES_EVIDENCE, ASSESSED_EVIDENCE]) : null;
+    // "Conflict" in the web presence map where a site's value doesn't agree with the website.
+    const map = as ? buildWebPresence(cp, as) : null;
     const out: WebPresenceSection = {
       citationCoverage: maps.length ? maps : null,
       credible: as ? buildCredible(cp, as, pa.section, pa.business.name) : null,
-      webPresence: as ? buildWebPresence(cp, as) : null,
+      webPresence: map && cin ? markConflicts(map, consistentConflicts(cin)) : map,
       consistent,
       evidence: { ...citedPagesEvidence(cp), ...(as ? assessedEvidence(as) : {}), ...(consistent && wv ? websiteValuesEvidence({ values: wv.values, pages: wv.pages, runId: wv.runId, finishedAt: wv.finishedAt, model: wv.model }) : {}) },
       ...(as ? { copy: { ...credibleCopy(cp, as), ...(consistent ? { consistentFoot: consistentFoot(wv!.finishedAt) } : {}) } } : {}),
@@ -73,5 +76,5 @@ export const wpSection: StageDefinition = {
 
 /** The note under the Consistent & current slide. */
 function consistentFoot(on: string) {
-  return { v: `Compared ${on.slice(0, 10)}: your website and the outside pages AI cited that name you. Google's listing isn't compared yet.`, p: { kind: "observed" as const, evidence: [WEBSITE_VALUES_EVIDENCE] } };
+  return { v: `Compared ${on.slice(0, 10)}: your website and the outside pages AI cited that name you. Google's listing is compared when the report is opened, once the business's listing is confirmed.`, p: { kind: "observed" as const, evidence: [WEBSITE_VALUES_EVIDENCE] } };
 }
