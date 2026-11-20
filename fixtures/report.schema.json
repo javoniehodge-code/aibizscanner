@@ -4266,7 +4266,6 @@
                       "additionalProperties": false
                     },
                     "sources": {
-                      "minItems": 1,
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -4432,6 +4431,52 @@
                               "name",
                               "website",
                               "note"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "p": {
+                            "$ref": "#/$defs/PresentProvenance"
+                          }
+                        },
+                        "required": [
+                          "v",
+                          "p"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "liveCompare": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "v": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "phone",
+                                  "address"
+                                ]
+                              },
+                              "website": {
+                                "minItems": 1,
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "kind",
+                              "website"
                             ],
                             "additionalProperties": false
                           },

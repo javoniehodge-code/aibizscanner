@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { checkValue, checkValues, type ReadValue } from "../../content/values";
 import { STANDARDS } from "../../content/standards";
-import { addressKey, buildConsistent, compareFact } from "../logic/consistent";
+import { addressKey, buildConsistent, compareFact, consistentConflicts, markConflicts } from "../logic/consistent";
 import type { CitedPages } from "../schemas";
 
 const v = (fact: string, value: string, quote: string, more: Partial<ReadValue> = {}): ReadValue => ({ fact, ref: null, value, amount: null, unit: null, item: null, quote, ...more });
@@ -132,7 +132,25 @@ describe("the Consistent & current part", () => {
     expect(nm("Prices and what's included").note).toBe("respectmyregion.com gives exotic cars: Approximately $400 to $1,200 per day, which isn't for the same vehicle and unit of time as your website, so it can't be compared.");
   });
 
-  it("is left out when no outside site we read gives a compared fact about the business", () => {
-    expect(buildConsistent({ standard: car, website, cited, readings: [{ key: "dr1", reading: reading([]) }] }, [])).toBeNull();
+  it("with no outside source, it's kept only for Google's listing (the website's phone or address), else left out", () => {
+    const none = [{ key: "dr1", reading: reading([]) }];
+    const out = buildConsistent({ standard: car, website, cited, readings: none }, [])!;
+    expect(out.sources).toEqual([]);
+    expect(out.facts).toEqual([]);
+    expect(out.liveCompare!.map((l) => l.v)).toEqual([{ name: "How to book and contact", kind: "phone", website: ["(305) 555-0100"] }]);
+    expect(out.verdict.v.heading).toBe("No fact could be compared yet");
+    const noPhone = { ...website, values: website.values.filter((v) => v.fact !== "booking-contact") };
+    expect(buildConsistent({ standard: car, website: noPhone, cited, readings: none }, [])).toBeNull();
+  });
+
+  it("marks Conflict in the web presence map, in the fact's column, for the site that differs", () => {
+    const input = { standard: car, website, cited, readings: [{ key: "dr1", reading: reading([c("booking-contact", "305-555-0199"), c("delivery-locations", "1 Main St")]) }] };
+    const conflicts = consistentConflicts(input);
+    expect(conflicts.map((x) => [x.site, x.fact])).toEqual([["carrentallist.com", "booking-contact"]]); // no address on the website: nothing to compare
+    const row = (domain: string) => ({ v: { domain, marks: ["P", "U", "A", "N", "A", "P"], details: {} as Record<string, { says: string; excerpt: string; url: string; issue: string; action: string }> } });
+    const [a, b] = markConflicts([row("carrentallist.com"), row("respectmyregion.com")], conflicts);
+    expect(a!.v.marks).toEqual(["C", "U", "A", "N", "A", "P"]);
+    expect(a!.v.details["0"]!.says).toBe("Its how to book and contact differs from your website: it says 305-555-0199; your website says (305) 555-0100.");
+    expect(b!.v.marks).toEqual(["P", "U", "A", "N", "A", "P"]);
   });
 });
