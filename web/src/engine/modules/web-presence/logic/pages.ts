@@ -132,36 +132,68 @@ export function ownSiteOf(site: string, businesses: readonly NamedBusiness[]): s
   const label = siteLabel(site);
   if (label.length < 6) return null;
   for (const b of businesses) {
-    const words = normalizeName(b.name).split(" ").filter(Boolean);
-    const forms = [words.join("")];
-    if (words.length >= 3) words.forEach((_, i) => forms.push(words.filter((__, j) => j !== i).join("")));
-    if (forms.includes(label)) return b.key;
+    // The name as normalised ("Red Hook Moving Co." -> red hook moving) and as written (red hook moving co).
+    const spellings = [normalizeName(b.name), fold(b.name).toLowerCase().replace(/&/g, " and ").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, " ")].map((n) => n.split(" ").filter(Boolean));
+    for (const words of spellings) {
+      const forms = [words.join("")];
+      if (words.length >= 3) words.forEach((_, i) => forms.push(words.filter((__, j) => j !== i).join("")));
+      if (forms.includes(label)) return b.key;
+    }
   }
   return null;
 }
 
 export type Line = { name: string; questions: readonly string[] };
-export type ChosenPage = RankedPage & { lines: string[] };
+/** Pages a line may try in all (read or not), so a line whose sites keep refusing us doesn't take the whole run. */
+export const MAX_TRIES_PER_LINE = PAGE_CAP * 2;
 
 /**
- * The pages to check. Without service lines: the PAGE_CAP most-cited outside pages, as before. With lines: up to
- * PAGE_CAP pages per line, ranked by that line's questions only, merged (a page chosen for two lines is checked once).
- * Unclassified pages that are another business's own website are left out either way.
+ * The cited outside pages each line (or, without lines, the whole report) may check, most-cited first.
+ * - Unclassified pages on another business's own website are left out (counted in ownSites).
+ * - Directory pages whose site is named like a business are kept but marked: read, such a page counts as an outside
+ *   site only when it names at least two other businesses (a marketplace such as giggster.com); otherwise it's that
+ *   business's own website (partyfunrental.com for Party Fun Rental).
  */
-export function choosePages(section: SectionPages, businesses: readonly NamedBusiness[], lines: readonly Line[] | null): { chosen: ChosenPage[]; outside: number; ownSites: number } {
-  const keep = (p: RankedPage) => !(p.category === "unc" && ownSiteOf(p.site, businesses));
+export function candidatePages(section: SectionPages, businesses: readonly NamedBusiness[], lines: readonly Line[] | null) {
   const all = rankCitedPages(section);
-  const ownSites = all.filter((p) => !keep(p)).length;
-  if (!lines) return { chosen: all.filter(keep).slice(0, PAGE_CAP).map((p) => ({ ...p, lines: [] })), outside: all.length - ownSites, ownSites };
-  const byKey = new Map<string, ChosenPage>();
-  for (const line of lines) {
-    const qs = new Set(line.questions);
-    const ranked = rankCitedPages({ pages: section.pages, questions: section.questions.filter((q) => qs.has(q.question.v.id)) }).filter(keep).slice(0, PAGE_CAP);
-    for (const p of ranked) {
-      const seen = byKey.get(p.key);
-      if (seen) seen.lines.push(line.name);
-      else byKey.set(p.key, { ...all.find((a) => a.key === p.key)!, lines: [line.name] });
+  const own = new Set(all.filter((p) => p.category === "unc" && ownSiteOf(p.site, businesses)).map((p) => p.key));
+  const suspects = new Map(all.filter((p) => p.category === "dir").flatMap((p) => { const b = ownSiteOf(p.site, businesses); return b ? [[p.key, b] as const] : []; }));
+  const keep = (ps: RankedPage[]) => ps.filter((p) => !own.has(p.key));
+  const lists = lines
+    ? lines.map((l) => ({ line: l.name as string | null, pages: keep(rankCitedPages({ pages: section.pages, questions: section.questions.filter((q) => l.questions.includes(q.question.v.id)) })).map((p) => all.find((a) => a.key === p.key)!) }))
+    : [{ line: null as string | null, pages: keep(all) }];
+  return { lists, outside: all.length - own.size, ownSites: own.size, suspects };
+}
+
+/** Where each candidate page stands during the run. "own": read and found to be a business's own website. */
+export type PageStatus = "read" | "failed" | "skipped" | "own";
+
+/**
+ * The next pages to fetch: for each list, its most-cited pages not yet tried, until the list has PAGE_CAP pages read
+ * (pages being fetched count as read until we know) or has tried MAX_TRIES_PER_LINE pages. Pages on a site that has
+ * refused us are passed over without a fetch ("skip") and don't count towards the cap. chosenBy records which lines
+ * chose or passed over each page.
+ */
+export function planNext(lists: ReturnType<typeof candidatePages>["lists"], status: ReadonlyMap<string, PageStatus>, refused: ReadonlySet<string>, chosenBy: Map<string, Set<string>>) {
+  const fetch = new Map<string, RankedPage>();
+  const skip = new Map<string, RankedPage>();
+  const mark = (key: string, line: string | null) => { if (line) chosenBy.set(key, (chosenBy.get(key) ?? new Set()).add(line)); };
+  for (const { line, pages } of lists) {
+    let need = PAGE_CAP - pages.filter((p) => status.get(p.key) === "read").length;
+    let tries = pages.filter((p) => ["read", "failed"].includes(status.get(p.key) ?? "")).length;
+    for (const p of pages) {
+      if (need <= 0 || tries >= MAX_TRIES_PER_LINE) break;
+      if (status.has(p.key) || skip.has(p.key)) continue;
+      if (refused.has(p.site)) {
+        skip.set(p.key, p);
+        mark(p.key, line);
+        continue;
+      }
+      if (!fetch.has(p.key)) fetch.set(p.key, p);
+      mark(p.key, line);
+      need--;
+      tries++;
     }
   }
-  return { chosen: [...byKey.values()], outside: all.length - ownSites, ownSites };
+  return { fetch: [...fetch.values()], skip: [...skip.values()] };
 }
