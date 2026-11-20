@@ -83,7 +83,7 @@ export function buildReportDocument(pa: BuiltSection, website: WebsiteSection | 
     credible: web?.credible ?? null,
     webPresence: web?.webPresence ?? null,
     // The website parts built so far; the others stay null until their stages exist.
-    website: website ? { discovery: website.discovery, structuredData: website.structuredData ?? null, clear: website.clear ?? null, consistent: null, distinctive: website.distinctive ?? null } : null,
+    website: website ? { discovery: website.discovery, structuredData: website.structuredData ?? null, clear: website.clear ?? null, consistent: web?.consistent ?? null, distinctive: website.distinctive ?? null } : null,
   };
   return doc as unknown as ReportDocument;
 }

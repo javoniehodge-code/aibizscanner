@@ -4405,6 +4405,47 @@
                         "additionalProperties": false
                       }
                     },
+                    "notMentioned": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "v": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "website": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "note": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "website",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "p": {
+                            "$ref": "#/$defs/PresentProvenance"
+                          }
+                        },
+                        "required": [
+                          "v",
+                          "p"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
                     "fixes": {
                       "type": "array",
                       "items": {

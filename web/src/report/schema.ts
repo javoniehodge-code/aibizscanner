@@ -350,10 +350,16 @@ const consistent = z
           .strict(),
       ),
     ),
+    /**
+     * Pipeline reports (owner decision 20 Nov 2026): facts no other source mentions, or the website doesn't give, with
+     * no status. When present, the slide shows two outcomes only (Agree, Don't agree: statuses a and c).
+     */
+    notMentioned: z.array(val(z.object({ name: nonEmpty, website: z.string().nullable(), note: nonEmpty }).strict())).optional(),
     fixes: z.array(val(z.object({ title: nonEmpty, where: nonEmpty, why: nonEmpty }).strict())),
     rules: z.array(val(kv)),
   })
   .strict();
+export const websiteConsistent = consistent;
 
 export const websiteDistinctive = z
   .object({

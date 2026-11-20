@@ -6,10 +6,12 @@
   "content/score-answers@1": "47de2e6952d5593355982187db39a0ec1d03fa0a7638102e7b8198ae7a2baa59",
   "content/score-answers@2": "c2dc23399365a4d1ee1ec0cbc9196a750b61f8dcd5aaa0d8ee9cb243e4c3dfd7",
   "content/score-answers@3": "22a0bc335509aaa93f5ef941ef42dd85f3c57df1f36161feacb48ee01ee9e2d7",
+  "content/website-values@1": "5b11972940a6329f7377cad61e1db27b5a4e5b15e361d0303571bac138a5b139",
   "prompt-analysis/classify-source@1": "68c022f63c439de625d9bc0277ae343848d3d6add22d6015797d811e3b8b9e07",
   "prompt-analysis/classify-source@2": "3d293f317f1850f7be33cf51a26e3ce8cc5f1bf3a5f8ac20b8b6aaebb62bbbc3",
   "prompt-analysis/extract-answer@1": "8a2cb2f300ee123a87d897544a1711fe21c0a638bbc89933fe789fdd5288a873",
   "prompt-analysis/extract-answer@2": "590e630b4b0dee3261bb7d9a6e6e492fe54a282ab64b8698340bafe430527b45",
   "prompt-analysis/extract-answer@3": "8b50e2f75e6ff6b04338c57b72c8b1f0fdd2cddb4386b6fdcb52668e77859ff8",
-  "web-presence/assess-page@1": "37e4135217ae0c80d12516008aa7e0d3f9930c39bd162397fb4decbca9efab00"
+  "web-presence/assess-page@1": "37e4135217ae0c80d12516008aa7e0d3f9930c39bd162397fb4decbca9efab00",
+  "web-presence/assess-page@2": "ce81d9f24436673ccfdb6aff52826adaa2544a95e1bedeec78fbe49f0af4e8ae"
 }

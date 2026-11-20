@@ -25,6 +25,8 @@ import {
   type WebsiteStatus,
 } from "./logic";
 import { standardFor, STANDARDS } from "./standards";
+import { websiteValues } from "./instructions/website-values";
+import { checkValues, checkedValue, comparableFacts, readValue, VALUES_VERSION } from "./values";
 
 const MODULE = "content";
 
@@ -404,4 +406,50 @@ export const ccScore: StageDefinition = {
   },
 };
 
-export const CONTENT_STAGES = [ccBundle, ccBaseline, ...ANSWER_STAGES, ccScore] as const;
+// ---------------------------------------------------------------------------------------------------------------
+// cc_values (one model call; every value checked in plain code): the website's facts as comparable values
+// ---------------------------------------------------------------------------------------------------------------
+
+/** cc_values: the website's values for the standard's compared facts (Consistent & current, part 4c). */
+export const websiteValuesOutput = z
+  .object({
+    version: z.string(),
+    model: z.string().nullable(),
+    standard: z.object({ id: z.string(), version: z.string() }).strict(),
+    pages: z.array(z.object({ ref: z.string(), url: z.string(), name: z.string() }).strict()),
+    values: z.array(checkedValue),
+    /** Values plain code dropped, and why (for review). */
+    dropped: z.array(z.string()),
+  })
+  .strict();
+export type WebsiteValues = z.infer<typeof websiteValuesOutput>;
+
+export const ccValues: StageDefinition = {
+  id: "cc_values",
+  module: MODULE,
+  label: "Consistent & current: the website's facts as values",
+  inputs: ["cc_bundle"],
+  timeoutMs: 180_000,
+  maxAttempts: 2,
+  autoRun: true,
+  instructions: [websiteValues],
+  parseParams: () => ({}),
+  output: websiteValuesOutput,
+  async run(ctx) {
+    const b = input(ctx, "cc_bundle", contentBundle);
+    const facts = comparableFacts(b.standard);
+    const base = { version: VALUES_VERSION, standard: { id: b.standard.id, version: b.standard.version }, pages: b.pages.map((p) => ({ ref: p.ref, url: p.url, name: p.name })) };
+    if (!facts.length) return { status: "done", output: { ...base, model: null, values: [], dropped: [] } as unknown as JsonValue };
+    const res = await ctx.llm({
+      instruction: websiteValues,
+      model: SCORING_MODEL,
+      input: { business: b.business, facts, pages: b.pages.map((p) => ({ ref: p.ref, name: p.name, url: p.url, text: p.text })) },
+      output: z.object({ values: z.array(readValue) }).strict(),
+    });
+    const checked = checkValues(res.values, b.standard.id, (v) => b.pages.find((p) => p.ref === v.ref)?.text ?? null);
+    const out: WebsiteValues = { ...base, model: SCORING_MODEL.model, values: checked.values, dropped: checked.dropped };
+    return { status: "done", output: out as unknown as JsonValue };
+  },
+};
+
+export const CONTENT_STAGES = [ccBundle, ccBaseline, ...ANSWER_STAGES, ccScore, ccValues] as const;

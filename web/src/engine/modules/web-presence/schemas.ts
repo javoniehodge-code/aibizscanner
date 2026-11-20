@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { OUTSIDE_CATEGORIES } from "./logic/pages";
+import { checkedValue } from "../content/values";
 
 /** wp_pages: the cited outside pages we checked, how we read each one, and the businesses each names. */
 export const citedPages = z
@@ -56,6 +57,8 @@ export const assessedPages = z
     model: z.string(),
     /** The wp_pages run these readings belong to (the report part uses them only with that run). */
     fromRun: z.string(),
+    /** The decision-fact standard the values were read for (absent before v2). */
+    standard: z.string().nullable().optional(),
     pages: z.array(
       z
         .object({
@@ -73,6 +76,8 @@ export const assessedPages = z
               columns: z.object({ details: cell, services: cell, fit: cell, reviews: cell, recommendations: cell, locations: cell }).strict(),
               review: z.object({ rating: z.string(), scale: z.number().positive().nullable(), count: z.string().nullable(), recent: z.string().nullable(), themes: z.string(), quote: z.string() }).strict().nullable(),
               overruled: z.array(z.string()),
+              /** The business's decision-fact values on this page, each checked against the page (absent before v2). */
+              values: z.array(checkedValue).optional(),
             })
             .strict()
             .nullable(),

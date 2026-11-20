@@ -181,7 +181,7 @@ describe("wp_pages and Citation coverage", () => {
     // wp_assess: one reading per page we read; plain code checks each against the page and the name check.
     const cols = (over: Record<string, { status: string; quote?: string; says?: string }> = {}) =>
       ["details", "services", "fit", "reviews", "recommendations", "locations"].map((column) => ({ column, status: "N", says: "Not on the page.", quote: null, issue: null, action: null, ...(over[column] ?? {}) }));
-    const reading = (o: Record<string, unknown>) => JSON.stringify({ presence: "none", detail: "A page about movers.", supports: "No reason to choose you.", reasons: [], concerns: [], recommendedInstead: [], columns: cols(), review: null, ...o });
+    const reading = (o: Record<string, unknown>) => JSON.stringify({ presence: "none", detail: "A page about movers.", supports: "No reason to choose you.", reasons: [], concerns: [], recommendedInstead: [], columns: cols(), review: null, values: [], ...o });
     const READ: Record<string, string> = {
       "https://brooklynmag.com/best-movers-2026": reading({
         presence: "rec",

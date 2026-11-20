@@ -389,7 +389,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
 
   <div style="display:flex;flex-direction:column;gap:12px">
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">Do your sources tell the same story?</h3>
-    <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch">“Agree” means the checked sources say the same thing. “Current” needs support that the information still applies, not just a recent page date.</p>
+    <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch">{{ m.tableNote }}</p>
     <div data-scrollx style="overflow-x:auto">
       <div style="min-width:1080px;display:flex;flex-direction:column">
         <div class="cc-grid" style="{{ m.headGrid }}">
@@ -404,7 +404,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
               <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4"><span style="{{ c.box }}"><span style="{{ c.symStyle }}">{{ c.sym }}</span><span style="{{ c.txt }}">{{ c.t }}</span></span></sc-for>
               <span style="display:flex;flex-direction:column;gap:6px"><span style="display:flex;gap:6px;align-items:center"><span style="{{ r.symStyle }}">{{ r.sym }}</span><span style="font-size:16px;font-weight:700">{{ r.label }}</span></span><span style="font-size:15px;line-height:1.5">{{ r.means }}</span></span>
             </div>
-            <sc-if value="{{ r.hasNote }}" hint-placeholder-val="{{ false }}"><div style="margin-left:calc(10% + 12px);display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:oklch(0.97 0.012 265);max-width:80ch"><span style="font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:oklch(0.45 0.22 265);white-space:nowrap;padding-top:2px">WHAT AI SAYS</span><span style="font-size:15px;line-height:1.5">{{ r.note }}</span></div></sc-if>
+            <sc-if value="{{ r.hasNote }}" hint-placeholder-val="{{ false }}"><div style="margin-left:calc(10% + 12px);display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:oklch(0.97 0.012 265);max-width:80ch"><span style="font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:oklch(0.45 0.22 265);white-space:nowrap;padding-top:2px">{{ m.noteLabel }}</span><span style="font-size:15px;line-height:1.5">{{ r.note }}</span></div></sc-if>
           </div>
         </sc-for>
       </div>
@@ -414,7 +414,13 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
     </div>
   </div>
 
-  <div style="display:flex;flex-direction:column">
+  <sc-if value="{{ m.hasNm }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px">
+    <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0">Not mentioned by other sources</h3>
+    <p style="margin:0;font-size:16px;line-height:1.5;max-width:75ch">Nothing to compare for these facts, so they have no status.</p>
+    <sc-for list="{{ m.nm }}" as="x" hint-placeholder-count="3"><div data-keep style="display:grid;grid-template-columns:minmax(160px,0.8fr) minmax(0,2fr);gap:4px 20px;padding:12px 0;border-top:1px solid oklch(0.92 0.006 265)"><span style="font-size:16px;font-weight:700;line-height:1.4">{{ x.name }}</span><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;line-height:1.45">{{ x.web }}</span><span style="font-size:14px;line-height:1.45;color:oklch(0.42 0.01 265)">{{ x.note }}</span></span></div></sc-for>
+  </div></sc-if>
+
+<sc-if value="{{ m.hasFixes }}" hint-placeholder-val="{{ true }}">  <div style="display:flex;flex-direction:column">
     <h3 style="font-size:20px;font-weight:700;line-height:1.3;margin:0;padding-bottom:12px">What should be corrected first?</h3>
     <sc-for list="{{ m.fixes }}" as="a" hint-placeholder-count="3">
       <div data-keep style="{{ a.style }}">
@@ -426,10 +432,10 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:2px}
         </div>
       </div>
     </sc-for>
-  </div>
+  </div></sc-if>
 
   <div style="display:flex;flex-direction:column;gap:8px;padding-top:20px;border-top:1px solid oklch(0.92 0.006 265)">
-    <details><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">How we judge consistency and freshness</summary>
+    <details><summary style="font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px">{{ m.rulesTitle }}</summary>
       <div style="display:flex;flex-direction:column;margin-top:8px">
         <sc-for list="{{ m.rules }}" as="x" hint-placeholder-count="5"><span style="font-size:14px;line-height:1.5;padding:10px 0;border-bottom:1px solid oklch(0.92 0.006 265);max-width:80ch"><strong style="font-weight:700">{{ x.k }}:</strong> {{ x.v }}</span></sc-for>
       </div>
@@ -1635,9 +1641,12 @@ class BrandPart extends Sub {
       })()] : [],
       credSlide: show.credible ? [_cred] : [], credAll: [_cred],
       consSlide: show.consistent ? [(() => { const m = MS[2], tot = R.website.consistent.facts.length;
-        const cols = 'minmax(120px,0.7fr) minmax(190px,1.15fr) repeat(4,minmax(100px,0.7fr)) minmax(190px,1.15fr)';
-        const ST = { a: ['g', 'Agree'], c: ['r', 'Conflicting'], o: ['r', 'Outdated elsewhere'], u: ['k', 'Not enough to confirm'] };
+        // Pipeline reports list the facts no other source mentions (notMentioned) and use two outcomes only: Agree or
+        // Don't agree (owner decision, 20 Nov 2026). Fixtures keep the four approved states.
+        const NM = R.website.consistent.notMentioned, TWO = Array.isArray(NM);
         const SRC = R.website.consistent.sources.map(s => [s.name, s.sub]);
+        const cols = 'minmax(120px,0.7fr) minmax(190px,1.15fr) repeat(' + (TWO ? SRC.length : 4) + ',minmax(100px,0.7fr)) minmax(190px,1.15fr)';
+        const ST = TWO ? { a: ['g', 'Agree'], c: ['r', 'Don\u2019t agree'] } : { a: ['g', 'Agree'], c: ['r', 'Conflicting'], o: ['r', 'Outdated elsewhere'], u: ['k', 'Not enough to confirm'] };
         // per source: [text, g=matches | r=differs | n=not listed]
         const rows = R.website.consistent.facts.map(f => [f.name, [f.website.value, f.website.pages || '', f.website.issue || ''], f.sources.map(s => [s.text, s.mark]), f.status, f.means, f.note || '']);
         const n = k => rows.filter(r => ST[r[3]][0] === k).length;
@@ -1645,13 +1654,16 @@ class BrandPart extends Sub {
           title: m.title, intro: m.intro,
           verdictH: R.website.consistent.verdict.heading,
           verdictP: R.website.consistent.verdict.text,
-          counts: [['g', 'Agree across checked sources'], ['r', 'Conflicting or outdated'], ['k', 'Not enough to confirm']].map(([k, label]) => ({ n: n(k), tot, label, sym: SYM[k], symStyle: symStyle(k, true) })),
+          counts: (TWO ? [['g', 'Agree'], ['r', 'Don\u2019t agree']] : [['g', 'Agree across checked sources'], ['r', 'Conflicting or outdated'], ['k', 'Not enough to confirm']]).map(([k, label]) => ({ n: n(k), tot, label, sym: SYM[k], symStyle: symStyle(k, true) })),
+          tableNote: TWO ? '\u201cAgree\u201d means another source says the same as your website and none says something different. \u201cDon\u2019t agree\u201d means at least one source says something different.' : '\u201cAgree\u201d means the checked sources say the same thing. \u201cCurrent\u201d needs support that the information still applies, not just a recent page date.',
+          noteLabel: TWO ? 'WHAT DIFFERS' : 'WHAT AI SAYS', rulesTitle: TWO ? 'How we compare' : 'How we judge consistency and freshness', hasFixes: !TWO || R.website.consistent.fixes.length > 0,
+          nm: (NM || []).map(x => ({ name: x.name, web: x.website ? 'Your website: ' + x.website : 'Not on your website', note: x.note })), hasNm: TWO && NM.length > 0,
           headGrid: { display: 'grid', gridTemplateColumns: cols, gap: 0, alignItems: 'end', padding: '12px 0', borderBottom: '2px solid #000', background: 'oklch(0.975 0.004 265)', borderRadius: '10px 10px 0 0' },
           srcCols: SRC.map(([n, sub]) => ({ n, sub })),
           rows: rows.map(([name, site, src, st, means, note]) => { const [k, label] = ST[st]; const [val, pages, issue] = site; return { name, means, label, sym: SYM[k], symStyle: symStyle(k, true), note, hasNote: !!note, val, pages: pages ? 'Pages: ' + pages : '', issue, hasIssue: !!issue, issueSym: SYM.r, issueSymStyle: { ...symStyle('r', true), width: 18, height: 18, fontSize: 11, flex: 'none', marginTop: 1 }, youBox: { display: 'flex', flexDirection: 'column', gap: 6, padding: '12px 14px', marginRight: 14, borderRadius: 10, background: 'oklch(0.97 0.012 265)', alignSelf: 'start' },
             cells: src.map(([t, c]) => ({ t, sym: c === 'g' ? SYM.g : c === 'r' ? SYM.r : '', symStyle: c === 'n' ? { display: 'none' } : { ...symStyle(c, true), width: 20, height: 20, fontSize: 12, marginTop: 1 }, box: { display: 'flex', gap: 6, alignItems: 'flex-start' }, txt: { fontSize: 15, lineHeight: 1.45, fontWeight: c === 'r' ? 700 : 400, color: c === 'n' ? GRAY : '#000' } })),
             grid: { display: 'grid', gridTemplateColumns: cols, gap: 0, alignItems: 'stretch' } }; }),
-          legend: [['g', 'Agrees with your website'], ['r', 'Conflicts or out of date'], ['k', 'Not enough to confirm']].map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
+          legend: (TWO ? [['g', 'Agrees with your website'], ['r', 'Differs from your website']] : [['g', 'Agrees with your website'], ['r', 'Conflicts or out of date'], ['k', 'Not enough to confirm']]).map(([k, t]) => ({ t, sym: SYM[k], symStyle: symStyle(k, true) })),
           fixes: R.website.consistent.fixes.map(f => [f.title, f.where, f.why]).map(([t, where, why], i) => ({ n: i + 1, t, where, why,
             style: { display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: 16, padding: '18px 0', borderTop: i === 0 ? '2px solid #000' : '1px solid oklch(0.92 0.006 265)' },
             numStyle: { width: 40, height: 40, borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: 16, fontWeight: 700, border: '1.5px solid #000', boxSizing: 'border-box' } })),

@@ -219,6 +219,59 @@ test("service lines: one Citation coverage slide per line, you and 7 competitors
   }
 });
 
+test("Consistent & current from the pipeline: Agree or Don't agree, one column per source, and the facts not mentioned", async ({ browser }) => {
+  // What wp_section produces (part 4c-1): two outcomes only, the sources that give values, and notMentioned.
+  type Env<T> = { v: T; p: unknown };
+  const doc = fixture("mvp-miami") as Record<string, unknown> & { website: Record<string, unknown> };
+  for (const k of ["summary", "competitors", "citationCoverage", "webPresence", "credible", "actions", "methodGroups"]) doc[k] = null;
+  for (const k of ["discovery", "structuredData", "clear", "distinctive"]) doc.website[k] = null;
+  const obs = <T>(v: T): Env<T> => ({ v, p: { kind: "observed", evidence: [] } });
+  doc.website.consistent = {
+    intro: obs("We compare the facts on your website with what the outside pages AI cited say about you."),
+    verdict: obs({ heading: "1 of 2 facts we could compare doesn't agree", text: "We compared your website with 2 outside sites AI cited that name you." }),
+    sources: [obs({ name: "carrentallist.com", sub: "Directory & marketplace" }), obs({ name: "respectmyregion.com", sub: "Editorial & publication" })],
+    facts: [
+      obs({ name: "How to book and contact", website: { value: "(305) 555-0100", pages: "Home", issue: null }, sources: [{ text: "305-555-0100", mark: "g" }, { text: "(305) 555-0100", mark: "g" }], status: "a", means: "2 other sources say the same as your website.", note: null }),
+      obs({ name: "Rental requirements", website: { value: "25 years", pages: "FAQ", issue: null }, sources: [{ text: "21+", mark: "r" }, { text: "Not mentioned", mark: "n" }], status: "c", means: "Sources disagree.", note: "carrentallist.com says 21+; your website says 25 years." }),
+    ],
+    notMentioned: [obs({ name: "Deposit and payment", website: null, note: "Your website doesn't give this; carrentallist.com says $2,000." })],
+    fixes: [obs({ title: "Correct the rental requirements on carrentallist.com", where: "carrentallist.com says 21+; your website says 25 years.", why: "AI can repeat whichever version it finds." })],
+    rules: [obs({ k: "Agree", v: "At least one other source says the same as your website." })],
+  };
+  const srv = await serveDir(templateDir(currentTemplate()));
+  try {
+    const page = await browser.newPage({ deviceScaleFactor: 1 });
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(String(e)));
+    await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
+    await page.addInitScript((r) => ((window as unknown as { __REPORT__: unknown }).__REPORT__ = r), doc);
+    await page.goto(`${srv.url}/report.html`);
+    const slide = page.locator("#dc-root section").first();
+    await slide.waitFor({ timeout: 30_000 });
+    let text = "";
+    for (let i = 0; i < 16 && !text.includes("CONSISTENT & CURRENT"); i++) {
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(120);
+      const t = await slide.innerText();
+      if (t.includes("Do your sources tell the same story?")) text = t;
+    }
+    expect(errors).toEqual([]);
+    expect(text).toContain("1 of 2 facts we could compare doesn't agree");
+    expect(text).toMatch(/1\s*of 2 facts\s*\S*\s*Agree/);
+    expect(text).toContain("Don\u2019t agree");
+    expect(text).not.toContain("Not enough to confirm");
+    expect(text).not.toContain("\u201cCurrent\u201d needs support");
+    expect(text).toContain("carrentallist.com");
+    expect(text).toContain("Not mentioned by other sources");
+    expect(text).toContain("Your website doesn't give this; carrentallist.com says $2,000.");
+    expect(text).toContain("Correct the rental requirements on carrentallist.com");
+    // Two source columns: each fact row has exactly the two cells.
+    expect(await page.locator("section .cc-grid").first().locator(":scope > span").count()).toBe(5); // fact, website, 2 sources, meaning
+  } finally {
+    await srv.close();
+  }
+});
+
 test("Credible: a page we couldn't read shows as couldn't check, and no reviews means no reviews block", async ({ browser }) => {
   // What stage 12 produces once wp_assess has run: credible and webPresence from the cited pages we read.
   const doc = fixture("mvp-miami") as Record<string, unknown> & { credible: { pages: { v: { presence: string } }[]; reviews: unknown[] } };
