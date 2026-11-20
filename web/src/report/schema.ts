@@ -333,7 +333,8 @@ const consistent = z
   .object({
     intro: val(nonEmpty),
     verdict: val(z.object({ heading: nonEmpty, text: nonEmpty }).strict()),
-    sources: z.array(val(z.object({ name: nonEmpty, sub: nonEmpty }).strict())).min(1),
+    /** At least one, except pipeline reports (notMentioned present) whose only source is Google's live listing. */
+    sources: z.array(val(z.object({ name: nonEmpty, sub: nonEmpty }).strict())),
     facts: z.array(
       val(
         z
@@ -355,6 +356,11 @@ const consistent = z
      * no status. When present, the slide shows two outcomes only (Agree, Don't agree: statuses a and c).
      */
     notMentioned: z.array(val(z.object({ name: nonEmpty, website: z.string().nullable(), note: nonEmpty }).strict())).optional(),
+    /**
+     * Pipeline reports: the website's own phone numbers and address (as written), kept so Google's listing can be
+     * compared in plain code when the report is opened (part 4c-2). Nothing from Google is stored.
+     */
+    liveCompare: z.array(val(z.object({ name: nonEmpty, kind: z.enum(["phone", "address"]), website: z.array(nonEmpty).min(1) }).strict())).optional(),
     fixes: z.array(val(z.object({ title: nonEmpty, where: nonEmpty, why: nonEmpty }).strict())),
     rules: z.array(val(kv)),
   })
@@ -623,6 +629,7 @@ function checkReferences(doc: Shape, ctx: z.RefinementCtx) {
     for (const k of s.v.pageKeys) if (!pageKeys.has(k)) issue(`Unknown page ${k}`, ["credible", "web", "sites", i]);
   });
   const nSources = doc.website?.consistent?.sources.length ?? 0;
+  if (doc.website?.consistent && !nSources && !doc.website.consistent.notMentioned) issue("At least one source is needed", ["website", "consistent", "sources"]);
   doc.website?.consistent?.facts.forEach((f, i) => {
     if (f.v.sources.length !== nSources) issue(`Fact has ${f.v.sources.length} source cells; expected ${nSources}`, ["website", "consistent", "facts", i]);
   });

@@ -1645,7 +1645,8 @@ class BrandPart extends Sub {
         // Don't agree (owner decision, 20 Nov 2026). Fixtures keep the four approved states.
         const NM = R.website.consistent.notMentioned, TWO = Array.isArray(NM);
         const SRC = R.website.consistent.sources.map(s => [s.name, s.sub]);
-        const cols = 'minmax(120px,0.7fr) minmax(190px,1.15fr) repeat(' + (TWO ? SRC.length : 4) + ',minmax(100px,0.7fr)) minmax(190px,1.15fr)';
+        const nSrc = TWO ? SRC.length : 4;
+        const cols = 'minmax(120px,0.7fr) minmax(190px,1.15fr)' + (nSrc ? ' repeat(' + nSrc + ',minmax(100px,0.7fr))' : '') + ' minmax(190px,1.15fr)';
         const ST = TWO ? { a: ['g', 'Agree'], c: ['r', 'Don\u2019t agree'] } : { a: ['g', 'Agree'], c: ['r', 'Conflicting'], o: ['r', 'Outdated elsewhere'], u: ['k', 'Not enough to confirm'] };
         // per source: [text, g=matches | r=differs | n=not listed]
         const rows = R.website.consistent.facts.map(f => [f.name, [f.website.value, f.website.pages || '', f.website.issue || ''], f.sources.map(s => [s.text, s.mark]), f.status, f.means, f.note || '']);
