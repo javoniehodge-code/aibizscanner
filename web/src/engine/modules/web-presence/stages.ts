@@ -6,7 +6,7 @@ import { promptSetSpec } from "../prompt-analysis/schemas";
 import { assembledSection } from "../prompt-analysis/stages";
 import { extractPage } from "../website/logic/extract";
 import { permission, type RobotsFile } from "../website/logic/robots";
-import { CITED_PAGES_VERSION, PAGE_CAP, choosePages, namesOnPage, wordCount, type NamedBusiness } from "./logic/pages";
+import { CITED_PAGES_VERSION, PAGE_CAP, candidatePages, namesOnPage, planNext, wordCount, type NamedBusiness, type PageStatus, type RankedPage } from "./logic/pages";
 import { serviceLines, shownLines } from "../prompt-analysis/lines-stage";
 import { citedPages, type CitedPages } from "./schemas";
 import { wpAssess } from "./assess-stage";
@@ -79,7 +79,7 @@ export const wpPages: StageDefinition = {
     // Lines may have been saved for an earlier prompt set: only this set's questions count towards a line.
     const linesIn = ctx.inputs.pa_lines;
     const lines = linesIn ? shownLines({ lines: serviceLines.parse(linesIn.output).lines.map((l) => ({ name: l.name, questions: l.questions.filter((q) => set.prompts.some((p) => p.id === q)) })) }) : null;
-    const { chosen, outside, ownSites } = choosePages(pa.section, businesses.filter((b) => b.key !== targetKey), lines);
+    const cands = candidatePages(pa.section, businesses.filter((b) => b.key !== targetKey), lines);
 
     // robots.txt once per host; a missing or unreadable file is no restriction (it is never read as a block).
     const robots = new Map<string, Promise<RobotsFile>>();
@@ -95,10 +95,15 @@ export const wpPages: StageDefinition = {
       return robots.get(origin)!;
     };
 
+    const pageBase = (p: RankedPage) => ({ key: p.key, url: p.url, site: p.site, category: p.category, title: p.title, prompts: p.prompts, answers: p.answers, engines: p.engines });
+    const started = Date.now();
+    const texts = new Map<string, string>();
+    /** Reads one batch of pages: robots.txt, a plain copy, then our browser where needed. */
+    const checkBatch = async (chosen: readonly RankedPage[]): Promise<Page[]> => {
     // Step 1: robots.txt and the plain copy, a few pages at a time.
     type Draft = Omit<Page, "state" | "reason" | "source" | "names" | "excerpt"> & { blocked: string | null; plain: { snapshotId: string; text: string; title: string | null; words: number; status: number | null; finalUrl: string | null; fetchedAt: string } | null; plainError: string | null };
     const drafts = await mapLimit(chosen, PLAIN_CONCURRENCY, async (p): Promise<Draft> => {
-      const base = { key: p.key, url: p.url, site: p.site, category: p.category, title: p.title, prompts: p.prompts, answers: p.answers, engines: p.engines, ...(lines ? { lines: p.lines } : {}), attempts: [] as Page["attempts"] };
+      const base = { ...pageBase(p), attempts: [] as Page["attempts"] };
       const rule = permission(await robotsFor(p.url), p.url, OUR_ROBOTS_TOKEN);
       if (rule.verdict === "blocked") return { ...base, blocked: `The site's robots.txt asks checkers like ours not to fetch this page (${rule.reason.toLowerCase()}).`, plain: null, plainError: null };
       const res = await ctx.fetchUrl(p.url, { accept: "html" });
@@ -130,9 +135,7 @@ export const wpPages: StageDefinition = {
 
     // Step 2: our browser for pages whose plain copy was refused or thin, one at a time within the time budget.
     const earlier = await ctx.fullestRenderedSnapshots(drafts.filter((d) => !d.blocked && (!d.plain || d.plain.words < THIN_WORDS)).map((d) => d.url));
-    const started = Date.now();
     const pages: Page[] = [];
-    const texts = new Map<string, string>();
     for (const d of drafts) {
       const { blocked, plain, plainError, ...rest } = d;
       const done = (state: Page["state"], reason: string | null, source: Page["source"], text: string, title: string | null): Page => {
@@ -200,6 +203,47 @@ export const wpPages: StageDefinition = {
       pages.push(done("unchecked", `We couldn't read this page: ${why}.`, null, "", null));
     }
 
+    return pages;
+    };
+
+    // Read pages until each line has PAGE_CAP pages read. A site that refuses our checker is passed over for the rest
+    // of the run, and the next most-cited pages take its place. Pages robots.txt asks us not to fetch cost nothing
+    // and don't count towards the cap either.
+    const status = new Map<string, PageStatus>();
+    const refused = new Set<string>();
+    const chosenBy = new Map<string, Set<string>>();
+    const byKey = new Map<string, Page>();
+    let ownSites = cands.ownSites;
+    for (;;) {
+      const plan = planNext(cands.lists, status, refused, chosenBy);
+      for (const p of plan.skip) {
+        status.set(p.key, "skipped");
+        byKey.set(p.key, { ...pageBase(p), state: "unchecked", reason: `We didn't fetch this page: ${p.site} refused our checker on another page this run.`, source: null, excerpt: null, attempts: [], names: [] });
+      }
+      if (!plan.fetch.length) break;
+      const read = await checkBatch(plan.fetch);
+      for (const page of read) {
+        const owner = cands.suspects.get(page.key);
+        // A directory named like a business: its own website unless it names at least two other businesses.
+        if (owner && !(page.state === "checked" && page.names.filter((n) => n.business !== owner).length >= 2)) {
+          status.set(page.key, "own");
+          ownSites++;
+          continue;
+        }
+        status.set(page.key, page.state === "checked" ? "read" : "failed");
+        byKey.set(page.key, page);
+        // Refused, not just missing: an HTTP 401, 403 or 429 (a 404 says nothing about the site's other pages).
+        if (page.state === "unchecked" && /HTTP (401|403|429)\b/.test(page.reason ?? "")) refused.add(page.site);
+      }
+      // Once our time is up, later pages would only be marked "not reached in time": stop here; a rerun continues.
+      if (read.some((p) => /ran out of time/.test(p.reason ?? ""))) break;
+    }
+    // Most-cited first, as before.
+    const order = new Map(cands.lists.flatMap((l) => l.pages).map((p, i) => [p.key, i] as const));
+    const pages = [...byKey.values()]
+      .map((p) => (lines ? { ...p, lines: lines.map((l) => l.name).filter((n) => chosenBy.get(p.key)?.has(n)) } : p))
+      .sort((a, b) => (order.get(a.key) ?? 0) - (order.get(b.key) ?? 0));
+
     // Different pages of one site that gave us exactly the same text: we read a shared shell (a consent, block or
     // loading page), not the pages themselves.
     for (const p of pages) {
@@ -217,7 +261,7 @@ export const wpPages: StageDefinition = {
     const out: CitedPages = {
       version: CITED_PAGES_VERSION,
       cap: PAGE_CAP,
-      outsidePages: outside,
+      outsidePages: cands.outside,
       businesses: businesses.map((b) => ({ key: b.key, name: b.name, target: b.key === targetKey })),
       ...(lines ? { lines } : {}),
       ownSites,

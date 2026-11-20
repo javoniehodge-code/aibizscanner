@@ -79,9 +79,8 @@ export function buildCitationCoverage(cp: CitedPagesInput, pa: CoverageAnswers) 
     const nameless = allSites.length - sites.length;
     const unchecked = mine.filter((p) => p.state === "unchecked");
 
-    const chosenCount = line ? cp.pages.filter((p) => (p.lines ?? []).includes(line.name)).length : cp.pages.length;
     const scope = [
-      `We read ${plural(checked.length, "outside page")} that ${line ? `the ${line.name} answers` : "AI"} cited (we check up to ${cp.cap} ${line ? "per service line" : "per report"}${line ? `; ${plural(chosenCount, "page was", "pages were")} chosen for this line` : `; ${plural(cp.outsidePages, "outside page was", "outside pages were")} cited in all`}).`,
+      `We read ${plural(checked.length, "outside page")} that ${line ? `the ${line.name} answers` : "AI"} cited, the most-cited first (up to ${cp.cap} ${line ? "per service line" : "per report"}; sites that refuse our checker are passed over and the next pages read instead).`,
       `Columns show you and the ${plural(competitors.length, "business", "businesses")} AI named most in ${line ? `the ${plural(qs.length, "question")} of this line` : "these answers"}${competitors.length > 7 ? " (the second table continues the first)" : ""}.`,
       "A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site.",
       nameless ? `${plural(nameless, "more site")} named none of these businesses and ${nameless === 1 ? "isn't" : "aren't"} shown (AI cited ${nameless === 1 ? "it" : "them"} for facts such as prices, or for businesses outside the top ${MAX_COMPETITORS}).` : "",

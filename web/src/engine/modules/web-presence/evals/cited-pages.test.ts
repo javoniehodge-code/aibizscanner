@@ -7,7 +7,7 @@ import { MemoryStore } from "../../../engine.test-support";
 import { executeRun, type PageRenderer, type Providers, type WebFetcher } from "../../../execute";
 import { registry } from "../../../index";
 import type { ClaimedRun, FetchedResource, JsonValue, RenderedPage, StageInput } from "../../../types";
-import { namesOnPage, rankCitedPages, type SectionPages } from "../logic/pages";
+import { PAGE_CAP, namesOnPage, rankCitedPages, type SectionPages } from "../logic/pages";
 import type { AssessedPages, CitedPages } from "../schemas";
 import { FakeLlmClient } from "../../../testing/fake-llm";
 import { instructionRef } from "../../../llm";
@@ -166,7 +166,7 @@ describe("wp_pages and Citation coverage", () => {
     // You, then the businesses named in the most usable answers (ties by name), whether or not a site names them.
     expect(cov.businesses.v).toEqual(["BM", "RH", "GM", "TB", "AA", "FV", "PS", "BX", "GS", "HS"]);
     expect(cov.scope.v).toBe(
-      "We read 7 outside pages that AI cited (we check up to 20 per report; 12 outside pages were cited in all). Columns show you and the 9 businesses AI named most in these answers (the second table continues the first). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 5 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read, 2 showed us only a page shared across the site.",
+      "We read 7 outside pages that AI cited, the most-cited first (up to 20 per report; sites that refuse our checker are passed over and the next pages read instead). Columns show you and the 9 businesses AI named most in these answers (the second table continues the first). A check means the business's name is on a page we read. A blank means it isn't on that page, not that the business is missing from the whole site. 5 more pages couldn't be read and aren't shown: 2 ask checkers like ours not to fetch them (robots.txt), 1 refused us or couldn't be read, 2 showed us only a page shared across the site.",
     );
 
     const doc = await run(store, "report_assemble", [asm, sec.input], {});
@@ -349,5 +349,46 @@ describe("review fixes (PR 45)", () => {
     expect(out.citationCoverage[0]!.scope.v).toContain("1 more page couldn't be read");
     const doc = await run(store, "report_assemble", [asm, sec.input], {});
     expect(reportDocument.safeParse(doc.input.output).success).toBe(true);
+  });
+});
+
+describe("wp_pages: refusing sites and directories named like a business", () => {
+  it("passes over a site that refused us, fills the 20 with the next pages, and keeps only real marketplaces", async () => {
+    // Cited most: 4 reddit.com pages (reddit refuses us), a directory page on Red Hook Moving Co.'s own website (names
+    // only them) and one on gowanusmovers.com that lists other movers (a marketplace). Then 25 directory pages.
+    const pa = structuredClone(FIX.promptAnalysis) as { pages: unknown[]; questions: { answers: { v: { status: string; citations: string[] } }[] }[] };
+    const pg = (key: string, url: string, category: string) => ({ v: { key, url, category }, p: { kind: "sample" } });
+    const reddit = Array.from({ length: 4 }, (_, i) => `cm${i + 50}`);
+    const lists = Array.from({ length: 25 }, (_, i) => `dr${i + 100}`);
+    pa.pages.push(...reddit.map((k) => pg(k, `reddit.com/r/movers/${k}`, "comm")), ...lists.map((k) => pg(k, `list${k}.com/movers`, "dir")), pg("dr90", "redhookmovingco.com/about", "dir"), pg("dr91", "gowanusmovers.com/list", "dir"));
+    for (const q of pa.questions) for (const a of q.answers) if (a.v.status === "ok") a.v.citations.push(...reddit, "dr90", "dr91");
+    pa.questions[0]!.answers.find((a) => a.v.status === "ok")!.v.citations.push(...lists);
+    const assembled = { ...ASSEMBLED, section: pa };
+    const page = (body: string) => html("Movers", `${body} ${words(200)}`);
+    const site: WebFetcher = {
+      async fetch(url) {
+        if (url.endsWith("/robots.txt")) return no(url, 404);
+        if (url.startsWith("https://reddit.com/")) return no(url, 403);
+        if (url === "https://redhookmovingco.com/about") return ok(url, page("Red Hook Moving Co. has moved Brooklyn since 1990."));
+        if (url === "https://gowanusmovers.com/list") return ok(url, page("Compare Red Hook Moving Co., Two Bridges Movers and Bushwick Box & Truck."));
+        if (/^https:\/\/listdr\d+\.com\//.test(url)) return ok(url, page(`Listing ${url}.`));
+        return PAGES[url] ? ok(url, PAGES[url]) : no(url, 404);
+      },
+    };
+    const noBrowser: PageRenderer = { async render(url) { return { requestedUrl: url, finalUrl: url, truncated: false, durationMs: 1, userAgent: "browser", requests: { fetched: 0, refused: 0, skipped: 0, failed: 0 }, status: 403, html: null, error: "HTTP 403" }; } };
+    const store = new MemoryStore(5, 0, []);
+    const set: StageInput = { runId: "set", stage: "pa_prompt_set", output: SET as unknown as JsonValue, outputHash: null };
+    const asm: StageInput = { runId: "asm", stage: "pa_assemble", output: assembled as unknown as JsonValue, outputHash: null };
+    const wp = await run(store, "wp_pages", [set, asm], { web: site, browser: noBrowser });
+    expect(wp.outcome, JSON.stringify(wp.outcome)).toMatchObject({ outcome: "done" });
+    const out = wp.input.output as unknown as CitedPages;
+    const state = (k: string) => out.pages.find((p) => p.key === k);
+    // reddit refused us: its pages don't take any of the 20 places.
+    expect(out.pages.filter((p) => p.state === "checked")).toHaveLength(PAGE_CAP);
+    expect(reddit.map((k) => state(k)?.state)).toEqual(["unchecked", "unchecked", "unchecked", "unchecked"]);
+    // Red Hook Moving Co.'s own site isn't an outside page; the marketplace naming three movers is.
+    expect(state("dr90")).toBeUndefined();
+    expect(out.ownSites).toBe(1);
+    expect(state("dr91")?.state).toBe("checked");
   });
 });

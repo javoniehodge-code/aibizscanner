@@ -98,12 +98,21 @@ separate businesses, because each service has its own cited sites and competitor
   question is asked again. `pa_lines` reads no other stage, so approving a new prompt set doesn't hold anything up; ids
   not in the current set are ignored.
 - **Shown lines:** a line with fewer than **3** questions gets no map (hidden until the question set grows).
-- **Pages:** `wp_pages` reruns on its own after a save. It ranks each shown line's cited outside pages by that line's
-  questions and checks up to **20 per line** (a page chosen for two lines is checked once). About $0.40 to read a
-  line's pages in `wp_assess`. Without saved lines, nothing changes: the 20 most-cited pages of the whole report.
-- **Competitors' own websites:** a cited page the classifier left unclassified whose site name is a business's name
-  written together (exoticmiamirental.com for Exotic Miami Car Rental; one word may be left out of a 3+ word name) is
-  that business's own website, not an outside site, and isn't checked.
+- **Pages:** `wp_pages` reruns on its own after a save. Each shown line reads up to **20** of its cited outside
+  pages, most-cited first, ranked by that line's questions (a page chosen for two lines is read once). About $0.40 to
+  read a line's pages in `wp_assess`. Without saved lines: the 20 most-cited pages of the whole report.
+- **Sites that refuse us are passed over (20 Nov 2026):** once a site refuses our checker (HTTP 401, 403 or 429), its
+  other pages aren't fetched this run ("refused our checker on another page") and the next most-cited pages are read
+  instead, so a line gets up to 20 pages we could read. Pages robots.txt asks us not to fetch, or that are missing,
+  don't count towards the 20 either. A line tries at most 40 pages. In MVP Miami's first per-line run, 10 of the 20
+  places went to pages we couldn't read (5 on turo.com).
+- **Competitors' own websites:** a cited page whose site name is a business's name written together is that
+  business's own website, not an outside site (exoticmiamirental.com for Exotic Miami Car Rental; one word may be left
+  out of a 3+ word name; "Co." and similar may be written or not). Unclassified pages like this are left out unread.
+  Directory pages like this (20 Nov 2026; partyfunrental.com for Party Fun Rental) are read first and kept as an
+  outside site only if they name at least two other businesses, since some marketplaces share a name with a business
+  AI names (giggster.com). A company site named unlike any business AI named (miamiexoticcarrental.com) can't be told
+  apart this way; it shows among the sites that named none of the top 15.
 - **Map per line (`wp_section`):** columns are the business and the line's **top 15** competitors, ranked by the number
   of the line's usable answers naming them (as on the Businesses named slide), ties by name. Rows are the websites of
   pages we read that the line's answers cite and that name at least one of those businesses. Sites naming only other
