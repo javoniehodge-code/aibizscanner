@@ -129,3 +129,30 @@ make the 7 columns (ranked 57th–72nd of 99), one was a competitor's own site, 
 follow-up test (19 Nov 2026, ChatGPT only; P1, P2, P4 asked again, then "which sites helped you pick companies, not
 learn facts?") found ChatGPT picks mostly from companies' own websites and cites what it used: one helpful site in
 three questions wasn't cited (kayak.com, a rating cross-check), out of 23–33 sites its searches returned.
+
+## Part 4c-1: Consistent & current, website vs cited pages (20 Nov 2026)
+
+Owner decisions (20 Nov 2026): a fact either **agrees** or **doesn't agree**; nothing about "current". Facts no other
+source mentions, or the website doesn't give, have no status and are listed under the table as "Not mentioned by other
+sources". About $0.15 more per report for the extra Sonnet reading is approved.
+
+- **Which facts:** the standard's facts that can be compared as values (`content/values.ts`, `COMPARABLE`). Car rental:
+  vehicles (list), prices (price per vehicle and unit of time), minimum age (number), deposit (money), address,
+  phone, chauffeur (yes/no), cancellation notice in hours (number), other services (list).
+- **Website values (`cc_values`, new):** one Sonnet call over the website pages Clear & complete already uses
+  (instruction `content/website-values` v1). Runs on its own after `cc_bundle`.
+- **Cited-page values (`wp_assess`, instruction `web-presence/assess-page` v2):** the same page reading also lists the
+  business's values, only on pages our name check found the business on. No extra call.
+- **Plain code keeps a value** only when its quote (at least three words) is on the page and the value is in the quote:
+  the phone's digits, the amount, the vehicle or item. Dropped values are kept for review (`dropped`, `overruled`).
+- **Plain code compares, like for like:** phone numbers by their last ten digits; addresses by street line
+  (abbreviations unified, suite dropped); numbers and money by amount; prices only for the same vehicle (two or more
+  matching words) and the same unit of time; lists item by item; yes/no exactly. A fact disagrees when any source
+  differs, agrees when at least one agrees and none differs. A page we couldn't read is never a disagreement.
+- **Slide:** one column per outside site giving values (up to 6), the two counts, the "Not mentioned by other sources"
+  list and one fix per disagreeing site and fact. Example reports keep the approved four-state design.
+- **Not yet (4c-2):** Google's listing as a column, compared when the report is opened (never stored), and "Conflict"
+  marks in the web presence map.
+
+After deploying: run `cc_values` once in the run monitor (it runs on its own after later `cc_bundle` runs), then rerun
+`wp_assess` so the page readings include values; `wp_section` and `report_assemble` follow.

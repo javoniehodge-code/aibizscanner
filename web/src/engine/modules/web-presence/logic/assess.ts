@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { readValue } from "../../content/values";
 
 /**
  * Checking a model's reading of one cited page (wp_assess). The model proposes; this code decides what counts:
@@ -26,6 +27,8 @@ export const pageReading = z
       .object({ rating: text, scale: z.number().positive().nullable(), count: text.nullable(), recent: text.nullable(), themes: text, quote: text })
       .strict()
       .nullable(),
+    /** v2: the business's decision facts as values (Consistent & current); checked in assess-stage. */
+    values: z.array(readValue),
   })
   .strict();
 export type PageReading = z.infer<typeof pageReading>;

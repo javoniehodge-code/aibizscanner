@@ -3,14 +3,16 @@ import { MissingPricingError, SpendingCapError, errorMessage } from "../../error
 import { LlmNotConfiguredError } from "../../llm";
 import type { JsonValue, StageContext, StageDefinition } from "../../types";
 import { cutWords } from "../content/logic";
-import { SCORING_MODEL } from "../content/stages";
+import { SCORING_MODEL, contentBundle } from "../content/stages";
+import { standardFor } from "../content/standards";
+import { checkValues, comparableFacts } from "../content/values";
 import { promptSetSpec } from "../prompt-analysis/schemas";
 import { assessPage } from "./instructions/assess-page";
 import { checkReading, pageReading } from "./logic/assess";
 import { CATEGORY_LABEL } from "./logic/pages";
 import { assessedPages, citedPages, type AssessedPages } from "./schemas";
 
-export const ASSESS_VERSION = "2026-11-19";
+export const ASSESS_VERSION = "2026-11-20";
 /** Each page is cut to this many words for the reading (disclosed on the page record). */
 const MAX_WORDS = 3000;
 const CONCURRENCY = 3;
@@ -30,6 +32,8 @@ export const wpAssess: StageDefinition = {
   module: "web-presence",
   label: "Web presence 2/3: read how each cited page presents the business",
   inputs: ["pa_prompt_set", "wp_pages"],
+  /** The decision-fact standard chosen for the website check, when it has run (else the category's standard). */
+  optionalInputs: ["cc_bundle"],
   timeoutMs: 240_000,
   maxAttempts: 2,
   autoRun: true,
@@ -46,6 +50,9 @@ export const wpAssess: StageDefinition = {
     const texts = await ctx.snapshotTexts(checked.map((p) => p.source!.snapshotId));
     const target = cp.businesses.find((b) => b.target)!;
     const names = new Map(cp.businesses.map((b) => [b.key, b.name] as const));
+    const bundle = ctx.inputs.cc_bundle ? contentBundle.parse(ctx.inputs.cc_bundle.output) : null;
+    const standard = bundle?.standard ?? standardFor(set.target.category);
+    const facts = standard ? comparableFacts(standard) : [];
 
     let stop: string | null = null;
     const out: AssessedPages["pages"] = new Array(checked.length);
@@ -73,11 +80,15 @@ export const wpAssess: StageDefinition = {
               business: { name: target.name, otherNames: set.target.aliases, location: set.target.location, category: set.target.category },
               page: { url: p.url, website: p.site, kind: CATEGORY_LABEL[p.category], title: p.title, text: cut.text },
               namedOnPage: { business: targetNamed, others: p.names.filter((n) => n.business !== target.key).map((n) => names.get(n.business) ?? n.business) },
+              facts,
             },
             output: pageReading,
           });
           // Quotes are checked against the copy the model was given.
-          out[i] = { key: p.key, cutAt: cut.truncated ? MAX_WORDS : null, reading: checkReading(r, cut.text, targetNamed), error: null };
+          const reading = checkReading(r, cut.text, targetNamed);
+          // Values only for a page our name check found the business on; each must be on the page and in its quote.
+          const vals = targetNamed && standard ? checkValues(r.values, standard.id, () => cut.text) : { values: [], dropped: r.values.length ? [`${r.values.length} value(s) dropped: the business isn't on the page`] : [] };
+          out[i] = { key: p.key, cutAt: cut.truncated ? MAX_WORDS : null, reading: { ...reading, values: vals.values, overruled: [...reading.overruled, ...vals.dropped] }, error: null };
         } catch (e) {
           const msg = errorMessage(e);
           if (e instanceof SpendingCapError || e instanceof MissingPricingError || e instanceof LlmNotConfiguredError) stop = msg;
@@ -86,7 +97,7 @@ export const wpAssess: StageDefinition = {
       }
     };
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, checked.length) }, work));
-    const result: AssessedPages = { version: ASSESS_VERSION, model: SCORING_MODEL.model, fromRun: ctx.inputs["wp_pages"]!.runId, pages: out };
+    const result: AssessedPages = { version: ASSESS_VERSION, model: SCORING_MODEL.model, fromRun: ctx.inputs["wp_pages"]!.runId, standard: standard?.id ?? null, pages: out };
     return { status: out.every((p) => p.reading) ? "done" : "partial", output: result as unknown as JsonValue };
   },
 };
