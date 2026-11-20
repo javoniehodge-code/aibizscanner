@@ -63,7 +63,8 @@ function keyOf(kind: Kind, v: CheckedValue): string {
 function listed(kind: Kind, vs: readonly CheckedValue[]): string {
   const seen = new Map<string, string>();
   for (const v of vs) if (!seen.has(keyOf(kind, v))) seen.set(keyOf(kind, v), shown(kind, v));
-  const all = [...seen.values()];
+  // One range read as two amounts ("$1,000 – $7,000") is shown once.
+  const all = [...new Set(seen.values())];
   return all.length > 3 ? `${all.slice(0, 3).join("; ")} and ${all.length - 3} more` : all.join("; ");
 }
 
@@ -85,7 +86,7 @@ export function compareFact(kind: Kind, web: readonly CheckedValue[], src: reado
       matched++;
       if (!same.some((w) => w.amount === s.amount)) differs.push(s);
     }
-    if (!matched) return { mark: "n", text: `${text} (not for the same vehicle and unit of time as your website)`, differs: [] };
+    if (!matched) return { mark: "n", text, differs: [] };
     return { mark: differs.length ? "r" : "g", text, differs };
   }
   if (kind === "list") {
@@ -170,7 +171,7 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
         ? `Your website doesn't give this; ${sites[elsewhere]![0]} says ${r.cells[elsewhere]!.text}.`
         : "Neither your website nor the other sources we read give this."
       : elsewhere >= 0
-        ? `${sites[elsewhere]![0]} gives ${r.cells[elsewhere]!.text}, which can't be compared with your website like for like.`
+        ? `${sites[elsewhere]![0]} gives ${r.cells[elsewhere]!.text}, which isn't for the same ${comparable[r.fact.id]!.kind === "price" ? "vehicle and unit of time" : "thing"} as your website, so it can't be compared.`
         : "No other source we read gives this.";
     return ob({ name: r.fact.name, website: r.web.length ? webText(r) : null, note });
   });
@@ -194,7 +195,7 @@ export function buildConsistent(input: ConsistentInput, evidence: string[]) {
     verdict: ob(
       differ
         ? { heading: `${differ} of ${plural(n, "fact")} we could compare ${differ === 1 ? "doesn't" : "don't"} agree`, text: `We compared your website with ${plural(sites.length, "outside site")} AI cited that name you. Where sources disagree, AI may repeat the wrong detail; the fixes below say where to correct it.` }
-        : { heading: `All ${plural(n, "fact")} we could compare agree`, text: `We compared your website with ${plural(sites.length, "outside site")} AI cited that name you. Nothing they say contradicts your website.` },
+        : { heading: n === 1 ? "The one fact we could compare agrees" : n === 2 ? "Both facts we could compare agree" : `All ${n} facts we could compare agree`, text: `We compared your website with ${plural(sites.length, "outside site")} AI cited that name you. Nothing they say contradicts your website.` },
     ),
     sources: sites.map(([name, s]) => ob({ name, sub: s.type })),
     facts: factRows,

@@ -110,6 +110,28 @@ describe("the Consistent & current part", () => {
     expect(out.fixes.map((f) => f.v.title)).toEqual(["Correct the rental requirements on carrentallist.com"]);
   });
 
+  it("reads plainly: a range is shown once, an unmatched price says why, and two agreeing facts are 'Both'", () => {
+    const out = buildConsistent(
+      {
+        standard: car,
+        website: {
+          ...website,
+          values: [...website.values, c("deposit-payment", "$1,000 – $7,000", { ref: "P2", amount: 1000 }), c("deposit-payment", "$1,000 – $7,000", { ref: "P2", amount: 7000 })],
+        },
+        cited,
+        readings: [
+          { key: "dr1", reading: reading([c("booking-contact", "305-555-0100"), c("requirements", "25+", { amount: 25 })]) },
+          { key: "ed1", reading: reading([c("prices", "Approximately $400 to $1,200 per day", { item: "exotic cars", amount: 400, unit: "day" })]) },
+        ],
+      },
+      [],
+    )!;
+    expect(out.verdict.v.heading).toBe("Both facts we could compare agree");
+    const nm = (name: string) => out.notMentioned!.find((n) => n.v.name === name)!.v;
+    expect(nm("Deposit and payment").website).toBe("$1,000 – $7,000");
+    expect(nm("Prices and what's included").note).toBe("respectmyregion.com gives exotic cars: Approximately $400 to $1,200 per day, which isn't for the same vehicle and unit of time as your website, so it can't be compared.");
+  });
+
   it("is left out when no outside site we read gives a compared fact about the business", () => {
     expect(buildConsistent({ standard: car, website, cited, readings: [{ key: "dr1", reading: reading([]) }] }, [])).toBeNull();
   });
