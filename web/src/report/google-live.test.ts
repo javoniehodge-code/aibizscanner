@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { PlaceDetails } from "@/lib/google/places";
 import { FIXTURES } from "./generated/fixtures";
-import { googlePresenceRow, withGoogle } from "./google-live";
+import { googlePresenceRow, matchListing, withCompetitorRatings, withGoogle } from "./google-live";
 import { reportDocument } from "./schema";
 
 const PLACE: PlaceDetails = {
@@ -106,5 +106,33 @@ describe("Google's listing on the Consistent & current slide (part 4c-2), for on
     const before = doc();
     const out = withGoogle(before, { details: PLACE, error: null }, "2026-11-20");
     expect((out.website as { consistent: unknown }).consistent).toEqual((before.website as { consistent: unknown }).consistent);
+  });
+});
+
+describe("each compared business's Google rating (part 5b), for one response", () => {
+  it("matches a search result only when it's named like the business", () => {
+    const c = [{ id: "a", name: "Miami Exotic Rentals" }, { id: "b", name: "MPH Club Miami" }];
+    expect(matchListing("mph club", c)?.id).toBe("b");
+    expect(matchListing("Prestige Luxury Rentals", c)).toBeNull();
+  });
+
+  it("adds a Review reputation row: rating and count, no listing, no rating, or couldn't load", () => {
+    const d = doc();
+    const out = withCompetitorRatings(d, [{ details: PLACE }, { none: true }, { error: "HTTP 429" }]);
+    const parsed = reportDocument.safeParse(withGoogle(out, { details: PLACE, error: null }, "2026-11-21"));
+    expect(parsed.success, JSON.stringify(parsed.error?.issues.slice(0, 3))).toBe(true);
+    const row = parsed.data!.competitors!.rows.at(-1)!.v;
+    expect(row.name).toBe("Review reputation");
+    expect(row.cells).toEqual([
+      { value: "4.9 / 5", sub: "412 Google reviews", mark: null },
+      { value: "No Google listing found", sub: "", mark: "r" },
+      { value: "Couldn't load Google", sub: "HTTP 429", mark: null },
+    ]);
+    // Applied twice, the row isn't repeated; the stored document is unchanged.
+    expect(withCompetitorRatings(out, [{ details: { ...PLACE, rating: null } }, { none: true }, { none: true }]).competitors).toMatchObject({ rows: expect.arrayContaining([expect.objectContaining({ v: expect.objectContaining({ cells: expect.arrayContaining([{ value: "No Google rating", sub: "", mark: "r" }]) }) })]) });
+    // The example already has a "Review reputation" row: it's replaced, not repeated.
+    const names = (x: unknown) => (x as { rows: { v: { name: string } }[] }).rows.map((r) => r.v.name);
+    expect(names(out.competitors).filter((n) => n === "Review reputation")).toHaveLength(1);
+    expect(names(out.competitors)).toHaveLength(names(d.competitors).length);
   });
 });
