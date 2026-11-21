@@ -37,3 +37,16 @@ The "Recommended by AI" row counts only the compared line's answers (`competitor
 
 After deploying: the comparison runs on its own after the prompt analysis; for an existing report, run "Competitors
 1/3" in the run monitor once.
+
+## Part 5b: Google ratings for the compared businesses (21 Nov 2026)
+
+When a report is opened (`app/(admin)/reports/[id]/document/route.ts`, after the business's own listing):
+
+- **Finding a competitor's listing:** once per competitor, Places Text Search for "name, location". Only a result
+  named like the competitor counts ("mph club" and "MPH Club Miami"); otherwise "No Google listing found". The place
+  ID (or "none found") is stored on the report in `competitor_place_ids` (migration `20261121000100`), keyed by the
+  name in lower case, with the date. Nothing else from Google is stored.
+- **Each view:** Place Details for each competitor (the same fields as the business's own listing), so a report view
+  makes 3 Place Details calls; the first view of a new comparison also makes up to 2 Text Search calls.
+- **Slide:** a "Review reputation" row (rating out of 5 and review count): you, then the two competitors. No listing
+  or no rating is marked (it trails on that point); if Google can't answer, the cell says so.

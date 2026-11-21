@@ -377,14 +377,14 @@ isOneToOne: false
                   ]
                 },"report": {
                   Row: {
-                    "business_id": string,"created_at": string,"created_by": string | null,"id": string,"spending_cap_usd": number,"status": string,"updated_at": string,"version": number
+                    "business_id": string,"competitor_place_ids": NonNullable<Json>,"created_at": string,"created_by": string | null,"id": string,"spending_cap_usd": number,"status": string,"updated_at": string,"version": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "business_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"spending_cap_usd"?: number,"status"?: string,"updated_at"?: string,"version"?: number
+                    "business_id": string,"competitor_place_ids"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"id"?: string,"spending_cap_usd"?: number,"status"?: string,"updated_at"?: string,"version"?: number
                   }
                   Update: {
-                    "business_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"spending_cap_usd"?: number,"status"?: string,"updated_at"?: string,"version"?: number
+                    "business_id"?: string,"competitor_place_ids"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"id"?: string,"spending_cap_usd"?: number,"status"?: string,"updated_at"?: string,"version"?: number
                   }
                   Relationships: [
                     {

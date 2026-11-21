@@ -179,3 +179,46 @@ export function withGoogle(doc: Doc, live: { details: PlaceDetails | null; error
     webPresence: [...doc.webPresence.filter((w) => (w as { v?: { domain?: string } }).v?.domain !== "google.com" || ((w as { v: { pageKeys: string[] } }).v.pageKeys.length > 0)), observed(googlePresenceRow(live.details, live.error, consistent?.differs))],
   };
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Competitor comparison (part 5b): each business's Google rating, read when the report is opened, never stored
+// ---------------------------------------------------------------------------------------------------------------
+
+const foldName = (s: string) => s.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+
+/**
+ * The listing among Text Search results that is this business: the first whose name contains the business's name, or
+ * is contained in it ("mph club" and "MPH Club Miami"). Null when none matches, so a different business's rating is
+ * never shown.
+ */
+export function matchListing<T extends { name: string }>(name: string, candidates: readonly T[]): T | null {
+  const n = foldName(name);
+  return candidates.find((c) => {
+    const m = foldName(c.name);
+    return !!n && !!m && (m.includes(n) || n.includes(m));
+  }) ?? null;
+}
+
+/** What Google gives for one compared business: its listing, none found, or an error. */
+export type CompetitorListing = { details: PlaceDetails } | { none: true } | { error: string };
+
+type CompetitorsPart = Record<string, unknown> & { rows: Env<{ name: string; sub: string; cells: { value: string; sub: string; mark: "g" | "r" | "k" | null }[] }>[] };
+
+/**
+ * The comparison with a "Review reputation" row from Google: the business first, then the two competitors. A listing
+ * without a rating, or no listing, is marked (it trails on that point); a listing Google couldn't give isn't.
+ */
+export function withCompetitorRatings<D extends Record<string, unknown> & { competitors?: unknown }>(doc: D, listings: readonly [CompetitorListing, CompetitorListing, CompetitorListing]): D {
+  const comp = doc.competitors as CompetitorsPart | null | undefined;
+  if (!comp) return doc;
+  const cell = (l: CompetitorListing) =>
+    "error" in l
+      ? { value: "Couldn't load Google", sub: l.error, mark: null }
+      : "none" in l
+        ? { value: "No Google listing found", sub: "", mark: "r" as const }
+        : l.details.rating === null
+          ? { value: "No Google rating", sub: "", mark: "r" as const }
+          : { value: `${l.details.rating.toFixed(1)} / 5`, sub: `${l.details.ratingCount !== null ? `${n(l.details.ratingCount)} ` : ""}Google reviews`, mark: null };
+  const row = observed({ name: "Review reputation", sub: "Google, read when you opened this report", cells: listings.map(cell) });
+  return { ...doc, competitors: { ...comp, rows: [...comp.rows.filter((r) => r.v.name !== "Review reputation"), row] } };
+}
