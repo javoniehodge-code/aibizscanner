@@ -5,6 +5,7 @@ import { assembledSection } from "../prompt-analysis/stages";
 import { webPresenceSection } from "../web-presence/section-stage";
 import { websiteSection } from "../website/section-stage";
 import { buildReportDocument } from "./logic/document";
+import { competitorSection } from "../competitors/stages";
 
 export const MODULE = "report";
 const emptyParams = (raw: unknown) => z.object({}).strict().parse(raw ?? {});
@@ -27,7 +28,7 @@ export const reportAssemble: StageDefinition = {
   label: "Report: assemble the report document",
   inputs: ["pa_assemble"],
   /** The website and web presence sections, when their stages have run. */
-  optionalInputs: ["ws_section", "wp_section"],
+  optionalInputs: ["ws_section", "wp_section", "cp_section"],
   timeoutMs: 20_000,
   maxAttempts: 1,
   autoRun: true,
@@ -36,7 +37,13 @@ export const reportAssemble: StageDefinition = {
   async run(ctx) {
     const site = ctx.inputs["ws_section"];
     const web = ctx.inputs["wp_section"];
-    const doc = buildReportDocument(upstream(ctx, "pa_assemble", assembledSection), site ? websiteSection.parse(site.output) : null, web ? webPresenceSection.parse(web.output) : null);
+    const comp = ctx.inputs["cp_section"];
+    const doc = buildReportDocument(
+      upstream(ctx, "pa_assemble", assembledSection),
+      site ? websiteSection.parse(site.output) : null,
+      web ? webPresenceSection.parse(web.output) : null,
+      comp ? competitorSection.parse(comp.output) : null,
+    );
     return { status: "done", output: doc as unknown as JsonValue };
   },
 };

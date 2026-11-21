@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { formatUsd } from "@/lib/format";
 import { PromptSetForm } from "./prompt-set-form";
 import { ServiceLinesForm } from "./service-lines-form";
+import { CompetitorsForm } from "./competitors-form";
+import { competitorChoice } from "@/engine/modules/competitors/stages";
 import { MIN_LINE_QUESTIONS, serviceLines } from "@/engine/modules/prompt-analysis/lines-stage";
 import { formatServiceLines } from "@/lib/service-lines";
 
@@ -17,13 +19,14 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
   if (!z.uuid().safeParse(id).success) notFound();
   const db = await createClient();
-  const [reportRes, setRes, busyRes, linesRes] = await Promise.all([
+  const [reportRes, setRes, busyRes, linesRes, choiceRes] = await Promise.all([
     db.from("report").select("id, version, spending_cap_usd, business:business_id (name, location)").eq("id", id).maybeSingle(),
     db.from("prompt_set").select("id, version, groups, prompts, customer_location, approved_at").eq("report_id", id).order("version", { ascending: false }).limit(1).maybeSingle(),
     db.from("stage_run").select("id", { count: "exact", head: true }).eq("report_id", id).in("stage", PA_STAGES).in("status", ["queued", "running"]),
     db.from("stage_run").select("params").eq("report_id", id).eq("stage", "pa_lines").order("created_at", { ascending: false }).limit(1).maybeSingle(),
+    db.from("stage_run").select("params").eq("report_id", id).eq("stage", "cp_choice").order("created_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
-  for (const r of [reportRes, setRes, busyRes, linesRes]) if (r.error) throw new Error(r.error.message);
+  for (const r of [reportRes, setRes, busyRes, linesRes, choiceRes]) if (r.error) throw new Error(r.error.message);
   const report = reportRes.data;
   if (!report) notFound();
 
@@ -32,6 +35,7 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
     ? { groups: stored.data.groups, prompts: stored.data.prompts, location: stored.data.customer_location }
     : examplePromptSet();
   const savedLines = linesRes.data ? serviceLines.safeParse(linesRes.data.params) : null;
+  const savedChoice = choiceRes.data ? competitorChoice.safeParse(choiceRes.data.params) : null;
   const loc = draft.location ?? { city: "", region: "", country: "", timezone: "" };
 
   return (
@@ -80,6 +84,10 @@ export default async function PromptSetPage({ params }: { params: Promise<{ id: 
       ) : (
         <p className="muted">Approve a prompt set first; then tag its questions with service lines here.</p>
       )}
+      <h2>Competitors to compare</h2>
+      {stored?.success ? (
+        <CompetitorsForm reportId={id} names={savedChoice?.success ? savedChoice.data.names.join(", ") : ""} disabled={(busyRes.count ?? 0) > 0} />
+      ) : null}
     </main>
   );
 }
